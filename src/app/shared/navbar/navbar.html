@@ -1,0 +1,59 @@
+<nav class="navbar navbar-light bg-blanco sticky-top">
+  <div class="container-fluid d-flex align-items-center position-relative">
+
+    <!-- Logo a la izquierda solo en desktop -->
+    <a class="navbar-brand d-none d-lg-block" routerLink="/">
+      <img src="assets/logo/logo.png" alt="Logo" width="50" />
+    </a>
+
+    <!-- Botón hamburguesa a la izquierda solo en móvil -->
+    <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu"
+      aria-controls="offcanvasMenu" aria-label="Menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Logo centrado solo en móvil -->
+    <a class="navbar-brand d-lg-none mx-auto position-absolute start-50 translate-middle-x" routerLink="/">
+      <img src="assets/logo/logo.png" alt="Logo" width="50" />
+    </a>
+
+    <!-- Menú horizontal desktop -->
+    <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
+      <ul class="navbar-nav flex-row gap-4">
+        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active">HOME</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/workshops" routerLinkActive="active">WORKSHOPS & SERVICES</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/calendar" routerLinkActive="active">CALENDAR</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/shop" routerLinkActive="active">SHOP</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active">ABOUT ASHYA</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/studio" routerLinkActive="active">ASHYA'S STUDIO</a></li>
+      </ul>
+    </div>
+
+    <!-- Carrito siempre visible a la derecha -->
+    <div class="position-relative ms-auto me-3">
+      <a class="nav-link position-relative">
+        <i class="bi bi-cart" style="font-size: 1.5rem;"></i>
+        <span class="badge bg-dark position-absolute top-0 start-100 translate-middle">0</span>
+      </a>
+    </div>
+
+  </div>
+</nav>
+
+<!-- Offcanvas menú lateral móvil -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menú</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" data-bs-dismiss="offcanvas">HOME</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/workshops" routerLinkActive="active" data-bs-dismiss="offcanvas">WORKSHOPS & SERVICES</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/calendar" routerLinkActive="active" data-bs-dismiss="offcanvas">CALENDAR</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/shop" routerLinkActive="active" data-bs-dismiss="offcanvas">SHOP</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active" data-bs-dismiss="offcanvas">ABOUT ASHYA</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/studio" routerLinkActive="active" data-bs-dismiss="offcanvas">ASHYA'S STUDIO</a></li>
+    </ul>
+  </div>
+</div>

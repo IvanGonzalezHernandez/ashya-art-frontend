@@ -1,0 +1,40 @@
+<!-- Botón hamburguesa solo visible en móvil -->
+<button class="btn btn-primary d-lg-none m-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" aria-label="Abrir menú lateral"><i class="bi bi-list"></i> Menú</button>
+
+<!-- Sidebar fijo para escritorio -->
+<aside class="d-none d-lg-flex flex-column justify-content-between vh-100 p-3 bg-light" role="navigation" aria-label="Sidebar" style="width: 250px;">
+  <div>
+    <div class="d-flex justify-content-center mb-4"><img src="assets/logo/logo.png" alt="Ashya Art Logo" class="img-fluid" style="max-height: 60px;"></div>
+        <ul class="nav flex-column nav-pills" role="tablist">
+        <li class="nav-item"><a routerLink="inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" aria-current="page"><i class="bi bi-house-door"></i> Inicio</a></li>
+        <li class="nav-item"><a routerLink="cursos" routerLinkActive="active" class="nav-link"><i class="bi bi-easel"></i> Cursos</a></li>
+        <li class="nav-item"><a routerLink="reservas" routerLinkActive="active" class="nav-link"><i class="bi bi-calendar-check"></i> Reservas</a></li>
+        <li class="nav-item"><a routerLink="productos" routerLinkActive="active" class="nav-link" tabindex="-1" aria-disabled="true"><i class="bi bi-bag"></i> Productos</a></li>
+        <li class="nav-item"><a routerLink="tarjetas-regalo" routerLinkActive="active" class="nav-link"><i class="bi bi-gift"></i> Tarjetas Regalo</a></li>
+        <li class="nav-item"><a routerLink="clientes" routerLinkActive="active" class="nav-link"><i class="bi bi-people"></i> Clientes</a></li>
+        <li class="nav-item"><a routerLink="newsletter" routerLinkActive="active" class="nav-link disabled" tabindex="-1" aria-disabled="true"><i class="bi bi-envelope"></i> Newsletter</a></li>
+        </ul>
+  </div>
+</aside>
+
+<!-- Offcanvas para móvil -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasSidebarLabel">Menú</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+  </div>
+  <div class="offcanvas-body d-flex flex-column justify-content-between p-3 bg-light vh-100">
+    <div>
+      <div class="d-flex justify-content-center mb-4"><img src="assets/logo/logo.png" alt="Ashya Art Logo" class="img-fluid" style="max-height: 60px;"></div>
+        <ul class="nav flex-column nav-pills" role="tablist">
+        <li class="nav-item"><a routerLink="inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" aria-current="page" data-bs-dismiss="offcanvas"><i class="bi bi-house-door"></i> Inicio</a></li>
+        <li class="nav-item"><a routerLink="cursos" routerLinkActive="active" class="nav-link" data-bs-dismiss="offcanvas"><i class="bi bi-easel"></i> Cursos</a></li>
+        <li class="nav-item"><a routerLink="reservas" routerLinkActive="active" class="nav-link" data-bs-dismiss="offcanvas"><i class="bi bi-calendar-check"></i> Reservas</a></li>
+        <li class="nav-item"><a routerLink="productos" routerLinkActive="active" class="nav-link" tabindex="-1" aria-disabled="true" data-bs-dismiss="offcanvas"><i class="bi bi-bag"></i> Productos</a></li>
+        <li class="nav-item"><a routerLink="tarjetas-regalo" routerLinkActive="active" class="nav-link" data-bs-dismiss="offcanvas"><i class="bi bi-gift"></i> Tarjetas Regalo</a></li>
+        <li class="nav-item"><a routerLink="clientes" routerLinkActive="active" class="nav-link" data-bs-dismiss="offcanvas"><i class="bi bi-people"></i> Clientes</a></li>
+        <li class="nav-item"><a routerLink="newsletter" routerLinkActive="active" class="nav-link disabled" tabindex="-1" aria-disabled="true"><i class="bi bi-envelope"></i> Newsletter</a></li>
+        </ul>
+    </div>
+  </div>
+</div>
