@@ -25,7 +25,11 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
-              "src/static"
+              {
+                "glob": "_redirects",
+                "input": "src/static",
+                "output": "/"
+              }
             ],
             "styles": [
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
