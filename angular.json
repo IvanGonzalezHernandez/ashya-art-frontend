@@ -24,7 +24,12 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/static",
+                "output": "/"
+              }
             ],
             "styles": [
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
