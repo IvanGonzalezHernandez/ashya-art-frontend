@@ -24,12 +24,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/assets",
-              {
-                "glob": "_redirects",
-                "input": "src/static",
-                "output": "/"
-              }
+              "src/assets"
             ],
             "styles": [
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
