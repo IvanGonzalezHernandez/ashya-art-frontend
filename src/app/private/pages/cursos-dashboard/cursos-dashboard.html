@@ -1,42 +1,100 @@
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-    <h2 class="mb-2 mb-md-0">Cursos</h2>
-    <button class="btn btn-success" (click)="crearCurso()">+ Nuevo Curso</button>
+<div class="container-fluid mt-4">
+  <!-- ENCABEZADO -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Course Dashboard</h1>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success" (click)="crearCurso()">+ New Course</button>
+      <button class="btn btn-warning" (click)="asignarFechaCurso()">+ Add Date</button>
+    </div>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-      <thead class="table-dark">
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let curso of cursos | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
-          <td>{{ curso.id }}</td>
-          <td>{{ curso.nombre }}</td>
-          <td>{{ curso.descripcion }}</td>
-          <td>{{ curso.precio | currency:'EUR' }}</td>
-          <td>
-            <div class="d-grid d-md-block gap-2">
-              <button class="btn btn-primary btn-sm mb-1 mb-md-0" (click)="editarCurso(curso)">Editar</button>
-              <button class="btn btn-danger btn-sm mb-1 mb-md-0" (click)="eliminarCurso(curso.id)">Eliminar</button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- TABLA EN UNA CARD -->
+  <div class="card shadow-sm rounded-3">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Subtitle</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let curso of cursos | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
+              <td>{{ curso.id }}</td>
+              <td>{{ curso.nombre }}</td>
+              <td>{{ curso.subtitulo }}</td>
+              <td>{{ curso.descripcion }}</td>
+              <td>{{ curso.precio | currency:'EUR' }}</td>
+              <td>
+                <img [src]="curso.img" alt="Image" width="60" height="60" style="object-fit: cover; border-radius: 5px;">
+              </td>
+              <td>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="editarCurso(curso)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarCurso(curso.id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <div class="d-flex justify-content-end mt-3">
+  <!-- CONTROLES DE ABAJO -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
     <pagination-controls
-      previousLabel="Anterior"
-      nextLabel="Siguiente"
+      previousLabel="Previous"
+      nextLabel="Next"
       (pageChange)="paginaActual = $event">
     </pagination-controls>
   </div>
 </div>
+
+<!-- MODAL -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
+        <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.nombre" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Subtitle</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.subtitulo" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Price</label>
+            <input type="number" class="form-control" [(ngModel)]="cursoEditando.precio" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Image URL</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.img" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
+        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="cursoEditando"></div>

@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'login', component: Login },
   {
     path: 'dashboard',
-    component: Layout, // layout privado con aside y router-outlet
+    component: Layout,
     children: [
       { path: 'inicio', component: Dashboard },
       { path: 'cursos', component: CursosDashboard },             
