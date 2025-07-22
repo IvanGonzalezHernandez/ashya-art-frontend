@@ -1,5 +1,5 @@
 <div class="container-fluid mt-4">
-  <!-- ENCABEZADO -->
+  <!-- ENCABEZADO PRODUCTOS -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Product Dashboard</h1>
     <div class="d-flex gap-2">
@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <!-- TABLA EN UNA CARD -->
+  <!-- TABLA PRODUCTOS EN UNA CARD -->
   <div class="card shadow-sm rounded-3">
     <div class="card-body p-0">
       <div class="table-responsive">
@@ -25,7 +25,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let producto of productos | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
+            <tr *ngFor="let producto of productos | paginate: { itemsPerPage: 5, currentPage: paginaActualProducto }">
               <td>{{ producto.id }}</td>
               <td>{{ producto.nombre }}</td>
               <td>{{ producto.subtitulo }}</td>
@@ -48,24 +48,81 @@
     </div>
   </div>
 
-  <!-- CONTROLES DE ABAJO -->
+  <!-- CONTROLES PRODUCTOS -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
+    <button class="btn btn-outline-secondary" (click)="exportarCSVProductos()">Export CSV</button>
     <pagination-controls
       previousLabel="Previous"
       nextLabel="Next"
-      (pageChange)="paginaActual = $event">
+      (pageChange)="paginaActualProducto = $event">
+    </pagination-controls>
+  </div>
+
+  <!-- ENCABEZADO COMPRAS -->
+  <div class="d-flex justify-content-between align-items-center my-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Product Purchases Dashboard</h1>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success" (click)="crearCompra()">+ New Purchase</button>
+    </div>
+  </div>
+
+  <!-- TABLA COMPRAS EN UNA CARD -->
+  <div class="card shadow-sm rounded-3">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>ID Cliente</th>
+              <th>Nombre Cliente</th>
+              <th>ID Producto</th>
+              <th>Nombre Producto</th>
+              <th>Cantidad</th>
+              <th>Fecha Compra</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let compra of compras | paginate: { itemsPerPage: 5, currentPage: paginaActualCompra }">
+              <td>{{ compra.id }}</td>
+              <td>{{ compra.idCliente }}</td>
+              <td>{{ compra.nombreCliente }}</td>
+              <td>{{ compra.idProducto }}</td>
+              <td>{{ compra.nombreProducto }}</td>
+              <td>{{ compra.cantidad }}</td>
+              <td>{{ compra.fechaCompra | date:'short' }}</td>
+              <td>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="editarCompra(compra)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarCompra(compra.id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLES COMPRAS -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
+    <button class="btn btn-outline-secondary" (click)="exportarCSVCompras()">Export CSV</button>
+    <pagination-controls
+      previousLabel="Previous"
+      nextLabel="Next"
+      (pageChange)="paginaActualCompra = $event">
     </pagination-controls>
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL PRODUCTO -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="productoEditando">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">{{ esNuevo ? 'Create Product' : 'Edit Product' }}</h5>
-        <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
+        <h5 class="modal-title">{{ esNuevoProducto ? 'Create Product' : 'Edit Product' }}</h5>
+        <button type="button" class="btn-close" (click)="cancelarEdicionProducto()"></button>
       </div>
       <div class="modal-body">
         <div class="row g-3">
@@ -96,10 +153,49 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
+        <button class="btn btn-secondary" (click)="cancelarEdicionProducto()">Cancel</button>
+        <button class="btn btn-success" (click)="guardarCambiosProducto()">Save</button>
       </div>
     </div>
   </div>
 </div>
 <div class="modal-backdrop fade show" *ngIf="productoEditando"></div>
+
+<!-- MODAL COMPRA -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{ esNuevoCompra ? 'Create Purchase' : 'Edit Purchase' }}</h5>
+        <button type="button" class="btn-close" (click)="cancelarEdicionCompra()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">ID Cliente</label>
+            <input type="number" class="form-control" [(ngModel)]="compraEditando.idCliente" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">ID Producto</label>
+            <input type="number" class="form-control" [(ngModel)]="compraEditando.idProducto" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Cantidad</label>
+            <input type="number" class="form-control" [(ngModel)]="compraEditando.cantidad" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Fecha Compra</label>
+            <input type="datetime-local" class="form-control" 
+              [ngModel]="compraEditando.fechaCompra | date:'yyyy-MM-ddTHH:mm'" 
+              (ngModelChange)="compraEditando.fechaCompra = $event" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelarEdicionCompra()">Cancel</button>
+        <button class="btn btn-success" (click)="guardarCambiosCompra()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="compraEditando"></div>

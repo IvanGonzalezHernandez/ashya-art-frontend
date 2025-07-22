@@ -2,14 +2,13 @@
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Course Dashboard</h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearCurso()">+ New Course</button>
-      <button class="btn btn-warning" (click)="asignarFechaCurso()">+ Add Date</button>
     </div>
   </div>
 
-  <!-- TABLA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3">
+  <!-- TABLA CURSOS EN UNA CARD -->
+  <div class="card shadow-sm rounded-3 mb-5">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0">
@@ -47,54 +46,154 @@
     </div>
   </div>
 
-  <!-- CONTROLES DE ABAJO -->
-  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
+  <!-- CONTROLES CURSOS -->
+  <div class="d-flex justify-content-between align-items-center mt-3 mb-5 flex-wrap">
+    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export Courses CSV</button>
     <pagination-controls
       previousLabel="Previous"
       nextLabel="Next"
       (pageChange)="paginaActual = $event">
     </pagination-controls>
   </div>
-</div>
 
-<!-- MODAL -->
-<div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content shadow-lg">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
-        <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">Name</label>
-            <input type="text" class="form-control" [(ngModel)]="cursoEditando.nombre" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Subtitle</label>
-            <input type="text" class="form-control" [(ngModel)]="cursoEditando.subtitulo" />
-          </div>
-          <div class="col-12">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion"></textarea>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Price</label>
-            <input type="number" class="form-control" [(ngModel)]="cursoEditando.precio" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Image URL</label>
-            <input type="text" class="form-control" [(ngModel)]="cursoEditando.img" />
+  <!-- MODAL CURSOS -->
+  <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
+          <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="cursoEditando.nombre" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Subtitle</label>
+              <input type="text" class="form-control" [(ngModel)]="cursoEditando.subtitulo" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Price</label>
+              <input type="number" class="form-control" [(ngModel)]="cursoEditando.precio" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Image URL</label>
+              <input type="text" class="form-control" [(ngModel)]="cursoEditando.img" />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
+          <button class="btn btn-success" (click)="guardarCambios()">Save</button>
+        </div>
       </div>
     </div>
   </div>
+  <div class="modal-backdrop fade show" *ngIf="cursoEditando"></div>
+
+    <!-- ENCABEZADO -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Date Dashboard</h1>
+    <div class="d-flex gap-2 flex-wrap">
+      <button class="btn btn-success" (click)="crearCursoFecha()">+ Add Date</button>
+    </div>
+  </div>
+
+  <!-- TABLA CURSOFECHA EN UNA CARD -->
+  <div class="card shadow-sm rounded-3">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Course ID</th>
+              <th>Date</th>
+              <th>Init Time</th>
+              <th>End Time</th>
+              <th>Available Seats</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cursoFecha of cursoFechas | paginate: { itemsPerPage: 5, currentPage: paginaActualCursoFecha }">
+              <td>{{ cursoFecha.id }}</td>
+              <td>{{ cursoFecha.nombreCurso }}</td>
+              <td>{{ cursoFecha.fecha }}</td>
+              <td>{{ cursoFecha.horaInicio }}</td>
+              <td>{{ cursoFecha.horaFin }}</td>
+              <td>{{ cursoFecha.plazasDisponibles }}</td>
+              <td>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="editarCursoFecha(cursoFecha)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarCursoFecha(cursoFecha.id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLES CURSOFECHA -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export Dates CSV</button>
+    <pagination-controls
+      previousLabel="Previous"
+      nextLabel="Next"
+      (pageChange)="paginaActualCursoFecha = $event">
+    </pagination-controls>
+  </div>
+
+  <!-- MODAL CURSOFECHA -->
+  <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoFechaEditando">
+    <div class="modal-dialog">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">{{ esNuevaCursoFecha ? 'New Course Date' : 'Edit Course Date' }}</h5>
+          <button type="button" class="btn-close" (click)="cancelarEdicionCursoFecha()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Course</label>
+            <select class="form-select" [(ngModel)]="cursoFechaEditando.idCurso">
+              <option *ngFor="let curso of cursos" [value]="curso.id">
+                {{ curso.nombre }}
+              </option>
+            </select>
+          </div>
+            <div class="col-md-6">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-control" [(ngModel)]="cursoFechaEditando.fecha" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Start Time</label>
+              <input type="time" class="form-control" [(ngModel)]="cursoFechaEditando.horaInicio" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">End Time</label>
+              <input type="time" class="form-control" [(ngModel)]="cursoFechaEditando.horaFin" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Available Seats</label>
+              <input type="number" class="form-control" [(ngModel)]="cursoFechaEditando.plazasDisponibles" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="cancelarEdicionCursoFecha()">Cancel</button>
+          <button class="btn btn-success" (click)="guardarCursoFecha()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show" *ngIf="cursoFechaEditando"></div>
 </div>
-<div class="modal-backdrop fade show" *ngIf="cursoEditando"></div>

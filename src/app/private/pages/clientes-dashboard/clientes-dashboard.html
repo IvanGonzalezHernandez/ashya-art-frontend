@@ -1,1 +1,127 @@
-<p>clientes-dashboard works!</p>
+<div class="container-fluid mt-4">
+  <!-- ENCABEZADO -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Clientes Dashboard</h1>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success" (click)="crearCliente()">+ New Cliente</button>
+    </div>
+  </div>
+
+  <!-- TABLA EN UNA CARD -->
+  <div class="card shadow-sm rounded-3">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Teléfono</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+              <th>Calle</th>
+              <th>Número</th>
+              <th>Piso</th>
+              <th>Provincia</th>
+              <th>Ciudad</th>
+              <th>Código Postal</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cliente of clientes | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
+              <td>{{ cliente.id }}</td>
+              <td>{{ cliente.telefono }}</td>
+              <td>{{ cliente.nombre }}</td>
+              <td>{{ cliente.apellido }}</td>
+              <td>{{ cliente.email }}</td>
+              <td>{{ cliente.calle }}</td>
+              <td>{{ cliente.numero }}</td>
+              <td>{{ cliente.piso }}</td>
+              <td>{{ cliente.provincia }}</td>
+              <td>{{ cliente.ciudad }}</td>
+              <td>{{ cliente.codigoPostal }}</td>
+              <td>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="editarCliente(cliente)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarCliente(cliente.id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLES DE ABAJO -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
+    <pagination-controls
+      previousLabel="Previous"
+      nextLabel="Next"
+      (pageChange)="paginaActual = $event">
+    </pagination-controls>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="clienteEditando">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{ esNuevo ? 'Create Cliente' : 'Edit Cliente' }}</h5>
+        <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Tlf</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.telefono" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.nombre" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Surname</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.apellido" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="clienteEditando.email" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Street</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.calle" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Number</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.numero" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Floor</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.piso" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Province</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.provincia" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">City</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.ciudad" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Postal code</label>
+            <input type="text" class="form-control" [(ngModel)]="clienteEditando.codigoPostal" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
+        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="clienteEditando"></div>
