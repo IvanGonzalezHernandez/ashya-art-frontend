@@ -37,16 +37,17 @@
       <div class="col-md-3">
         <h6 class="fw-bold text-uppercase">Newsletter</h6>
         <p>Be the first to see our special offers.</p>
-        <form class="d-flex flex-column">
+        <form class="d-flex flex-column" (ngSubmit)="suscribirse()" #form="ngForm">
           <input
             type="email"
             name="email"
+            [(ngModel)]="emailSuscripcion"
             placeholder="Enter your email"
             aria-label="Email for newsletter"
             class="form-control mb-2"
             required
           />
-          <button type="submit" class="btn mb-2" style="background-color: #3A9097; color: #fff;">
+          <button type="submit" class="btn mb-2 bg-azul text-white">
             Subscribe
           </button>
         </form>

@@ -6,8 +6,6 @@ import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Reservas } from '../../../models/curso-compra.model';
  
-import { FullCalendarModule } from '@fullcalendar/angular';
-import type { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -17,7 +15,7 @@ import interactionPlugin from '@fullcalendar/interaction';
   standalone: true,
   templateUrl: './reservas-dashboard.html',
   styleUrls: ['./reservas-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, FullCalendarModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule]
 })
 export class ReservasDashboard implements OnInit {
   reservas: Reservas[] = [];
@@ -25,20 +23,6 @@ export class ReservasDashboard implements OnInit {
   reservaEditando: Reservas | null = null;
   esNuevo: boolean = false;
   
-calendarOptions: CalendarOptions = {
-  initialView: 'dayGridMonth',
-  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-  headerToolbar: {
-    right: 'prev,next'
-  },
-  events: [], 
-  height: 600,       // Altura fija para que no ocupe mucho espacio
-  aspectRatio: 1.3,  // Más compacto
-  weekends: true,
-  dayMaxEventRows: true,
-  nowIndicator: true,
-  selectable: true,
-};
 
   constructor(
     private reservasService: ReservasService,
@@ -52,17 +36,6 @@ calendarOptions: CalendarOptions = {
   obtenerReservas() {
     this.reservasService.getReservas().subscribe(data => {
       this.reservas = data;
-
-      // Actualiza los eventos del calendario
-      this.calendarOptions = {
-        ...this.calendarOptions,
-        events: this.reservas.map(r => ({
-          id: r.id.toString(),
-          title: `${r.nombreCliente} - (${r.plazasReservadas} plazas)`,
-          start: r.fechaCurso,
-          allDay: true
-        }))
-      };
     });
   }
 

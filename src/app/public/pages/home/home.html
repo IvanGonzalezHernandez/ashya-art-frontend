@@ -1,1 +1,131 @@
-<p>home works!</p>
+<!-- Banner -->
+<div class="position-relative w-100 d-flex justify-content-center align-items-center" style="height: 100vh; overflow: hidden;">
+  <img src="assets/banner/banner.png" alt="Banner"
+       class="position-absolute top-0 start-0 w-100 h-100"
+       style="object-fit: cover; z-index: 1;">
+  <div class="position-absolute top-0 start-0 w-100 h-100"
+       style="background-color: rgba(0, 0, 0, 0.3); z-index: 2;"></div>
+  <div class="position-relative text-center text-white" style="z-index: 3;">
+    <h1 class="display-3">Welcome to Ashya Art</h1>
+    <p class="lead">Handcrafted ceramics with soul</p>
+  </div>
+</div>
+
+<!-- About Ashya -->
+<section class="py-5 bg-beige-claro">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- Texto con botón visible solo en escritorio -->
+      <div class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0">
+        <h2 class="fw-bold mb-4">About Ashya</h2>
+        <p class="text-muted fs-5">
+          At Ashya, we’re passionate about creating unique handmade ceramics that blend traditional craftsmanship with modern design.  
+          Each piece is carefully crafted to bring warmth and beauty into your home and life.
+        </p>
+        <p class="text-muted">
+          Founded in Hamburg, Germany, our studio focuses on quality, sustainability, and the art of storytelling through ceramics.  
+          We offer workshops, custom pieces, and an open studio where creativity comes to life.  
+          Join us in celebrating the tactile beauty of clay and the magic of handmade art.
+        </p>
+        <a href="/about" class="btn bg-azul text-white mt-3 d-none d-lg-inline-block">Learn More</a>
+      </div>
+
+      <!-- Imagen con botón visible solo en móvil debajo de la imagen -->
+      <div class="col-lg-6 order-2 text-center">
+        <img src="assets/about/about.jpg" alt="About Ashya" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
+        <a href="/about" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">Learn More</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Cursos Destacados -->
+<section class="py-4 bg-beige-claro">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold" style="color: #3E3028;">Our Featured Courses</h2>
+    <p class="text-center text-muted mb-5" style="max-width: 700px; margin: 0 auto; color: #6b5e52;">
+      Discover our courses designed to help you create unique, handcrafted pieces.
+    </p>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+      <div class="col" *ngFor="let curso of cursos">
+        <div class="card h-100 shadow-sm border-0 rounded-4" style="background-color: #fff;">
+          <img [src]="curso.img" class="card-img-top rounded-top-4" [alt]="curso.nombre" style="object-fit: cover; height: 200px;">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title" style="color: #3E3028;">{{ curso.nombre }}</h5>
+            <p class="card-text text-muted flex-grow-1" style="color: #6b5e52;">{{ curso.descripcion }}</p>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              <span class="fw-bold fs-5" style="color: #3E3028;">{{ curso.precio }}€</span>
+              <!-- <a [routerLink]="['/courses', curso.id]" class="btn btn-primary" style="background-color: #3E3028; border:none;">View Course</a> -->
+              <a href="#" class="btn" style="background-color: #3E3028; color: white; border:none;">View Course</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gift Cards Section -->
+<section class="py-4 bg-beige-claro">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- Imagen a la izquierda -->
+      <div class="col-lg-6 mb-4 mb-lg-0 order-2 order-lg-1 text-center">
+        <img src="assets/tarjeta-regalo/plantilla.png" alt="Gift Cards" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
+        <!-- Botón solo visible en móvil, debajo de la imagen -->
+        <a href="/gift-cards" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">Shop Gift Cards</a>
+      </div>
+
+      <!-- Texto a la derecha -->
+      <div class="col-lg-6 text-center text-lg-start order-1 order-lg-2">
+        <h2 class="fw-bold mb-4">Gift Cards</h2>
+        <p class="text-muted fs-5">
+          Give the gift of creativity with Ashya gift cards — personalized and perfect for any occasion.
+        </p>
+        <p class="text-muted">
+          Valid for 6 months from the date of purchase, our gift cards can be used for any products or workshops in our store.  
+          They’re ideal for gifting friends, family, or anyone who loves handcrafted ceramics and artistic experiences.
+        </p>
+        <p class="text-muted">
+          Customize your gift card with a personal message to make it truly special and memorable.
+        </p>
+        <!-- Botón solo visible en escritorio, junto al texto -->
+        <a href="/gift-cards" class="btn bg-azul text-white mt-3 d-none d-lg-inline-block">Shop Gift Cards</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Productos Destacados -->
+<section class="py-4 bg-beige">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold" style="color: #3E3028;">Our Featured Products</h2>
+    <p class="text-center text-muted mb-5" style="max-width: 700px; margin: 0 auto; color: #6b5e52;">
+      Discover our handcrafted ceramics perfect for daily use or decoration.
+    </p>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+      <div class="col" *ngFor="let producto of productos">
+        <div class="card h-100 shadow-sm border-0 rounded-4" style="background-color: #fff;">
+          <img [src]="producto.img" class="card-img-top rounded-top-4" [alt]="producto.nombre" style="object-fit: cover; height: 200px;">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title" style="color: #3E3028;">{{ producto.nombre }}</h5>
+            <p class="card-text text-muted flex-grow-1" style="color: #6b5e52;">{{ producto.subtitulo }}</p>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              <span class="fw-bold fs-5" style="color: #3E3028;">{{ producto.precio }}€</span>
+              <!-- <a [routerLink]="['/products', producto.id]" class="btn btn-primary" style="background-color: #3E3028; border:none;">View Product</a> -->
+              <a href="#" class="btn" style="background-color: #3E3028; color: white; border:none;">View Product</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

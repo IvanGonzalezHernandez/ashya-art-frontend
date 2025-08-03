@@ -27,4 +27,8 @@ export class NewsletterService {
   eliminarNewsletter(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  suscribirse(newsletter: Partial<Newsletter>): Observable<Newsletter> {
+    return this.http.post<Newsletter>(`${this.apiUrl}/suscribirse`, newsletter);
+  }
 }
