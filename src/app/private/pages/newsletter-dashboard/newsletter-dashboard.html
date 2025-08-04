@@ -16,10 +16,10 @@
             <tr>
               <th>ID</th>
               <th>Email</th>
-              <th>Fecha Registro</th>
-              <th>Estado</th>
+              <th>Registration Date</th>
+              <th>Status</th>
               <th>Actions</th>
-            </tr>
+            </tr>            
           </thead>
           <tbody>
             <tr *ngFor="let newsletter of newsletters | paginate: { itemsPerPage: 5, currentPage: paginaActual }">

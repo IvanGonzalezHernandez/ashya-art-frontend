@@ -63,3 +63,14 @@
     </div>
   </div>
 </footer>
+
+
+
+
+<app-feedback-modal
+  *ngIf="mostrarFeedback"
+  [title]="feedbackTitulo"
+  [message]="feedbackMensaje"
+  [status]="feedbackTipo"
+  (closed)="cerrarFeedback()"
+></app-feedback-modal>

@@ -1,0 +1,27 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content border-0 shadow rounded">
+  
+        <div class="modal-header
+                    text-white
+                    "
+             [ngClass]="{
+               'bg-success': status === 'success',
+               'bg-danger': status === 'error',
+               'bg-info': status === 'info'
+             }">
+          <h5 class="modal-title" id="modalTitle">{{ title }}</h5>
+        </div>
+  
+        <div class="modal-body" id="modalDesc">
+          <p class="mb-0">{{ message }}</p>
+        </div>
+  
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cerrar</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  

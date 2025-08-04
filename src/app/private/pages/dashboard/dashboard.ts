@@ -15,7 +15,7 @@ export class Dashboard implements AfterViewInit {
   totalReservas: number = 78;
   totalIngresos: number = 3500;
 
-  resumenLabels: string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'];
+  resumenLabels: string[] = ['January', 'February', 'March', 'April', 'May'];
   resumenDatos: number[] = [1200, 1500, 1800, 1300, 1700];
 
   ngAfterViewInit(): void {
@@ -30,7 +30,7 @@ export class Dashboard implements AfterViewInit {
         data: {
           labels: this.resumenLabels,
           datasets: [{
-            label: 'Ingresos (€)',
+            label: 'Revenue (€)',
             data: this.resumenDatos,
             borderColor: '#198754',
             backgroundColor: 'rgba(25,135,84,0.2)',
