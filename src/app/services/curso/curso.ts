@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Curso } from '../../models/curso.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
-import { CursoFecha } from '../../models/cursoFecha.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +16,14 @@ export class CursoService {
     return this.http.get<Curso[]>(this.apiUrl);
   }
 
-  crearCurso(curso: Curso): Observable<Curso> {
-    return this.http.post<Curso>(this.apiUrl, curso);
+  crearCurso(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData);
   }
-
-  actualizarCurso(curso: Curso): Observable<Curso> {
-    return this.http.put<Curso>(`${this.apiUrl}/${curso.id}`, curso);
+  
+  actualizarCurso(formData: FormData, id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, formData);
   }
-
+  
   eliminarCurso(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

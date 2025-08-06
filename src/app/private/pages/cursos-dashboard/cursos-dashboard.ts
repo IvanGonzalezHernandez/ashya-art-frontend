@@ -24,6 +24,9 @@ export class CursosDashboard implements OnInit {
   cursoEditando: Curso | null = null;
   esNuevo: boolean = false;
 
+  imagenes: File[] = [];
+  vistaPreviaImagenes: string[] = [];
+
   // CURSOFECHA
   cursoFechas: CursoFecha[] = [];
   paginaActualCursoFecha: number = 1;
@@ -46,7 +49,7 @@ export class CursosDashboard implements OnInit {
   obtenerCursos() {
     this.cursoService.getCursos().subscribe(data => this.cursos = data);
   }
-
+  
   crearCurso() {
     this.esNuevo = true;
     this.cursoEditando = {
@@ -55,10 +58,45 @@ export class CursosDashboard implements OnInit {
       subtitulo: '',
       descripcion: '',
       precio: 0,
-      img: ''
+      img1: null,
+      img2: null,
+      img3: null,
+      img4: null,
+      img5: null,
+      nivel: '',
+      duracion: '',
+      piezas: '',
+      materiales: '',
+      plazasMaximas: 0,
+      informacionExtra: ''
     };
   }
+  
+  onImagenesSeleccionadas(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+  
+    const nuevosArchivos = Array.from(input.files);
+  
+    if (this.imagenes.length + nuevosArchivos.length > 5) {
+      alert('Solo puedes seleccionar hasta 5 imágenes en total');
+      return;
+    }
+  
+    nuevosArchivos.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vistaPreviaImagenes.push(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      this.imagenes.push(file);
+    });
+  }
 
+  eliminarImagen(index: number) {
+    this.imagenes.splice(index, 1);
+    this.vistaPreviaImagenes.splice(index, 1);
+  }
   editarCurso(curso: Curso) {
     this.esNuevo = false;
     this.cursoEditando = { ...curso };
@@ -71,21 +109,42 @@ export class CursosDashboard implements OnInit {
 
   guardarCambios() {
     if (!this.cursoEditando) return;
-
+  
+    const formData = new FormData();
+    const cursoDto = {
+      id: this.cursoEditando.id,
+      nombre: this.cursoEditando.nombre,
+      subtitulo: this.cursoEditando.subtitulo,
+      descripcion: this.cursoEditando.descripcion,
+      precio: this.cursoEditando.precio,
+      nivel: this.cursoEditando.nivel,
+      duracion: this.cursoEditando.duracion,
+      piezas: this.cursoEditando.piezas,
+      materiales: this.cursoEditando.materiales,
+      plazasMaximas: this.cursoEditando.plazasMaximas,
+      informacionExtra: this.cursoEditando.informacionExtra
+    };
+  
+    formData.append('curso', new Blob([JSON.stringify(cursoDto)], { type: 'application/json' }));
+  
+    this.imagenes.forEach(imagen => {
+      formData.append('imagenes', imagen);
+    });
+  
     if (this.esNuevo) {
-      this.cursoService.crearCurso(this.cursoEditando).subscribe(() => {
+      this.cursoService.crearCurso(formData).subscribe(() => {
         this.obtenerCursos();
-        this.cursoEditando = null;
-        this.esNuevo = false;
+        this.cancelarEdicion();
       });
     } else {
-      this.cursoService.actualizarCurso(this.cursoEditando).subscribe(() => {
+      this.cursoService.actualizarCurso(formData, this.cursoEditando.id).subscribe(() => {
         this.obtenerCursos();
-        this.cursoEditando = null;
-        this.esNuevo = false;
+        this.cancelarEdicion();
       });
     }
   }
+  
+  
 
   eliminarCurso(id: number) {
     if (confirm('¿Estás seguro de eliminar este curso?')) {
@@ -154,14 +213,13 @@ export class CursosDashboard implements OnInit {
 
   exportarCSV() {
     // Exportar cursos
-    const encabezadoCursos = ['ID', 'Nombre', 'Subtítulo', 'Descripción', 'Precio', 'Imagen'];
+    const encabezadoCursos = ['ID', 'Nombre', 'Subtítulo', 'Descripción', 'Precio'];
     const filasCursos = this.cursos.map(curso => [
       curso.id,
       curso.nombre,
       curso.subtitulo,
       curso.descripcion,
       curso.precio,
-      curso.img
     ]);
     this.csvExportService.exportarCSV(encabezadoCursos, filasCursos, 'courses.csv');
 

@@ -18,8 +18,13 @@
               <th>Name</th>
               <th>Subtitle</th>
               <th>Description</th>
+              <th>Duration</th>
+              <th>Level</th>
+              <th>Pieces</th>
+              <th>Materials</th>
+              <th>Max Seats</th>
+              <th>Extra Info</th>
               <th>Price</th>
-              <th>Image</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -29,10 +34,13 @@
               <td>{{ curso.nombre }}</td>
               <td>{{ curso.subtitulo }}</td>
               <td>{{ curso.descripcion }}</td>
+              <td>{{ curso.duracion }}</td>
+              <td>{{ curso.nivel }}</td>
+              <td>{{ curso.piezas }}</td>
+              <td>{{ curso.materiales }}</td>
+              <td>{{ curso.plazasMaximas }}</td>
+              <td>{{ curso.informacionExtra }}</td>
               <td>{{ curso.precio | currency:'EUR' }}</td>
-              <td>
-                <img [src]="curso.img" alt="Image" width="60" height="60" style="object-fit: cover; border-radius: 5px;">
-              </td>
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarCurso(curso)">Edit</button>
@@ -56,46 +64,79 @@
     </pagination-controls>
   </div>
 
-  <!-- MODAL CURSOS -->
-  <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content shadow-lg">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
-          <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Name</label>
-              <input type="text" class="form-control" [(ngModel)]="cursoEditando.nombre" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Subtitle</label>
-              <input type="text" class="form-control" [(ngModel)]="cursoEditando.subtitulo" />
-            </div>
-            <div class="col-12">
-              <label class="form-label">Description</label>
-              <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion"></textarea>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Price</label>
-              <input type="number" class="form-control" [(ngModel)]="cursoEditando.precio" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Image URL</label>
-              <input type="text" class="form-control" [(ngModel)]="cursoEditando.img" />
-            </div>
+<!-- MODAL CURSOS -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
+        <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.nombre" />
           </div>
+          <div class="col-md-6">
+            <label class="form-label">Subtitle</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.subtitulo" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Level</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.nivel" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Duration</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.duracion" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Pieces</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.piezas" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Materials</label>
+            <input type="text" class="form-control" [(ngModel)]="cursoEditando.materiales" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Max Seats</label>
+            <input type="number" class="form-control" [(ngModel)]="cursoEditando.plazasMaximas" min="1" max="99" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Price</label>
+            <input type="number" class="form-control" [(ngModel)]="cursoEditando.precio" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Extra Information</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="cursoEditando.informacionExtra"></textarea>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Images (max 5)</label>
+            <input type="file" class="form-control" (change)="onImagenesSeleccionadas($event)" multiple accept="image/*" />
+            <div class="mt-3 d-flex flex-wrap gap-2">
+              <div *ngFor="let vista of vistaPreviaImagenes; let i = index" class="position-relative">
+                <img [src]="vista" alt="preview" style="width: 100px; height: 100px; object-fit: cover;" class="rounded border" />
+                <button type="button" class="btn-close position-absolute top-0 end-0 bg-white rounded-circle"
+                        style="transform: scale(0.8);" (click)="eliminarImagen(i)"></button>
+              </div>
+            </div>
+          </div>            
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-          <button class="btn btn-success" (click)="guardarCambios()">Save</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
+        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
       </div>
     </div>
   </div>
-  <div class="modal-backdrop fade show" *ngIf="cursoEditando"></div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="cursoEditando"></div>
+
 
     <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">

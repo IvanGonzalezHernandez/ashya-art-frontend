@@ -54,7 +54,8 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let curso of cursos">
         <div class="card h-100 shadow-sm border-0 rounded-4" style="background-color: #fff;">
-          <img [src]="curso.img" class="card-img-top rounded-top-4" [alt]="curso.nombre" style="object-fit: cover; height: 200px;">
+          <img [src]="curso.img1Url" class="card-img-top rounded-top-4" [alt]="curso.nombre" style="object-fit: cover; height: 200px;">
+
           <div class="card-body d-flex flex-column">
             <h5 class="card-title" style="color: #3E3028;">{{ curso.nombre }}</h5>
             <p class="card-text text-muted flex-grow-1" style="color: #6b5e52;">{{ curso.descripcion }}</p>
