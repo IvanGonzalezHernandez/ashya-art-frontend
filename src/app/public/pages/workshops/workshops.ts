@@ -1,9 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-workshops',
-  imports: [],
+  standalone: true,
   templateUrl: './workshops.html',
-  styleUrl: './workshops.scss'
+  styleUrls: ['./workshops.scss'],
+  imports: [CommonModule, RouterModule]
 })
 export class Workshops {}

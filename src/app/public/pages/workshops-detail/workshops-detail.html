@@ -1,0 +1,187 @@
+<section class="py-5 bg-beige" *ngIf="cursoSeleccionado">
+    <div class="container">
+  
+      <!-- Nombre y subtítulo -->
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <h1 class="fw-bold" style="color: #3E3028;">{{ cursoSeleccionado.nombre }}</h1>
+          <p class="fs-5 text-muted">{{ cursoSeleccionado.subtitulo }}</p>
+        </div>
+      </div>
+  
+      <div class="row g-4 align-items-center">
+        <!-- Carrusel de imágenes -->
+        <div class="col-lg-6">
+          <div id="cursoCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner rounded-4 shadow">
+  
+              <ng-container *ngFor="let img of [cursoSeleccionado.img1Url, cursoSeleccionado.img2Url, cursoSeleccionado.img3Url, cursoSeleccionado.img4Url, cursoSeleccionado.img5Url]; let i = index">
+                <div *ngIf="img" class="carousel-item" [class.active]="i === 0">
+                  <img [src]="img" class="d-block w-100" alt="Imagen curso {{ i + 1 }}" style="object-fit: cover; height: 400px;">
+                </div>
+              </ng-container>
+  
+            </div>
+  
+            <button class="carousel-control-prev" type="button" data-bs-target="#cursoCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#cursoCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+  
+        <!-- Descripción y detalles -->
+        <div class="col-lg-6 d-flex flex-column">
+          <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
+  
+          <div class="text-muted fs-5 flex-grow-1" style="overflow-wrap: break-word;">
+            <p>{{ cursoSeleccionado.descripcion }}</p>
+            <p>{{ cursoSeleccionado.informacionExtra }}</p>
+          </div>
+  
+          <ul class="list-unstyled mt-4">
+            <li><strong>Price:</strong> {{ cursoSeleccionado.precio }}€</li>
+            <li><strong>Duration:</strong> {{ cursoSeleccionado.duracion }}</li>
+            <li><strong>Level:</strong> {{ cursoSeleccionado.nivel }}</li>
+            <li><strong>Materials:</strong> {{ cursoSeleccionado.materiales }}</li>
+            <li><strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}</li>
+            <li><strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Botón centrado fuera del row para que quede debajo -->
+      <div class="mt-4 text-center">
+        <button class="btn text-white bg-azul px-4 py-2"
+                data-bs-toggle="modal" data-bs-target="#modalFechasDisponibles">
+          Reserve Course
+        </button>
+      </div>
+  
+    </div>
+  </section>
+  
+  
+<!-- Modal Bootstrap normal -->
+<div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header bg-azul text-white">
+          <h5 class="modal-title" id="modalReservaLabel">Reserve Course</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <!-- Class type (Dropdown) -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Class type</label>
+                <select class="form-select" [(ngModel)]="cliente.classType" name="classType">
+                  <option value="" disabled selected>Select an option</option>
+                  <option *ngFor="let curso of cursos" [value]="curso.nombre">{{ curso.nombre }}</option>
+                </select>
+            </div>
+              
+  
+            <!-- How many people are interested? -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">How many people are interested?</label>
+              <input type="number" class="form-control" min="1" [(ngModel)]="cliente.peopleInterested" name="peopleInterested" placeholder="Number of people">
+            </div>
+  
+            <!-- Your Name -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Your Name</label>
+              <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" placeholder="Your full name">
+            </div>
+  
+            <!-- Your availability for the class -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Your availability for the class (on which days/hours are you available?)</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="cliente.availability" name="availability" placeholder="Write your available days/hours"></textarea>
+            </div>
+  
+            <!-- Your email address -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Your email address</label>
+              <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" placeholder="email@example.com">
+            </div>
+  
+            <!-- Your phone number -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Your phone number</label>
+              <input type="text" class="form-control" [(ngModel)]="cliente.telefono" name="telefono" placeholder="+34 600 000 000">
+            </div>
+  
+            <!-- Additional questions -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Do you have any additional questions to me?</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="cliente.additionalQuestions" name="additionalQuestions" placeholder="Write here"></textarea>
+            </div>
+  
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-success">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- Modal para mostrar fechas disponibles -->
+  <div class="modal fade" id="modalFechasDisponibles" tabindex="-1" aria-labelledby="modalFechasDisponiblesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header bg-azul text-white">
+          <h5 class="modal-title" id="modalFechasDisponiblesLabel">Available Dates</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="cursosFecha.length > 0; else noFechas">
+            <div *ngFor="let fecha of cursosFecha" class="card mb-3">
+              <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title mb-1">{{ fecha.fecha | date:'dd/MM/yyyy' }}</h5>
+                  <p class="mb-1">
+                    {{ fecha.horaInicio }} - {{ fecha.horaFin }}
+                  </p>
+                  <p class="mb-0">Available seats: <strong>{{ fecha.plazasDisponibles }}</strong></p>
+                </div>
+                <div class="d-flex align-items-center mt-3 mt-md-0">
+                  <label for="plazasSelect{{fecha.id}}" class="me-2 mb-0">Quantity:</label>
+                  <select id="plazasSelect{{fecha.id}}" class="form-select me-3" style="width: 80px;">
+                    <option *ngFor="let _ of [].constructor(fecha.plazasDisponibles); let i = index" [value]="i + 1">
+                      {{ i + 1 }}
+                    </option>
+                  </select>
+                  
+                  <button class="btn btn-success">Add to cart</button>
+                </div>
+              </div>
+            </div>
+  
+            <div class="text-center mt-4">
+              <!-- Aquí llamamos al método que cierra este modal y abre el otro -->
+              <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">Dates don't fit my schedule, send a message</button>
+            </div>
+          </div>
+  
+          <ng-template #noFechas>
+            <p>There are no available dates for this course.</p>
+  
+            <div class="text-center mt-4">
+              <button class="btn btn-outline-primary">Request a course date</button>
+            </div>
+          </ng-template>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

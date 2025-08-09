@@ -45,7 +45,13 @@ export class ClientesDashboard implements OnInit {
       piso: '',
       provincia: '',
       ciudad: '',
-      codigoPostal: ''
+      codigoPostal: '',
+
+      // Nuevos campos
+      classType: '',
+      peopleInterested: 1,
+      availability: '',
+      additionalQuestions: ''
     };
   }
 

@@ -17,6 +17,10 @@ export class CursoFechaService {
     return this.http.get<CursoFecha[]>(this.apiUrl);
   }
 
+  getCursoFechaPorIdCurso(id: number): Observable<CursoFecha[]> {
+    return this.http.get<CursoFecha[]>(`${this.apiUrl}/${id}`);
+  }
+
   // Crear nueva fecha de curso
   crearCursoFecha(fechaCurso: CursoFecha): Observable<CursoFecha> {
     return this.http.post<CursoFecha>(this.apiUrl, fechaCurso);

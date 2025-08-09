@@ -1,0 +1,27 @@
+<ul class="nav nav-tabs justify-content-center mb-4 custom-tabs">
+    <li class="nav-item">
+      <a class="nav-link"
+         [routerLink]="['/workshops']"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }">
+        Workshops
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"
+         [routerLink]="['/workshops/firing-services']"
+         routerLinkActive="active">
+        Firing Services
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"
+         [routerLink]="['/workshops/gift-cards']"
+         routerLinkActive="active">
+        Gift Cards
+      </a>
+    </li>
+  </ul>
+  
+  <router-outlet></router-outlet>
+  

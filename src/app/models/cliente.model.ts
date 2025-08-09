@@ -10,4 +10,10 @@ export interface Cliente {
     provincia: string;
     ciudad: string;
     codigoPostal: string;
+
+    // Nuevos campos
+    classType: '',
+    peopleInterested: 1,
+    availability: '',
+    additionalQuestions: ''
 }
