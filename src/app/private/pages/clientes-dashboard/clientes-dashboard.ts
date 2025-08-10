@@ -48,10 +48,10 @@ export class ClientesDashboard implements OnInit {
       codigoPostal: '',
 
       // Nuevos campos
-      classType: '',
-      peopleInterested: 1,
-      availability: '',
-      additionalQuestions: ''
+      tipoClase: '',
+      personasInteresadas: 1,
+      disponibilidad: '',
+      preguntasAdicionales: ''
     };
   }
 

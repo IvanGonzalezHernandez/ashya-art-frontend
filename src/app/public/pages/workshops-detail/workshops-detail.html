@@ -75,20 +75,19 @@
         <div class="modal-body">
           <form>
 
-            <!-- Class type (Dropdown) -->
+            <!-- Tipo de clase -->
             <div class="mb-3">
                 <label class="form-label fw-bold">Class type</label>
-                <select class="form-select" [(ngModel)]="cliente.classType" name="classType">
-                  <option value="" disabled selected>Select an option</option>
-                  <option *ngFor="let curso of cursos" [value]="curso.nombre">{{ curso.nombre }}</option>
+                <select class="form-select" [(ngModel)]="cliente.tipoClase" name="tipoClase">
+                <option value="" disabled selected>Select an option</option>
+                <option *ngFor="let curso of cursos" [value]="curso.nombre">{{ curso.nombre }}</option>
                 </select>
             </div>
-              
-  
-            <!-- How many people are interested? -->
+
+            <!-- Personas interesadas -->
             <div class="mb-3">
-              <label class="form-label fw-bold">How many people are interested?</label>
-              <input type="number" class="form-control" min="1" [(ngModel)]="cliente.peopleInterested" name="peopleInterested" placeholder="Number of people">
+                <label class="form-label fw-bold">How many people are interested?</label>
+                <input type="number" class="form-control" min="1" [(ngModel)]="cliente.personasInteresadas" name="personasInteresadas" placeholder="Number of people">
             </div>
   
             <!-- Your Name -->
@@ -96,11 +95,11 @@
               <label class="form-label fw-bold">Your Name</label>
               <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" placeholder="Your full name">
             </div>
-  
-            <!-- Your availability for the class -->
+
+            <!-- Disponibilidad -->
             <div class="mb-3">
-              <label class="form-label fw-bold">Your availability for the class (on which days/hours are you available?)</label>
-              <textarea class="form-control" rows="3" [(ngModel)]="cliente.availability" name="availability" placeholder="Write your available days/hours"></textarea>
+                <label class="form-label fw-bold">Your availability for the class (on which days/hours are you available?)</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="cliente.disponibilidad" name="disponibilidad" placeholder="Write your available days/hours"></textarea>
             </div>
   
             <!-- Your email address -->
@@ -114,18 +113,18 @@
               <label class="form-label fw-bold">Your phone number</label>
               <input type="text" class="form-control" [(ngModel)]="cliente.telefono" name="telefono" placeholder="+34 600 000 000">
             </div>
-  
-            <!-- Additional questions -->
+
+            <!-- Preguntas adicionales -->
             <div class="mb-3">
-              <label class="form-label fw-bold">Do you have any additional questions to me?</label>
-              <textarea class="form-control" rows="3" [(ngModel)]="cliente.additionalQuestions" name="additionalQuestions" placeholder="Write here"></textarea>
+                <label class="form-label fw-bold">Do you have any additional questions to me?</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="cliente.preguntasAdicionales" name="preguntasAdicionales" placeholder="Write here"></textarea>
             </div>
   
           </form>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button class="btn btn-success">Send</button>
+          <button class="btn btn-success" (click)="enviarSolicitudCurso()">Send</button>
         </div>
       </div>
     </div>
@@ -174,7 +173,7 @@
             <p>There are no available dates for this course.</p>
   
             <div class="text-center mt-4">
-              <button class="btn btn-outline-primary">Request a course date</button>
+              <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">Request a course date</button>
             </div>
           </ng-template>
         </div>
@@ -184,4 +183,11 @@
       </div>
     </div>
   </div>
-  
+
+  <app-feedback-modal 
+    *ngIf="mostrarFeedback"
+    [status]="feedbackTipo"
+    [title]="feedbackTitulo"
+    [message]="feedbackMensaje"
+    (closed)="cerrarFeedback()">
+  </app-feedback-modal>

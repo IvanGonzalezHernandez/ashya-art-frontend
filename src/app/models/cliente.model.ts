@@ -12,8 +12,8 @@ export interface Cliente {
     codigoPostal: string;
 
     // Nuevos campos
-    classType: '',
-    peopleInterested: 1,
-    availability: '',
-    additionalQuestions: ''
+    tipoClase: '',
+    personasInteresadas: 1,
+    disponibilidad: '',
+    preguntasAdicionales: ''
 }

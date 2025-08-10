@@ -64,7 +64,6 @@ export class Footer {
     });
   }
   
-
   // Mostrar el modal
   mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
     this.feedbackTipo = tipo;

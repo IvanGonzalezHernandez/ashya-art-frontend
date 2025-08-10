@@ -7,13 +7,14 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
+import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-workshops-detail',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent],
   templateUrl: './workshops-detail.html',
   styleUrl: './workshops-detail.scss'
 })
@@ -21,6 +22,12 @@ export class WorkshopsDetail {
   cursos: Curso[] = [];
   cursosFecha: CursoFecha[] = [];
   cursoSeleccionado?: Curso;
+
+  // Modal de feedback
+  mostrarFeedback: boolean = false;
+  feedbackTitulo: string = '';
+  feedbackMensaje: string = '';
+  feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
   cliente: Cliente = {
     id: 0,
@@ -34,12 +41,12 @@ export class WorkshopsDetail {
     provincia: '',
     ciudad: '',
     codigoPostal: '',
-  
+
     // Campos formulario
-    classType: '',
-    peopleInterested: 1,
-    availability: '',
-    additionalQuestions: ''
+    tipoClase: '',
+    personasInteresadas: 1,
+    disponibilidad: '',
+    preguntasAdicionales: ''
   };
   
 
@@ -108,6 +115,52 @@ export class WorkshopsDetail {
     }
   }
 
+  enviarSolicitudCurso() {
+    this.cursoService.solicitarCurso(this.cliente).subscribe({
+      next: () => {
+        this.mostrarModalFeedback(
+          'success',
+          'Request sent',
+          'Thank you for submitting your request. You will receive a confirmation email shortly, and one of our team members will contact you as soon as possible to coordinate the details.'
+        );
+        
+        const modal = document.getElementById('modalReserva');
+        if (modal) {
+          const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+          modalInstance.hide();
+        }
+      },
+      error: (err) => {
+        console.error('Error sending request', err);
+  
+        const modal = document.getElementById('modalReserva');
+        if (modal) {
+          const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+          modalInstance.hide();
+        }
+        let mensajeError = 'An error occurred while sending the request. Please try again later.';
+        this.mostrarModalFeedback(
+          'error',
+          'Request error',
+          mensajeError
+        );
+      }
+    });
+  }
+  
+    // Mostrar el modal
+    mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
+      this.feedbackTipo = tipo;
+      this.feedbackTitulo = titulo;
+      this.feedbackMensaje = mensaje;
+      this.mostrarFeedback = true;
+    }
+  
+    // Cerrar manual (si se pulsa la X)
+    cerrarFeedback() {
+      this.mostrarFeedback = false;
+    }
+  
   abrirModalReservaDesdeModalFechas(): void {
     const fechasModalEl = document.getElementById('modalFechasDisponibles');
     const reservaModalEl = document.getElementById('modalReserva');

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Curso } from '../../models/curso.model';
+import { Cliente } from '../../models/cliente.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { CursoFecha } from '../../models/cursoFecha.model';
@@ -31,5 +32,9 @@ export class CursoService {
   
   eliminarCurso(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  solicitarCurso(cliente: Cliente): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/solicitud-curso`, cliente);
   }
 }
