@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShopService } from '../../../services/shop/shop';
 import { Producto } from '../../../models/producto.model';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './shop.html',
   styleUrls: ['./shop.scss']
 })

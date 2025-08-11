@@ -31,6 +31,14 @@ const routes: Routes = [
         loadComponent: () => import('./pages/workshops-detail/workshops-detail').then(m => m.WorkshopsDetail)
       },
       {
+        path: 'products/:id',
+        loadComponent: () => import('./pages/ceramics-detail/ceramics-detail').then(m => m.CeramicsDetail)
+      },
+            {
+        path: 'secrets/:id',
+        loadComponent: () => import('./pages/secrets-detail/secrets-detail').then(m => m.SecretsDetail)
+      },
+      {
         path: 'shop',
         component: ShopTabs,
         children: [
