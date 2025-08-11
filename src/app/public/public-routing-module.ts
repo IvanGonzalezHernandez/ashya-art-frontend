@@ -9,6 +9,7 @@ import { Shop } from './pages/shop/shop';
 import { About } from './pages/about/about';
 import { Studio } from './pages/studio/studio';
 import { WorkshopsTabs } from '../shared/workshops-tabs/workshops-tabs';
+import { ShopTabs } from '../shared/shop-tabs/shop-tabs';
 
 const routes: Routes = [
   {
@@ -29,8 +30,15 @@ const routes: Routes = [
         path: 'workshops/:id',
         loadComponent: () => import('./pages/workshops-detail/workshops-detail').then(m => m.WorkshopsDetail)
       },
+      {
+        path: 'shop',
+        component: ShopTabs,
+        children: [
+          { path: '', component: Shop },
+          { path: 'secrets', loadComponent: () => import('./pages/secrets/secrets').then(m => m.Secrets) },
+        ]
+      },
       { path: 'calendar', component: Calendar },
-      { path: 'shop', component: Shop },
       { path: 'about', component: About },
       { path: 'studio', component: Studio }
     ]

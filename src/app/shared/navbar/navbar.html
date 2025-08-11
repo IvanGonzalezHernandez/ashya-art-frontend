@@ -1,5 +1,5 @@
 <nav class="navbar navbar-light bg-blanco sticky-top">
-  <div class="container-fluid d-flex align-items-center position-relative">
+  <div class="container d-flex align-items-center position-relative">
 
     <!-- Logo a la izquierda solo en desktop -->
     <a class="navbar-brand d-none d-lg-block" routerLink="/">
@@ -31,11 +31,12 @@
 
     <!-- Carrito siempre visible a la derecha -->
     <div class="position-relative ms-auto me-3">
-      <a class="nav-link position-relative">
+      <a class="nav-link position-relative" data-bs-toggle="offcanvas" href="#offcanvasCarrito" role="button" aria-controls="offcanvasCarrito">
         <i class="bi bi-cart" style="font-size: 1.5rem;"></i>
         <span class="badge bg-azul position-absolute top-0 start-100 translate-middle">0</span>
       </a>
     </div>
+    
 
   </div>
 </nav>
@@ -57,3 +58,15 @@
     </ul>
   </div>
 </div>
+
+<div class="offcanvas offcanvas-end bg-white" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasCarritoLabel">Your Cart</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <!-- Aquí iría el contenido dinámico del carrito -->
+    <p>Your cart is empty.</p>
+  </div>
+</div>
+

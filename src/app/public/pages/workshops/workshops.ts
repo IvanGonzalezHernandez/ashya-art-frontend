@@ -12,12 +12,15 @@ import { CursoService } from '../../../services/curso/curso';
   imports: [CommonModule, RouterModule]
 })
 export class Workshops implements OnInit {
+  loading = false;
+  cursosCargados = false;
   
   cursos: Curso[] = [];
 
   constructor(private cursoService: CursoService) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.cargarCursos();
   }
 
@@ -26,10 +29,16 @@ export class Workshops implements OnInit {
       next: (data) => {
         this.cursos = data;
         this.cursos.forEach(curso => this.procesarImagenesBase64(curso));
+        this.cursosCargados = true;
+        this.comprobarCargaCompleta();
       },
-      error: (err) => console.error('Error cargando cursos', err),
+      error: (err) => {
+        console.error('Error cargando cursos', err);
+        this.cursosCargados = true;
+        this.comprobarCargaCompleta();
+      }
     });
-  }
+  }  
 
   private procesarImagenesBase64(curso: Curso): void {
     for (let i = 1; i <= 5; i++) {
@@ -42,6 +51,12 @@ export class Workshops implements OnInit {
       } else {
         (curso as any)[urlProp] = '';
       }
+    }
+  }
+
+  private comprobarCargaCompleta(): void {
+    if (this.cursosCargados) {
+      this.loading = false;
     }
   }
 }

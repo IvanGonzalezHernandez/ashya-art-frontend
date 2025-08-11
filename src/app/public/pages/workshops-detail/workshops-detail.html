@@ -1,4 +1,8 @@
-<section class="py-5 bg-beige" *ngIf="cursoSeleccionado">
+<div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
+</div> 
+
+<section class="py-5 bg-beige" *ngIf="cursoSeleccionado && !loading">
     <div class="container">
   
       <!-- Nombre y subtítulo -->
@@ -33,23 +37,23 @@
         </div>
   
         <!-- Descripción y detalles -->
-        <div class="col-lg-6 d-flex flex-column">
-          <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
-  
-          <div class="text-muted fs-5 flex-grow-1" style="overflow-wrap: break-word;">
-            <p>{{ cursoSeleccionado.descripcion }}</p>
-            <p>{{ cursoSeleccionado.informacionExtra }}</p>
+        <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">
+            <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
+          
+            <div class="text-muted fs-5 flex-grow-1" style="overflow-wrap: break-word;">
+              <p>{{ cursoSeleccionado.descripcion }}</p>
+              <p>{{ cursoSeleccionado.informacionExtra }}</p>
+            </div>
+          
+            <ul class="list-unstyled mt-4">
+              <li><strong>Price:</strong> {{ cursoSeleccionado.precio }}€</li>
+              <li><strong>Duration:</strong> {{ cursoSeleccionado.duracion }}</li>
+              <li><strong>Level:</strong> {{ cursoSeleccionado.nivel }}</li>
+              <li><strong>Materials:</strong> {{ cursoSeleccionado.materiales }}</li>
+              <li><strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}</li>
+              <li><strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}</li>
+            </ul>
           </div>
-  
-          <ul class="list-unstyled mt-4">
-            <li><strong>Price:</strong> {{ cursoSeleccionado.precio }}€</li>
-            <li><strong>Duration:</strong> {{ cursoSeleccionado.duracion }}</li>
-            <li><strong>Level:</strong> {{ cursoSeleccionado.nivel }}</li>
-            <li><strong>Materials:</strong> {{ cursoSeleccionado.materiales }}</li>
-            <li><strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}</li>
-            <li><strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}</li>
-          </ul>
-        </div>
       </div>
   
       <!-- Botón centrado fuera del row para que quede debajo -->

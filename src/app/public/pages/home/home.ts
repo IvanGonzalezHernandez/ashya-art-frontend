@@ -13,12 +13,17 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./home.scss'],
 })
 export class Home implements OnInit {
+  loading = false;
+  cursosCargados = false;
+  productosCargados = false;
+
   cursos: Curso[] = [];
   productos: Producto[] = [];
 
   constructor(private homeService: HomeService) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.cargarCursos();
     this.cargarProductos();
   }
@@ -48,25 +53,37 @@ export class Home implements OnInit {
     }
   }
   
-  
-  
-
   private cargarCursos(): void {
     this.homeService.getCursos().subscribe({
       next: (data) => {
         this.cursos = data;
         this.cursos.forEach(curso => this.procesarImagenesBase64(curso));
+        this.cursosCargados = true;
+        this.comprobarCargaCompleta();
       },
-      error: (err) => console.error('Error cargando cursos', err),
+      error: (err) => {
+        console.error('Error cargando cursos', err);
+        this.cursosCargados = true;
+        this.comprobarCargaCompleta();
+      }
     });
-  }  
+  }
 
   private cargarProductos(): void {
     this.homeService.getProductos().subscribe({
-      next: (data) => this.productos = data,
-      error: (err) => console.error('Error cargando productos', err),
+      next: (data) => {
+        this.productos = data;
+        this.productosCargados = true;
+        this.comprobarCargaCompleta();
+      },
+      error: (err) => {
+        console.error('Error cargando productos', err);
+        this.productosCargados = true;
+        this.comprobarCargaCompleta();
+      },
     });
   }
+  
 
   private procesarImagenesBase64(curso: Curso): void {
     for (let i = 1; i <= 5; i++) {
@@ -79,6 +96,12 @@ export class Home implements OnInit {
       } else {
         (curso as any)[urlProp] = '';
       }
+    }
+  }
+
+  private comprobarCargaCompleta(): void {
+    if (this.cursosCargados && this.productosCargados) {
+      this.loading = false;
     }
   }
   

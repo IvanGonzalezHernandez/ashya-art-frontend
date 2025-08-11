@@ -16,9 +16,12 @@ declare var bootstrap: any;
   standalone: true,
   imports: [CommonModule, FormsModule, FeedbackModalComponent],
   templateUrl: './workshops-detail.html',
-  styleUrl: './workshops-detail.scss'
+  styleUrls: ['./workshops-detail.scss']
 })
 export class WorkshopsDetail {
+  loading = false;
+  cursosCargados = false;
+  
   cursos: Curso[] = [];
   cursosFecha: CursoFecha[] = [];
   cursoSeleccionado?: Curso;
@@ -55,6 +58,7 @@ export class WorkshopsDetail {
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.cargarCursos();
 
     // Obtener el parámetro 'id' de la URL y cargar ese curso
@@ -87,6 +91,8 @@ export class WorkshopsDetail {
         if (curso) {
           this.procesarImagenesBase64(curso);
         }
+        this.cursosCargados = true;
+        this.comprobarCargaCompleta();
       },
       error: (err) => console.error(`Error cargando curso con ID ${id}`, err),
     });
@@ -112,6 +118,12 @@ export class WorkshopsDetail {
       } else {
         (curso as any)[urlProp] = '';
       }
+    }
+  }
+
+  private comprobarCargaCompleta(): void {
+    if (this.cursosCargados) {
+      this.loading = false;
     }
   }
 

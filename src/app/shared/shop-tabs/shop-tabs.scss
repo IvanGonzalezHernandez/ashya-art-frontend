@@ -1,0 +1,23 @@
+.nav-tabs {
+    border-bottom: none; /* quita la línea inferior */
+    padding: 0.5rem 1rem;
+  }
+  
+  .nav-tabs .nav-link {
+    background-color: transparent !important; /* quita fondo blanco */
+    border: none !important; /* quita borde */
+    color: #3E3028;
+    padding: 0.5rem 1rem;
+    border-radius: 0;
+    font-weight: normal; /* normal cuando no está activo */
+  }
+  
+  .nav-tabs .nav-link.active {
+    font-weight: 700; /* negrita para activo */
+    color: #3E3028;
+    background-color: transparent !important; /* sin fondo */
+    border: none !important;
+    border-radius: 0;
+  }
+  
+  

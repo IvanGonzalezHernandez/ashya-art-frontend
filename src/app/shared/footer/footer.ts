@@ -4,11 +4,12 @@ import { NewsletterService } from '../../services/newsletter/newsletter';
 import { Newsletter } from '../../models/newsletter.model';
 import { FeedbackModalComponent } from '../../shared/feedback-modal/feedback-modal';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule],
   templateUrl: './footer.html',
   styleUrls: ['./footer.scss']
 })
