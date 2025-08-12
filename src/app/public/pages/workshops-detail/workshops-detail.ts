@@ -8,13 +8,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { RouterModule } from '@angular/router';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-workshops-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, FeedbackModalComponent],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, RouterModule],
   templateUrl: './workshops-detail.html',
   styleUrls: ['./workshops-detail.scss']
 })

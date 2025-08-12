@@ -33,7 +33,7 @@
               <td>{{ producto.stock }}</td>
               <td>{{ producto.precio | currency:'EUR' }}</td>
               <td>
-                <img [src]="producto.img" alt="Image" width="60" height="60" style="object-fit: cover; border-radius: 5px;">
+                <img [src]="producto.img1Url" alt="Image" width="60" height="60" style="object-fit: cover; border-radius: 5px;">
               </td>
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
@@ -148,7 +148,7 @@
           </div>
           <div class="col-12">
             <label class="form-label">Image URL</label>
-            <input type="text" class="form-control" [(ngModel)]="productoEditando.img" />
+            <input type="text" class="form-control" [(ngModel)]="productoEditando.img1Url" />
           </div>
         </div>
       </div>

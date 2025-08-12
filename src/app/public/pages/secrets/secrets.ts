@@ -9,7 +9,7 @@ import { Secreto } from '../../../models/secreto.model';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './secrets.html',
-  styleUrl: './secrets.scss'
+  styleUrls: ['./secrets.scss']
 })
 export class Secrets {
   loading = false;
@@ -19,7 +19,7 @@ export class Secrets {
 
   constructor(private SecretoService: SecretoService) {}
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.loading = true;
     this.cargarSecretos();
   }
@@ -28,6 +28,7 @@ export class Secrets {
     this.SecretoService.getSecretos().subscribe({
       next: (data) => {
         this.secretos = data;
+        this.secretos.forEach(secretos => this.procesarImagenesBase64(secretos));
         this.secretosCargados = true;
         this.comprobarCargaCompleta();
       },
@@ -44,5 +45,19 @@ export class Secrets {
       this.loading = false;
     }
   }
+
+    private procesarImagenesBase64(secreto: Secreto): void {
+      for (let i = 1; i <= 5; i++) {
+        const imgProp = `img${i}` as keyof Secreto;
+        const urlProp = `img${i}Url` as keyof Secreto;
+    
+        const base64Str = secreto[imgProp] as unknown as string;
+        if (base64Str) {
+          (secreto as any)[urlProp] = `data:image/webp;base64,${base64Str}`;
+        } else {
+          (secreto as any)[urlProp] = '';
+        }
+      }
+    }
 
 }

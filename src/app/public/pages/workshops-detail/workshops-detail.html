@@ -4,6 +4,16 @@
 
 <section class="py-5 bg-beige" *ngIf="cursoSeleccionado && !loading">
     <div class="container">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/workshops" class="text-decoration-none" style="color: #3E3028;">Workshops</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ cursoSeleccionado.nombre }}</li>
+      </ol>
+    </nav>
   
       <!-- Nombre y subtítulo -->
       <div class="row mb-4">

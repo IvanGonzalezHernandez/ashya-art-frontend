@@ -1,11 +1,70 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { ShopService } from '../../../services/shop/shop';
+import { Producto } from '../../../models/producto.model';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-ceramics-detail',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './ceramics-detail.html',
-  styleUrl: './ceramics-detail.scss'
+  styleUrls: ['./ceramics-detail.scss']
 })
-export class CeramicsDetail {
+export class CeramicsDetail implements OnInit {
+  loading = false;
+  productoCargado = false;
 
+  productoSeleccionado?: Producto;
+
+  constructor(
+    private route: ActivatedRoute,
+    private shopService: ShopService
+  ) {}
+
+  ngOnInit(): void {
+    this.loading = true;
+
+    this.route.paramMap.subscribe(params => {
+      const idStr = params.get('id');
+      if (idStr) {
+        const id = Number(idStr);
+        if (!isNaN(id)) {
+          this.cargarProductoPorId(id);
+        }
+      }
+    });
+  }
+
+  private cargarProductoPorId(id: number): void {
+    this.shopService.getProductoPorId(id).subscribe({
+      next: (producto) => {
+        this.productoSeleccionado = producto;
+        if (producto) {
+          this.procesarImagenesBase64(producto);
+        }
+        this.productoCargado = true;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(`Error cargando producto con ID ${id}`, err);
+        this.loading = false;
+      }
+    });
+  }
+
+  private procesarImagenesBase64(producto: Producto): void {
+    for (let i = 1; i <= 5; i++) {
+      const imgProp = `img${i}` as keyof Producto;
+      const urlProp = `img${i}Url` as keyof Producto;
+
+      const base64Str = producto[imgProp] as unknown as string;
+      if (base64Str) {
+        (producto as any)[urlProp] = `data:image/webp;base64,${base64Str}`;
+      } else {
+        (producto as any)[urlProp] = '';
+      }
+    }
+  }
 }

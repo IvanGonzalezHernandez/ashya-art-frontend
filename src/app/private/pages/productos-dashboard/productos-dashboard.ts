@@ -53,7 +53,11 @@ export class ProductosDashboard implements OnInit {
       descripcion: '',
       stock: 0,
       precio: 0,
-      img: ''
+      img1: '',
+      img2: '',
+      img3: '',
+      img4: '',
+      img5: ''
     };
   }
 
@@ -94,7 +98,7 @@ export class ProductosDashboard implements OnInit {
   }
 
   exportarCSVProductos() {
-    const encabezado = ['ID', 'Name', 'Subtitle', 'Description', 'Stock', 'Price', 'Image'];
+    const encabezado = ['ID', 'Name', 'Subtitle', 'Description', 'Stock', 'Price'];
     const filas = this.productos.map(producto => [
       producto.id,
       producto.nombre,
@@ -102,7 +106,6 @@ export class ProductosDashboard implements OnInit {
       producto.descripcion,
       producto.stock,
       producto.precio,
-      producto.img
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'products.csv');
   }

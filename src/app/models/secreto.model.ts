@@ -13,4 +13,10 @@ export interface Secreto {
   img3?: string | null;
   img4?: string | null;
   img5?: string | null;
+  
+  img1Url?: string;
+  img2Url?: string;
+  img3Url?: string;
+  img4Url?: string;
+  img5Url?: string;
 }

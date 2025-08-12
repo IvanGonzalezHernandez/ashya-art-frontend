@@ -16,4 +16,8 @@ export class ShopService {
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(this.apiProductos);
   }
+
+  getProductoPorId(id: number): Observable<Producto> {
+    return this.http.get<Producto>(`${this.apiProductos}/${id}`);
+  }
 }

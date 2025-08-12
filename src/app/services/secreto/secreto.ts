@@ -16,4 +16,9 @@ export class SecretoService {
     return this.http.get<Secreto[]>(this.apiUrl);
   }
 
+  getSecretoPorId(id: number): Observable<Secreto> {
+    return this.http.get<Secreto>(`${this.apiUrl}/${id}`);
+  }
+
+
 }
