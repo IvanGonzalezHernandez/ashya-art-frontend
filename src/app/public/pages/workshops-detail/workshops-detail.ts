@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { RouterModule } from '@angular/router';
+import { ItemCarrito } from '../../../models/item-carrito';
+import { CarritoService } from '../../../services/carrito/carrito';
 
 declare var bootstrap: any;
 
@@ -26,6 +28,8 @@ export class WorkshopsDetail {
   cursos: Curso[] = [];
   cursosFecha: CursoFecha[] = [];
   cursoSeleccionado?: Curso;
+
+  cantidades: { [idFecha: number]: number } = {};
 
   // Modal de feedback
   mostrarFeedback: boolean = false;
@@ -56,7 +60,8 @@ export class WorkshopsDetail {
 
   constructor(private cursoService: CursoService,
               private cursoFechaService: CursoFechaService,
-              private route: ActivatedRoute) {}
+              private route: ActivatedRoute,
+              private carritoService: CarritoService) {}
 
   ngOnInit(): void {
     this.loading = true;
@@ -103,6 +108,10 @@ export class WorkshopsDetail {
     this.cursoFechaService.getCursoFechaPorIdCurso(id).subscribe({
       next: (data) => {
         this.cursosFecha = data;
+
+        this.cursosFecha.forEach(fecha => {
+          this.cantidades[fecha.id] = 1;
+        });
       },
       error: (err) => console.error(`Error cargando fechas del curso con ID ${id}`, err),
     });
@@ -185,6 +194,25 @@ export class WorkshopsDetail {
       reservaModal.show();
     }
   }
+
+agregarCursoAlCarrito(fecha: any) {
+  if (!this.cursoSeleccionado) return;
+
+  const cantidad = this.cantidades[fecha.id] || 1;
+
+  const item: ItemCarrito = {
+    id: fecha.id,
+    tipo: 'CURSO',
+    nombre: `${this.cursoSeleccionado.nombre} - ${fecha.fecha}`,
+    precio: this.cursoSeleccionado.precio ?? 0,
+    cantidad: cantidad,
+    img: this.cursoSeleccionado.img1Url || ''
+  };
+
+  this.carritoService.agregarItem(item);
+}
+
+
 
   
   

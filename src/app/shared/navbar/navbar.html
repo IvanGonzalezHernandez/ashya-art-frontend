@@ -33,7 +33,9 @@
     <div class="position-relative ms-auto me-3">
       <a class="nav-link position-relative" data-bs-toggle="offcanvas" href="#offcanvasCarrito" role="button" aria-controls="offcanvasCarrito">
         <i class="bi bi-cart" style="font-size: 1.5rem;"></i>
-        <span class="badge bg-azul position-absolute top-0 start-100 translate-middle">0</span>
+        <span class="badge bg-azul position-absolute top-0 start-100 translate-middle">
+          {{ contadorCarrito }}
+        </span>
       </a>
     </div>
     
@@ -42,31 +44,28 @@
 </nav>
 
 <!-- Offcanvas menú lateral móvil -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menú</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-  </div>
-  <div class="offcanvas-body">
-    <ul class="navbar-nav flex-column">
-      <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" data-bs-dismiss="offcanvas">HOME</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/workshops" routerLinkActive="active" data-bs-dismiss="offcanvas">WORKSHOPS & SERVICES</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/calendar" routerLinkActive="active" data-bs-dismiss="offcanvas">CALENDAR</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/shop" routerLinkActive="active" data-bs-dismiss="offcanvas">SHOP</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active" data-bs-dismiss="offcanvas">ABOUT ASHYA</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/studio" routerLinkActive="active" data-bs-dismiss="offcanvas">ASHYA'S STUDIO</a></li>
-    </ul>
-  </div>
-</div>
-
 <div class="offcanvas offcanvas-end bg-white" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="offcanvasCarritoLabel">Your Cart</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <!-- Aquí iría el contenido dinámico del carrito -->
-    <p>Your cart is empty.</p>
+    <div *ngIf="itemsCarrito.length > 0; else vacio">
+      <div *ngFor="let item of itemsCarrito" class="mb-2 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <img [src]="item.img" alt="{{ item.nombre }}" class="me-2 rounded" style="width: 60px; height: 60px; object-fit: cover;">
+          <span>{{ item.nombre }}</span>
+        </div>
+        <span>{{ item.cantidad }} x {{ item.precio }}€</span>
+      </div>
+      <hr>
+      <p><strong>Total: {{ carritoService.obtenerTotal() }}€</strong></p>
+    </div>
+    <ng-template #vacio>
+      <p>Your cart is empty.</p>
+    </ng-template>
   </div>
 </div>
+
+
 
