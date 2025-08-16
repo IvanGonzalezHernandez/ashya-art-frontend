@@ -208,7 +208,7 @@ agregarCursoAlCarrito(fecha: any) {
     cantidad: cantidad,
     img: this.cursoSeleccionado.img1Url || ''
   };
-
+  console.log(item);
   this.carritoService.agregarItem(item);
 }
 

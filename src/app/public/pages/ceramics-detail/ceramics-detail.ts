@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ShopService } from '../../../services/shop/shop';
 import { Producto } from '../../../models/producto.model';
 import { RouterModule } from '@angular/router';
+import { ItemCarrito } from '../../../models/item-carrito';
+import { CarritoService } from '../../../services/carrito/carrito';
 
 @Component({
   selector: 'app-ceramics-detail',
@@ -20,7 +22,8 @@ export class CeramicsDetail implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private carritoService: CarritoService
   ) {}
 
   ngOnInit(): void {
@@ -66,5 +69,22 @@ export class CeramicsDetail implements OnInit {
         (producto as any)[urlProp] = '';
       }
     }
+  }
+
+  agregarProductoAlCarrito(producto: any) {
+  if (!producto) return;
+
+  const cantidad = producto.cantidadSeleccionada || 1;
+
+  const item: ItemCarrito = {
+    id: producto.id,
+    tipo: 'PRODUCTO',
+    nombre: producto.nombre,
+    precio: producto.precio ?? 0,
+    cantidad: cantidad,
+    img: producto.img1Url || ''
+  };
+  console.log(item);
+  this.carritoService.agregarItem(item);
   }
 }
