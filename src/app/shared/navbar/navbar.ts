@@ -15,6 +15,7 @@ declare var bootstrap: any;
   styleUrls: ['./navbar.scss']
 })
 export class Navbar implements OnInit {
+  loadingCheckout = false;
 
   contadorCarrito: number = 0;
   itemsCarrito: ItemCarrito[] = [];
@@ -51,7 +52,8 @@ export class Navbar implements OnInit {
   }
 
     pagarConStripe() {
-    // Cierra el offcanvas manualmente
+    this.loadingCheckout = true;
+
     const offcanvasEl = document.getElementById('offcanvasCarrito');
     if (offcanvasEl) {
       const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
@@ -66,6 +68,7 @@ export class Navbar implements OnInit {
       error: (err) => {
         console.error('Error al crear sesión de Stripe', err);
         alert('Hubo un error al procesar el pago.');
+        this.loadingCheckout = false;
       }
     });
   }

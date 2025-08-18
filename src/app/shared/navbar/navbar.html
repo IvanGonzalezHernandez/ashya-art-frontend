@@ -62,9 +62,24 @@
       <p><strong>Total: {{ carritoService.obtenerTotal() }}€</strong></p>
 
       <!-- Botón de Stripe -->
-      <div class="d-grid mt-3">
-        <button class="btn btn-success text-white" (click)="pagarConStripe()">Proceed to Checkout</button>
+<div class="d-grid mt-3">
+  <button class="btn btn-success text-white" 
+          (click)="pagarConStripe()" 
+          [disabled]="loadingCheckout">
+
+    <ng-container *ngIf="!loadingCheckout; else cargando">
+      Proceed to Checkout
+    </ng-container>
+
+    <ng-template #cargando>
+      <div class="d-flex align-items-center justify-content-center">
+        <div class="spinner-border spinner-border-sm text-light me-2" role="status"></div>
+        <span>Processing...</span>
       </div>
+    </ng-template>
+
+  </button>
+</div>
     </div>
     <ng-template #vacio>
       <p>Your cart is empty.</p>
