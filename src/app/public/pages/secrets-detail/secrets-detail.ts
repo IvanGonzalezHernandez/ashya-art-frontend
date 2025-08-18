@@ -3,6 +3,8 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Secreto } from '../../../models/secreto.model';
 import { SecretoService } from '../../../services/secreto/secreto';
+import { CarritoService } from '../../../services/carrito/carrito';
+import { ItemCarrito } from '../../../models/item-carrito';
 
 @Component({
   selector: 'app-secrets-detail',
@@ -19,7 +21,8 @@ export class SecretsDetail implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private secretosService: SecretoService
+    private secretosService: SecretoService,
+    private carritoService: CarritoService
   ) {}
 
   ngOnInit(): void {
@@ -66,4 +69,24 @@ export class SecretsDetail implements OnInit {
       }
     }
   }
+
+  agregarSecretoAlCarrito(secreto: any) {
+    if (!secreto) return;
+
+    const cantidad = secreto.cantidadSeleccionada || 1;
+
+    const item: ItemCarrito = {
+      id: secreto.id,
+      tipo: 'SECRETO',
+      nombre: secreto.nombre,
+      precio: secreto.precio ?? 0,
+      cantidad: cantidad,
+      img: secreto.img1Url || ''
+    };
+
+    console.log(item);
+    this.carritoService.agregarItem(item);
+  }
+
+
 }

@@ -50,5 +50,25 @@ export class Navbar implements OnInit {
     }
   }
 
+    pagarConStripe() {
+    // Cierra el offcanvas manualmente
+    const offcanvasEl = document.getElementById('offcanvasCarrito');
+    if (offcanvasEl) {
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      bsOffcanvas?.hide();
+    }
+
+    // Llamada al backend para crear sesión Stripe
+    this.carritoService.crearSesionStripe().subscribe({
+      next: (data: { url: string }) => {
+        window.location.href = data.url;
+      },
+      error: (err) => {
+        console.error('Error al crear sesión de Stripe', err);
+        alert('Hubo un error al procesar el pago.');
+      }
+    });
+  }
+
 
 }

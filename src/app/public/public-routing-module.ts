@@ -27,6 +27,10 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'gift-cards/:id',
+        loadComponent: () => import('./pages/gift-cards-detail/gift-cards-detail').then(m => m.GiftCardsDetail)
+      },
+      {
         path: 'workshops/:id',
         loadComponent: () => import('./pages/workshops-detail/workshops-detail').then(m => m.WorkshopsDetail)
       },

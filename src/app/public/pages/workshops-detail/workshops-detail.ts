@@ -170,7 +170,6 @@ export class WorkshopsDetail {
     });
   }
   
-    // Mostrar el modal
     mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
       this.feedbackTipo = tipo;
       this.feedbackTitulo = titulo;
@@ -178,7 +177,6 @@ export class WorkshopsDetail {
       this.mostrarFeedback = true;
     }
   
-    // Cerrar manual (si se pulsa la X)
     cerrarFeedback() {
       this.mostrarFeedback = false;
     }
