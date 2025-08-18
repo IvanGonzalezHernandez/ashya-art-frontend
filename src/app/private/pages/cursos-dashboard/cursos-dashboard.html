@@ -68,7 +68,7 @@
 <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
         <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
       </div>
@@ -130,7 +130,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
+        <button class="btn bg-azul text-white" (click)="guardarCambios()">Save</button>
       </div>
     </div>
   </div>
@@ -197,7 +197,7 @@
   <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoFechaEditando">
     <div class="modal-dialog">
       <div class="modal-content shadow-lg">
-        <div class="modal-header bg-primary text-white">
+        <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevaCursoFecha ? 'New Course Date' : 'Edit Course Date' }}</h5>
           <button type="button" class="btn-close" (click)="cancelarEdicionCursoFecha()"></button>
         </div>

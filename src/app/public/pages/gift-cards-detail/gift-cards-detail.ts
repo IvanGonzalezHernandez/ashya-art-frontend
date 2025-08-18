@@ -64,7 +64,10 @@ export class GiftCardsDetail implements OnInit {
       nombre: tarjeta.nombre,
       precio: tarjeta.precio ?? 0,
       cantidad: cantidad,
-      img: tarjeta.img || ''
+      img: tarjeta.img || '',
+      subtitulo: '',
+      fecha: '',
+      hora: ''
     };
 
     console.log(item);

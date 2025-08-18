@@ -4,11 +4,16 @@ import { Curso } from '../../../models/curso.model';
 import { Producto } from '../../../models/producto.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
 })
@@ -17,15 +22,45 @@ export class Home implements OnInit {
   cursosCargados = false;
   productosCargados = false;
 
+  // Modal de feedback
+  mostrarFeedback: boolean = false;
+  feedbackTitulo: string = '';
+  feedbackMensaje: string = '';
+  feedbackTipo: 'success' | 'error' | 'info' = 'info';
+
   cursos: Curso[] = [];
   productos: Producto[] = [];
 
-  constructor(private homeService: HomeService) {}
+  constructor(private homeService: HomeService,
+              private route: ActivatedRoute, 
+              private router: Router) {}
 
   ngOnInit(): void {
     this.loading = true;
     this.cargarCursos();
     this.cargarProductos();
+
+    // Revisar si viene de Stripe
+    this.route.queryParams.subscribe(params => {
+      const payment = params['payment'];
+      if (payment) {
+        if (payment === 'success') {
+          this.mostrarModalFeedback(
+          'success',
+          'Payment successful',
+          'Thank you! Your payment was completed. You will receive an email shortly with your invoice and your order number.'
+        );
+        } else {
+          this.mostrarModalFeedback(
+          'error',
+          'Payment failed',
+          'Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +01 532 223 434.'
+        );
+        }
+        // Limpiar query params para que no vuelva a abrir el modal al refrescar
+        this.router.navigate([], { queryParams: {} });
+      }
+    });
   }
 
   imagenes = [
@@ -103,6 +138,19 @@ export class Home implements OnInit {
     if (this.cursosCargados && this.productosCargados) {
       this.loading = false;
     }
+  }
+
+  // Mostrar el modal
+  mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
+    this.feedbackTipo = tipo;
+    this.feedbackTitulo = titulo;
+    this.feedbackMensaje = mensaje;
+    this.mostrarFeedback = true;
+  }
+
+  // Cerrar manual (si se pulsa la X)
+  cerrarFeedback() {
+    this.mostrarFeedback = false;
   }
   
   

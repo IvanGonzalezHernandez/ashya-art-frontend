@@ -81,7 +81,10 @@ export class SecretsDetail implements OnInit {
       nombre: secreto.nombre,
       precio: secreto.precio ?? 0,
       cantidad: cantidad,
-      img: secreto.img1Url || ''
+      img: secreto.img1Url || '',
+      subtitulo: secreto.subtitulo,
+      fecha: '',
+      hora: ''
     };
 
     console.log(item);

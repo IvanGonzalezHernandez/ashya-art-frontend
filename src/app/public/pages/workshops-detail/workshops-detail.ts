@@ -204,7 +204,10 @@ agregarCursoAlCarrito(fecha: any) {
     nombre: `${this.cursoSeleccionado.nombre} - ${fecha.fecha}`,
     precio: this.cursoSeleccionado.precio ?? 0,
     cantidad: cantidad,
-    img: this.cursoSeleccionado.img1Url || ''
+    img: this.cursoSeleccionado.img1Url || '',
+    subtitulo: this.cursoSeleccionado.subtitulo,
+    fecha: fecha.fecha,
+    hora: fecha.horaInicio
   };
   console.log(item);
   this.carritoService.agregarItem(item);
