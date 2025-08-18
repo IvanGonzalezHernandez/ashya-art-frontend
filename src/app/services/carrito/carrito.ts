@@ -11,7 +11,14 @@ export class CarritoService {
 
   private apiUrl = `${environment.apiUrl}/carrito`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Cargar items desde LocalStorage al iniciar
+    const itemsGuardados = localStorage.getItem('carrito');
+    if (itemsGuardados) {
+      this.items = JSON.parse(itemsGuardados);
+      this.actualizarContador();
+    }
+  }
 
   getContador(): Observable<number> {
     return this.contador.asObservable();
@@ -22,26 +29,40 @@ export class CarritoService {
     const cantidad = Number(item.cantidad);
 
     if (existente) {
-        existente.cantidad += cantidad;
+      existente.cantidad += cantidad;
     } else {
-        this.items.push({ ...item, cantidad });
+      this.items.push({ ...item, cantidad });
     }
 
     this.actualizarContador();
+    this.guardarEnLocalStorage();
   }
 
   obtenerItems(): ItemCarrito[] {
-    return this.items;
+    return [...this.items]; // devolver copia
   }
 
-  limpiarCarrito() {
-    this.items = [];
-    this.actualizarContador();
-  }
+  eliminarItem(index: number) {
+  // Hacemos una copia de los items actuales
+  const items = [...this.items];
+  
+  // Eliminamos el item en la posición indicada
+  items.splice(index, 1);
+
+  // Actualizamos la lista de items, contador y LocalStorage
+  this.items = items;
+  this.actualizarContador();
+  localStorage.setItem('carrito', JSON.stringify(this.items));
+}
+
 
   private actualizarContador() {
     const total = this.items.reduce((sum, item) => sum + item.cantidad, 0);
     this.contador.next(total);
+  }
+
+  private guardarEnLocalStorage() {
+    localStorage.setItem('carrito', JSON.stringify(this.items));
   }
 
   obtenerTotal(): number {
@@ -49,7 +70,6 @@ export class CarritoService {
   }
 
   crearSesionStripe(): Observable<{ url: string }> {
-    const carrito = this.obtenerItems();
-    return this.http.post<{ url: string }>(`${this.apiUrl}`, { items: carrito });
+    return this.http.post<{ url: string }>(`${this.apiUrl}`, { items: this.obtenerItems() });
   }
 }

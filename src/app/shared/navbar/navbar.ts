@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 
 declare var bootstrap: any;
 
-
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -16,7 +15,6 @@ declare var bootstrap: any;
 })
 export class Navbar implements OnInit {
   loadingCheckout = false;
-
   contadorCarrito: number = 0;
   itemsCarrito: ItemCarrito[] = [];
 
@@ -27,6 +25,7 @@ export class Navbar implements OnInit {
       this.contadorCarrito = contador;
       this.itemsCarrito = [...this.carritoService.obtenerItems()];
 
+      // Abrir carrito automáticamente si hay items
       if (this.itemsCarrito.length > 0) {
         this.abrirCarrito();
       }
@@ -51,27 +50,31 @@ export class Navbar implements OnInit {
     }
   }
 
-pagarConStripe() {
-  this.loadingCheckout = true;
+  pagarConStripe() {
+    this.loadingCheckout = true;
 
-  const offcanvasEl = document.getElementById('offcanvasCarrito');
-  if (offcanvasEl) {
-    const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-    bsOffcanvas?.hide();
+    // Cerrar offcanvas del carrito
+    const offcanvasEl = document.getElementById('offcanvasCarrito');
+    if (offcanvasEl) {
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      bsOffcanvas?.hide();
+    }
+
+    // Crear sesión de Stripe
+    this.carritoService.crearSesionStripe().subscribe({
+      next: (data: { url: string }) => {
+        window.location.href = data.url;
+      },
+      error: (err) => {
+        console.error('Error al crear sesión de Stripe', err);
+        alert('Hubo un error al procesar el pago.');
+        this.loadingCheckout = false;
+      }
+    });
   }
 
-  this.carritoService.crearSesionStripe().subscribe({
-    next: (data: { url: string }) => {
-      window.location.href = data.url;
-    },
-    error: (err) => {
-      console.error('Error al crear sesión de Stripe', err);
-      alert('Hubo un error al procesar el pago.');
-      this.loadingCheckout = false;
-    }
-  });
-}
-
-
+  eliminarItem(index: number) {
+      this.carritoService.eliminarItem(index);
+  }
 
 }
