@@ -3,13 +3,15 @@ import { RouterModule } from '@angular/router';
 import { CarritoService } from '../../services/carrito/carrito';
 import { ItemCarrito } from '../../models/item-carrito';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Cliente } from '../../models/cliente.model';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, FormsModule],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
@@ -17,6 +19,21 @@ export class Navbar implements OnInit {
   loadingCheckout = false;
   contadorCarrito: number = 0;
   itemsCarrito: ItemCarrito[] = [];
+
+  // Datos cliente
+  cliente = {
+    id: 0,
+    telefono: '',
+    nombre: '',
+    apellido: '',
+    email: '',
+    calle: '',
+    numero: '',
+    piso: '',
+    provincia: '',
+    ciudad: '',
+    codigoPostal: ''
+  };
 
   constructor(public carritoService: CarritoService) {}
 
@@ -50,6 +67,49 @@ export class Navbar implements OnInit {
     }
   }
 
+  abrirModalCliente() {
+    // 1) Cierra offcanvas si está abierto
+    const offcanvasEl = document.getElementById('offcanvasCarrito');
+    if (offcanvasEl && offcanvasEl.classList.contains('show')) {
+      bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl).hide();
+      offcanvasEl.addEventListener('hidden.bs.offcanvas', () => this._openClienteModal(), { once: true });
+    } else {
+      this._openClienteModal();
+    }
+  }
+  //Método Auxiliar para abrir el modal por problemas que he tenido con los fade
+  private _openClienteModal() {
+    // 2) Limpia backdrops “colgados”
+    document.querySelectorAll('.modal-backdrop, .offcanvas-backdrop').forEach(el => el.remove());
+
+    // 3) Mueve el modal al body (clave para el z-index correcto)
+    const modalEl = document.getElementById('modalCliente') as HTMLElement | null;
+    if (!modalEl) return;
+    if (modalEl.parentElement !== document.body) {
+      document.body.appendChild(modalEl);
+    }
+
+    // 4) Abre el modal con backdrop normal
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl, { backdrop: true, focus: true, keyboard: true });
+    modal.show();
+  }
+
+  confirmarDatos() {
+    // Validar mínimos (nombre + apellido + email)
+    if (!this.cliente.nombre || !this.cliente.apellido || !this.cliente.email) {
+      alert('Please complete the required fields: name, last name and email.');
+      return;
+    }
+
+    // Cerrar modal
+    const modalEl = document.getElementById('modalCliente');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    modalInstance?.hide();
+
+    // Procesar Stripe
+    this.pagarConStripe();
+  }
+
   pagarConStripe() {
     this.loadingCheckout = true;
 
@@ -61,7 +121,7 @@ export class Navbar implements OnInit {
     }
 
     // Crear sesión de Stripe
-    this.carritoService.crearSesionStripe().subscribe({
+    this.carritoService.crearSesionStripe(/* aquí podrías pasar también this.cliente si lo necesitas */).subscribe({
       next: (data: { url: string }) => {
         window.location.href = data.url;
       },
@@ -74,7 +134,6 @@ export class Navbar implements OnInit {
   }
 
   eliminarItem(index: number) {
-      this.carritoService.eliminarItem(index);
+    this.carritoService.eliminarItem(index);
   }
-
 }
