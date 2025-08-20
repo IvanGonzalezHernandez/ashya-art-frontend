@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ItemCarrito } from '../../models/item-carrito';
+import { Cliente } from '../../models/cliente.model';
 import { environment } from '../../../environments/environments';
 
 @Injectable({ providedIn: 'root' })
@@ -43,17 +44,17 @@ export class CarritoService {
   }
 
   eliminarItem(index: number) {
-  // Hacemos una copia de los items actuales
-  const items = [...this.items];
-  
-  // Eliminamos el item en la posición indicada
-  items.splice(index, 1);
+    // Hacemos una copia de los items actuales
+    const items = [...this.items];
+    
+    // Eliminamos el item en la posición indicada
+    items.splice(index, 1);
 
-  // Actualizamos la lista de items, contador y LocalStorage
-  this.items = items;
-  this.actualizarContador();
-  localStorage.setItem('carrito', JSON.stringify(this.items));
-}
+    // Actualizamos la lista de items, contador y LocalStorage
+    this.items = items;
+    this.actualizarContador();
+    localStorage.setItem('carrito', JSON.stringify(this.items));
+  }
 
 
   private actualizarContador() {
@@ -69,7 +70,10 @@ export class CarritoService {
     return this.items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
   }
 
-  crearSesionStripe(): Observable<{ url: string }> {
-    return this.http.post<{ url: string }>(`${this.apiUrl}`, { items: this.obtenerItems() });
+  crearSesionStripe(cliente: Cliente): Observable<{ url: string }> {
+    return this.http.post<{ url: string }>(`${this.apiUrl}`, { 
+      carrito: { items: this.obtenerItems() }, 
+      cliente: cliente
+    });
   }
 }

@@ -21,7 +21,7 @@ export class Navbar implements OnInit {
   itemsCarrito: ItemCarrito[] = [];
 
   // Datos cliente
-  cliente = {
+  cliente: Cliente = {
     id: 0,
     telefono: '',
     nombre: '',
@@ -32,8 +32,13 @@ export class Navbar implements OnInit {
     piso: '',
     provincia: '',
     ciudad: '',
-    codigoPostal: ''
+    codigoPostal: '',
+    tipoClase: '',
+    personasInteresadas: 1,
+    disponibilidad: '',
+    preguntasAdicionales: ''
   };
+
 
   constructor(public carritoService: CarritoService) {}
 
@@ -120,8 +125,8 @@ export class Navbar implements OnInit {
       bsOffcanvas?.hide();
     }
 
-    // Crear sesión de Stripe
-    this.carritoService.crearSesionStripe(/* aquí podrías pasar también this.cliente si lo necesitas */).subscribe({
+    // Crear sesión de Stripe enviando carrito + cliente
+    this.carritoService.crearSesionStripe(this.cliente).subscribe({
       next: (data: { url: string }) => {
         window.location.href = data.url;
       },
