@@ -2,20 +2,19 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
-
 import { CursoService } from '../../../services/curso/curso';
 import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
 import { CsvExportService } from '../../../services/csv/csv-export';
-
 import { Curso } from '../../../models/curso.model';
 import { CursoFecha } from '../../../models/cursoFecha.model';
+import { TruncatePipe } from '../../../pipes/truncate/truncate-pipe';
 
 @Component({
   selector: 'app-cursos-dashboard',
   standalone: true,
   templateUrl: './cursos-dashboard.html',
   styleUrls: ['./cursos-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, TruncatePipe]
 })
 export class CursosDashboard implements OnInit {
   // CURSOS
@@ -144,8 +143,6 @@ export class CursosDashboard implements OnInit {
     }
   }
   
-  
-
   eliminarCurso(id: number) {
     if (confirm('¿Estás seguro de eliminar este curso?')) {
       this.cursoService.eliminarCurso(id).subscribe(() => {
