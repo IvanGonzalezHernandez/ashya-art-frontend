@@ -10,18 +10,18 @@
 <div class="card shadow-sm rounded-3 mb-5">
   <div class="card-body p-0">
     <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
-      <thead class="table-dark">
+      <thead class="table-azul">
         <tr>
           <th style="width: 5%;">ID</th>
           <th style="width: 12%;">Name</th>
-          <th style="width: 12%;">Subtitle</th>
-          <th style="width: 20%;">Description</th>
-          <th style="width: 8%;">Duration</th>
-          <th style="width: 8%;">Level</th>
-          <th style="width: 6%;">Pieces</th>
-          <th style="width: 10%;">Materials</th>
-          <th style="width: 4%;">Seats</th>
-          <th style="width: 10%;">Extra Info</th>
+          <th class="d-none d-md-table-cell" style="width: 12%;">Subtitle</th>
+          <th class="d-none d-lg-table-cell" style="width: 20%;">Description</th>
+          <th class="d-none d-md-table-cell" style="width: 8%;">Duration</th>
+          <th class="d-none d-md-table-cell" style="width: 8%;">Level</th>
+          <th class="d-none d-lg-table-cell" style="width: 6%;">Pieces</th>
+          <th class="d-none d-lg-table-cell" style="width: 10%;">Materials</th>
+          <!--<th class="d-none d-xl-table-cell" style="width: 4%;">Seats</th>-->
+          <!--<th class="d-none d-xl-table-cell" style="width: 10%;">Extra Info</th>-->
           <th style="width: 5%;">Price</th>
           <th style="width: 12%;">Actions</th>
         </tr>
@@ -30,14 +30,14 @@
         <tr *ngFor="let curso of cursos | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
           <td>{{ curso.id }}</td>
           <td class="text-truncate" [title]="curso.nombre">{{ curso.nombre | truncate:15 }}</td>
-          <td class="text-truncate" [title]="curso.subtitulo">{{ curso.subtitulo | truncate:15 }}</td>
-          <td class="text-truncate" [title]="curso.descripcion">{{ curso.descripcion | truncate:30 }}</td>
-          <td class="text-truncate" [title]="curso.duracion">{{ curso.duracion | truncate:10 }}</td>
-          <td class="text-truncate" [title]="curso.nivel">{{ curso.nivel | truncate:10 }}</td>
-          <td class="text-truncate" [title]="curso.piezas">{{ curso.piezas | truncate:5 }}</td>
-          <td class="text-truncate" [title]="curso.materiales">{{ curso.materiales | truncate:10 }}</td>
-          <td>{{ curso.plazasMaximas }}</td>
-          <td class="text-truncate" [title]="curso.informacionExtra">{{ curso.informacionExtra | truncate:20 }}</td>
+          <td class="d-none d-md-table-cell text-truncate" [title]="curso.subtitulo">{{ curso.subtitulo | truncate:15 }}</td>
+          <td class="d-none d-lg-table-cell text-truncate" [title]="curso.descripcion">{{ curso.descripcion | truncate:30 }}</td>
+          <td class="d-none d-md-table-cell text-truncate" [title]="curso.duracion">{{ curso.duracion | truncate:10 }}</td>
+          <td class="d-none d-md-table-cell text-truncate" [title]="curso.nivel">{{ curso.nivel | truncate:10 }}</td>
+          <td class="d-none d-lg-table-cell text-truncate" [title]="curso.piezas">{{ curso.piezas | truncate:5 }}</td>
+          <td class="d-none d-lg-table-cell text-truncate" [title]="curso.materiales">{{ curso.materiales | truncate:10 }}</td>
+          <!--<td class="d-none d-xl-table-cell">{{ curso.plazasMaximas }}</td>-->
+          <!--<td class="d-none d-xl-table-cell text-truncate" [title]="curso.informacionExtra">{{ curso.informacionExtra | truncate:20 }}</td>-->
           <td>{{ curso.precio | currency:'EUR' }}</td>
           <td>
             <div class="d-flex flex-column flex-md-row gap-2">
@@ -50,13 +50,6 @@
     </table>
   </div>
 </div>
-
-
-
-
-
-
-
 
   <!-- CONTROLES CURSOS -->
   <div class="d-flex justify-content-between align-items-center mt-3 mb-5 flex-wrap">
@@ -74,7 +67,7 @@
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
-          <button type="button" class="btn-close" (click)="cancelarEdicion()"></button>
+          <button type="button" class="btn-close  btn-close-white" (click)="cancelarEdicion()"></button>
         </div>
         <div class="modal-body">
           <form #cursoForm="ngForm" (ngSubmit)="guardarCambios()" novalidate>
@@ -194,7 +187,7 @@
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0">
-          <thead class="table-dark">
+          <thead class="table-azul">
             <tr>
               <th>ID</th>
               <th>Course ID</th>
