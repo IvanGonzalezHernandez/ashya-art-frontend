@@ -8,17 +8,22 @@ import { environment } from '../../../environments/environments';
 @Injectable({ providedIn: 'root' })
 export class CarritoService {
   private items: ItemCarrito[] = [];
+  private itemsSubject = new BehaviorSubject<ItemCarrito[]>([]);
   private contador = new BehaviorSubject<number>(0);
 
   private apiUrl = `${environment.apiUrl}/carrito`;
 
   constructor(private http: HttpClient) {
-    // Cargar items desde LocalStorage al iniciar
     const itemsGuardados = localStorage.getItem('carrito');
     if (itemsGuardados) {
       this.items = JSON.parse(itemsGuardados);
-      this.actualizarContador();
     }
+    this.itemsSubject.next(this.items);
+    this.actualizarContador();
+  }
+
+  getItems$(): Observable<ItemCarrito[]> {
+    return this.itemsSubject.asObservable();
   }
 
   getContador(): Observable<number> {
@@ -35,35 +40,35 @@ export class CarritoService {
       this.items.push({ ...item, cantidad });
     }
 
-    this.actualizarContador();
-    this.guardarEnLocalStorage();
+    this.persistir();
   }
 
   obtenerItems(): ItemCarrito[] {
-    return [...this.items]; // devolver copia
+    return [...this.items];
   }
 
   eliminarItem(index: number) {
-    // Hacemos una copia de los items actuales
     const items = [...this.items];
-    
-    // Eliminamos el item en la posición indicada
     items.splice(index, 1);
-
-    // Actualizamos la lista de items, contador y LocalStorage
     this.items = items;
-    this.actualizarContador();
-    localStorage.setItem('carrito', JSON.stringify(this.items));
+    this.persistir();
   }
 
+  vaciarCarrito() {
+    this.items = [];
+    this.persistir();
+    localStorage.removeItem('carrito'); // opcional, porque persistir ya pone []
+  }
 
   private actualizarContador() {
     const total = this.items.reduce((sum, item) => sum + item.cantidad, 0);
     this.contador.next(total);
   }
 
-  private guardarEnLocalStorage() {
+  private persistir() {
     localStorage.setItem('carrito', JSON.stringify(this.items));
+    this.itemsSubject.next([...this.items]); // 👈 aquí notificamos cambios
+    this.actualizarContador();
   }
 
   obtenerTotal(): number {

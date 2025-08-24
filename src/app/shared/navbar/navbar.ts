@@ -43,16 +43,22 @@ export class Navbar implements OnInit {
   constructor(public carritoService: CarritoService) {}
 
   ngOnInit(): void {
-    this.carritoService.getContador().subscribe(contador => {
-      this.contadorCarrito = contador;
-      this.itemsCarrito = [...this.carritoService.obtenerItems()];
+      // contador para el badge
+      this.carritoService.getContador().subscribe(contador => {
+        this.contadorCarrito = contador;
+      });
 
-      // Abrir carrito automáticamente si hay items
-      if (this.itemsCarrito.length > 0) {
-        this.abrirCarrito();
-      }
-    });
+      // items para pintar el listado y reaccionar al vaciado
+      this.carritoService.getItems$().subscribe(items => {
+        this.itemsCarrito = items;
+
+        // Abrir carrito automáticamente si hay items
+        if (items.length > 0) {
+          this.abrirCarrito();
+        }
+      });
   }
+
 
   abrirCarrito() {
     // Cerrar modales abiertos
