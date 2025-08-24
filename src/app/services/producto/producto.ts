@@ -27,4 +27,15 @@ export class ProductoService {
   eliminarProducto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+
+  crearProductoConImagenes(formData: FormData): Observable<Producto> {
+    return this.http.post<Producto>(`${this.apiUrl}`, formData);
+  }
+
+  actualizarProductoConImagenes(id: number, formData: FormData): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, formData);
+  }
+
+
 }

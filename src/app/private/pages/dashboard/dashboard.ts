@@ -32,7 +32,7 @@ export class Dashboard implements AfterViewInit {
           datasets: [{
             label: 'Revenue (€)',
             data: this.resumenDatos,
-            borderColor: '#198754',
+            borderColor: '#3A9097',
             backgroundColor: 'rgba(25,135,84,0.2)',
             tension: 0.4,
             fill: true

@@ -5,6 +5,7 @@ export interface Producto {
     descripcion: string;
     stock: number;
     precio: number;
+    categoria: string;
     material?: string | null;
     medidas?: string | null;
     estado?: boolean;

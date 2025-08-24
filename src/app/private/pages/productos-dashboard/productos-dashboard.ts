@@ -8,6 +8,7 @@ import { CsvExportService } from '../../../services/csv/csv-export';
 import { Producto } from '../../../models/producto.model';
 import { ProductoCompra } from '../../../models/producto-compra.model';
 
+
 @Component({
   selector: 'app-productos-dashboard',
   standalone: true,
@@ -27,6 +28,9 @@ export class ProductosDashboard implements OnInit {
   paginaActualCompra: number = 1;
   compraEditando: ProductoCompra | null = null;
   esNuevoCompra: boolean = false;
+
+  imagenes: File[] = [];
+  vistaPreviaImagenes: string[] = [];
 
   constructor(
     private productoService: ProductoService,
@@ -50,6 +54,7 @@ export class ProductosDashboard implements OnInit {
       id: 0,
       nombre: '',
       subtitulo: '',
+      categoria: '',
       descripcion: '',
       stock: 0,
       precio: 0,
@@ -59,6 +64,32 @@ export class ProductosDashboard implements OnInit {
       img4: '',
       img5: ''
     };
+  }
+
+  onImagenesSeleccionadas(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+  
+    const nuevosArchivos = Array.from(input.files);
+  
+    if (this.imagenes.length + nuevosArchivos.length > 5) {
+      alert('Solo puedes seleccionar hasta 5 imágenes en total');
+      return;
+    }
+  
+    nuevosArchivos.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vistaPreviaImagenes.push(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      this.imagenes.push(file);
+    });
+  }
+
+  eliminarImagen(index: number) {
+    this.imagenes.splice(index, 1);
+    this.vistaPreviaImagenes.splice(index, 1);
   }
 
   editarProducto(producto: Producto) {
@@ -74,20 +105,42 @@ export class ProductosDashboard implements OnInit {
   guardarCambiosProducto() {
     if (!this.productoEditando) return;
 
+    const formData = new FormData();
+
+    // Creamos un objeto con los datos del producto
+    const productoDto = { 
+      id: this.productoEditando.id,
+      nombre: this.productoEditando.nombre,
+      subtitulo: this.productoEditando.subtitulo,
+      categoria: this.productoEditando.categoria,
+      descripcion: this.productoEditando.descripcion,
+      stock: this.productoEditando.stock,
+      precio: this.productoEditando.precio,
+      medidas: this.productoEditando.medidas,
+      material: this.productoEditando.material
+    };
+
+    // Lo añadimos al FormData como JSON
+    formData.append('producto', new Blob([JSON.stringify(productoDto)], { type: 'application/json' }));
+
+    // Añadimos las imágenes
+    this.imagenes.forEach(imagen => formData.append('imagenes', imagen));
+
     if (this.esNuevoProducto) {
-      this.productoService.crearProducto(this.productoEditando).subscribe(() => {
+      this.productoService.crearProductoConImagenes(formData).subscribe(() => {
         this.obtenerProductos();
-        this.productoEditando = null;
-        this.esNuevoProducto = false;
+        this.cancelarEdicionProducto();
       });
     } else {
-      this.productoService.actualizarProducto(this.productoEditando).subscribe(() => {
+      this.productoService.actualizarProductoConImagenes(this.productoEditando.id, formData).subscribe(() => {
         this.obtenerProductos();
-        this.productoEditando = null;
-        this.esNuevoProducto = false;
+        this.cancelarEdicionProducto();
       });
     }
   }
+
+
+
 
   eliminarProducto(id: number) {
     if (confirm('¿Estás seguro de eliminar este producto?')) {

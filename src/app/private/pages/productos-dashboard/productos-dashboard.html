@@ -12,15 +12,17 @@
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0">
-          <thead class="table-dark">
+          <thead class="table-azul">
             <tr>
               <th>ID</th>
               <th>Name</th>
               <th>Subtitle</th>
               <th>Description</th>
+              <th>Category</th>
+              <th>Measures</th>
+              <th>Materials</th>
               <th>Stock</th>
               <th>Price</th>
-              <th>Image</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -29,12 +31,12 @@
               <td>{{ producto.id }}</td>
               <td>{{ producto.nombre }}</td>
               <td>{{ producto.subtitulo }}</td>
+              <td>{{ producto.categoria }}</td>
               <td>{{ producto.descripcion }}</td>
+              <td>{{ producto.medidas }}</td>
+              <td>{{ producto.material }}</td>
               <td>{{ producto.stock }}</td>
               <td>{{ producto.precio | currency:'EUR' }}</td>
-              <td>
-                <img [src]="producto.img1Url" alt="Image" width="60" height="60" style="object-fit: cover; border-radius: 5px;">
-              </td>
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarProducto(producto)">Edit</button>
@@ -71,12 +73,12 @@
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0">
-          <thead class="table-dark">
+          <thead class="table-azul">
             <tr>
               <th>ID</th>
-              <th>ID Cliente</th>
+              <!--<th>ID Cliente</th>-->
               <th>Nombre Cliente</th>
-              <th>ID Producto</th>
+              <!--<th>ID Producto</th>-->
               <th>Nombre Producto</th>
               <th>Cantidad</th>
               <th>Fecha Compra</th>
@@ -86,9 +88,9 @@
           <tbody>
             <tr *ngFor="let compra of compras | paginate: { itemsPerPage: 5, currentPage: paginaActualCompra }">
               <td>{{ compra.id }}</td>
-              <td>{{ compra.idCliente }}</td>
+              <!--<td>{{ compra.idCliente }}</td>-->
               <td>{{ compra.nombreCliente }}</td>
-              <td>{{ compra.idProducto }}</td>
+              <!--<td>{{ compra.idProducto }}</td>-->
               <td>{{ compra.nombreProducto }}</td>
               <td>{{ compra.cantidad }}</td>
               <td>{{ compra.fechaCompra | date:'short' }}</td>
@@ -116,50 +118,123 @@
   </div>
 </div>
 
+
 <!-- MODAL PRODUCTO -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="productoEditando">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
+      
+      <!-- Header -->
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title">{{ esNuevoProducto ? 'Create Product' : 'Edit Product' }}</h5>
-        <button type="button" class="btn-close" (click)="cancelarEdicionProducto()"></button>
+        <button 
+          type="button" 
+          class="btn-close btn-close-white" 
+          (click)="cancelarEdicionProducto()" 
+          aria-label="Close">
+        </button>
       </div>
+
+      <!-- Body -->
       <div class="modal-body">
         <div class="row g-3">
+          
+          <!-- Name -->
           <div class="col-md-6">
             <label class="form-label">Name</label>
             <input type="text" class="form-control" [(ngModel)]="productoEditando.nombre" />
           </div>
+
+          <!-- Subtitle -->
           <div class="col-md-6">
             <label class="form-label">Subtitle</label>
             <input type="text" class="form-control" [(ngModel)]="productoEditando.subtitulo" />
           </div>
+
+          <!-- Description -->
           <div class="col-12">
             <label class="form-label">Description</label>
             <textarea class="form-control" rows="3" [(ngModel)]="productoEditando.descripcion"></textarea>
           </div>
+
+          <!-- Category -->
           <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <input type="text" class="form-control" [(ngModel)]="productoEditando.categoria" />
+          </div>
+
+          <!-- Measures -->
+          <div class="col-md-6">
+            <label class="form-label">Measures</label>
+            <input type="text" class="form-control" [(ngModel)]="productoEditando.medidas" />
+          </div>
+
+          <!-- Materials -->
+          <div class="col-md-6">
+            <label class="form-label">Materials</label>
+            <input type="text" class="form-control" [(ngModel)]="productoEditando.material" />
+          </div>
+
+          <!-- Stock -->
+          <div class="col-md-3">
             <label class="form-label">Stock</label>
             <input type="number" class="form-control" [(ngModel)]="productoEditando.stock" />
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Price</label>
+
+          <!-- Price -->
+          <div class="col-md-3">
+            <label class="form-label">Price (€)</label>
             <input type="number" class="form-control" [(ngModel)]="productoEditando.precio" />
           </div>
+
+          <!-- Images -->
           <div class="col-12">
-            <label class="form-label">Image URL</label>
-            <input type="text" class="form-control" [(ngModel)]="productoEditando.img1Url" />
+            <label class="form-label">Images (max 5, formato .webp)</label>
+            <input 
+              type="file" 
+              class="form-control" 
+              (change)="onImagenesSeleccionadas($event)" 
+              multiple 
+              accept="image/webp" 
+            />
+
+            <small class="text-muted">{{ vistaPreviaImagenes.length }}/5 selected</small>
+            
+            <div class="mt-3 d-flex flex-wrap gap-2">
+              <div *ngFor="let vista of vistaPreviaImagenes; let i = index" class="position-relative">
+                <img 
+                  [src]="vista" 
+                  alt="preview" 
+                  style="width: 100px; height: 100px; object-fit: cover;" 
+                  class="rounded border" 
+                />
+                <button 
+                  type="button" 
+                  class="btn-close position-absolute top-0 end-0 bg-white rounded-circle"
+                  style="transform: scale(0.8);" 
+                  aria-label="Remove image"
+                  (click)="eliminarImagen(i)">
+                </button>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
+
+      <!-- Footer -->
       <div class="modal-footer">
         <button class="btn btn-secondary" (click)="cancelarEdicionProducto()">Cancel</button>
         <button class="btn btn-success" (click)="guardarCambiosProducto()">Save</button>
       </div>
+
     </div>
   </div>
 </div>
+
 <div class="modal-backdrop fade show" *ngIf="productoEditando"></div>
+
+
 
 <!-- MODAL COMPRA -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">
