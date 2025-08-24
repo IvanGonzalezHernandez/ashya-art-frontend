@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CarritoService } from '../../../services/carrito/carrito';
 
 
 
@@ -33,7 +34,8 @@ export class Home implements OnInit {
 
   constructor(private homeService: HomeService,
               private route: ActivatedRoute, 
-              private router: Router) {}
+              private router: Router,
+              private carritoService: CarritoService) {}
 
   ngOnInit(): void {
     this.loading = true;
@@ -45,27 +47,27 @@ export class Home implements OnInit {
       const payment = params['payment'];
       if (payment) {
         if (payment === 'success') {
-          //Borrar carrito
-          localStorage.removeItem('carrito');
+          // ✅ Vaciar carrito correctamente
+          this.carritoService.vaciarCarrito();
 
           this.mostrarModalFeedback(
-          'success',
-          'Payment successful',
-          'Thank you! Your payment was completed. You will receive an email shortly with your invoice and your order number.'
-        );
+            'success',
+            'Payment successful',
+            'Thank you! Your payment was completed. You will receive an email shortly with your invoice and your order number.'
+          );
         } else {
           this.mostrarModalFeedback(
-          'error',
-          'Payment failed',
-          'Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +01 532 223 434.'
-        );
+            'error',
+            'Payment failed',
+            'Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +01 532 223 434.'
+          );
         }
         // Limpiar query params para que no vuelva a abrir el modal al refrescar
         this.router.navigate([], { queryParams: {} });
       }
     });
   }
-
+  
   imagenes = [
     'assets/instagram/galery_1.webp',
     'assets/instagram/galery_2.webp',
