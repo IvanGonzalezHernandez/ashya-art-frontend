@@ -45,6 +45,9 @@ export class Home implements OnInit {
       const payment = params['payment'];
       if (payment) {
         if (payment === 'success') {
+          //Borrar carrito
+          localStorage.removeItem('carrito');
+
           this.mostrarModalFeedback(
           'success',
           'Payment successful',
