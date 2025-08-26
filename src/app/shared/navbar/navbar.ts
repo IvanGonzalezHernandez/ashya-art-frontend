@@ -19,6 +19,12 @@ export class Navbar implements OnInit {
   loadingCheckout = false;
   contadorCarrito: number = 0;
   itemsCarrito: ItemCarrito[] = [];
+  
+  //Código tarjeta regalo canjeo
+  codigoTarjeta: string = '';
+  mensajeCodigo: string = '';
+  errorCodigo: string = '';
+  totalConDescuento: number | null = null;
 
   // Datos cliente
   cliente: Cliente = {
@@ -121,30 +127,59 @@ export class Navbar implements OnInit {
     this.pagarConStripe();
   }
 
-  pagarConStripe() {
-    this.loadingCheckout = true;
+pagarConStripe() {
+  this.loadingCheckout = true;
 
-    // Cerrar offcanvas del carrito
-    const offcanvasEl = document.getElementById('offcanvasCarrito');
-    if (offcanvasEl) {
-      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-      bsOffcanvas?.hide();
-    }
+  const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
 
-    // Crear sesión de Stripe enviando carrito + cliente
-    this.carritoService.crearSesionStripe(this.cliente).subscribe({
-      next: (data: { url: string }) => {
-        window.location.href = data.url;
-      },
-      error: (err) => {
-        console.error('Error al crear sesión de Stripe', err);
-        alert('Hubo un error al procesar el pago.');
-        this.loadingCheckout = false;
-      }
-    });
+  // Cerrar offcanvas del carrito
+  const offcanvasEl = document.getElementById('offcanvasCarrito');
+  if (offcanvasEl) {
+    const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+    bsOffcanvas?.hide();
   }
+
+  // Crear sesión de Stripe enviando carrito + cliente + total descontado + código
+  this.carritoService.crearSesionStripe(this.cliente, total, this.codigoTarjeta).subscribe({
+    next: (data: { url: string }) => {
+      window.location.href = data.url;
+    },
+    error: (err) => {
+      console.error('Error al crear sesión de Stripe', err);
+      alert('Hubo un error al procesar el pago.');
+      this.loadingCheckout = false;
+    }
+  });
+}
+
 
   eliminarItem(index: number) {
     this.carritoService.eliminarItem(index);
   }
-}
+
+
+
+  aplicarCodigo() {
+    if (!this.codigoTarjeta.trim()) {
+      this.errorCodigo = 'Introduce un código válido';
+      this.mensajeCodigo = '';
+      return;
+    }
+
+    // Llamada a tu backend para validar el código
+    this.carritoService.validarTarjeta(this.codigoTarjeta).subscribe({
+      next: (descuento: number) => {
+        this.totalConDescuento = this.carritoService.obtenerTotal() - descuento;
+        if (this.totalConDescuento < 0) this.totalConDescuento = 0;
+        this.mensajeCodigo = `Code applied: discount of ${descuento}€`;
+        this.errorCodigo = '';
+      },
+      error: () => {
+        this.errorCodigo = 'Invalid or already redeemed code';
+        this.mensajeCodigo = '';
+      }
+    });
+  }
+
+  
+  }

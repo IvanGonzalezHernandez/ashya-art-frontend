@@ -93,6 +93,17 @@
 
     <!-- Total y botón fijos al final -->
     <div class="mt-3 pt-3 border-top">
+      <!-- Campo de tarjeta regalo -->
+      <div class="mb-2">
+        <label for="codigoTarjeta" class="form-label">Gift card code</label>
+        <div class="input-group">
+          <input type="text" id="codigoTarjeta" class="form-control" [(ngModel)]="codigoTarjeta" placeholder="Introduce tu código">
+          <button class="btn btn-outline-secondary" type="button" (click)="aplicarCodigo()">Apply</button>
+        </div>
+        <small *ngIf="mensajeCodigo" class="text-success">{{ mensajeCodigo }}</small>
+        <small *ngIf="errorCodigo" class="text-danger">{{ errorCodigo }}</small>
+      </div>
+
       <p class="mb-2"><strong>Total: {{ carritoService.obtenerTotal() }}€</strong></p>
       <div class="d-grid">
         <button class="btn bg-azul text-white" (click)="abrirModalCliente()">Proceed to Checkout</button>

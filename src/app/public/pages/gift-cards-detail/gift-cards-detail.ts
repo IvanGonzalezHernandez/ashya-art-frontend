@@ -56,7 +56,7 @@ export class GiftCardsDetail implements OnInit {
   agregarTarjetaAlCarrito(tarjeta: TarjetaRegalo) {
     if (!tarjeta) return;
 
-    const cantidad = 1; // Siempre 1 para tarjeta regalo, o puedes añadir un campo cantidadSeleccionada
+    const cantidad = 1; // Siempre 1 para tarjeta regalo
 
     const item: ItemCarrito = {
       id: tarjeta.id,
@@ -65,7 +65,7 @@ export class GiftCardsDetail implements OnInit {
       precio: tarjeta.precio ?? 0,
       cantidad: cantidad,
       img: tarjeta.img || '',
-      subtitulo: '',
+      subtitulo: 'Tarjeta regalo para canjear por valor de ' + tarjeta.precio + '€',
       fecha: '',
       hora: ''
     };

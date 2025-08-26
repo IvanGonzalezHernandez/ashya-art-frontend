@@ -57,7 +57,7 @@ export class CarritoService {
   vaciarCarrito() {
     this.items = [];
     this.persistir();
-    localStorage.removeItem('carrito'); // opcional, porque persistir ya pone []
+    localStorage.removeItem('carrito'); // opcional
   }
 
   private actualizarContador() {
@@ -67,7 +67,7 @@ export class CarritoService {
 
   private persistir() {
     localStorage.setItem('carrito', JSON.stringify(this.items));
-    this.itemsSubject.next([...this.items]); // 👈 aquí notificamos cambios
+    this.itemsSubject.next([...this.items]); // aquí notificamos cambios
     this.actualizarContador();
   }
 
@@ -75,10 +75,17 @@ export class CarritoService {
     return this.items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
   }
 
-  crearSesionStripe(cliente: Cliente): Observable<{ url: string }> {
+  crearSesionStripe(cliente: Cliente, total: number, codigoTarjeta?: string): Observable<{ url: string }> {
     return this.http.post<{ url: string }>(`${this.apiUrl}`, { 
-      carrito: { items: this.obtenerItems() }, 
-      cliente: cliente
+      carrito: { items: this.obtenerItems() },
+      cliente: cliente,
+      totalConDescuento: total,
+      codigoTarjeta: codigoTarjeta?.trim().toUpperCase() || null
     });
   }
+  
+  validarTarjeta(codigo: string): Observable<number> {
+    return this.http.post<number>(`${environment.apiUrl}/tarjetas-regalo/validar`, { codigo });
+  }
+
 }
