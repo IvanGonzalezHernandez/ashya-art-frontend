@@ -58,6 +58,8 @@
             <ul class="list-unstyled mt-4">
               <li><strong>Level:</strong> {{ cursoSeleccionado.nivel }}</li>
               <li><strong>Duration:</strong> {{ cursoSeleccionado.duracion }}</li>
+              <li><strong>Language:</strong> I teach in German, English, Polish</li>
+              <li><strong>Location:</strong> Pinneberger Chaussee 74, Hamburg</li>
               <li><strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}</li>
               <li><strong>Materials:</strong> {{ cursoSeleccionado.materiales }}</li>
               <li><strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}</li>
@@ -84,7 +86,7 @@
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title" id="modalReservaLabel">Reserve Course</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <form>
@@ -151,7 +153,7 @@
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title" id="modalFechasDisponiblesLabel">Available Dates</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
           <div *ngIf="cursosFecha.length > 0; else noFechas">
