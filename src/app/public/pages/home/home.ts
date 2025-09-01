@@ -59,7 +59,7 @@ export class Home implements OnInit {
           this.mostrarModalFeedback(
             'error',
             'Payment failed',
-            'Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +01 532 223 434.'
+            'Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +49 163 86 81 397.'
           );
         }
         // Limpiar query params para que no vuelva a abrir el modal al refrescar

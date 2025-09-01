@@ -1,7 +1,7 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Reservas Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Bookings Dashboard</h1>
     <div class="d-flex gap-2">
       <!-- <button class="btn btn-success" (click)="crearReserva()">+ New Reserva</button> -->
     </div>
@@ -59,7 +59,7 @@
 <div class="modal fade show d-block" tabindex="-1" *ngIf="reservaEditando">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">{{ esNuevo ? 'Create Reserva' : 'Edit Reserva' }}</h5>
         <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
       </div>
