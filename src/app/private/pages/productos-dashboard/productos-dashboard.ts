@@ -17,6 +17,10 @@ import { ProductoCompra } from '../../../models/producto-compra.model';
   imports: [CommonModule, FormsModule, NgxPaginationModule]
 })
 export class ProductosDashboard implements OnInit {
+  loading = false;
+  productosCargados = false;
+  comprasCargadas = false;
+
   // Productos
   productos: Producto[] = [];
   paginaActualProducto: number = 1;
@@ -39,14 +43,26 @@ export class ProductosDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.obtenerProductos();
     this.obtenerCompras();
   }
 
   // --- MÉTODOS PRODUCTOS ---
-  obtenerProductos() {
-    this.productoService.getProductos().subscribe(data => this.productos = data);
-  }
+obtenerProductos() {
+  this.productoService.getProductos().subscribe({
+    next: data => {
+      this.productos = data;
+      this.productosCargados = true;
+      this.comprobarCargaCompleta();
+    },
+    error: err => {
+      console.error('Error al cargar productos', err);
+      this.productosCargados = true;
+      this.comprobarCargaCompleta();
+    }
+  });
+}
 
   crearProducto() {
     this.esNuevoProducto = true;
@@ -150,6 +166,12 @@ export class ProductosDashboard implements OnInit {
     }
   }
 
+  private comprobarCargaCompleta() {
+    if (this.productosCargados && this.comprasCargadas) {
+      this.loading = false;
+    }
+  }
+
   exportarCSVProductos() {
     const encabezado = ['ID', 'Name', 'Subtitle', 'Description', 'Stock', 'Price'];
     const filas = this.productos.map(producto => [
@@ -165,7 +187,18 @@ export class ProductosDashboard implements OnInit {
 
   // --- MÉTODOS PRODUCTO COMPRA ---
   obtenerCompras() {
-    this.productoCompraService.getProductoCompras().subscribe(data => this.compras = data);
+    this.productoCompraService.getProductoCompras().subscribe({
+      next: data => {
+        this.compras = data;
+        this.comprasCargadas = true;
+        this.comprobarCargaCompleta();
+      },
+      error: err => {
+        console.error('Error al cargar compras', err);
+        this.comprasCargadas = true; // lo marcamos para no bloquear el loading
+        this.comprobarCargaCompleta();
+      }
+    });
   }
 
   crearCompra() {

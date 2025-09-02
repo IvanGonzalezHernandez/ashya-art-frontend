@@ -1,14 +1,18 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Clientes Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Clients Dashboard</h1>
     <div class="d-flex gap-2">
       <button class="btn btn-success" (click)="crearCliente()">+ New Cliente</button>
     </div>
   </div>
 
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
+  </div> 
+
   <!-- TABLA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3">
+  <div class="card shadow-sm rounded-3" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0">

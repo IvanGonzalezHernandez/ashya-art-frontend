@@ -14,6 +14,8 @@ import { CsvExportService } from '../../../services/csv/csv-export';
   imports: [CommonModule, FormsModule, NgxPaginationModule]
 })
 export class TarjetasRegaloDashboard implements OnInit {
+  loading = false;
+
   tarjetas: TarjetaRegalo[] = [];
   paginaActual: number = 1;
   tarjetaEditando: TarjetaRegalo | null = null;
@@ -25,11 +27,22 @@ export class TarjetasRegaloDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.obtenerTarjetas();
   }
 
   obtenerTarjetas() {
-    this.tarjetaService.getTarjetas().subscribe(data => this.tarjetas = data);
+    this.loading = true;
+    this.tarjetaService.getTarjetas().subscribe({
+      next: data => {
+        this.tarjetas = data;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al cargar tarjetas', err);
+        this.loading = false;
+      }
+    });
   }
 
   crearTarjeta() {

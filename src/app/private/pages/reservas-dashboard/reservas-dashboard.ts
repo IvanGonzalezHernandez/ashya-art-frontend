@@ -5,10 +5,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Reservas } from '../../../models/curso-compra.model';
- 
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
+
 
 @Component({
   selector: 'app-reservas-dashboard',
@@ -18,6 +15,8 @@ import interactionPlugin from '@fullcalendar/interaction';
   imports: [CommonModule, FormsModule, NgxPaginationModule]
 })
 export class ReservasDashboard implements OnInit {
+  loading = false;
+  
   reservas: Reservas[] = [];
   paginaActual: number = 1;
   reservaEditando: Reservas | null = null;
@@ -30,12 +29,21 @@ export class ReservasDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.obtenerReservas();
   }
 
   obtenerReservas() {
-    this.reservasService.getReservas().subscribe(data => {
-      this.reservas = data;
+    this.loading = true;
+    this.reservasService.getReservas().subscribe({
+      next: data => {
+        this.reservas = data;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al cargar reservas', err);
+        this.loading = false;
+      }
     });
   }
 

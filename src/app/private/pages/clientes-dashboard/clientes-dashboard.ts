@@ -14,6 +14,8 @@ import { Cliente } from '../../../models/cliente.model';
   imports: [CommonModule, FormsModule, NgxPaginationModule]
 })
 export class ClientesDashboard implements OnInit {
+  loading = false;
+
   clientes: Cliente[] = [];
   paginaActual: number = 1;
   clienteEditando: Cliente | null = null;
@@ -25,11 +27,22 @@ export class ClientesDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.obtenerClientes();
   }
 
   obtenerClientes() {
-    this.clienteService.getClientes().subscribe(data => this.clientes = data);
+    this.loading = true;
+    this.clienteService.getClientes().subscribe({
+      next: data => {
+        this.clientes = data;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al cargar clientes', err);
+        this.loading = false;
+      }
+    });
   }
 
   crearCliente() {

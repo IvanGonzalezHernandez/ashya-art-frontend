@@ -15,6 +15,8 @@ import { Newsletter } from '../../../models/newsletter.model';
   imports: [CommonModule, FormsModule, NgxPaginationModule]
 })
 export class NewsletterDashboard implements OnInit {
+  loading = false;
+
   newsletters: Newsletter[] = [];
   paginaActual: number = 1;
   newsletterEditando: Newsletter | null = null;
@@ -26,11 +28,22 @@ export class NewsletterDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.obtenerNewsletters();
   }
 
   obtenerNewsletters() {
-    this.newsletterService.getNewsletters().subscribe(data => this.newsletters = data);
+    this.loading = true;
+    this.newsletterService.getNewsletters().subscribe({
+      next: data => {
+        this.newsletters = data;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al cargar newsletters', err);
+        this.loading = false;
+      }
+    });
   }
 
   crearNewsletter() {

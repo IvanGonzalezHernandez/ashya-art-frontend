@@ -17,6 +17,10 @@ import { TruncatePipe } from '../../../pipes/truncate/truncate-pipe';
   imports: [CommonModule, FormsModule, NgxPaginationModule, TruncatePipe]
 })
 export class CursosDashboard implements OnInit {
+  loading = false;
+  cursosCargados = false;
+  fechasCargados = false;
+
   // CURSOS
   cursos: Curso[] = [];
   paginaActual: number = 1;
@@ -39,15 +43,28 @@ export class CursosDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.obtenerCursos();
     this.obtenerCursoFechas();
   }
 
   // --- CURSOS ---
 
-  obtenerCursos() {
-    this.cursoService.getCursos().subscribe(data => this.cursos = data);
-  }
+obtenerCursos() {
+  this.cursoService.getCursos().subscribe({
+    next: (data) => {
+      this.cursos = data;
+      this.cursosCargados = true;
+      this.comprobarCargaCompleta();
+    },
+    error: (err) => {
+      console.error('Error cargando cursos', err);
+      this.cursosCargados = true;  // marcamos como intentado aunque falle
+      this.comprobarCargaCompleta();
+    }
+  });
+}
+
   
   crearCurso() {
     this.esNuevo = true;
@@ -153,9 +170,21 @@ export class CursosDashboard implements OnInit {
 
   // --- CURSOFECHA ---
 
-  obtenerCursoFechas() {
-    this.cursoFechaService.getCursoFechas().subscribe(data => this.cursoFechas = data);
-  }
+obtenerCursoFechas() {
+  this.cursoFechaService.getCursoFechas().subscribe({
+    next: (data) => {
+      this.cursoFechas = data;
+      this.fechasCargados = true;
+      this.comprobarCargaCompleta();
+    },
+    error: (err) => {
+      console.error('Error cargando fechas de curso', err);
+      this.fechasCargados = true;
+      this.comprobarCargaCompleta();
+    }
+  });
+}
+
 
   crearCursoFecha() {
     this.esNuevaCursoFecha = true;
@@ -203,6 +232,12 @@ export class CursosDashboard implements OnInit {
       this.cursoFechaService.eliminarCursoFecha(id).subscribe(() => {
         this.obtenerCursoFechas();
       });
+    }
+  }
+
+  private comprobarCargaCompleta() {
+    if (this.cursosCargados && this.fechasCargados) {
+      this.loading = false;
     }
   }
 
