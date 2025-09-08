@@ -2,12 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+
 import { CursoService } from '../../../services/curso/curso';
 import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
 import { CsvExportService } from '../../../services/csv/csv-export';
+
 import { Curso } from '../../../models/curso.model';
 import { CursoFecha } from '../../../models/cursoFecha.model';
 import { TruncatePipe } from '../../../pipes/truncate/truncate-pipe';
+
+type SlotImagen = {
+  slot: number;                 // 1..5
+  previewUrl: string | null;    // dataURL local o URL backend
+  file?: File;                  // archivo nuevo elegido
+  markedForDelete: boolean;     // borrar en servidor
+};
 
 @Component({
   selector: 'app-cursos-dashboard',
@@ -27,8 +36,8 @@ export class CursosDashboard implements OnInit {
   cursoEditando: Curso | null = null;
   esNuevo: boolean = false;
 
-  imagenes: File[] = [];
-  vistaPreviaImagenes: string[] = [];
+  // UI de imágenes por slots
+  slots: SlotImagen[] = [];
 
   // CURSOFECHA
   cursoFechas: CursoFecha[] = [];
@@ -37,7 +46,7 @@ export class CursosDashboard implements OnInit {
   esNuevaCursoFecha: boolean = false;
 
   constructor(
-    private cursoService: CursoService,
+    public cursoService: CursoService,
     private cursoFechaService: CursoFechaService,
     private csvExportService: CsvExportService
   ) {}
@@ -50,22 +59,32 @@ export class CursosDashboard implements OnInit {
 
   // --- CURSOS ---
 
-obtenerCursos() {
-  this.cursoService.getCursos().subscribe({
-    next: (data) => {
-      this.cursos = data;
-      this.cursosCargados = true;
-      this.comprobarCargaCompleta();
-    },
-    error: (err) => {
-      console.error('Error cargando cursos', err);
-      this.cursosCargados = true;  // marcamos como intentado aunque falle
-      this.comprobarCargaCompleta();
-    }
-  });
-}
+  obtenerCursos() {
+    this.cursoService.getCursos().subscribe({
+      next: (data) => {
+        this.cursos = data;
+        this.cursosCargados = true;
+        this.comprobarCargaCompleta();
+      },
+      error: (err) => {
+        console.error('Error cargando cursos', err);
+        this.cursosCargados = true;  // marcamos como intentado aunque falle
+        this.comprobarCargaCompleta();
+      }
+    });
+  }
 
-  
+  private initSlots(cursoId?: number) {
+    this.slots = Array.from({ length: 5 }, (_, i) => {
+      const slotNum = i + 1;
+      return {
+        slot: slotNum,
+        previewUrl: cursoId ? this.cursoService.getImagenUrl(cursoId, slotNum) : null,
+        markedForDelete: false
+      } as SlotImagen;
+    });
+  }
+
   crearCurso() {
     this.esNuevo = true;
     this.cursoEditando = {
@@ -85,49 +104,57 @@ obtenerCursos() {
       materiales: '',
       plazasMaximas: 0,
       informacionExtra: ''
-    };
-  }
-  
-  onImagenesSeleccionadas(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
-  
-    const nuevosArchivos = Array.from(input.files);
-  
-    if (this.imagenes.length + nuevosArchivos.length > 5) {
-      alert('Solo puedes seleccionar hasta 5 imágenes en total');
-      return;
-    }
-  
-    nuevosArchivos.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.vistaPreviaImagenes.push(e.target.result);
-      };
-      reader.readAsDataURL(file);
-      this.imagenes.push(file);
-    });
+    } as unknown as Curso; // adapta si tu modelo difiere
+    this.initSlots(); // sin URLs
   }
 
-  eliminarImagen(index: number) {
-    this.imagenes.splice(index, 1);
-    this.vistaPreviaImagenes.splice(index, 1);
-  }
   editarCurso(curso: Curso) {
     this.esNuevo = false;
     this.cursoEditando = { ...curso };
+    this.initSlots(curso.id);
   }
 
   cancelarEdicion() {
     this.cursoEditando = null;
     this.esNuevo = false;
+    this.slots = [];
+  }
+
+  onSeleccionarArchivo(event: Event, slot: SlotImagen) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    slot.file = file;
+    slot.markedForDelete = false;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      slot.previewUrl = e.target.result; // dataURL local para preview
+    };
+    reader.readAsDataURL(file);
+
+    // permitir volver a seleccionar el mismo archivo si se desea
+    input.value = '';
+  }
+
+  eliminarSlot(slot: SlotImagen) {
+    slot.file = undefined;
+    slot.previewUrl = null;
+    slot.markedForDelete = true;
+  }
+
+  restaurarSlot(slot: SlotImagen) {
+    if (!this.cursoEditando || this.esNuevo) return;
+    slot.file = undefined;
+    slot.previewUrl = this.cursoService.getImagenUrl(this.cursoEditando.id, slot.slot);
+    slot.markedForDelete = false;
   }
 
   guardarCambios() {
     if (!this.cursoEditando) return;
-  
-    const formData = new FormData();
-    const cursoDto = {
+
+    const cursoDto: any = {
       id: this.cursoEditando.id,
       nombre: this.cursoEditando.nombre,
       subtitulo: this.cursoEditando.subtitulo,
@@ -140,26 +167,37 @@ obtenerCursos() {
       plazasMaximas: this.cursoEditando.plazasMaximas,
       informacionExtra: this.cursoEditando.informacionExtra
     };
-  
-    formData.append('curso', new Blob([JSON.stringify(cursoDto)], { type: 'application/json' }));
-  
-    this.imagenes.forEach(imagen => {
-      formData.append('imagenes', imagen);
+
+    const fd = new FormData();
+    fd.append('curso', new Blob([JSON.stringify(cursoDto)], { type: 'application/json' }));
+
+    // Reemplazos: enviar img1..img5 si hay archivo cargado
+    this.slots.forEach(s => {
+      if (s.file) {
+        fd.append(`img${s.slot}`, s.file);
+      }
     });
-  
-    if (this.esNuevo) {
-      this.cursoService.crearCurso(formData).subscribe(() => {
+
+    // Borrados: enviar flags deleteImgN=true
+    this.slots.forEach(s => {
+      if (s.markedForDelete) {
+        fd.append(`deleteImg${s.slot}`, 'true');
+      }
+    });
+
+    const req$ = this.esNuevo
+      ? this.cursoService.crearCurso(fd)
+      : this.cursoService.actualizarCurso(fd, this.cursoEditando.id);
+
+    req$.subscribe({
+      next: () => {
         this.obtenerCursos();
         this.cancelarEdicion();
-      });
-    } else {
-      this.cursoService.actualizarCurso(formData, this.cursoEditando.id).subscribe(() => {
-        this.obtenerCursos();
-        this.cancelarEdicion();
-      });
-    }
+      },
+      error: (e) => console.error('Error guardando curso', e)
+    });
   }
-  
+
   eliminarCurso(id: number) {
     if (confirm('¿Estás seguro de eliminar este curso?')) {
       this.cursoService.eliminarCurso(id).subscribe(() => {
@@ -170,21 +208,20 @@ obtenerCursos() {
 
   // --- CURSOFECHA ---
 
-obtenerCursoFechas() {
-  this.cursoFechaService.getCursoFechas().subscribe({
-    next: (data) => {
-      this.cursoFechas = data;
-      this.fechasCargados = true;
-      this.comprobarCargaCompleta();
-    },
-    error: (err) => {
-      console.error('Error cargando fechas de curso', err);
-      this.fechasCargados = true;
-      this.comprobarCargaCompleta();
-    }
-  });
-}
-
+  obtenerCursoFechas() {
+    this.cursoFechaService.getCursoFechas().subscribe({
+      next: (data) => {
+        this.cursoFechas = data;
+        this.fechasCargados = true;
+        this.comprobarCargaCompleta();
+      },
+      error: (err) => {
+        console.error('Error cargando fechas de curso', err);
+        this.fechasCargados = true;
+        this.comprobarCargaCompleta();
+      }
+    });
+  }
 
   crearCursoFecha() {
     this.esNuevaCursoFecha = true;
@@ -196,7 +233,7 @@ obtenerCursoFechas() {
       horaFin: '',
       plazasDisponibles: 0,
       nombreCurso: ''
-    };
+    } as unknown as CursoFecha;
   }
 
   editarCursoFecha(cursoFecha: CursoFecha) {
@@ -243,28 +280,28 @@ obtenerCursoFechas() {
 
   // --- EXPORTACIÓN CSV ---
 
-  exportarCSV() {
-    // Exportar cursos
-    const encabezadoCursos = ['ID', 'Nombre', 'Subtítulo', 'Descripción', 'Precio'];
-    const filasCursos = this.cursos.map(curso => [
-      curso.id,
-      curso.nombre,
-      curso.subtitulo,
-      curso.descripcion,
-      curso.precio,
-    ]);
-    this.csvExportService.exportarCSV(encabezadoCursos, filasCursos, 'courses.csv');
+exportarCursosCSV() {
+  const encabezadoCursos = ['ID', 'Nombre', 'Subtítulo', 'Descripción', 'Precio'];
+  const filasCursos = (this.cursos || []).map(curso => [
+    curso.id,
+    curso.nombre,
+    curso.subtitulo,
+    curso.descripcion,
+    curso.precio
+  ]);
+  this.csvExportService.exportarCSV(encabezadoCursos, filasCursos, 'courses.csv');
+}
 
-    // Exportar cursoFechas
-    const encabezadoCursoFechas = ['ID', 'Curso', 'Fecha', 'Hora Inicio', 'Hora Fin', 'Plazas Disponibles'];
-    const filasCursoFechas = this.cursoFechas.map(cf => [
-      cf.id,
-      cf.nombreCurso,
-      cf.fecha,
-      cf.horaInicio,
-      cf.horaFin,
-      cf.plazasDisponibles
-    ]);
-    this.csvExportService.exportarCSV(encabezadoCursoFechas, filasCursoFechas, 'curso-fechas.csv');
-  }
+exportarCursoFechasCSV() {
+  const encabezadoCursoFechas = ['ID', 'Curso', 'Fecha', 'Hora Inicio', 'Hora Fin', 'Plazas Disponibles'];
+  const filasCursoFechas = (this.cursoFechas || []).map(cf => [
+    cf.id,
+    cf.nombreCurso,
+    cf.fecha,
+    cf.horaInicio,
+    cf.horaFin,
+    cf.plazasDisponibles
+  ]);
+  this.csvExportService.exportarCSV(encabezadoCursoFechas, filasCursoFechas, 'course-dates.csv');
+}
 }

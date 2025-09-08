@@ -113,50 +113,58 @@
 </div>
 
 
-<!-- Modal Datos Cliente -->
+<!-- MODAL CLIENTE -->
 <div class="modal fade" id="modalCliente" tabindex="-1" aria-labelledby="modalClienteLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content shadow-lg">
-      
-      <!-- Header -->
+
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title" id="modalClienteLabel">Your Information</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <!-- Body -->
       <div class="modal-body">
-        <form #clienteForm="ngForm">
+        <form #clienteForm="ngForm" (ngSubmit)="confirmarDatos()" novalidate>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">First Name *</label>
-              <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre" required>
+              <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre" required #nombre="ngModel">
+              <div class="text-danger" *ngIf="nombre.invalid && nombre.touched">First name is required.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Last Name *</label>
-              <input type="text" class="form-control" name="apellido" [(ngModel)]="cliente.apellido" required>
+              <input type="text" class="form-control" name="apellido" [(ngModel)]="cliente.apellido" required #apellido="ngModel">
+              <div class="text-danger" *ngIf="apellido.invalid && apellido.touched">Last name is required.</div>
             </div>
           </div>
 
+        <div class="mb-3">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-control" name="email" [(ngModel)]="cliente.email" required email #email="ngModel">
+          <!-- Error si está vacío -->
+          <div class="text-danger" *ngIf="email.errors?.['required'] && email.touched">Email is required.</div>
+          <!-- Error si el formato es inválido -->
+          <div class="text-danger" *ngIf="email.errors?.['email'] && email.touched">Please enter a valid email address.</div>
+        </div>
+
           <div class="mb-3">
-            <label class="form-label">Email *</label>
-            <input type="email" class="form-control" name="email" [(ngModel)]="cliente.email" required>
+            <label class="form-label">Phone *</label>
+            <input type="text" class="form-control" name="telefono" [(ngModel)]="cliente.telefono" required pattern="[-0-9()+ ]{7,20}" #telefono="ngModel">
+            <div class="text-danger" *ngIf="telefono.invalid && telefono.touched">Use digits, space, +, (), - (7–20 chars).</div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Phone</label>
-            <input type="text" class="form-control" name="telefono" [(ngModel)]="cliente.telefono">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Street</label>
-            <input type="text" class="form-control" name="calle" [(ngModel)]="cliente.calle">
+            <label class="form-label">Street *</label>
+            <input type="text" class="form-control" name="calle" [(ngModel)]="cliente.calle" required #calle="ngModel">
+            <div class="text-danger" *ngIf="calle.invalid && calle.touched">Street is required.</div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Number</label>
-              <input type="text" class="form-control" name="numero" [(ngModel)]="cliente.numero">
+              <label class="form-label">Number *</label>
+              <input type="text" class="form-control" name="numero" [(ngModel)]="cliente.numero" required pattern="^[0-9]+[A-Za-z]?$" #numero="ngModel">
+              <div class="text-danger" *ngIf="numero.invalid && numero.touched">Example: 12 or 12B.</div>
+                <div class="text-danger" *ngIf="email.errors?.['email'] && email.touched">Please enter a valid email address.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Floor</label>
@@ -166,26 +174,28 @@
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">City</label>
-              <input type="text" class="form-control" name="ciudad" [(ngModel)]="cliente.ciudad">
+              <label class="form-label">City *</label>
+              <input type="text" class="form-control" name="ciudad" [(ngModel)]="cliente.ciudad" required #ciudad="ngModel">
+              <div class="text-danger" *ngIf="ciudad.invalid && ciudad.touched">City is required.</div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Province</label>
-              <input type="text" class="form-control" name="provincia" [(ngModel)]="cliente.provincia">
+              <label class="form-label">Province *</label>
+              <input type="text" class="form-control" name="provincia" [(ngModel)]="cliente.provincia" required #provincia="ngModel">
+              <div class="text-danger" *ngIf="provincia.invalid && provincia.touched">Province is required.</div>
             </div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Postal Code</label>
-            <input type="text" class="form-control" name="codigoPostal" [(ngModel)]="cliente.codigoPostal">
+            <label class="form-label">Postal Code *</label>
+            <input type="text" class="form-control" name="codigoPostal" [(ngModel)]="cliente.codigoPostal" required pattern="^[0-9]{5}$" #codigoPostal="ngModel">
+            <div class="text-danger" *ngIf="codigoPostal.invalid && codigoPostal.touched">Must be exactly 5 digits.</div>
+          </div>
+
+          <div class="modal-footer px-0">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn bg-azul text-white" [disabled]="clienteForm.invalid">Continue</button>
           </div>
         </form>
-      </div>
-
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn bg-azul text-white" (click)="confirmarDatos()">Continue</button>
       </div>
 
     </div>
