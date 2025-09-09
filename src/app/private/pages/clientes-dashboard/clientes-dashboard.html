@@ -2,66 +2,120 @@
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Clients Dashboard</h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearCliente()">+ New Cliente</button>
     </div>
   </div>
 
   <div *ngIf="loading" class="text-center my-4">
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-  </div> 
+  </div>
 
-  <!-- TABLA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+  <!-- TABLA CLIENTES EN UNA CARD -->
+  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th>ID</th>
-              <th>Phone</th>
-              <th>Name</th>
-              <th>Surname</th>
-              <th>Email</th>
-              <th>Street</th>
-              <th>Number</th>
-              <th>Floor</th>
-              <th>Province</th>
-              <th>City</th>
-              <th>Postal Code</th>
-              <th>Actions</th>              
+              <!--<th style="width: 6%;">ID</th>-->
+              <th style="width: 12%;">Name</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">Surname</th>
+              <th style="width: 10%;">Phone</th>
+              <th class="d-none d-md-table-cell" style="width: 18%;">Email</th>
+              <th class="d-none d-lg-table-cell" style="width: 14%;">Street</th>
+              <th class="d-none d-lg-table-cell" style="width: 6%;">Number</th>
+              <th class="d-none d-xl-table-cell" style="width: 6%;">Floor</th>
+              <th class="d-none d-xl-table-cell" style="width: 10%;">Province</th>
+              <th class="d-none d-lg-table-cell" style="width: 10%;">City</th>
+              <th class="d-none d-xl-table-cell" style="width: 6%;">Postal</th>
+              <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr *ngFor="let cliente of clientes | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
-              <td>{{ cliente.id }}</td>
-              <td>{{ cliente.telefono }}</td>
-              <td>{{ cliente.nombre }}</td>
-              <td>{{ cliente.apellido }}</td>
-              <td>{{ cliente.email }}</td>
-              <td>{{ cliente.calle }}</td>
-              <td>{{ cliente.numero }}</td>
-              <td>{{ cliente.piso }}</td>
-              <td>{{ cliente.provincia }}</td>
-              <td>{{ cliente.ciudad }}</td>
-              <td>{{ cliente.codigoPostal }}</td>
+            <tr *ngFor="let cliente of clientes | paginate: { id: 'clientes', itemsPerPage: 5, currentPage: paginaActual }">
+              <!--td class="text-muted">{{ cliente.id }}</td>-->
+
               <td>
-                <div class="d-flex flex-column flex-md-row gap-2">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.nombre">
+                  {{ cliente.nombre }}
+                </span>
+              </td>
+
+              <td class="d-none d-md-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.apellido">
+                  {{ cliente.apellido }}
+                </span>
+              </td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.telefono">
+                  {{ cliente.telefono }}
+                </span>
+              </td>
+
+              <td class="d-none d-md-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.email">
+                  {{ cliente.email }}
+                </span>
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.calle">
+                  {{ cliente.calle }}
+                </span>
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.numero">
+                  {{ cliente.numero }}
+                </span>
+              </td>
+
+              <td class="d-none d-xl-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.piso">
+                  {{ cliente.piso }}
+                </span>
+              </td>
+
+              <td class="d-none d-xl-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.provincia">
+                  {{ cliente.provincia }}
+                </span>
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.ciudad">
+                  {{ cliente.ciudad }}
+                </span>
+              </td>
+
+              <td class="d-none d-xl-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.codigoPostal">
+                  {{ cliente.codigoPostal }}
+                </span>
+              </td>
+
+              <td>
+                <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarCliente(cliente)">Edit</button>
                   <button class="btn btn-danger btn-sm" (click)="eliminarCliente(cliente.id)">Delete</button>
                 </div>
               </td>
             </tr>
           </tbody>
+
         </table>
       </div>
     </div>
   </div>
 
   <!-- CONTROLES DE ABAJO -->
-  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
+    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export Clients CSV</button>
     <pagination-controls
+      id="clientes"
       previousLabel="Previous"
       nextLabel="Next"
       (pageChange)="paginaActual = $event">
@@ -69,62 +123,76 @@
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL CLIENTE -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="clienteEditando">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">{{ esNuevo ? 'Create Cliente' : 'Edit Cliente' }}</h5>
         <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
       </div>
+
       <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">Tlf</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.telefono" />
+        <form (ngSubmit)="guardarCambios()" #clienteForm="ngForm" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Tlf</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.telefono" name="telefono" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.nombre" name="nombre" required />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Surname</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.apellido" name="apellido" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="clienteEditando.email" name="email" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Street</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.calle" name="calle" />
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Number</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.numero" name="numero" />
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Floor</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.piso" name="piso" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Province</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.provincia" name="provincia" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">City</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.ciudad" name="ciudad" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Postal code</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.codigoPostal" name="codigoPostal" />
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
+              <button type="submit" class="btn btn-success" [disabled]="clienteForm.invalid">Save</button>
+            </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Name</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.nombre" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Surname</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.apellido" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" [(ngModel)]="clienteEditando.email" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Street</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.calle" />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Number</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.numero" />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Floor</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.piso" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Province</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.provincia" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">City</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.ciudad" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Postal code</label>
-            <input type="text" class="form-control" [(ngModel)]="clienteEditando.codigoPostal" />
-          </div>
-        </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
-      </div>
+
     </div>
   </div>
 </div>

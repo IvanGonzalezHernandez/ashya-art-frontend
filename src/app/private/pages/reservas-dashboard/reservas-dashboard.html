@@ -18,7 +18,7 @@
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th style="width: 8%;">ID</th>
+              <!--<th style="width: 8%;">ID</th>-->
               <th style="width: 22%;">Client</th>
               <th style="width: 22%;">Course</th>
               <th style="width: 16%;">Date</th>
@@ -29,7 +29,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let reserva of reservas | paginate: { id: 'reservas', itemsPerPage: 5, currentPage: paginaActual }">
-              <td class="text-muted">{{ reserva.id }}</td>
+              <!--<td class="text-muted">{{ reserva.id }}</td>-->
 
               <td>
                 <span class="d-inline-block w-100 text-truncate" [title]="reserva.nombreCliente">

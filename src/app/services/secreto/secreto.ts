@@ -12,6 +12,7 @@ export class SecretoService {
 
   constructor(private http: HttpClient) {}
 
+  // --- CRUD básico ---
   getSecretos(): Observable<Secreto[]> {
     return this.http.get<Secreto[]>(this.apiUrl);
   }
@@ -20,5 +21,28 @@ export class SecretoService {
     return this.http.get<Secreto>(`${this.apiUrl}/${id}`);
   }
 
+  /** Crear secreto con imágenes/PDF usando FormData (multipart/form-data) */
+  crearSecreto(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData);
+  }
 
+  /** Actualizar secreto con imágenes/PDF y flags de borrado */
+  actualizarSecreto(formData: FormData, id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, formData);
+  }
+
+  eliminarSecreto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // --- Recursos públicos (para previews/enlaces) ---
+  /** URL pública para la imagen de un slot (1..5) */
+  getImagenUrl(idSecreto: number, slot: number): string {
+    return `${this.apiUrl}/${idSecreto}/imagen/${slot}`;
+  }
+
+  /** URL pública para ver/descargar el PDF del secreto */
+  getPdfUrl(idSecreto: number): string {
+    return `${this.apiUrl}/${idSecreto}/pdf`;
+  }
 }

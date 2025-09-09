@@ -11,47 +11,61 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- TABLA CURSOS EN UNA CARD -->
   <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
     <div class="card-body p-0">
-      <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
-        <thead class="table-azul">
-          <tr>
-            <!--<th style="width: 5%;">ID</th>-->
-            <th style="width: 12%;">Name</th>
-            <th class="d-none d-md-table-cell" style="width: 12%;">Subtitle</th>
-            <th class="d-none d-lg-table-cell" style="width: 20%;">Description</th>
-            <!--<th class="d-none d-md-table-cell" style="width: 8%;">Duration</th>-->
-            <!--<th class="d-none d-md-table-cell" style="width: 8%;">Level</th>-->
-            <!--<th class="d-none d-lg-table-cell" style="width: 6%;">Pieces</th>-->
-            <!--<th class="d-none d-lg-table-cell" style="width: 10%;">Materials</th>-->
-            <!--<th class="d-none d-xl-table-cell" style="width: 4%;">Seats</th>-->
-            <!--<th class="d-none d-xl-table-cell" style="width: 10%;">Extra Info</th>-->
-            <th style="width: 5%;">Price</th>
-            <th style="width: 12%;">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let curso of cursos | paginate: { id: 'cursos', itemsPerPage: 5, currentPage: paginaActual }">
-            <!--<td>{{ curso.id }}</td>-->
-            <td class="text-truncate" [title]="curso.nombre">{{ curso.nombre | truncate:15 }}</td>
-            <td class="d-none d-md-table-cell text-truncate" [title]="curso.subtitulo">{{ curso.subtitulo | truncate:15 }}</td>
-            <td class="d-none d-lg-table-cell text-truncate" [title]="curso.descripcion">{{ curso.descripcion | truncate:30 }}</td>
-            <!--<td class="d-none d-md-table-cell text-truncate" [title]="curso.duracion">{{ curso.duracion | truncate:10 }}</td>-->
-            <!--<td class="d-none d-md-table-cell text-truncate" [title]="curso.nivel">{{ curso.nivel | truncate:10 }}</td>-->
-            <!--<td class="d-none d-lg-table-cell text-truncate" [title]="curso.piezas">{{ curso.piezas | truncate:5 }}</td>-->
-            <!--<td class="d-none d-lg-table-cell text-truncate" [title]="curso.materiales">{{ curso.materiales | truncate:10 }}</td>-->
-            <!--<td class="d-none d-xl-table-cell">{{ curso.plazasMaximas }}</td>-->
-            <!--<td class="d-none d-xl-table-cell text-truncate" [title]="curso.informacionExtra">{{ curso.informacionExtra | truncate:20 }}</td>-->
-            <td>{{ curso.precio | currency:'EUR' }}</td>
-            <td>
-              <div class="d-flex flex-column flex-md-row gap-2">
-                <button class="btn btn-primary btn-sm" (click)="editarCurso(curso)">Edit</button>
-                <button class="btn btn-danger btn-sm" (click)="eliminarCurso(curso.id)">Delete</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
+          <thead class="table-azul">
+            <tr>
+              <!-- <th style="width: 5%;">ID</th> -->
+              <th style="width: 14%;">Name</th>
+              <th class="d-none d-md-table-cell" style="width: 14%;">Subtitle</th>
+              <th class="d-none d-lg-table-cell" style="width: 26%;">Description</th>
+              <!-- <th class="d-none d-md-table-cell" style="width: 8%;">Duration</th> -->
+              <!-- <th class="d-none d-md-table-cell" style="width: 8%;">Level</th> -->
+              <!-- <th class="d-none d-lg-table-cell" style="width: 6%;">Pieces</th> -->
+              <!-- <th class="d-none d-lg-table-cell" style="width: 10%;">Materials</th> -->
+              <!-- <th class="d-none d-xl-table-cell" style="width: 4%;">Seats</th> -->
+              <!-- <th class="d-none d-xl-table-cell" style="width: 10%;">Extra Info</th> -->
+              <th style="width: 10%;">Price</th>
+              <th style="width: 16%;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let curso of cursos | paginate: { id: 'cursos', itemsPerPage: 5, currentPage: paginaActual }">
+              <!-- <td class="text-muted">{{ curso.id }}</td> -->
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="curso.nombre">
+                  {{ curso.nombre | truncate:20 }}
+                </span>
+              </td>
+
+              <td class="d-none d-md-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="curso.subtitulo">
+                  {{ curso.subtitulo | truncate:20 }}
+                </span>
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="curso.descripcion">
+                  {{ curso.descripcion | truncate:40 }}
+                </span>
+              </td>
+
+              <td class="text-nowrap">{{ curso.precio | currency:'EUR' }}</td>
+
+              <td>
+                <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="editarCurso(curso)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarCurso(curso.id)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -68,72 +82,146 @@
 
   <!-- MODAL CURSOS -->
   <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
           <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
         </div>
+
         <div class="modal-body">
           <form #cursoForm="ngForm" (ngSubmit)="guardarCambios()" novalidate>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Name</label>
-                <input type="text" class="form-control" [(ngModel)]="cursoEditando.nombre" name="nombre" required #nombre="ngModel" />
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.nombre"
+                  name="nombre"
+                  required
+                  #nombre="ngModel"
+                />
                 <div class="text-danger" *ngIf="nombre.invalid && nombre.touched">Name is required.</div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Subtitle</label>
-                <input type="text" class="form-control" [(ngModel)]="cursoEditando.subtitulo" name="subtitulo" required #subtitulo="ngModel" />
-                <div class="text-danger" *ngIf="subtitulo.invalid && subtitulo?.touched">Subtitle is required.</div>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.subtitulo"
+                  name="subtitulo"
+                  required
+                  #subtitulo="ngModel"
+                />
+                <div class="text-danger" *ngIf="subtitulo.invalid && subtitulo.touched">Subtitle is required.</div>
               </div>
 
               <div class="col-12">
                 <label class="form-label">Description</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion" name="descripcion" required #descripcion="ngModel"></textarea>
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  [(ngModel)]="cursoEditando.descripcion"
+                  name="descripcion"
+                  required
+                  #descripcion="ngModel"
+                ></textarea>
                 <div class="text-danger" *ngIf="descripcion.invalid && descripcion.touched">Description is required.</div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Level</label>
-                <input type="text" class="form-control" [(ngModel)]="cursoEditando.nivel" name="nivel" required #nivel="ngModel" />
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.nivel"
+                  name="nivel"
+                  required
+                  #nivel="ngModel"
+                />
                 <div class="text-danger" *ngIf="nivel.invalid && nivel.touched">Level is required.</div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Duration</label>
-                <input type="text" class="form-control" [(ngModel)]="cursoEditando.duracion" name="duracion" required #duracion="ngModel" />
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.duracion"
+                  name="duracion"
+                  required
+                  #duracion="ngModel"
+                />
                 <div class="text-danger" *ngIf="duracion.invalid && duracion.touched">Duration is required.</div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Pieces</label>
-                <input type="text" class="form-control" [(ngModel)]="cursoEditando.piezas" name="piezas" required #piezas="ngModel" />
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.piezas"
+                  name="piezas"
+                  required
+                  #piezas="ngModel"
+                />
                 <div class="text-danger" *ngIf="piezas.invalid && piezas.touched">Pieces is required.</div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Materials</label>
-                <input type="text" class="form-control" [(ngModel)]="cursoEditando.materiales" name="materiales" required #materiales="ngModel" />
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.materiales"
+                  name="materiales"
+                  required
+                  #materiales="ngModel"
+                />
                 <div class="text-danger" *ngIf="materiales.invalid && materiales.touched">Materials is required.</div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Max Seats</label>
-                <input type="number" class="form-control" [(ngModel)]="cursoEditando.plazasMaximas" name="plazasMaximas" min="1" required #plazasMaximas="ngModel" />
-                <div class="text-danger" *ngIf="plazasMaximas.invalid && plazasMaximas.touched">Max Seats must be greater than 0.</div>
+                <input
+                  type="number"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.plazasMaximas"
+                  name="plazasMaximas"
+                  min="1"
+                  required
+                  #plazasMaximas="ngModel"
+                />
+                <div class="text-danger" *ngIf="plazasMaximas.invalid && plazasMaximas.touched">
+                  Max Seats must be greater than 0.
+                </div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Price</label>
-                <input type="number" class="form-control" [(ngModel)]="cursoEditando.precio" name="precio" min="0.01" step="0.01" required #precio="ngModel" />
+                <input
+                  type="number"
+                  class="form-control"
+                  [(ngModel)]="cursoEditando.precio"
+                  name="precio"
+                  min="0.01"
+                  step="0.01"
+                  required
+                  #precio="ngModel"
+                />
                 <div class="text-danger" *ngIf="precio.invalid && precio.touched">Price must be greater than 0.</div>
               </div>
 
               <div class="col-12">
                 <label class="form-label">Extra Information</label>
-                <textarea class="form-control" rows="2" [(ngModel)]="cursoEditando.informacionExtra" name="informacionExtra"></textarea>
+                <textarea
+                  class="form-control"
+                  rows="2"
+                  [(ngModel)]="cursoEditando.informacionExtra"
+                  name="informacionExtra"
+                ></textarea>
               </div>
 
               <!-- BLOQUE: GESTIÓN DE 5 SLOTS DE IMAGEN -->
@@ -143,19 +231,25 @@
                 <div class="row g-3">
                   <div class="col-6 col-md-4 col-lg-2" *ngFor="let s of slots">
                     <div class="border rounded p-2 text-center position-relative">
+                      <!-- Preview -->
+                      <img
+                        *ngIf="s.previewUrl"
+                        [src]="s.previewUrl"
+                        alt="preview"
+                        style="width:100%; height:100px; object-fit:cover;"
+                        class="rounded"
+                      />
 
-                      <img *ngIf="s.previewUrl"
-                           [src]="s.previewUrl"
-                           alt="preview"
-                           style="width:100%; height:100px; object-fit:cover;"
-                           class="rounded">
-
-                      <div *ngIf="!s.previewUrl"
-                           class="d-flex align-items-center justify-content-center"
-                           style="width:100%; height:100px; background:#f6f6f6; border-radius:6px;">
+                      <!-- Placeholder -->
+                      <div
+                        *ngIf="!s.previewUrl"
+                        class="d-flex align-items-center justify-content-center"
+                        style="width:100%; height:100px; background:#f6f6f6; border-radius:6px;"
+                      >
                         <small class="text-muted">Slot {{ s.slot }}</small>
                       </div>
 
+                      <!-- Controles -->
                       <div class="mt-2 d-flex flex-column gap-1">
                         <label class="btn btn-sm btn-outline-primary mb-0">
                           Replace
@@ -163,14 +257,16 @@
                             type="file"
                             class="d-none"
                             accept="image/*"
-                            (change)="onSeleccionarArchivo($event, s)">
+                            (change)="onSeleccionarArchivo($event, s)"
+                          />
                         </label>
 
                         <button
                           type="button"
                           class="btn btn-sm btn-outline-danger"
                           (click)="eliminarSlot(s)"
-                          [disabled]="!s.previewUrl && !s.file && esNuevo">
+                          [disabled]="!s.previewUrl && !s.file && esNuevo"
+                        >
                           Delete
                         </button>
 
@@ -178,21 +274,27 @@
                           type="button"
                           class="btn btn-sm btn-outline-secondary"
                           *ngIf="!esNuevo"
-                          (click)="restaurarSlot(s)">
+                          (click)="restaurarSlot(s)"
+                        >
                           Restore
                         </button>
                       </div>
 
-                      <span *ngIf="s.markedForDelete" class="badge bg-danger position-absolute top-0 start-0 m-1">To delete</span>
+                      <span
+                        *ngIf="s.markedForDelete"
+                        class="badge bg-danger position-absolute top-0 start-0 m-1"
+                        >To delete</span
+                      >
                     </div>
                   </div>
                 </div>
 
                 <small class="text-muted d-block mt-2">
-                  Tip: “Replace” sube una nueva imagen para ese slot. “Delete” vacía el slot y lo marca para borrado; “Restore” (solo en edición) vuelve a la imagen guardada en el servidor.
+                  Tip: “Replace” uploads a new image for that slot. “Delete” clears the slot and marks it for removal;
+                  “Restore” (edit mode only) brings back the server image.
                 </small>
               </div>
-              <!-- FIN BLOQUE NUEVO -->
+              <!-- FIN BLOQUE SLOTS -->
 
               <div class="col-12 d-flex justify-content-end gap-2 mt-3">
                 <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
@@ -201,6 +303,7 @@
             </div>
           </form>
         </div>
+
       </div>
     </div>
   </div>
@@ -222,29 +325,36 @@
   <div class="card shadow-sm rounded-3" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <!--<th>ID</th>-->
-              <th>Course</th>
-              <th>Date</th>
-              <th>Init Time</th>
-              <th>End Time</th>
-              <th>Available Seats</th>
-              <th>Actions</th>
+              <!-- <th style="width: 8%;">ID</th> -->
+              <th style="width: 26%;">Course</th>
+              <th style="width: 16%;">Date</th>
+              <th style="width: 14%;">Start</th>
+              <th style="width: 14%;">End</th>
+              <th style="width: 14%;">Available</th>
+              <th style="width: 16%;">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let cursoFecha of cursoFechas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }">
-              <!--<td>{{ cursoFecha.id }}</td>-->
-              <td>{{ cursoFecha.nombreCurso }}</td>
-              <td>{{ cursoFecha.fecha }}</td>
-              <td>{{ cursoFecha.horaInicio }}</td>
-              <td>{{ cursoFecha.horaFin }}</td>
-              <td>{{ cursoFecha.plazasDisponibles }}</td>
+              <!-- <td class="text-muted">{{ cursoFecha.id }}</td> -->
+
               <td>
-                <div class="d-flex flex-column flex-md-row gap-2">
-                  <button class="btn btn-secondary">Detail</button>
+                <span class="d-inline-block w-100 text-truncate" [title]="cursoFecha.nombreCurso">
+                  {{ cursoFecha.nombreCurso }}
+                </span>
+              </td>
+
+              <td class="text-nowrap">{{ cursoFecha.fecha }}</td>
+              <td class="text-nowrap">{{ cursoFecha.horaInicio }}</td>
+              <td class="text-nowrap">{{ cursoFecha.horaFin }}</td>
+              <td class="text-nowrap">{{ cursoFecha.plazasDisponibles }}</td>
+
+              <td>
+                <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
+                  <button class="btn btn-secondary btn-sm">Detail</button>
                   <button class="btn btn-primary btn-sm" (click)="editarCursoFecha(cursoFecha)">Edit</button>
                   <button class="btn btn-danger btn-sm" (click)="eliminarCursoFecha(cursoFecha.id)">Delete</button>
                 </div>
@@ -256,7 +366,7 @@
     </div>
   </div>
 
-  <!-- CONTROLES CURSOFECHA -->
+  <!-- CONTROLES FECHAS -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
     <button class="btn btn-outline-secondary" (click)="exportarCursoFechasCSV()">Export Dates CSV</button>
     <pagination-controls
@@ -269,12 +379,13 @@
 
   <!-- MODAL CURSOFECHA -->
   <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoFechaEditando">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevaCursoFecha ? 'New Course Date' : 'Edit Course Date' }}</h5>
           <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicionCursoFecha()"></button>
         </div>
+
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
@@ -285,24 +396,29 @@
                 </option>
               </select>
             </div>
+
             <div class="col-md-6">
               <label class="form-label">Date</label>
               <input type="date" class="form-control" [(ngModel)]="cursoFechaEditando.fecha" />
             </div>
+
             <div class="col-md-6">
               <label class="form-label">Start Time</label>
               <input type="time" class="form-control" [(ngModel)]="cursoFechaEditando.horaInicio" />
             </div>
+
             <div class="col-md-6">
               <label class="form-label">End Time</label>
               <input type="time" class="form-control" [(ngModel)]="cursoFechaEditando.horaFin" />
             </div>
+
             <div class="col-md-6">
               <label class="form-label">Available Seats</label>
               <input type="number" class="form-control" [(ngModel)]="cursoFechaEditando.plazasDisponibles" />
             </div>
           </div>
         </div>
+
         <div class="modal-footer">
           <button class="btn btn-secondary" (click)="cancelarEdicionCursoFecha()">Cancel</button>
           <button class="btn btn-success" (click)="guardarCursoFecha()">Save</button>

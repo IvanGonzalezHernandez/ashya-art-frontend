@@ -2,57 +2,69 @@
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Newsletter Dashboard</h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearNewsletter()">+ New Newsletter</button>
     </div>
   </div>
 
-    
   <div *ngIf="loading" class="text-center my-4">
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-  </div> 
+  </div>
 
-  <!-- TABLA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+  <!-- TABLA NEWSLETTERS EN UNA CARD -->
+  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th>ID</th>
-              <th>Email</th>
-              <th>Registration Date</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>            
+              <!--<th style="width: 8%;">ID</th>-->
+              <th style="width: 32%;">Email</th>
+              <th class="d-none d-md-table-cell" style="width: 24%;">Registration Date</th>
+              <th style="width: 16%;">Status</th>
+              <th style="width: 20%;">Actions</th>
+            </tr>
           </thead>
+
           <tbody>
-            <tr *ngFor="let newsletter of newsletters | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
-              <td>{{ newsletter.id }}</td>
-              <td>{{ newsletter.email }}</td>
-              <td>{{ newsletter.fechaRegistro | date:'mediumDate' }}</td>
+            <tr *ngFor="let newsletter of newsletters | paginate: { id: 'newsletters', itemsPerPage: 5, currentPage: paginaActual }">
+              <!--<td class="text-muted">{{ newsletter.id }}</td>-->
+
               <td>
-                <span [class]="newsletter.estado ? 'badge bg-success' : 'badge bg-danger'">
-                  {{ newsletter.estado ? 'Activo' : 'Inactivo' }}
+                <span class="d-inline-block w-100 text-truncate" [title]="newsletter.email">
+                  {{ newsletter.email }}
                 </span>
               </td>
+
+              <td class="d-none d-md-table-cell text-nowrap">
+                {{ newsletter.fechaRegistro | date:'yyyy-MM-dd' }}
+              </td>
+
               <td>
-                <div class="d-flex flex-column flex-md-row gap-2">
+                <span class="badge" [ngClass]="newsletter.estado ? 'bg-success' : 'bg-danger'">
+                  {{ newsletter.estado ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+
+              <td>
+                <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarNewsletter(newsletter)">Edit</button>
                   <button class="btn btn-danger btn-sm" (click)="eliminarNewsletter(newsletter.id)">Delete</button>
                 </div>
               </td>
             </tr>
           </tbody>
+
         </table>
       </div>
     </div>
   </div>
 
   <!-- CONTROLES DE ABAJO -->
-  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
     <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
     <pagination-controls
+      id="newsletters"
       previousLabel="Previous"
       nextLabel="Next"
       (pageChange)="paginaActual = $event">
@@ -60,37 +72,57 @@
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL NEWSLETTER -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="newsletterEditando">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">{{ esNuevo ? 'Create Newsletter' : 'Edit Newsletter' }}</h5>
         <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
       </div>
+
       <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" [(ngModel)]="newsletterEditando.email" />
+        <form (ngSubmit)="guardarCambios()" #newsletterForm="ngForm" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                [(ngModel)]="newsletterEditando.email"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Registration Date</label>
+              <input
+                type="date"
+                class="form-control"
+                name="fechaRegistro"
+                [ngModel]="newsletterEditando.fechaRegistro | date:'yyyy-MM-dd'"
+                (ngModelChange)="newsletterEditando.fechaRegistro = $event"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Status</label>
+              <select class="form-select" name="estado" [(ngModel)]="newsletterEditando.estado" required>
+                <option [ngValue]="true">Active</option>
+                <option [ngValue]="false">Inactive</option>
+              </select>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
+              <button type="submit" class="btn btn-success" [disabled]="newsletterForm.invalid">Save</button>
+            </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Fecha Registro</label>
-            <input type="date" class="form-control" [(ngModel)]="newsletterEditando.fechaRegistro" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Estado</label>
-            <select class="form-select" [(ngModel)]="newsletterEditando.estado">
-              <option [ngValue]="true">Activo</option>
-              <option [ngValue]="false">Inactivo</option>
-            </select>
-          </div>
-        </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
-      </div>
+
     </div>
   </div>
 </div>
