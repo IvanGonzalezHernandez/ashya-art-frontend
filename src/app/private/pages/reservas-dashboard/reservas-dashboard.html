@@ -9,38 +9,60 @@
 
   <div *ngIf="loading" class="text-center my-4">
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-  </div> 
+  </div>
 
   <!-- TABLA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+  <div class="card shadow-sm rounded-3 mb-4" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th>ID</th>
-              <th>Client</th>
-              <th>Course</th>
-              <th>Date</th>
-              <th>Plazas Reservadas</th>
-              <th>Book date</th>
-              <!--<th>Actions</th>-->
+              <th style="width: 8%;">ID</th>
+              <th style="width: 22%;">Client</th>
+              <th style="width: 22%;">Course</th>
+              <th style="width: 16%;">Date</th>
+              <th style="width: 14%;">Reserved Seats</th>
+              <th style="width: 18%;">Book date</th>
+              <!-- <th style="width: 10%;">Actions</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let reserva of reservas | paginate: { itemsPerPage: 5, currentPage: paginaActual }">
-              <td>{{ reserva.id }}</td>
-              <td>{{ reserva.nombreCliente }}</td>
-              <td>{{ reserva.nombreCurso }}</td>
-              <td>{{ reserva.fechaCurso }}</td>
-              <td>{{ reserva.plazasReservadas }}</td>
-              <td>{{ reserva.fechaReserva | date:'yyyy-MM-dd' }}</td>
-              <!--<td>
+            <tr *ngFor="let reserva of reservas | paginate: { id: 'reservas', itemsPerPage: 5, currentPage: paginaActual }">
+              <td class="text-muted">{{ reserva.id }}</td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="reserva.nombreCliente">
+                  {{ reserva.nombreCliente }}
+                </span>
+              </td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="reserva.nombreCurso">
+                  {{ reserva.nombreCurso }}
+                </span>
+              </td>
+
+              <td class="text-nowrap">
+                {{ reserva.fechaCurso }}
+              </td>
+
+              <td class="text-nowrap">
+                {{ reserva.plazasReservadas }}
+              </td>
+
+              <td class="text-nowrap">
+                {{ reserva.fechaReserva | date:'yyyy-MM-dd' }}
+              </td>
+
+              <!--
+              <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
-                 <button class="btn btn-primary btn-sm" (click)="editarReserva(reserva)">Edit</button>
-                 <button class="btn btn-danger btn-sm" (click)="eliminarReserva(reserva.id)">Delete</button>
+                  <button class="btn btn-primary btn-sm" (click)="editarReserva(reserva)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarReserva(reserva.id)">Delete</button>
                 </div>
-              </td>-->
+              </td>
+              -->
             </tr>
           </tbody>
         </table>
@@ -49,9 +71,10 @@
   </div>
 
   <!-- CONTROLES DE ABAJO -->
-  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
     <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
     <pagination-controls
+      id="reservas"
       previousLabel="Previous"
       nextLabel="Next"
       (pageChange)="paginaActual = $event">
@@ -67,30 +90,64 @@
         <h5 class="modal-title">{{ esNuevo ? 'Create Reserva' : 'Edit Reserva' }}</h5>
         <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
       </div>
+
       <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">ID Cliente</label>
-            <input type="number" class="form-control" [(ngModel)]="reservaEditando.idCliente" />
+        <form (ngSubmit)="guardarCambios()" #reservaForm="ngForm" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">ID Cliente</label>
+              <input
+                type="number"
+                class="form-control"
+                name="idCliente"
+                [(ngModel)]="reservaEditando.idCliente"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">ID Fecha</label>
+              <input
+                type="number"
+                class="form-control"
+                name="idFecha"
+                [(ngModel)]="reservaEditando.idFecha"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Reserved Seats</label>
+              <input
+                type="number"
+                class="form-control"
+                name="plazasReservadas"
+                [(ngModel)]="reservaEditando.plazasReservadas"
+                min="1"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Book date</label>
+              <input
+                type="date"
+                class="form-control"
+                name="fechaReserva"
+                [ngModel]="reservaEditando.fechaReserva | date:'yyyy-MM-dd'"
+                (ngModelChange)="reservaEditando.fechaReserva = $event"
+                required
+              />
+            </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">ID Fecha</label>
-            <input type="number" class="form-control" [(ngModel)]="reservaEditando.idFecha" />
+
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
+            <button type="submit" class="btn btn-success" [disabled]="reservaForm.invalid">Save</button>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Plazas Reservadas</label>
-            <input type="number" class="form-control" [(ngModel)]="reservaEditando.plazasReservadas" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Fecha Reserva</label>
-            <input type="date" class="form-control" [(ngModel)]="reservaEditando.fechaReserva" />
-          </div>
-        </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambios()">Save</button>
-      </div>
+
     </div>
   </div>
 </div>

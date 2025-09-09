@@ -2,12 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+
 import { ProductoService } from '../../../services/producto/producto';
 import { ProductoCompraService } from '../../../services/producto-compra/producto-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
+
 import { Producto } from '../../../models/producto.model';
 import { ProductoCompra } from '../../../models/producto-compra.model';
 
+// === Slots, igual que en cursos ===
+type SlotImagen = {
+  slot: number;               // 1..5
+  previewUrl: string | null;  // dataURL o URL del backend
+  file?: File;                // archivo local seleccionado
+  markedForDelete: boolean;   // marcar para borrado al editar
+};
 
 @Component({
   selector: 'app-productos-dashboard',
@@ -21,20 +30,20 @@ export class ProductosDashboard implements OnInit {
   productosCargados = false;
   comprasCargadas = false;
 
+  // SLOTS (igual que cursos)
+  slots: SlotImagen[] = [];
+
   // Productos
   productos: Producto[] = [];
   paginaActualProducto: number = 1;
   productoEditando: Producto | null = null;
   esNuevoProducto: boolean = false;
 
-  // ProductoCompra
+  // Compras
   compras: ProductoCompra[] = [];
   paginaActualCompra: number = 1;
   compraEditando: ProductoCompra | null = null;
   esNuevoCompra: boolean = false;
-
-  imagenes: File[] = [];
-  vistaPreviaImagenes: string[] = [];
 
   constructor(
     private productoService: ProductoService,
@@ -49,20 +58,33 @@ export class ProductosDashboard implements OnInit {
   }
 
   // --- MÉTODOS PRODUCTOS ---
-obtenerProductos() {
-  this.productoService.getProductos().subscribe({
-    next: data => {
-      this.productos = data;
-      this.productosCargados = true;
-      this.comprobarCargaCompleta();
-    },
-    error: err => {
-      console.error('Error al cargar productos', err);
-      this.productosCargados = true;
-      this.comprobarCargaCompleta();
-    }
-  });
-}
+
+  obtenerProductos() {
+    this.productoService.getProductos().subscribe({
+      next: data => {
+        this.productos = data;
+        this.productosCargados = true;
+        this.comprobarCargaCompleta();
+      },
+      error: err => {
+        console.error('Error al cargar productos', err);
+        this.productosCargados = true;
+        this.comprobarCargaCompleta();
+      }
+    });
+  }
+
+  /** Inicializa los 5 slots; si hay id, precarga las URLs de backend para restore/preview */
+  private initSlots(productoId?: number) {
+    this.slots = Array.from({ length: 5 }, (_, i) => {
+      const slotNum = i + 1;
+      return {
+        slot: slotNum,
+        previewUrl: productoId ? this.productoService.getImagenUrl(productoId, slotNum) : null,
+        markedForDelete: false
+      } as SlotImagen;
+    });
+  }
 
   crearProducto() {
     this.esNuevoProducto = true;
@@ -74,48 +96,70 @@ obtenerProductos() {
       descripcion: '',
       stock: 0,
       precio: 0,
-      img1: '',
-      img2: '',
-      img3: '',
-      img4: '',
-      img5: ''
-    };
-  }
+      medidas: '',
+      material: '',
+      img1: null,
+      img2: null,
+      img3: null,
+      img4: null,
+      img5: null
+    } as Producto;
 
-  onImagenesSeleccionadas(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
-  
-    const nuevosArchivos = Array.from(input.files);
-  
-    if (this.imagenes.length + nuevosArchivos.length > 5) {
-      alert('Solo puedes seleccionar hasta 5 imágenes en total');
-      return;
-    }
-  
-    nuevosArchivos.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.vistaPreviaImagenes.push(e.target.result);
-      };
-      reader.readAsDataURL(file);
-      this.imagenes.push(file);
-    });
-  }
-
-  eliminarImagen(index: number) {
-    this.imagenes.splice(index, 1);
-    this.vistaPreviaImagenes.splice(index, 1);
+    this.initSlots(); // sin id => sin previews del server
   }
 
   editarProducto(producto: Producto) {
     this.esNuevoProducto = false;
     this.productoEditando = { ...producto };
+    this.initSlots(producto.id); // precarga previews desde backend por slot
   }
 
   cancelarEdicionProducto() {
     this.productoEditando = null;
     this.esNuevoProducto = false;
+    this.slots = [];
+  }
+
+  // Handlers UI de slots (igual que cursos)
+  onSeleccionarArchivo(event: Event, slot: SlotImagen) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    if (!file.type.startsWith('image/')) {
+      alert('El archivo debe ser una imagen.');
+      input.value = '';
+      return;
+    }
+
+    slot.file = file;
+    slot.markedForDelete = false;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      slot.previewUrl = e.target.result; // dataURL para previsualizar
+    };
+    reader.readAsDataURL(file);
+
+    input.value = ''; // permitir re-elegir el mismo archivo
+  }
+
+  eliminarSlot(slot: SlotImagen) {
+    slot.file = undefined;
+    slot.previewUrl = null;
+    // En edición marcamos para borrado; en nuevo no hace falta marcar
+    slot.markedForDelete = !this.esNuevoProducto;
+  }
+
+  restaurarSlot(slot: SlotImagen) {
+    if (!this.productoEditando || this.esNuevoProducto) return;
+    slot.file = undefined;
+    slot.previewUrl = this.productoService.getImagenUrl(this.productoEditando.id, slot.slot);
+    slot.markedForDelete = false;
+  }
+
+  selectedSlotsCount(): number {
+    return this.slots.filter(s => !!s.previewUrl).length;
   }
 
   guardarCambiosProducto() {
@@ -123,8 +167,8 @@ obtenerProductos() {
 
     const formData = new FormData();
 
-    // Creamos un objeto con los datos del producto
-    const productoDto = { 
+    // DTO de producto
+    const productoDto: any = {
       id: this.productoEditando.id,
       nombre: this.productoEditando.nombre,
       subtitulo: this.productoEditando.subtitulo,
@@ -136,27 +180,35 @@ obtenerProductos() {
       material: this.productoEditando.material
     };
 
-    // Lo añadimos al FormData como JSON
+    // Añadir JSON
     formData.append('producto', new Blob([JSON.stringify(productoDto)], { type: 'application/json' }));
 
-    // Añadimos las imágenes
-    this.imagenes.forEach(imagen => formData.append('imagenes', imagen));
+    // Reemplazos: enviar img1..img5 si hay archivo cargado en ese slot
+    this.slots.forEach(s => {
+      if (s.file) {
+        formData.append(`img${s.slot}`, s.file);
+      }
+    });
 
-    if (this.esNuevoProducto) {
-      this.productoService.crearProductoConImagenes(formData).subscribe(() => {
+    // Borrados: flags deleteImgN=true (solo en edición)
+    this.slots.forEach(s => {
+      if (!this.esNuevoProducto && s.markedForDelete) {
+        formData.append(`deleteImg${s.slot}`, 'true');
+      }
+    });
+
+    const req$ = this.esNuevoProducto
+      ? this.productoService.crearProductoConImagenes(formData)
+      : this.productoService.actualizarProductoConImagenes(this.productoEditando.id, formData);
+
+    req$.subscribe({
+      next: () => {
         this.obtenerProductos();
         this.cancelarEdicionProducto();
-      });
-    } else {
-      this.productoService.actualizarProductoConImagenes(this.productoEditando.id, formData).subscribe(() => {
-        this.obtenerProductos();
-        this.cancelarEdicionProducto();
-      });
-    }
+      },
+      error: (e) => console.error('Error guardando producto', e)
+    });
   }
-
-
-
 
   eliminarProducto(id: number) {
     if (confirm('¿Estás seguro de eliminar este producto?')) {
@@ -186,6 +238,7 @@ obtenerProductos() {
   }
 
   // --- MÉTODOS PRODUCTO COMPRA ---
+
   obtenerCompras() {
     this.productoCompraService.getProductoCompras().subscribe({
       next: data => {
@@ -195,7 +248,7 @@ obtenerProductos() {
       },
       error: err => {
         console.error('Error al cargar compras', err);
-        this.comprasCargadas = true; // lo marcamos para no bloquear el loading
+        this.comprasCargadas = true;
         this.comprobarCargaCompleta();
       }
     });

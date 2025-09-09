@@ -16,19 +16,25 @@ export class ProductoService {
     return this.http.get<Producto[]>(this.apiUrl);
   }
 
-  crearProducto(producto: Producto): Observable<Producto> {
-    return this.http.post<Producto>(this.apiUrl, producto);
+ // Igual que cursos: POST multipart (FormData con 'producto', 'img1'..'img5', 'deleteImgN' opcional)
+  crearProducto(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData);
   }
 
-  actualizarProducto(producto: Producto): Observable<Producto> {
-    return this.http.put<Producto>(`${this.apiUrl}/${producto.id}`, producto);
+  // Igual que cursos: PUT multipart
+  actualizarProducto(formData: FormData, id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, formData);
   }
 
   eliminarProducto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-
+  // URL directa para cada slot (preview en el modal)
+  getImagenUrl(idProducto: number, slot: number): string {
+    return `${this.apiUrl}/${idProducto}/imagen/${slot}`;
+  }
+  
   crearProductoConImagenes(formData: FormData): Observable<Producto> {
     return this.http.post<Producto>(`${this.apiUrl}`, formData);
   }

@@ -2,106 +2,267 @@
   <!-- ENCABEZADO PRODUCTOS -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Product Dashboard</h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearProducto()">+ New Product</button>
     </div>
   </div>
 
   <div *ngIf="loading" class="text-center my-4">
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-  </div> 
+  </div>
 
   <!-- TABLA PRODUCTOS EN UNA CARD -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
     <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0">
-          <thead class="table-azul">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Subtitle</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Measures</th>
-              <th>Materials</th>
-              <th>Stock</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let producto of productos | paginate: { itemsPerPage: 5, currentPage: paginaActualProducto }">
-              <td>{{ producto.id }}</td>
-              <td>{{ producto.nombre }}</td>
-              <td>{{ producto.subtitulo }}</td>
-              <td>{{ producto.categoria }}</td>
-              <td>{{ producto.descripcion }}</td>
-              <td>{{ producto.medidas }}</td>
-              <td>{{ producto.material }}</td>
-              <td>{{ producto.stock }}</td>
-              <td>{{ producto.precio | currency:'EUR' }}</td>
-              <td>
-                <div class="d-flex flex-column flex-md-row gap-2">
-                  <button class="btn btn-primary btn-sm" (click)="editarProducto(producto)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">Delete</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
+        <thead class="table-azul">
+          <tr>
+            <!-- <th style="width: 5%;">ID</th> -->
+            <th style="width: 12%;">Name</th>
+            <th style="width: 12%;" class="d-none d-md-table-cell">Subtitle</th>
+            <th style="width: 20%;" class="d-none d-lg-table-cell">Description</th>
+            <th style="width: 10%;">Category</th>
+            <th style="width: 8%;" class="d-none d-lg-table-cell">Measures</th>
+            <th style="width: 8%;" class="d-none d-lg-table-cell">Materials</th>
+            <th style="width: 6%;">Stock</th>
+            <th style="width: 6%;">Price</th>
+            <th style="width: 12%;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of productos | paginate: { id: 'productos', itemsPerPage: 5, currentPage: paginaActualProducto }">
+            <!-- <td class="text-muted">{{ producto.id }}</td> -->
+
+            <td>
+              <span class="d-inline-block w-100 text-truncate" [title]="producto.nombre">{{ producto.nombre }}</span>
+            </td>
+
+            <td class="d-none d-md-table-cell">
+              <span class="d-inline-block w-100 text-truncate" [title]="producto.subtitulo">{{ producto.subtitulo }}</span>
+            </td>
+
+            <td class="d-none d-lg-table-cell">
+              <span class="d-inline-block w-100 text-truncate" [title]="producto.descripcion">{{ producto.descripcion }}</span>
+            </td>
+
+            <td>
+              <span class="d-inline-block w-100 text-truncate" [title]="producto.categoria">{{ producto.categoria }}</span>
+            </td>
+
+            <td class="d-none d-lg-table-cell">
+              <span class="d-inline-block w-100 text-truncate" [title]="producto.medidas">{{ producto.medidas }}</span>
+            </td>
+
+            <td class="d-none d-lg-table-cell">
+              <span class="d-inline-block w-100 text-truncate" [title]="producto.material">{{ producto.material }}</span>
+            </td>
+
+            <td class="text-nowrap">{{ producto.stock }}</td>
+
+            <td class="text-nowrap">{{ producto.precio | currency:'EUR' }}</td>
+
+            <td>
+              <div class="d-flex flex-column flex-md-row gap-2">
+                <button class="btn btn-primary btn-sm" (click)="editarProducto(producto)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">Delete</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
   <!-- CONTROLES PRODUCTOS -->
-  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-    <button class="btn btn-outline-secondary" (click)="exportarCSVProductos()">Export CSV</button>
+  <div class="d-flex justify-content-between align-items-center mt-3 mb-5 flex-wrap">
+    <button class="btn btn-outline-secondary" (click)="exportarCSVProductos()">Export Products CSV</button>
     <pagination-controls
+      id="productos"
       previousLabel="Previous"
       nextLabel="Next"
       (pageChange)="paginaActualProducto = $event">
     </pagination-controls>
   </div>
 
+  <!-- MODAL PRODUCTO -->
+  <div class="modal fade show d-block" tabindex="-1" *ngIf="productoEditando">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header bg-azul text-white">
+          <h5 class="modal-title">{{ esNuevoProducto ? 'Create Product' : 'Edit Product' }}</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicionProducto()"></button>
+        </div>
+
+        <div class="modal-body">
+          <form (ngSubmit)="guardarCambiosProducto()" novalidate>
+            <div class="row g-3">
+              <!-- Name -->
+              <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="productoEditando.nombre" name="nombre" required />
+              </div>
+
+              <!-- Subtitle -->
+              <div class="col-md-6">
+                <label class="form-label">Subtitle</label>
+                <input type="text" class="form-control" [(ngModel)]="productoEditando.subtitulo" name="subtitulo" />
+              </div>
+
+              <!-- Description -->
+              <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="productoEditando.descripcion" name="descripcion"></textarea>
+              </div>
+
+              <!-- Category -->
+              <div class="col-md-6">
+                <label class="form-label">Category</label>
+                <input type="text" class="form-control" [(ngModel)]="productoEditando.categoria" name="categoria" />
+              </div>
+
+              <!-- Measures -->
+              <div class="col-md-6">
+                <label class="form-label">Measures</label>
+                <input type="text" class="form-control" [(ngModel)]="productoEditando.medidas" name="medidas" />
+              </div>
+
+              <!-- Materials -->
+              <div class="col-md-6">
+                <label class="form-label">Materials</label>
+                <input type="text" class="form-control" [(ngModel)]="productoEditando.material" name="material" />
+              </div>
+
+              <!-- Stock -->
+              <div class="col-md-3">
+                <label class="form-label">Stock</label>
+                <input type="number" class="form-control" [(ngModel)]="productoEditando.stock" name="stock" />
+              </div>
+
+              <!-- Price -->
+              <div class="col-md-3">
+                <label class="form-label">Price (€)</label>
+                <input type="number" class="form-control" [(ngModel)]="productoEditando.precio" name="precio" />
+              </div>
+
+              <!-- BLOQUE: GESTIÓN DE 5 SLOTS DE IMAGEN -->
+              <div class="col-12">
+                <label class="form-label">Images (up to 5)</label>
+
+                <div class="row g-3">
+                  <div class="col-6 col-md-4 col-lg-2" *ngFor="let s of slots">
+                    <div class="border rounded p-2 text-center position-relative">
+
+                      <!-- Preview -->
+                      <img *ngIf="s.previewUrl"
+                           [src]="s.previewUrl"
+                           alt="preview"
+                           style="width:100%; height:100px; object-fit:cover;"
+                           class="rounded">
+
+                      <!-- Placeholder -->
+                      <div *ngIf="!s.previewUrl"
+                           class="d-flex align-items-center justify-content-center"
+                           style="width:100%; height:100px; background:#f6f6f6; border-radius:6px;">
+                        <small class="text-muted">Slot {{ s.slot }}</small>
+                      </div>
+
+                      <!-- Controles -->
+                      <div class="mt-2 d-flex flex-column gap-1">
+                        <label class="btn btn-sm btn-outline-primary mb-0">
+                          Replace
+                          <input
+                            type="file"
+                            class="d-none"
+                            accept="image/*"
+                            (change)="onSeleccionarArchivo($event, s)">
+                        </label>
+
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="eliminarSlot(s)"
+                          [disabled]="esNuevoProducto && !s.previewUrl && !s.file">
+                          Delete
+                        </button>
+
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-secondary"
+                          *ngIf="!esNuevoProducto"
+                          (click)="restaurarSlot(s)">
+                          Restore
+                        </button>
+                      </div>
+
+                      <span *ngIf="s.markedForDelete"
+                            class="badge bg-danger position-absolute top-0 start-0 m-1">To delete</span>
+                    </div>
+                  </div>
+                </div>
+
+                <small class="text-muted d-block mt-2">
+                  Tip: “Replace” sube una nueva imagen para ese slot. “Delete” vacía el slot y lo marca para
+                  borrado; “Restore” (solo en edición) vuelve a la imagen guardada en el servidor.
+                  ({{ selectedSlotsCount() }}/5 seleccionadas)
+                </small>
+              </div>
+
+              <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+                <button type="button" class="btn btn-secondary" (click)="cancelarEdicionProducto()">Cancel</button>
+                <button type="submit" class="btn bg-azul text-white">Save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show" *ngIf="productoEditando"></div>
+
   <!-- ENCABEZADO COMPRAS -->
-  <div class="d-flex justify-content-between align-items-center my-4 flex-wrap">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Product Purchases Dashboard</h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearCompra()">+ New Purchase</button>
     </div>
   </div>
 
   <div *ngIf="loading" class="text-center my-4">
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-  </div> 
+  </div>
 
   <!-- TABLA COMPRAS EN UNA CARD -->
   <div class="card shadow-sm rounded-3" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th>ID</th>
-              <!--<th>ID Cliente</th>-->
-              <th>Nombre Cliente</th>
-              <!--<th>ID Producto</th>-->
-              <th>Nombre Producto</th>
-              <th>Cantidad</th>
-              <th>Fecha Compra</th>
-              <th>Actions</th>
+              <!-- <th style="width: 8%;">ID</th> -->
+              <th style="width: 28%;">Customer</th>
+              <th style="width: 28%;">Product</th>
+              <th style="width: 10%;">Quantity</th>
+              <th style="width: 16%;">Date</th>
+              <th style="width: 12%;">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let compra of compras | paginate: { itemsPerPage: 5, currentPage: paginaActualCompra }">
-              <td>{{ compra.id }}</td>
-              <!--<td>{{ compra.idCliente }}</td>-->
-              <td>{{ compra.nombreCliente }}</td>
-              <!--<td>{{ compra.idProducto }}</td>-->
-              <td>{{ compra.nombreProducto }}</td>
-              <td>{{ compra.cantidad }}</td>
-              <td>{{ compra.fechaCompra | date:'short' }}</td>
+            <tr *ngFor="let compra of compras | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompra }">
+              <!-- <td class="text-muted">{{ compra.id }}</td> -->
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="compra.nombreCliente">{{ compra.nombreCliente }}</span>
+              </td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="compra.nombreProducto">{{ compra.nombreProducto }}</span>
+              </td>
+
+              <td class="text-nowrap">{{ compra.cantidad }}</td>
+
+              <td class="text-nowrap">{{ compra.fechaCompra | date:'short' }}</td>
+
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarCompra(compra)">Edit</button>
@@ -117,168 +278,85 @@
 
   <!-- CONTROLES COMPRAS -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
-    <button class="btn btn-outline-secondary" (click)="exportarCSVCompras()">Export CSV</button>
+    <button class="btn btn-outline-secondary" (click)="exportarCSVCompras()">Export Purchases CSV</button>
     <pagination-controls
+      id="compras"
       previousLabel="Previous"
       nextLabel="Next"
       (pageChange)="paginaActualCompra = $event">
     </pagination-controls>
   </div>
-</div>
 
+  <!-- MODAL COMPRA -->
+  <div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header bg-azul text-white">
+          <h5 class="modal-title">{{ esNuevoCompra ? 'Create Purchase' : 'Edit Purchase' }}</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicionCompra()"></button>
+        </div>
 
-<!-- MODAL PRODUCTO -->
-<div class="modal fade show d-block" tabindex="-1" *ngIf="productoEditando">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content shadow-lg">
-      
-      <!-- Header -->
-      <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title">{{ esNuevoProducto ? 'Create Product' : 'Edit Product' }}</h5>
-        <button 
-          type="button" 
-          class="btn-close btn-close-white" 
-          (click)="cancelarEdicionProducto()" 
-          aria-label="Close">
-        </button>
-      </div>
+        <div class="modal-body">
+          <form (ngSubmit)="guardarCambiosCompra()" #compraForm="ngForm" novalidate>
+            <div class="row g-3">
 
-      <!-- Body -->
-      <div class="modal-body">
-        <div class="row g-3">
-          
-          <!-- Name -->
-          <div class="col-md-6">
-            <label class="form-label">Name</label>
-            <input type="text" class="form-control" [(ngModel)]="productoEditando.nombre" />
-          </div>
-
-          <!-- Subtitle -->
-          <div class="col-md-6">
-            <label class="form-label">Subtitle</label>
-            <input type="text" class="form-control" [(ngModel)]="productoEditando.subtitulo" />
-          </div>
-
-          <!-- Description -->
-          <div class="col-12">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="productoEditando.descripcion"></textarea>
-          </div>
-
-          <!-- Category -->
-          <div class="col-md-6">
-            <label class="form-label">Category</label>
-            <input type="text" class="form-control" [(ngModel)]="productoEditando.categoria" />
-          </div>
-
-          <!-- Measures -->
-          <div class="col-md-6">
-            <label class="form-label">Measures</label>
-            <input type="text" class="form-control" [(ngModel)]="productoEditando.medidas" />
-          </div>
-
-          <!-- Materials -->
-          <div class="col-md-6">
-            <label class="form-label">Materials</label>
-            <input type="text" class="form-control" [(ngModel)]="productoEditando.material" />
-          </div>
-
-          <!-- Stock -->
-          <div class="col-md-3">
-            <label class="form-label">Stock</label>
-            <input type="number" class="form-control" [(ngModel)]="productoEditando.stock" />
-          </div>
-
-          <!-- Price -->
-          <div class="col-md-3">
-            <label class="form-label">Price (€)</label>
-            <input type="number" class="form-control" [(ngModel)]="productoEditando.precio" />
-          </div>
-
-          <!-- Images -->
-          <div class="col-12">
-            <label class="form-label">Images (max 5, formato .webp)</label>
-            <input 
-              type="file" 
-              class="form-control" 
-              (change)="onImagenesSeleccionadas($event)" 
-              multiple 
-              accept="image/webp" 
-            />
-
-            <small class="text-muted">{{ vistaPreviaImagenes.length }}/5 selected</small>
-            
-            <div class="mt-3 d-flex flex-wrap gap-2">
-              <div *ngFor="let vista of vistaPreviaImagenes; let i = index" class="position-relative">
-                <img 
-                  [src]="vista" 
-                  alt="preview" 
-                  style="width: 100px; height: 100px; object-fit: cover;" 
-                  class="rounded border" 
+              <div class="col-md-6">
+                <label class="form-label">ID Cliente</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="idCliente"
+                  [(ngModel)]="compraEditando.idCliente"
+                  required
                 />
-                <button 
-                  type="button" 
-                  class="btn-close position-absolute top-0 end-0 bg-white rounded-circle"
-                  style="transform: scale(0.8);" 
-                  aria-label="Remove image"
-                  (click)="eliminarImagen(i)">
-                </button>
               </div>
+
+              <div class="col-md-6">
+                <label class="form-label">ID Producto</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="idProducto"
+                  [(ngModel)]="compraEditando.idProducto"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Cantidad</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="cantidad"
+                  [(ngModel)]="compraEditando.cantidad"
+                  min="1"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Fecha Compra</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  name="fechaCompra"
+                  [ngModel]="compraEditando.fechaCompra | date:'yyyy-MM-ddTHH:mm'"
+                  (ngModelChange)="compraEditando.fechaCompra = $event"
+                  required
+                />
+              </div>
+
             </div>
-          </div>
 
+            <div class="d-flex justify-content-end gap-2 mt-3">
+              <button type="button" class="btn btn-secondary" (click)="cancelarEdicionCompra()">Cancel</button>
+              <button type="submit" class="btn btn-success" [disabled]="compraForm.invalid">Save</button>
+            </div>
+          </form>
         </div>
-      </div>
 
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cancelarEdicionProducto()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambiosProducto()">Save</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="modal-backdrop fade show" *ngIf="productoEditando"></div>
-
-
-
-<!-- MODAL COMPRA -->
-<div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content shadow-lg">
-      <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title">{{ esNuevoCompra ? 'Create Purchase' : 'Edit Purchase' }}</h5>
-        <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicionCompra()"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">ID Cliente</label>
-            <input type="number" class="form-control" [(ngModel)]="compraEditando.idCliente" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">ID Producto</label>
-            <input type="number" class="form-control" [(ngModel)]="compraEditando.idProducto" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Cantidad</label>
-            <input type="number" class="form-control" [(ngModel)]="compraEditando.cantidad" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Fecha Compra</label>
-            <input type="datetime-local" class="form-control" 
-              [ngModel]="compraEditando.fechaCompra | date:'yyyy-MM-ddTHH:mm'" 
-              (ngModelChange)="compraEditando.fechaCompra = $event" />
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cancelarEdicionCompra()">Cancel</button>
-        <button class="btn btn-success" (click)="guardarCambiosCompra()">Save</button>
       </div>
     </div>
   </div>
+  <div class="modal-backdrop fade show" *ngIf="compraEditando"></div>
 </div>
-<div class="modal-backdrop fade show" *ngIf="compraEditando"></div>

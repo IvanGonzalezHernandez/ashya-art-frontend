@@ -99,13 +99,15 @@ export class ReservasDashboard implements OnInit {
 
   exportarCSV() {
     const encabezado = ['ID', 'Client', 'ID Fecha', 'Plazas Reservadas', 'Fecha Reserva'];
-    const filas = this.reservas.map(reserva => [
+    const filas = (this.reservas || []).map(reserva => [
       reserva.id,
-      reserva.nombreCliente,
+      reserva.nombreCliente ?? '',
       reserva.idFecha,
-      reserva.plazasReservadas,
-      reserva.fechaReserva.toISOString().slice(0, 10)
+      reserva.plazasReservadas ?? 0,
+      reserva.fechaReserva ? reserva.fechaReserva.toString() : '' // <- toString aquí
     ]);
+
     this.csvExportService.exportarCSV(encabezado, filas, 'books.csv');
   }
+
 }

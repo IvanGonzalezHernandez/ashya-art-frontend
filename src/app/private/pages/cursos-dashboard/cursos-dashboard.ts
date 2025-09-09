@@ -12,10 +12,10 @@ import { CursoFecha } from '../../../models/cursoFecha.model';
 import { TruncatePipe } from '../../../pipes/truncate/truncate-pipe';
 
 type SlotImagen = {
-  slot: number;                 // 1..5
-  previewUrl: string | null;    // dataURL local o URL backend
-  file?: File;                  // archivo nuevo elegido
-  markedForDelete: boolean;     // borrar en servidor
+  slot: number;                 
+  previewUrl: string | null;    
+  file?: File;                  
+  markedForDelete: boolean;     
 };
 
 @Component({
@@ -68,7 +68,7 @@ export class CursosDashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error cargando cursos', err);
-        this.cursosCargados = true;  // marcamos como intentado aunque falle
+        this.cursosCargados = true;
         this.comprobarCargaCompleta();
       }
     });
@@ -105,7 +105,7 @@ export class CursosDashboard implements OnInit {
       plazasMaximas: 0,
       informacionExtra: ''
     } as unknown as Curso; // adapta si tu modelo difiere
-    this.initSlots(); // sin URLs
+    this.initSlots();
   }
 
   editarCurso(curso: Curso) {
@@ -130,7 +130,7 @@ export class CursosDashboard implements OnInit {
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      slot.previewUrl = e.target.result; // dataURL local para preview
+      slot.previewUrl = e.target.result;
     };
     reader.readAsDataURL(file);
 
