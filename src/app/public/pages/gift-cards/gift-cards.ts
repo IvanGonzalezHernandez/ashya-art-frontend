@@ -3,11 +3,12 @@ import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaRegalo';
+import { ValorationsComponent } from '../../../shared/valorations/valorations';
 
 @Component({
   selector: 'app-gift-cards',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ValorationsComponent],
   templateUrl: './gift-cards.html',
   styleUrls: ['./gift-cards.scss']
 })

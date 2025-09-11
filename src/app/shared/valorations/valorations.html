@@ -1,0 +1,73 @@
+<section class="reviews-section py-5 bg-beige">
+  <div class="container">
+
+    <!-- Título -->
+    <h4 class="title text-center mb-3 fw-bold text-uppercase">{{ title }}</h4>
+
+    <!-- ⭐ Rating global  -->
+    <div class="rating-summary text-center mb-4 d-flex justify-content-center align-items-center gap-2">
+      <span class="fw-semibold fs-6">{{ averageRating | number:'1.1-1' }}</span>
+
+      <div class="stars text-warning fs-6">
+        <i class="bi" *ngFor="let __ of five; let j = index"
+           [ngClass]="j < roundedRating ? 'bi-star-fill' : 'bi-star'"></i>
+      </div>
+
+      <span class="text-muted small">({{ totalReviews }})</span>
+    </div>
+
+    <!-- Carrusel (autoplay controlado por TS) -->
+    <div class="carousel slide"
+         #carouselEl
+         [id]="carouselId"
+         [attr.data-bs-ride]="'carousel'"
+         [attr.data-bs-interval]="interval"
+         [attr.data-bs-pause]="'false'">
+
+      <div class="carousel-inner">
+        <div class="carousel-item"
+             *ngFor="let group of slides; let i = index"
+             [class.active]="i === 0">
+          <div class="row justify-content-center">
+            <div class="col-md-3 mb-3" *ngFor="let r of group">
+              <div class="card review-card white-bg h-100 p-3 rounded-4 shadow-sm d-flex flex-column">
+
+                <!-- Estrellas de la reseña -->
+                <div class="stars mb-2 text-warning">
+                  <i class="bi" *ngFor="let __ of five; let j = index"
+                     [ngClass]="j < r.rating ? 'bi-star-fill' : 'bi-star'"></i>
+                </div>
+
+                <small class="text-muted">{{ r.timeAgo }}</small>
+                <p class="my-2 clamp-5">{{ r.text }}</p>
+
+                <!-- Autor -->
+                <div class="d-flex align-items-center gap-2 mt-auto">
+                  <div class="avatar bg-azul text-white d-flex justify-content-center align-items-center">
+                    {{ r.initials || getInitials(r.author) }}
+                  </div>
+
+                  <span class="author-name text-truncate" [title]="r.author">{{ r.author }}</span>
+
+                  <img class="brand-mark ms-auto d-inline-block"
+                       src="assets/valorations/resena.png"
+                       width="20" height="20" alt="Review logo">
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sin controles -->
+
+    </div>
+
+    <!-- Fallback sin reseñas -->
+    <div *ngIf="!slides?.length" class="text-center text-muted mt-4">
+      No reviews yet.
+    </div>
+
+  </div>
+</section>

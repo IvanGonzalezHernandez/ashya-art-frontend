@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FiringServiceService } from '../../../services/firing/firing';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { ValorationsComponent } from '../../../shared/valorations/valorations';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-firing-services',
-  imports: [CommonModule, FormsModule, FeedbackModalComponent],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, ValorationsComponent],
   standalone: true,
   templateUrl: './firing-services.html',
   styleUrl: './firing-services.scss'

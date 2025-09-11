@@ -60,4 +60,29 @@ export class Secrets {
       }
     }
 
+      imagenes = [
+    'assets/instagram/galery_1.webp',
+    'assets/instagram/galery_2.webp',
+    'assets/instagram/galery_3.webp',
+    'assets/instagram/galery_4.webp',
+    'assets/instagram/galery_5.webp',
+    'assets/instagram/galery_6.webp',
+    'assets/instagram/galery_7.webp',
+    'assets/instagram/galery_8.webp'
+  ];
+
+  mostrarOverlay(event: MouseEvent) {
+    const overlay = (event.currentTarget as HTMLElement).querySelector<HTMLElement>('.overlay');
+    if (overlay) {
+      overlay.style.opacity = '1';
+    }
+  }
+
+  ocultarOverlay(event: MouseEvent) {
+    const overlay = (event.currentTarget as HTMLElement).querySelector<HTMLElement>('.overlay');
+    if (overlay) {
+      overlay.style.opacity = '0';
+    }
+  }
+
 }

@@ -18,23 +18,13 @@
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <!--<th style="width: 8%;">ID</th>-->
-              <th style="width: 18%;">Reference</th>
-              <th style="width: 28%;">Name</th>
+              <th style="width: 32%;">Name</th>
               <th style="width: 12%;">Price</th>
               <th style="width: 20%;">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let tarjeta of tarjetas | paginate: { id: 'tarjetas', itemsPerPage: 5, currentPage: paginaActual }">
-              <!--<td class="text-muted">{{ tarjeta.id }}</td>-->
-
-              <td>
-                <span class="d-inline-block w-100 text-truncate" [title]="tarjeta.idReferencia">
-                  {{ tarjeta.idReferencia }}
-                </span>
-              </td>
-
               <td>
                 <span class="d-inline-block w-100 text-truncate" [title]="tarjeta.nombre">
                   {{ tarjeta.nombre }}
@@ -46,7 +36,7 @@
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarTarjeta(tarjeta)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarTarjeta(tarjeta.id)">Delete</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarTarjeta(tarjeta.id!)">Delete</button>
                 </div>
               </td>
             </tr>
@@ -80,16 +70,6 @@
       <div class="modal-body">
         <form (ngSubmit)="guardarCambios()" #tarjetaForm="ngForm" novalidate>
           <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Reference</label>
-              <input
-                type="text"
-                class="form-control"
-                name="idReferencia"
-                [(ngModel)]="tarjetaEditando.idReferencia"
-                required
-              />
-            </div>
 
             <div class="col-md-6">
               <label class="form-label">Name</label>
@@ -115,17 +95,69 @@
               />
             </div>
 
+            <!-- SLOT ÚNICO DE IMAGEN -->
             <div class="col-12">
-              <label class="form-label">Image URL</label>
-              <input
-                type="text"
-                class="form-control"
-                name="img"
-                [(ngModel)]="tarjetaEditando.img"
-                required
-              />
-              <small class="text-muted">Provide a valid image URL (e.g., https://.../image.webp)</small>
+              <label class="form-label">Image</label>
+
+              <div class="row g-3">
+                <div class="col-6 col-md-4 col-lg-3">
+                  <div class="border rounded p-2 text-center position-relative">
+
+                    <!-- Preview -->
+                    <img *ngIf="imgSlot.previewUrl"
+                         [src]="imgSlot.previewUrl"
+                         alt="preview"
+                         style="width:100%; height:120px; object-fit:cover;"
+                         class="rounded">
+
+                    <!-- Placeholder -->
+                    <div *ngIf="!imgSlot.previewUrl"
+                         class="d-flex align-items-center justify-content-center"
+                         style="width:100%; height:120px; background:#f6f6f6; border-radius:6px;">
+                      <small class="text-muted">No image</small>
+                    </div>
+
+                    <!-- Controles -->
+                    <div class="mt-2 d-flex flex-column gap-1">
+                      <label class="btn btn-sm btn-outline-primary mb-0">
+                        Replace
+                        <input
+                          type="file"
+                          class="d-none"
+                          accept="image/*"
+                          (change)="onSeleccionarArchivo($event)">
+                      </label>
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        (click)="eliminarImagen()"
+                        [disabled]="esNueva && !imgSlot.previewUrl && !imgSlot.file">
+                        Delete
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        *ngIf="!esNueva"
+                        (click)="restaurarImagen()">
+                        Restore
+                      </button>
+                    </div>
+
+                    <span *ngIf="imgSlot.markedForDelete"
+                          class="badge bg-danger position-absolute top-0 start-0 m-1">To delete</span>
+                  </div>
+                </div>
+              </div>
+
+              <small class="text-muted d-block mt-2">
+                Tip: “Replace” sube una nueva imagen. “Delete” la elimina (se marca para borrado);
+                “Restore” (solo en edición) vuelve a la imagen guardada en el servidor.
+              </small>
             </div>
+            <!-- FIN SLOT -->
+
           </div>
 
           <div class="d-flex justify-content-end gap-2 mt-3">

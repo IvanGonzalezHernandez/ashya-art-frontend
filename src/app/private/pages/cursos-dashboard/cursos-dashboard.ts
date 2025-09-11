@@ -11,11 +11,15 @@ import { Curso } from '../../../models/curso.model';
 import { CursoFecha } from '../../../models/cursoFecha.model';
 import { TruncatePipe } from '../../../pipes/truncate/truncate-pipe';
 
+// ✅ IMPORTA EL MODELO Y EL SERVICE DE RESERVAS
+import { Reservas } from '../../../models/curso-compra.model';
+import { ReservasService } from '../../../services/curso-compra/curso-compra';
+
 type SlotImagen = {
-  slot: number;                 
-  previewUrl: string | null;    
-  file?: File;                  
-  markedForDelete: boolean;     
+  slot: number;
+  previewUrl: string | null;
+  file?: File;
+  markedForDelete: boolean;
 };
 
 @Component({
@@ -29,6 +33,12 @@ export class CursosDashboard implements OnInit {
   loading = false;
   cursosCargados = false;
   fechasCargados = false;
+
+  // Detalle de CursoFecha
+  cursoFechaSeleccionada: CursoFecha | null = null;
+
+  // ✅ Lista de reservas
+  reservas: Reservas[] = [];
 
   // CURSOS
   cursos: Curso[] = [];
@@ -48,13 +58,17 @@ export class CursosDashboard implements OnInit {
   constructor(
     public cursoService: CursoService,
     private cursoFechaService: CursoFechaService,
-    private csvExportService: CsvExportService
+    private csvExportService: CsvExportService,
+    // ✅ INYECTA EL SERVICE DE RESERVAS
+    private reservasService: ReservasService
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
     this.obtenerCursos();
     this.obtenerCursoFechas();
+    // ✅ CARGA LAS RESERVAS
+    this.cargarReservas();
   }
 
   // --- CURSOS ---
@@ -104,7 +118,7 @@ export class CursosDashboard implements OnInit {
       materiales: '',
       plazasMaximas: 0,
       informacionExtra: ''
-    } as unknown as Curso; // adapta si tu modelo difiere
+    } as unknown as Curso;
     this.initSlots();
   }
 
@@ -134,7 +148,6 @@ export class CursosDashboard implements OnInit {
     };
     reader.readAsDataURL(file);
 
-    // permitir volver a seleccionar el mismo archivo si se desea
     input.value = '';
   }
 
@@ -171,18 +184,12 @@ export class CursosDashboard implements OnInit {
     const fd = new FormData();
     fd.append('curso', new Blob([JSON.stringify(cursoDto)], { type: 'application/json' }));
 
-    // Reemplazos: enviar img1..img5 si hay archivo cargado
     this.slots.forEach(s => {
-      if (s.file) {
-        fd.append(`img${s.slot}`, s.file);
-      }
+      if (s.file) fd.append(`img${s.slot}`, s.file);
     });
 
-    // Borrados: enviar flags deleteImgN=true
     this.slots.forEach(s => {
-      if (s.markedForDelete) {
-        fd.append(`deleteImg${s.slot}`, 'true');
-      }
+      if (s.markedForDelete) fd.append(`deleteImg${s.slot}`, 'true');
     });
 
     const req$ = this.esNuevo
@@ -200,9 +207,7 @@ export class CursosDashboard implements OnInit {
 
   eliminarCurso(id: number) {
     if (confirm('¿Estás seguro de eliminar este curso?')) {
-      this.cursoService.eliminarCurso(id).subscribe(() => {
-        this.obtenerCursos();
-      });
+      this.cursoService.eliminarCurso(id).subscribe(() => this.obtenerCursos());
     }
   }
 
@@ -249,26 +254,23 @@ export class CursosDashboard implements OnInit {
   guardarCursoFecha() {
     if (!this.cursoFechaEditando) return;
 
-    if (this.esNuevaCursoFecha) {
-      this.cursoFechaService.crearCursoFecha(this.cursoFechaEditando).subscribe(() => {
+    const req$ = this.esNuevaCursoFecha
+      ? this.cursoFechaService.crearCursoFecha(this.cursoFechaEditando)
+      : this.cursoFechaService.actualizarCursoFecha(this.cursoFechaEditando);
+
+    req$.subscribe({
+      next: () => {
         this.obtenerCursoFechas();
         this.cursoFechaEditando = null;
         this.esNuevaCursoFecha = false;
-      });
-    } else {
-      this.cursoFechaService.actualizarCursoFecha(this.cursoFechaEditando).subscribe(() => {
-        this.obtenerCursoFechas();
-        this.cursoFechaEditando = null;
-        this.esNuevaCursoFecha = false;
-      });
-    }
+      },
+      error: (e) => console.error('Error guardando fecha de curso', e)
+    });
   }
 
   eliminarCursoFecha(id: number) {
     if (confirm('¿Estás seguro de eliminar esta fecha de curso?')) {
-      this.cursoFechaService.eliminarCursoFecha(id).subscribe(() => {
-        this.obtenerCursoFechas();
-      });
+      this.cursoFechaService.eliminarCursoFecha(id).subscribe(() => this.obtenerCursoFechas());
     }
   }
 
@@ -278,30 +280,57 @@ export class CursosDashboard implements OnInit {
     }
   }
 
+  // --- RESERVAS / DETALLE DE FECHA ---
+
+  private cargarReservas() {
+    this.reservasService.getReservas().subscribe({
+      next: (data) => (this.reservas = data ?? []),
+      error: (e) => console.error('Error cargando reservas', e)
+    });
+  }
+
+  verDetalleCursoFecha(cf: CursoFecha) {
+    this.cursoFechaSeleccionada = cf;
+  }
+
+  cerrarDetalleCursoFecha() {
+    this.cursoFechaSeleccionada = null;
+  }
+
+  get reservasDeFecha(): Reservas[] {
+    if (!this.cursoFechaSeleccionada) return [];
+    const idFechaSel = this.cursoFechaSeleccionada.id;
+    return this.reservas.filter(r => r.idFecha === idFechaSel);
+  }
+
+  get totalPlazasReservadas(): number {
+    return this.reservasDeFecha.reduce((sum, r) => sum + (Number(r.plazasReservadas) || 0), 0);
+  }
+
   // --- EXPORTACIÓN CSV ---
 
-exportarCursosCSV() {
-  const encabezadoCursos = ['ID', 'Nombre', 'Subtítulo', 'Descripción', 'Precio'];
-  const filasCursos = (this.cursos || []).map(curso => [
-    curso.id,
-    curso.nombre,
-    curso.subtitulo,
-    curso.descripcion,
-    curso.precio
-  ]);
-  this.csvExportService.exportarCSV(encabezadoCursos, filasCursos, 'courses.csv');
-}
+  exportarCursosCSV() {
+    const encabezadoCursos = ['ID', 'Nombre', 'Subtítulo', 'Descripción', 'Precio'];
+    const filasCursos = (this.cursos || []).map(curso => [
+      curso.id,
+      curso.nombre,
+      curso.subtitulo,
+      curso.descripcion,
+      curso.precio
+    ]);
+    this.csvExportService.exportarCSV(encabezadoCursos, filasCursos, 'courses.csv');
+  }
 
-exportarCursoFechasCSV() {
-  const encabezadoCursoFechas = ['ID', 'Curso', 'Fecha', 'Hora Inicio', 'Hora Fin', 'Plazas Disponibles'];
-  const filasCursoFechas = (this.cursoFechas || []).map(cf => [
-    cf.id,
-    cf.nombreCurso,
-    cf.fecha,
-    cf.horaInicio,
-    cf.horaFin,
-    cf.plazasDisponibles
-  ]);
-  this.csvExportService.exportarCSV(encabezadoCursoFechas, filasCursoFechas, 'course-dates.csv');
-}
+  exportarCursoFechasCSV() {
+    const encabezadoCursoFechas = ['ID', 'Curso', 'Fecha', 'Hora Inicio', 'Hora Fin', 'Plazas Disponibles'];
+    const filasCursoFechas = (this.cursoFechas || []).map(cf => [
+      cf.id,
+      cf.nombreCurso,
+      cf.fecha,
+      cf.horaInicio,
+      cf.horaFin,
+      cf.plazasDisponibles
+    ]);
+    this.csvExportService.exportarCSV(encabezadoCursoFechas, filasCursoFechas, 'course-dates.csv');
+  }
 }

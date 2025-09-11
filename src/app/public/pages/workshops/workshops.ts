@@ -3,13 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Curso } from '../../../models/curso.model';
 import { CursoService } from '../../../services/curso/curso';
+import { ValorationsComponent } from '../../../shared/valorations/valorations';
 
 @Component({
   selector: 'app-workshops',
   standalone: true,
   templateUrl: './workshops.html',
   styleUrls: ['./workshops.scss'],
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, ValorationsComponent]
 })
 export class Workshops implements OnInit {
   loading = false;
