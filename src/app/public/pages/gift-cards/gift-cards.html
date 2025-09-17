@@ -50,24 +50,44 @@
     </div> 
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" *ngIf="!loading">
-    <div class="col" *ngFor="let card of tarjetas">
-        <div class="card h-100 shadow-sm border-0 rounded-4" style="background-color: #fff;">
-        <img [src]="card.img" class="card-img-top rounded-top-4" [alt]="card.nombre" style="object-fit: cover; height: 200px;">
-        <div class="card-body d-flex flex-column">
-            <h5 class="card-title" style="color: #3E3028;">{{ card.nombre }}</h5>
-            <div class="mt-auto d-flex justify-content-between align-items-center">
-            <span class="fw-bold fs-5" style="color: #3E3028;">{{ card.precio }}€</span>
-            <a [routerLink]="['/gift-cards', card.id]" class="btn text-white" style="background-color: #3E3028;">
+      <div class="col" *ngFor="let card of tarjetas">
+        <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
+
+          <!-- Imagen cuadrada -->
+          <div class="img-1x1 position-relative">
+            <img
+              [src]="card.img"
+              [alt]="card.nombre"
+              class="img-1x1-content"
+              loading="lazy"
+              decoding="async">
+          </div>
+
+          <!-- Contenido -->
+          <div class="card-body d-flex flex-column p-4">
+            <h5 class="card-title mb-1 text-dark fw-semibold text-truncate" [title]="card.nombre">
+              {{ card.nombre }}
+            </h5>
+
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <span class="price fw-bold">{{ card.precio }}€</span>
+
+              <a
+                [routerLink]="['/gift-cards', card.id]"
+                class="btn bg-azul text-white px-3"
+                [attr.aria-label]="'View gift card ' + card.nombre">
                 View details
-            </a>
+              </a>
             </div>
-        </div>
-        </div>
-    </div>
+          </div>
+
+        </article>
+      </div>
     </div>
 
   </div>
 </section>
+
 
   <app-valorations
   [title]="'Reviews from our workshops'"

@@ -1,0 +1,62 @@
+/* --- Imagen cuadrada reutilizable --- */
+.img-1x1 {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;      /* cuadrado perfecto */
+  overflow: hidden;
+}
+
+.img-1x1-content {
+  position: absolute;
+  inset: 0;                 /* top/right/bottom/left: 0 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .45s ease;
+}
+
+/* --- Card estilos --- */
+.card-course {
+  background: #fff;
+  transition: transform .2s ease, box-shadow .2s ease;
+  will-change: transform, box-shadow;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.08);
+  }
+
+  &:hover .img-1x1-content {
+    transform: scale(1.05);
+  }
+}
+
+/* --- Precio y colores de marca --- */
+.price {
+  color: #3E3028;
+  font-size: 1.125rem; /* fs-5 */
+}
+
+/* Botón marca */
+.btn-dark-ashya {
+  background-color: #3E3028;
+  color: #fff;
+  border: none;
+  border-radius: .5rem;
+
+  &:hover {
+    background-color: #2d221c;
+    color: #fff;
+  }
+}
+
+/* Helpers para posicionamiento sin inline styles */
+.top-2   { top: .5rem; }
+.start-2 { left: .5rem; }
+
+/* (Opcional) Reducir zoom en dispositivos táctiles para evitar “salto” al scroll */
+@media (hover: none) {
+  .card-course:hover .img-1x1-content {
+    transform: none;
+  }
+}

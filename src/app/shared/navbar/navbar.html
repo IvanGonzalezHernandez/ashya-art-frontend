@@ -20,7 +20,7 @@
     <!-- Menú horizontal desktop -->
     <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
       <ul class="navbar-nav flex-row gap-4">
-        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active">HOME</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">HOME</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/workshops" routerLinkActive="active">WORKSHOPS & SERVICES</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/calendar" routerLinkActive="active">CALENDAR</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/shop" routerLinkActive="active">SHOP</a></li>
@@ -54,7 +54,7 @@
   </div>
   <div class="offcanvas-body">
     <ul class="navbar-nav flex-column">
-      <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" data-bs-dismiss="offcanvas">HOME</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-bs-dismiss="offcanvas">HOME</a></li>
       <li class="nav-item"><a class="nav-link" routerLink="/workshops" routerLinkActive="active" data-bs-dismiss="offcanvas">WORKSHOPS & SERVICES</a></li>
       <li class="nav-item"><a class="nav-link" routerLink="/calendar" routerLinkActive="active" data-bs-dismiss="offcanvas">CALENDAR</a></li>
       <li class="nav-item"><a class="nav-link" routerLink="/shop" routerLinkActive="active" data-bs-dismiss="offcanvas">SHOP</a></li>

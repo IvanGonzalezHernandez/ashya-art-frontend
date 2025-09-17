@@ -30,9 +30,11 @@
             <div class="carousel-inner rounded-4 shadow">
   
               <ng-container *ngFor="let img of [cursoSeleccionado.img1Url, cursoSeleccionado.img2Url, cursoSeleccionado.img3Url, cursoSeleccionado.img4Url, cursoSeleccionado.img5Url]; let i = index">
-                <div *ngIf="img" class="carousel-item" [class.active]="i === 0">
-                  <img [src]="img" class="d-block w-100" alt="Imagen curso {{ i + 1 }}" style="object-fit: cover; height: 400px;">
+              <div class="carousel-item" [class.active]="i === 0">
+                <div class="img-1x1">
+                  <img [src]="img" alt="Imagen curso" class="img-1x1-content">
                 </div>
+              </div>
               </ng-container>
   
             </div>

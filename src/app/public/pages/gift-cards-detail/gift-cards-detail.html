@@ -25,7 +25,9 @@
     <div class="row g-4 align-items-center">
       <!-- Imagen -->
       <div class="col-lg-6 text-center">
-        <img [src]="tarjetaSeleccionada.img" class="img-fluid rounded-4 shadow" alt="{{ tarjetaSeleccionada.nombre }}">
+        <div class="img-1x1 rounded-4 shadow mx-auto">
+          <img [src]="tarjetaSeleccionada.img" alt="{{ tarjetaSeleccionada.nombre }}" class="img-1x1-content">
+        </div>
       </div>
 
       <!-- Detalles -->
