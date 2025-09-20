@@ -48,6 +48,7 @@ export class WorkshopsDetail {
     piso: '',
     provincia: '',
     ciudad: '',
+    pais: '',
     codigoPostal: '',
 
     // Campos formulario

@@ -126,6 +126,12 @@
               </div>
 
               <div class="col-md-6">
+                <label class="form-label">Location</label>
+                <input type="text" class="form-control" [(ngModel)]="cursoEditando.localizacion" name="localizacion" required #localizacion="ngModel" />
+                <div class="text-danger" *ngIf="materiales.invalid && materiales.touched">Location is required.</div>
+              </div>
+
+              <div class="col-md-6">
                 <label class="form-label">Max Seats</label>
                 <input type="number" class="form-control" [(ngModel)]="cursoEditando.plazasMaximas" name="plazasMaximas" min="1" required #plazasMaximas="ngModel" />
                 <div class="text-danger" *ngIf="plazasMaximas.invalid && plazasMaximas.touched">Max Seats must be greater than 0.</div>
@@ -157,7 +163,8 @@
                       <div class="mt-2 d-flex flex-column gap-1">
                         <label class="btn btn-sm btn-outline-primary mb-0">
                           Replace
-                          <input type="file" class="d-none" accept="image/*" (change)="onSeleccionarArchivo($event, s)" />
+                          <input type="file" class="d-none" accept="image/webp" (change)="onSeleccionarArchivo($event, s)" />
+
                         </label>
 
                         <button type="button" class="btn btn-sm btn-outline-danger" (click)="eliminarSlot(s)" [disabled]="!s.previewUrl && !s.file && esNuevo">
@@ -346,8 +353,10 @@
             <table class="table table-hover table-striped mb-0 align-middle">
               <thead class="table-azul">
                 <tr>
-                  <th style="width: 50%;">Client</th>
-                  <th style="width: 25%;">Seats</th>
+                  <th style="width: 20%;">Client</th>
+                  <th style="width: 15%;">Tlf</th>
+                  <th style="width: 30%;">Email</th>
+                  <th style="width: 10%;">Seats</th>
                   <th style="width: 25%;">Booked on</th>
                 </tr>
               </thead>
@@ -358,11 +367,13 @@
                       {{ r.nombreCliente }}
                     </span>
                   </td>
+                  <td class="text-nowrap">{{ r.telefono }}</td>
+                  <td class="text-nowrap">{{ r.email }}</td>
                   <td class="text-nowrap">{{ r.plazasReservadas }}</td>
                   <td class="text-nowrap">{{ r.fechaReserva | date:'yyyy-MM-dd' }}</td>
                 </tr>
                 <tr *ngIf="reservasDeFecha.length === 0">
-                  <td colspan="3" class="text-center text-muted">No bookings for this date.</td>
+                  <td colspan="5" class="text-center text-muted">No bookings for this date.</td>
                 </tr>
               </tbody>
             </table>
@@ -425,3 +436,11 @@
   </div>
   <div class="modal-backdrop fade show" *ngIf="cursoFechaEditando"></div>
 </div>
+
+<app-feedback-modal
+  *ngIf="mostrarFeedback"
+  [title]="feedbackTitulo"
+  [message]="feedbackMensaje"
+  [status]="feedbackTipo"
+  (closed)="cerrarFeedback()"
+></app-feedback-modal>

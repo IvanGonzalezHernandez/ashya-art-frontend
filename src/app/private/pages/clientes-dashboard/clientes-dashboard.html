@@ -28,6 +28,7 @@
               <th class="d-none d-xl-table-cell" style="width: 6%;">Floor</th>
               <th class="d-none d-xl-table-cell" style="width: 10%;">Province</th>
               <th class="d-none d-lg-table-cell" style="width: 10%;">City</th>
+              <th class="d-none d-lg-table-cell" style="width: 10%;">Country</th>
               <th class="d-none d-xl-table-cell" style="width: 6%;">Postal</th>
               <th style="width: 10%;">Actions</th>
             </tr>
@@ -88,6 +89,12 @@
               <td class="d-none d-lg-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="cliente.ciudad">
                   {{ cliente.ciudad }}
+                </span>
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="cliente.pais">
+                  {{ cliente.pais }}
                 </span>
               </td>
 
@@ -178,6 +185,11 @@
             <div class="col-md-6">
               <label class="form-label">City</label>
               <input type="text" class="form-control" [(ngModel)]="clienteEditando.ciudad" name="ciudad" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Pais</label>
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.pais" name="pais" />
             </div>
 
             <div class="col-md-6">

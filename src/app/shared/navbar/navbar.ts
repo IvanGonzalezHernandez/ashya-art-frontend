@@ -38,6 +38,7 @@ export class Navbar implements OnInit {
     piso: '',
     provincia: '',
     ciudad: '',
+    pais: '',
     codigoPostal: '',
     tipoClase: '',
     personasInteresadas: 1,
@@ -161,7 +162,7 @@ pagarConStripe() {
 
   aplicarCodigo() {
     if (!this.codigoTarjeta.trim()) {
-      this.errorCodigo = 'Introduce un código válido';
+      this.errorCodigo = 'Please, introduce a valid code';
       this.mensajeCodigo = '';
       return;
     }

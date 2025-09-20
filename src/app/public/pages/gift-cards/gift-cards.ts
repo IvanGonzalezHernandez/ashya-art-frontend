@@ -14,8 +14,6 @@ import { ValorationsComponent } from '../../../shared/valorations/valorations';
 })
 export class GiftCards implements OnInit {
   loading = false;
-  tarjetasCargadas = false;
-
   tarjetas: TarjetaRegalo[] = [];
 
   constructor(private tarjetaRegaloService: TarjetaRegaloService) {}
@@ -29,14 +27,21 @@ export class GiftCards implements OnInit {
     this.tarjetaRegaloService.getTarjetas().subscribe({
       next: (data) => {
         this.tarjetas = data;
-        this.tarjetasCargadas = true;
+        this.tarjetas.forEach(card => this.procesarImagenesBase64(card));
         this.loading = false;
       },
       error: (err) => {
         console.error('Error cargando tarjetas regalo', err);
-        this.tarjetasCargadas = true;
         this.loading = false;
       }
     });
+  }
+
+  private procesarImagenesBase64(card: TarjetaRegalo): void {
+    if (card.img) {
+      (card as any).imgUrl = `data:image/webp;base64,${card.img}`;
+    } else {
+      (card as any).imgUrl = '';
+    }
   }
 }

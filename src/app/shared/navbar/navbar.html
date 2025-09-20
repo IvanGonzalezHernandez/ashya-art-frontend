@@ -97,7 +97,7 @@
       <div class="mb-2">
         <label for="codigoTarjeta" class="form-label">Gift card code</label>
         <div class="input-group">
-          <input type="text" id="codigoTarjeta" class="form-control" [(ngModel)]="codigoTarjeta" placeholder="Introduce tu código">
+          <input type="text" id="codigoTarjeta" class="form-control" [(ngModel)]="codigoTarjeta" placeholder="Introduce your code">
           <button class="btn btn-outline-secondary" type="button" (click)="aplicarCodigo()">Apply</button>
         </div>
         <small *ngIf="mensajeCodigo" class="text-success">{{ mensajeCodigo }}</small>
@@ -185,11 +185,22 @@
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">Postal Code *</label>
-            <input type="text" class="form-control" name="codigoPostal" [(ngModel)]="cliente.codigoPostal" required pattern="^[0-9]{5}$" #codigoPostal="ngModel">
-            <div class="text-danger" *ngIf="codigoPostal.invalid && codigoPostal.touched">Must be exactly 5 digits.</div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Country *</label>
+              <input type="text" class="form-control" name="codigoPostal" [(ngModel)]="cliente.codigoPostal" required  #ciudad="ngModel">
+              <div class="text-danger" *ngIf="ciudad.invalid && ciudad.touched">Countrybe is required.</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Postal Code *</label>
+              <input type="text" class="form-control" name="codigoPostal" [(ngModel)]="cliente.codigoPostal" required pattern="^[0-9]{5}$" #codigoPostal="ngModel">
+              <div class="text-danger" *ngIf="codigoPostal.invalid && codigoPostal.touched">Must be exactly 5 digits.</div>
+            </div>
+
           </div>
+
+
 
           <div class="modal-footer px-0">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

@@ -3,4 +3,5 @@ export interface TarjetaRegalo {
     nombre: string;
     precio: number;
     img: string;
+    imgUrl: String;
 }

@@ -12,6 +12,7 @@ export interface Curso {
   fechaBaja?: string;
   plazasMaximas?: number;
   informacionExtra?: string;
+  localizacion: string;
   img1?: any;
   img2?: any;
   img3?: any;

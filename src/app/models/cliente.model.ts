@@ -9,6 +9,7 @@ export interface Cliente {
     piso: string;
     provincia: string;
     ciudad: string;
+    pais: string;
     codigoPostal: string;
 
     // Nuevos campos
