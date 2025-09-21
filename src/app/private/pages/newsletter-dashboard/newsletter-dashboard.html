@@ -127,3 +127,11 @@
   </div>
 </div>
 <div class="modal-backdrop fade show" *ngIf="newsletterEditando"></div>
+
+<app-feedback-modal
+  *ngIf="mostrarFeedback"
+  [title]="feedbackTitulo"
+  [message]="feedbackMensaje"
+  [status]="feedbackTipo"
+  (closed)="cerrarFeedback()"
+></app-feedback-modal>

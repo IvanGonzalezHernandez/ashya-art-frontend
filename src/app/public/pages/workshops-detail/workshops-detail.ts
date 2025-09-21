@@ -214,6 +214,11 @@ agregarCursoAlCarrito(fecha: any) {
   this.carritoService.agregarItem(item);
 }
 
+get infoExtraList(): string[] {
+  const txt = this.cursoSeleccionado?.informacionExtra ?? '';
+  return txt.split(/•/g).map(s => s.trim()).filter(Boolean);
+}
+
 
 
   

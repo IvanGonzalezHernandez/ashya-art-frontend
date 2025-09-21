@@ -35,6 +35,25 @@ export class CursosDashboard implements OnInit {
   cursosCargados = false;
   fechasCargados = false;
 
+  // Número de bullets seleccionados
+  numBullets: number = 0;
+
+  // Lista de textos (cada item = un bullet)
+  bullets: string[] = [];
+
+  // Cuando cambia el número en el select
+  onChangeNumBullets() {
+    if (this.numBullets > this.bullets.length) {
+      // Añadir elementos vacíos
+      for (let i = this.bullets.length; i < this.numBullets; i++) {
+        this.bullets.push('');
+      }
+    } else {
+      // Reducir tamaño
+      this.bullets = this.bullets.slice(0, this.numBullets);
+    }
+  }
+
   private readonly IMG_LIMIT_BYTES = 800 * 1024; // 800 KB
   private readonly IMG_MAX_W = 1600;
   private readonly IMG_MAX_H = 1600;
@@ -128,14 +147,26 @@ export class CursosDashboard implements OnInit {
       piezas: '',
       materiales: '',
       plazasMaximas: 0,
-      informacionExtra: ''
+      informacionExtra: '',
+      localizacion: ''
     } as unknown as Curso;
+
+      // Bullets: reset
+      this.numBullets = 0;
+      this.bullets = [];
+
     this.initSlots();
   }
 
   editarCurso(curso: Curso) {
     this.esNuevo = false;
     this.cursoEditando = { ...curso };
+
+    // Bullets desde informacionExtra (separado por \n)
+    const raw = this.cursoEditando.informacionExtra ?? '';
+    this.bullets = raw ? raw.split(/\r?\n/) : [];
+    this.numBullets = this.bullets.length;
+
     this.initSlots(curso.id);
   }
 
@@ -143,6 +174,9 @@ export class CursosDashboard implements OnInit {
     this.cursoEditando = null;
     this.esNuevo = false;
     this.slots = [];
+
+    this.numBullets = 0;
+    this.bullets = [];
   }
 
  async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
@@ -171,12 +205,33 @@ export class CursosDashboard implements OnInit {
     return;
   }
 
-  // ✅ Pasa validación
+  // Pasa validación
   slot.file = original;
   slot.markedForDelete = false;
   slot.previewUrl = await fileToDataUrl(original);
 }
 
+    /** Vista previa sin vacíos */
+  get bulletsPreview(): string[] {
+    return (this.bullets ?? []).map(b => (b ?? '').trim()).filter(Boolean);
+  }
+
+  /** Cadena final para BD (saltos de línea) */
+  get informacionExtraConcat(): string {
+    return this.bulletsPreview.join('\n');
+  }
+
+  /** Cuando cambia cualquier input de bullet */
+  onBulletsChanged(): void {
+    if (this.cursoEditando) {
+      this.cursoEditando.informacionExtra = this.informacionExtraConcat;
+    }
+  }
+
+  /** trackBy para no perder el foco al escribir */
+  trackByIndex(index: number): number {
+    return index;
+  }
 
 
   eliminarSlot(slot: SlotImagen) {
@@ -194,6 +249,8 @@ export class CursosDashboard implements OnInit {
 
   guardarCambios() {
   if (!this.cursoEditando) return;
+
+  this.cursoEditando.informacionExtra = this.bullets.filter(b => b.trim() !== '').join('\n');
 
   // 🔒 Doble validación de seguridad
   for (const s of this.slots) {
@@ -262,11 +319,21 @@ export class CursosDashboard implements OnInit {
 }
 
 
-  eliminarCurso(id: number) {
-    if (confirm('¿Estás seguro de eliminar este curso?')) {
-      this.cursoService.eliminarCurso(id).subscribe(() => this.obtenerCursos());
-    }
+eliminarCurso(id: number) {
+  if (confirm('¿Estás seguro de eliminar este curso?')) {
+    this.cursoService.eliminarCurso(id).subscribe({
+      next: () => {
+        this.obtenerCursos();
+        this.mostrarModalFeedback('success', 'Course deleted', 'The course has been deleted successfully.');
+      },
+      error: (e) => {
+        console.error('Error eliminando curso', e);
+        this.mostrarModalFeedback('error', 'Error deleting course', 'There was a problem deleting the course. Please try again.');
+      }
+    });
   }
+}
+
 
   // --- CURSOFECHA ---
 
@@ -311,7 +378,9 @@ export class CursosDashboard implements OnInit {
   guardarCursoFecha() {
     if (!this.cursoFechaEditando) return;
 
-    const req$ = this.esNuevaCursoFecha
+    const creating = this.esNuevaCursoFecha;
+
+    const req$ = creating
       ? this.cursoFechaService.crearCursoFecha(this.cursoFechaEditando)
       : this.cursoFechaService.actualizarCursoFecha(this.cursoFechaEditando);
 
@@ -320,16 +389,33 @@ export class CursosDashboard implements OnInit {
         this.obtenerCursoFechas();
         this.cursoFechaEditando = null;
         this.esNuevaCursoFecha = false;
+        this.mostrarModalFeedback('success', creating ? 'Date created' : 'Date saved',
+          'The date has been saved successfully.');
       },
-      error: (e) => console.error('Error guardando fecha de curso', e)
+      error: (e) => {
+        console.error('Error guardando fecha de curso', e);
+        this.mostrarModalFeedback('error', 'Error saving date', 'Please review fields or try again.');
+      }
     });
   }
 
-  eliminarCursoFecha(id: number) {
-    if (confirm('¿Estás seguro de eliminar esta fecha de curso?')) {
-      this.cursoFechaService.eliminarCursoFecha(id).subscribe(() => this.obtenerCursoFechas());
-    }
+
+
+eliminarCursoFecha(id: number) {
+  if (confirm('¿Estás seguro de eliminar esta fecha de curso?')) {
+    this.cursoFechaService.eliminarCursoFecha(id).subscribe({
+      next: () => {
+        this.obtenerCursoFechas();
+        this.mostrarModalFeedback('success', 'Date deleted', 'The date has been deleted successfully.');
+      },
+      error: (e) => {
+        console.error('Error eliminando fecha de curso', e);
+        this.mostrarModalFeedback('error', 'Error deleting date', 'There was a problem deleting the date. Please try again.');
+      }
+    });
   }
+}
+
 
   private comprobarCargaCompleta() {
     if (this.cursosCargados && this.fechasCargados) {

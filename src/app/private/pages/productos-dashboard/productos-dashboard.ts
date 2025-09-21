@@ -9,6 +9,8 @@ import { CsvExportService } from '../../../services/csv/csv-export';
 
 import { Producto } from '../../../models/producto.model';
 import { ProductoCompra } from '../../../models/producto-compra.model';
+import { convertToWebPUnderLimit, fileToDataUrl, isTooLarge, isWebpFile } from '../../../utils/image-optimizer.util';
+import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
 // === Slots, igual que en cursos ===
 type SlotImagen = {
@@ -23,12 +25,23 @@ type SlotImagen = {
   standalone: true,
   templateUrl: './productos-dashboard.html',
   styleUrls: ['./productos-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class ProductosDashboard implements OnInit {
   loading = false;
   productosCargados = false;
   comprasCargadas = false;
+
+    // LÍMITES DE IMAGEN
+  private readonly IMG_LIMIT_BYTES = 800 * 1024; // 800 KB
+  private readonly IMG_MAX_W = 1600;
+  private readonly IMG_MAX_H = 1600;
+
+  // FEEDBACK MODAL
+  mostrarFeedback = false;
+  feedbackTitulo = '';
+  feedbackMensaje = '';
+  feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
   // SLOTS (igual que cursos)
   slots: SlotImagen[] = [];
@@ -120,29 +133,35 @@ export class ProductosDashboard implements OnInit {
     this.slots = [];
   }
 
-  // Handlers UI de slots (igual que cursos)
-  onSeleccionarArchivo(event: Event, slot: SlotImagen) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
+async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
 
-    const file = input.files[0];
-    if (!file.type.startsWith('image/')) {
-      alert('El archivo debe ser una imagen.');
-      input.value = '';
-      return;
-    }
+  const original = input.files[0];
+  input.value = ''; // permitir re-seleccionar el mismo archivo después
 
-    slot.file = file;
-    slot.markedForDelete = false;
-
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      slot.previewUrl = e.target.result; // dataURL para previsualizar
-    };
-    reader.readAsDataURL(file);
-
-    input.value = ''; // permitir re-elegir el mismo archivo
+  // ✅ Política STRICT: solo WebP y <= 800 KB
+  if (!isWebpFile(original)) {
+    this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+    return;
   }
+
+  if (isTooLarge(original, this.IMG_LIMIT_BYTES)) {
+    this.mostrarModalFeedback('error', 'Image too large', `The file must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`);
+    return;
+  }
+
+  // Pasa validación → preview y guarda
+  slot.file = original;
+  slot.markedForDelete = false;
+  try {
+    slot.previewUrl = await fileToDataUrl(original);
+  } catch {
+    this.mostrarModalFeedback('error', 'Invalid image', 'Could not read the image.');
+    slot.file = undefined;
+  }
+}
+
 
   eliminarSlot(slot: SlotImagen) {
     slot.file = undefined;
@@ -163,60 +182,82 @@ export class ProductosDashboard implements OnInit {
   }
 
   guardarCambiosProducto() {
-    if (!this.productoEditando) return;
+  if (!this.productoEditando) return;
 
-    const formData = new FormData();
-
-    // DTO de producto
-    const productoDto: any = {
-      id: this.productoEditando.id,
-      nombre: this.productoEditando.nombre,
-      subtitulo: this.productoEditando.subtitulo,
-      categoria: this.productoEditando.categoria,
-      descripcion: this.productoEditando.descripcion,
-      stock: this.productoEditando.stock,
-      precio: this.productoEditando.precio,
-      medidas: this.productoEditando.medidas,
-      material: this.productoEditando.material
-    };
-
-    // Añadir JSON
-    formData.append('producto', new Blob([JSON.stringify(productoDto)], { type: 'application/json' }));
-
-    // Reemplazos: enviar img1..img5 si hay archivo cargado en ese slot
-    this.slots.forEach(s => {
-      if (s.file) {
-        formData.append(`img${s.slot}`, s.file);
+  // 🔒 Doble validación de seguridad
+  for (const s of this.slots) {
+    if (s.file) {
+      if (!isWebpFile(s.file)) {
+        this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+        return;
       }
-    });
-
-    // Borrados: flags deleteImgN=true (solo en edición)
-    this.slots.forEach(s => {
-      if (!this.esNuevoProducto && s.markedForDelete) {
-        formData.append(`deleteImg${s.slot}`, 'true');
+      if (isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
+        this.mostrarModalFeedback('error', 'Image too large', `Each image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`);
+        return;
       }
-    });
-
-    const req$ = this.esNuevoProducto
-      ? this.productoService.crearProductoConImagenes(formData)
-      : this.productoService.actualizarProductoConImagenes(this.productoEditando.id, formData);
-
-    req$.subscribe({
-      next: () => {
-        this.obtenerProductos();
-        this.cancelarEdicionProducto();
-      },
-      error: (e) => console.error('Error guardando producto', e)
-    });
-  }
-
-  eliminarProducto(id: number) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
-      this.productoService.eliminarProducto(id).subscribe(() => {
-        this.obtenerProductos();
-      });
     }
   }
+
+  const formData = new FormData();
+  const productoDto: any = {
+    id: this.productoEditando.id,
+    nombre: this.productoEditando.nombre,
+    subtitulo: this.productoEditando.subtitulo,
+    categoria: this.productoEditando.categoria,
+    descripcion: this.productoEditando.descripcion,
+    stock: this.productoEditando.stock,
+    precio: this.productoEditando.precio,
+    medidas: this.productoEditando.medidas,
+    material: this.productoEditando.material
+  };
+  formData.append('producto', new Blob([JSON.stringify(productoDto)], { type: 'application/json' }));
+
+  // Solo sube archivos válidos
+  this.slots.forEach(s => {
+    if (s.file && isWebpFile(s.file) && !isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
+      formData.append(`img${s.slot}`, s.file);
+    }
+  });
+
+  if (!this.esNuevoProducto) {
+    this.slots.forEach(s => {
+      if (s.markedForDelete) formData.append(`deleteImg${s.slot}`, 'true');
+    });
+  }
+
+  const req$ = this.esNuevoProducto
+    ? this.productoService.crearProductoConImagenes(formData)
+    : this.productoService.actualizarProductoConImagenes(this.productoEditando.id, formData);
+
+  req$.subscribe({
+    next: () => {
+      this.obtenerProductos();
+      this.cancelarEdicionProducto();
+      this.mostrarModalFeedback('success', 'Product saved', 'The product has been saved successfully.');
+    },
+    error: (e) => {
+      console.error('Error guardando producto', e);
+      this.mostrarModalFeedback('error', 'Error saving product', 'Please review fields or try again.');
+    }
+  });
+}
+
+
+eliminarProducto(id: number) {
+  if (confirm('¿Estás seguro de eliminar este producto?')) {
+    this.productoService.eliminarProducto(id).subscribe({
+      next: () => {
+        this.obtenerProductos();
+        this.mostrarModalFeedback('success', 'Product deleted', 'The product has been deleted successfully.');
+      },
+      error: (e) => {
+        console.error('Error eliminando producto', e);
+        this.mostrarModalFeedback('error', 'Error deleting product', 'There was a problem deleting the product.');
+      }
+    });
+  }
+}
+
 
   private comprobarCargaCompleta() {
     if (this.productosCargados && this.comprasCargadas) {
@@ -302,6 +343,16 @@ export class ProductosDashboard implements OnInit {
       });
     }
   }
+
+  mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
+  this.feedbackTipo = tipo;
+  this.feedbackTitulo = titulo;
+  this.feedbackMensaje = mensaje;
+  this.mostrarFeedback = true;
+}
+cerrarFeedback() {
+  this.mostrarFeedback = false;
+}
 
   exportarCSVCompras() {
     const encabezado = ['ID', 'ID Cliente', 'Nombre Cliente', 'ID Producto', 'Nombre Producto', 'Cantidad', 'Fecha Compra'];

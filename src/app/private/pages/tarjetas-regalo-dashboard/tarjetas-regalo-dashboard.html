@@ -124,7 +124,7 @@
                         <input
                           type="file"
                           class="d-none"
-                          accept="image/*"
+                          accept="image/webp"
                           (change)="onSeleccionarArchivo($event)">
                       </label>
 
@@ -171,3 +171,12 @@
   </div>
 </div>
 <div class="modal-backdrop fade show" *ngIf="tarjetaEditando"></div>
+
+<app-feedback-modal
+ *ngIf="mostrarFeedback"
+ [title]="feedbackTitulo"
+ [message]="feedbackMensaje"
+ [status]="feedbackTipo"
+ (closed)="cerrarFeedback()"
+></app-feedback-modal>
+

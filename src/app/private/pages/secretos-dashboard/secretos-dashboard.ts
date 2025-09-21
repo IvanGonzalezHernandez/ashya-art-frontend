@@ -7,6 +7,9 @@ import { Secreto } from '../../../models/secreto.model';
 import { SecretoService } from '../../../services/secreto/secreto';
 import { CsvExportService } from '../../../services/csv/csv-export';
 
+import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { isTooLarge, isWebpFile, fileToDataUrl } from '../../../utils/image-optimizer.util';
+
 type SlotImagen = {
   slot: number;
   previewUrl: string | null;
@@ -19,10 +22,20 @@ type SlotImagen = {
   standalone: true,
   templateUrl: './secretos-dashboard.html',
   styleUrls: ['./secretos-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class SecretosDashboard implements OnInit {
   loading = false;
+
+    // Límites
+  private readonly IMG_LIMIT_BYTES = 800 * 1024;      // 800 KB
+  private readonly PDF_LIMIT_BYTES = 10 * 1024 * 1024; // 10 MB
+
+  // Feedback modal
+  mostrarFeedback = false;
+  feedbackTitulo = '';
+  feedbackMensaje = '';
+  feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
   // listado
   secretos: Secreto[] = [];
@@ -118,21 +131,34 @@ export class SecretosDashboard implements OnInit {
   }
 
   // --- IMÁGENES (slots) ---
-  onSeleccionarArchivo(event: Event, slot: SlotImagen) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
+async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
 
-    const file = input.files[0];
-    slot.file = file;
-    slot.markedForDelete = false;
+  const file = input.files[0];
+  input.value = ''; // permitir re-seleccionar
 
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      slot.previewUrl = e.target.result;
-    };
-    reader.readAsDataURL(file);
-    input.value = '';
+  // Solo WebP y <= 800 KB
+  if (!isWebpFile(file)) {
+    this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+    return;
   }
+  if (isTooLarge(file, this.IMG_LIMIT_BYTES)) {
+    this.mostrarModalFeedback('error', 'Image too large', `Each image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`);
+    return;
+  }
+
+  slot.file = file;
+  slot.markedForDelete = false;
+
+  try {
+    slot.previewUrl = await fileToDataUrl(file);
+  } catch {
+    this.mostrarModalFeedback('error', 'Invalid image', 'Could not read the image.');
+    slot.file = undefined;
+  }
+}
+
 
   eliminarSlot(slot: SlotImagen) {
     slot.file = undefined;
@@ -152,16 +178,27 @@ export class SecretosDashboard implements OnInit {
   }
 
   // --- PDF ---
-  onSeleccionarPdf(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
+onSeleccionarPdf(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
 
-    const file = input.files[0];
-    this.pdfFile = file;
-    this.pdfPreviewName = file.name;
-    this.pdfMarkedForDelete = false;
-    input.value = '';
+  const file = input.files[0];
+  input.value = '';
+
+  if (file.type !== 'application/pdf') {
+    this.mostrarModalFeedback('error', 'Invalid file', 'Only PDF files are allowed.');
+    return;
   }
+  if (isTooLarge(file, this.PDF_LIMIT_BYTES)) {
+    this.mostrarModalFeedback('error', 'PDF too large', `The PDF must be ${(this.PDF_LIMIT_BYTES / (1024*1024)).toFixed(0)} MB or less.`);
+    return;
+  }
+
+  this.pdfFile = file;
+  this.pdfPreviewName = file.name;
+  this.pdfMarkedForDelete = false;
+}
+
 
   eliminarPdf() {
     this.pdfFile = undefined;
@@ -177,55 +214,99 @@ export class SecretosDashboard implements OnInit {
   }
 
   // --- GUARDAR ---
-  guardarCambios() {
-    if (!this.secretoEditando) return;
+guardarCambios() {
+  if (!this.secretoEditando) return;
 
-    const dto: any = {
-      id: this.secretoEditando.id,
-      estado: this.secretoEditando.estado,
-      fechaBaja: this.secretoEditando.fechaBaja,
-      precio: this.secretoEditando.precio,
-      nombre: this.secretoEditando.nombre,
-      subtitulo: this.secretoEditando.subtitulo,
-      descripcion: this.secretoEditando.descripcion,
-      categoria: this.secretoEditando.categoria
-    };
-
-    const fd = new FormData();
-    fd.append('secreto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
-
-    // imágenes
-    this.slots.forEach(s => {
-      if (s.file) {
-        fd.append(`img${s.slot}`, s.file);
+  // 🔒 Doble validación IMÁGENES (solo WebP y <= 800 KB)
+  for (const s of this.slots) {
+    if (s.file) {
+      if (!isWebpFile(s.file)) {
+        this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+        return;
       }
-    });
-    this.slots.forEach(s => {
-      if (s.markedForDelete) {
-        fd.append(`deleteImg${s.slot}`, 'true');
+      if (isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
+        this.mostrarModalFeedback(
+          'error',
+          'Image too large',
+          `Each image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`
+        );
+        return;
       }
-    });
-
-    // pdf
-    if (this.pdfFile) {
-      fd.append('pdf', this.pdfFile);
     }
-    if (this.pdfMarkedForDelete) {
-      fd.append('deletePdf', 'true');
-    }
-
-    const req$ = this.esNuevo
-      ? this.secretoService.crearSecreto(fd)
-      : this.secretoService.actualizarSecreto(fd, this.secretoEditando.id!);
-
-    req$.subscribe({
-      next: () => {
-        this.obtenerSecretos();
-        this.cancelarEdicion();
-      },
-      error: (e) => console.error('Error guardando secreto', e)
-    });
   }
+
+  // 🔒 Doble validación PDF (solo PDF y <= 10 MB)
+  if (this.pdfFile) {
+    if (this.pdfFile.type !== 'application/pdf') {
+      this.mostrarModalFeedback('error', 'Invalid file', 'Only PDF files are allowed.');
+      return;
+    }
+    if (isTooLarge(this.pdfFile, this.PDF_LIMIT_BYTES)) {
+      this.mostrarModalFeedback(
+        'error',
+        'PDF too large',
+        `The PDF must be ${(this.PDF_LIMIT_BYTES / (1024 * 1024)).toFixed(0)} MB or less.`
+      );
+      return;
+    }
+  }
+
+  // DTO principal
+  const dto: any = {
+    id: this.secretoEditando.id,
+    estado: this.secretoEditando.estado,
+    fechaBaja: this.secretoEditando.fechaBaja,
+    precio: this.secretoEditando.precio,
+    nombre: this.secretoEditando.nombre,
+    subtitulo: this.secretoEditando.subtitulo,
+    descripcion: this.secretoEditando.descripcion,
+    categoria: this.secretoEditando.categoria
+  };
+
+  // Construir FormData
+  const fd = new FormData();
+  fd.append('secreto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+
+  // Imágenes: reemplazos
+  this.slots.forEach(s => {
+    if (s.file && isWebpFile(s.file) && !isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
+      fd.append(`img${s.slot}`, s.file);
+    }
+  });
+
+  // Imágenes: borrados (solo cuando editas)
+  this.slots.forEach(s => {
+    if (!this.esNuevo && s.markedForDelete) {
+      fd.append(`deleteImg${s.slot}`, 'true');
+    }
+  });
+
+  // PDF: reemplazo / borrado
+  if (this.pdfFile) {
+    fd.append('pdf', this.pdfFile);
+  }
+  if (this.pdfMarkedForDelete) {
+    fd.append('deletePdf', 'true');
+  }
+
+  // Llamada al servicio
+  const req$ = this.esNuevo
+    ? this.secretoService.crearSecreto(fd)
+    : this.secretoService.actualizarSecreto(fd, this.secretoEditando.id!);
+
+  req$.subscribe({
+    next: () => {
+      this.obtenerSecretos();
+      this.cancelarEdicion();
+      this.mostrarModalFeedback('success', 'Secret saved', 'The secret has been saved successfully.');
+    },
+    error: (e) => {
+      console.error('Error guardando secreto', e);
+      this.mostrarModalFeedback('error', 'Error saving', 'Please review fields or try again.');
+    }
+  });
+}
+
 
   eliminarSecreto(id: number | undefined) {
     if (!id) return;
@@ -233,6 +314,18 @@ export class SecretosDashboard implements OnInit {
       this.secretoService.eliminarSecreto(id).subscribe(() => this.obtenerSecretos());
     }
   }
+
+  mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
+  this.feedbackTipo = tipo;
+  this.feedbackTitulo = titulo;
+  this.feedbackMensaje = mensaje;
+  this.mostrarFeedback = true;
+  }
+
+  cerrarFeedback() {
+    this.mostrarFeedback = false;
+  }
+
 
   // --- CSV ---
   exportarCSV() {

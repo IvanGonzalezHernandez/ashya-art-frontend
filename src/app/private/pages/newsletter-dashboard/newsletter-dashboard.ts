@@ -6,16 +6,23 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NewsletterService } from '../../../services/newsletter/newsletter';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Newsletter } from '../../../models/newsletter.model';
+import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
 @Component({
   selector: 'app-newsletter-dashboard',
   standalone: true,
   templateUrl: './newsletter-dashboard.html',
   styleUrls: ['./newsletter-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class NewsletterDashboard implements OnInit {
   loading = false;
+
+  // Modal de feedback
+  mostrarFeedback = false;
+  feedbackTitulo = '';
+  feedbackMensaje = '';
+  feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
   newsletters: Newsletter[] = [];
   paginaActual: number = 1;
@@ -67,29 +74,68 @@ export class NewsletterDashboard implements OnInit {
   }
 
   guardarCambios() {
-    if (!this.newsletterEditando) return;
+  if (!this.newsletterEditando) return;
 
-    if (this.esNuevo) {
-      this.newsletterService.crearNewsletter(this.newsletterEditando).subscribe(() => {
+  const payload = { ...this.newsletterEditando };
+
+  if (this.esNuevo) {
+    this.newsletterService.crearNewsletter(payload).subscribe({
+      next: () => {
         this.obtenerNewsletters();
         this.newsletterEditando = null;
         this.esNuevo = false;
-      });
-    } else {
-      this.newsletterService.actualizarNewsletter(this.newsletterEditando).subscribe(() => {
+        this.mostrarModalFeedback('success', 'Saved', 'Newsletter created successfully.');
+      },
+      error: (e) => {
+        console.error(e);
+        this.mostrarModalFeedback('error', 'Error', 'Could not create the newsletter. Please try again.');
+      }
+    });
+  } else {
+    this.newsletterService.actualizarNewsletter(payload).subscribe({
+      next: () => {
         this.obtenerNewsletters();
         this.newsletterEditando = null;
         this.esNuevo = false;
-      });
+        this.mostrarModalFeedback('success', 'Saved', 'Newsletter updated successfully.');
+      },
+      error: (e) => {
+        console.error(e);
+        this.mostrarModalFeedback('error', 'Error', 'Could not update the newsletter. Please try again.');
+      }
+    });
+  }
+}
+
+eliminarNewsletter(id: number) {
+  if (!confirm('Are you sure you want to delete this newsletter?')) return;
+
+  this.newsletterService.eliminarNewsletter(id).subscribe({
+    next: () => {
+      this.obtenerNewsletters();
+      this.mostrarModalFeedback('success', 'Deleted', 'Newsletter deleted successfully.');
+    },
+    error: (e) => {
+      console.error(e);
+      this.mostrarModalFeedback('error', 'Error', 'Could not delete the newsletter. Please try again.');
     }
+  });
+}
+
+
+  private mostrarModalFeedback(
+  tipo: 'success' | 'error' | 'info',
+  titulo: string,
+  mensaje: string
+  ) {
+    this.feedbackTipo = tipo;
+    this.feedbackTitulo = titulo;
+    this.feedbackMensaje = mensaje;
+    this.mostrarFeedback = true;
   }
 
-  eliminarNewsletter(id: number) {
-    if (confirm('¿Estás seguro de eliminar este newsletter?')) {
-      this.newsletterService.eliminarNewsletter(id).subscribe(() => {
-        this.obtenerNewsletters();
-      });
-    }
+  cerrarFeedback() {
+    this.mostrarFeedback = false;
   }
 
   exportarCSV() {

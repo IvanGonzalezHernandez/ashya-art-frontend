@@ -3,7 +3,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Clients Dashboard</h1>
     <div class="d-flex gap-2 flex-wrap">
-      <button class="btn btn-success" (click)="crearCliente()">+ New Cliente</button>
+      <button class="btn btn-success" (click)="crearCliente()">+ New Client</button>
     </div>
   </div>
 
@@ -209,3 +209,12 @@
   </div>
 </div>
 <div class="modal-backdrop fade show" *ngIf="clienteEditando"></div>
+
+<app-feedback-modal
+  *ngIf="mostrarFeedback"
+  [title]="feedbackTitulo"
+  [message]="feedbackMensaje"
+  [status]="feedbackTipo"
+  (closed)="cerrarFeedback()"
+></app-feedback-modal>
+

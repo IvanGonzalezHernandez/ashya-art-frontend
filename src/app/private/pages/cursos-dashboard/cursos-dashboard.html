@@ -128,7 +128,7 @@
               <div class="col-md-6">
                 <label class="form-label">Location</label>
                 <input type="text" class="form-control" [(ngModel)]="cursoEditando.localizacion" name="localizacion" required #localizacion="ngModel" />
-                <div class="text-danger" *ngIf="materiales.invalid && materiales.touched">Location is required.</div>
+                <div class="text-danger" *ngIf="localizacion.invalid && localizacion.touched">Location is required.</div>
               </div>
 
               <div class="col-md-6">
@@ -143,10 +143,42 @@
                 <div class="text-danger" *ngIf="precio.invalid && precio.touched">Price must be greater than 0.</div>
               </div>
 
-              <div class="col-12">
-                <label class="form-label">Extra Information</label>
-                <textarea class="form-control" rows="2" [(ngModel)]="cursoEditando.informacionExtra" name="informacionExtra"></textarea>
-              </div>
+<div class="col-12">
+  <label class="form-label">Extra Information (Bullets)</label>
+
+  <!-- Selector de cantidad de bullets -->
+  <div class="mb-2">
+    <label class="me-2">Number of items:</label>
+    <select class="form-select d-inline-block w-auto"
+            [(ngModel)]="numBullets"
+            (ngModelChange)="onChangeNumBullets()"
+            name="numBullets">
+      <option *ngFor="let n of [0,1,2,3,4,5,6,7,8,9,10]" [value]="n">{{n}}</option>
+    </select>
+  </div>
+
+  <!-- Inputs dinámicos -->
+  <ul class="list-unstyled">
+    <li *ngFor="let _ of bullets; let i = index; trackBy: trackByIndex" class="mb-2">
+      <input type="text"
+             class="form-control"
+             [placeholder]="'Bullet ' + (i+1)"
+             [(ngModel)]="bullets[i]"
+             (ngModelChange)="onBulletsChanged()"
+             name="bullet-{{i}}">
+    </li>
+  </ul>
+
+  <!-- Vista previa opcional -->
+  <div *ngIf="bulletsPreview.length" class="mt-2">
+    <small class="text-muted d-block mb-1">Preview</small>
+    <ul class="mb-0">
+      <li *ngFor="let li of bulletsPreview">{{ li }}</li>
+    </ul>
+  </div>
+</div>
+
+
 
               <!-- BLOQUE: GESTIÓN DE 5 SLOTS DE IMAGEN -->
               <div class="col-12">

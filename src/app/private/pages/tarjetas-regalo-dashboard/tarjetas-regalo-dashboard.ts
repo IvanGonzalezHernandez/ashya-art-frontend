@@ -5,6 +5,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
 import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaRegalo';
 import { CsvExportService } from '../../../services/csv/csv-export';
+import { isWebpFile, isTooLarge, fileToDataUrl, convertToWebPUnderLimit } from '../../../utils/image-optimizer.util';
+import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
 type SlotImagen = {
   previewUrl: string | null;
@@ -17,10 +19,22 @@ type SlotImagen = {
   standalone: true,
   templateUrl: './tarjetas-regalo-dashboard.html',
   styleUrls: ['./tarjetas-regalo-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class TarjetasRegaloDashboard implements OnInit {
   loading = false;
+
+  // límites imagen
+  private readonly IMG_LIMIT_BYTES = 800 * 1024; // 800 KB
+  private readonly IMG_MAX_W = 1600;
+  private readonly IMG_MAX_H = 1600;
+
+  // Modal feedback
+  mostrarFeedback = false;
+  feedbackTitulo = '';
+  feedbackMensaje = '';
+  feedbackTipo: 'success' | 'error' | 'info' = 'info';
+
 
   tarjetas: TarjetaRegalo[] = [];
   paginaActual: number = 1;
@@ -54,6 +68,17 @@ export class TarjetasRegaloDashboard implements OnInit {
     });
   }
 
+  mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
+  this.feedbackTipo = tipo;
+  this.feedbackTitulo = titulo;
+  this.feedbackMensaje = mensaje;
+  this.mostrarFeedback = true;
+  }
+  cerrarFeedback() {
+    this.mostrarFeedback = false;
+  }
+
+
   crearTarjeta() {
     this.esNueva = true;
     this.tarjetaEditando = {
@@ -84,23 +109,33 @@ export class TarjetasRegaloDashboard implements OnInit {
     this.imgSlot = { previewUrl: null, markedForDelete: false };
   }
 
-  onSeleccionarArchivo(event: Event) {
+  async onSeleccionarArchivo(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
-    const file = input.files[0];
-    this.imgSlot.file = file;
+    const original = input.files[0];
+    input.value = ''; // permitir re-seleccionar
+
+    // Solo WebP
+    if (!isWebpFile(original)) {
+      this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+      return;
+    }
+    // ≤ 800 KB
+    if (isTooLarge(original, this.IMG_LIMIT_BYTES)) {
+      this.mostrarModalFeedback(
+        'error',
+        'Image too large',
+        `The image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`
+      );
+      return;
+    }
+
+    this.imgSlot.file = original;
     this.imgSlot.markedForDelete = false;
-
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.imgSlot.previewUrl = e.target.result;
-    };
-    reader.readAsDataURL(file);
-
-    // permitir re-seleccionar el mismo archivo
-    input.value = '';
+    this.imgSlot.previewUrl = await fileToDataUrl(original);
   }
+
 
   eliminarImagen() {
     this.imgSlot.file = undefined;
@@ -115,27 +150,48 @@ export class TarjetasRegaloDashboard implements OnInit {
     this.imgSlot.markedForDelete = false;
   }
 
-  guardarCambios() {
-    if (!this.tarjetaEditando) return;
+guardarCambios() {
+  if (!this.tarjetaEditando) return;
 
-    const fd = this.tarjetaService.buildFormData(
-      this.tarjetaEditando,
-      this.imgSlot.file,
-      this.imgSlot.markedForDelete
-    );
-
-    const req$ = this.esNueva
-      ? this.tarjetaService.crearTarjeta(fd)
-      : this.tarjetaService.actualizarTarjeta(this.tarjetaEditando.id!, fd);
-
-    req$.subscribe({
-      next: () => {
-        this.obtenerTarjetas();
-        this.cancelarEdicion();
-      },
-      error: err => console.error('Error guardando tarjeta', err)
-    });
+  // Doble validación estricta
+  if (this.imgSlot.file) {
+    if (!isWebpFile(this.imgSlot.file)) {
+      this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+      return;
+    }
+    if (isTooLarge(this.imgSlot.file, this.IMG_LIMIT_BYTES)) {
+      this.mostrarModalFeedback(
+        'error',
+        'Image too large',
+        `The image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`
+      );
+      return;
+    }
   }
+
+  const fd = this.tarjetaService.buildFormData(
+    this.tarjetaEditando,
+    this.imgSlot.file,
+    this.imgSlot.markedForDelete
+  );
+
+  const req$ = this.esNueva
+    ? this.tarjetaService.crearTarjeta(fd)
+    : this.tarjetaService.actualizarTarjeta(this.tarjetaEditando.id!, fd);
+
+  req$.subscribe({
+    next: () => {
+      this.obtenerTarjetas();
+      this.cancelarEdicion();
+      this.mostrarModalFeedback('success', 'Gift card saved', 'The gift card has been saved successfully.');
+    },
+    error: err => {
+      console.error('Error guardando tarjeta', err);
+      this.mostrarModalFeedback('error', 'Error saving', 'Please review fields or try again.');
+    }
+  });
+}
+
 
   eliminarTarjeta(id: number) {
     if (confirm('¿Estás seguro de eliminar esta tarjeta regalo?')) {
