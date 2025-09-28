@@ -17,7 +17,7 @@ export class GiftCardsDetail implements OnInit {
   loading = false;
   tarjetaCargada = false;
 
-  tarjetaSeleccionada?: TarjetaRegalo;
+  tarjetaSeleccionada?: TarjetaRegalo; // no extendemos el tipo para evitar choques
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +53,25 @@ export class GiftCardsDetail implements OnInit {
     });
   }
 
+  /** Convierte base64 en data URL (si no trae prefijo data:) */
+  private toDataUrl(base64?: string | null): string {
+    if (!base64) return '';
+    return base64.startsWith('data:') ? base64 : `data:image/webp;base64,${base64}`;
+  }
+
+  /** Getter: URL lista para <img> sin tocar el tipo del modelo */
+  get imgTarjetaUrl(): string {
+    // cubrimos el caso de que el modelo tenga String (wrapper)
+    const b64 = (this.tarjetaSeleccionada as any)?.img as string | undefined | null;
+    // si el back ya guarda imgUrl y quieres priorizarlo:
+    const existingUrl = (this.tarjetaSeleccionada as any)?.imgUrl as string | undefined | null;
+    // prioriza imgUrl si es data: o http(s), si no, genera desde img
+    if (existingUrl && (existingUrl.startsWith('data:') || existingUrl.startsWith('http'))) {
+      return existingUrl;
+    }
+    return this.toDataUrl(b64);
+  }
+
   agregarTarjetaAlCarrito(tarjeta: TarjetaRegalo) {
     if (!tarjeta) return;
 
@@ -64,7 +83,7 @@ export class GiftCardsDetail implements OnInit {
       nombre: tarjeta.nombre,
       precio: tarjeta.precio ?? 0,
       cantidad: cantidad,
-      img: tarjeta.img || '',
+      img: this.imgTarjetaUrl, // usamos la URL procesada
       subtitulo: 'Tarjeta regalo para canjear por valor de ' + tarjeta.precio + '€',
       fecha: '',
       hora: ''

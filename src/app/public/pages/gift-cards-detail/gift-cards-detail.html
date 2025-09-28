@@ -26,7 +26,10 @@
       <!-- Imagen -->
       <div class="col-lg-6 text-center">
         <div class="img-1x1 rounded-4 shadow mx-auto">
-          <img [src]="tarjetaSeleccionada.img" alt="{{ tarjetaSeleccionada.nombre }}" class="img-1x1-content">
+          <img [src]="imgTarjetaUrl"
+               alt="{{ tarjetaSeleccionada.nombre }}"
+               class="img-1x1-content"
+               loading="lazy">
         </div>
       </div>
 
@@ -42,7 +45,7 @@
 
     <!-- Botón añadir al carrito -->
     <div class="mt-4 text-center">
-      <button class="btn text-white bg-azul px-4 py-2" (click)="agregarTarjetaAlCarrito(tarjetaSeleccionada)">
+      <button class="btn text-white bg-azul px-4 py-2" (click)="agregarTarjetaAlCarrito(tarjetaSeleccionada!)">
         Add to cart
       </button>
     </div>
