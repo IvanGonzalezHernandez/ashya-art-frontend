@@ -8,4 +8,5 @@ export interface ItemCarrito {
   fecha: string;
   hora: string;
   img: string;
+  destinatario?: string;
 }

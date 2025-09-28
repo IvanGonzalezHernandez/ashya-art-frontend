@@ -44,10 +44,48 @@
     </div>
 
     <!-- Botón añadir al carrito -->
-    <div class="mt-4 text-center">
-      <button class="btn text-white bg-azul px-4 py-2" (click)="agregarTarjetaAlCarrito(tarjetaSeleccionada!)">
-        Add to cart
-      </button>
-    </div>
+  <div class="mt-4 text-center">
+    <button class="btn text-white bg-azul px-4 py-2"
+            data-bs-toggle="modal"
+            data-bs-target="#modalDestinatario">
+      Add to cart
+    </button>
+  </div>
   </div>
 </section>
+
+<!-- Modal Destinatario Gift Card -->
+<div class="modal fade" id="modalDestinatario" tabindex="-1" aria-labelledby="modalDestinatarioLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-azul text-white">
+        <h5 class="modal-title" id="modalDestinatarioLabel">Gift Card – Recipient</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Recipient name</label>
+            <input type="text"
+                   class="form-control"
+                   [(ngModel)]="destinatario"
+                   placeholder="Jhon Doe"
+                   name="destinatario"
+                   maxlength="120">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-success"
+                [disabled]="!(destinatario && destinatario.trim().length >= 2)"
+                (click)="confirmarDestinatario()"
+                data-bs-dismiss="modal">
+          Confirm & add to cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
