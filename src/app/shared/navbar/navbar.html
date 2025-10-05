@@ -188,9 +188,10 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Country *</label>
-              <input type="text" class="form-control" name="codigoPostal" [(ngModel)]="cliente.codigoPostal" required  #ciudad="ngModel">
-              <div class="text-danger" *ngIf="ciudad.invalid && ciudad.touched">Countrybe is required.</div>
+              <input type="text" class="form-control" name="pais" [(ngModel)]="cliente.pais" required #pais="ngModel">
+              <div class="text-danger" *ngIf="pais.invalid && pais.touched">Country is required.</div>
             </div>
+
 
             <div class="col-md-6 mb-3">
               <label class="form-label">Postal Code *</label>

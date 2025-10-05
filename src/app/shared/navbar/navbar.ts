@@ -147,7 +147,7 @@ pagarConStripe() {
     },
     error: (err) => {
       console.error('Error al crear sesión de Stripe', err);
-      alert('Hubo un error al procesar el pago.');
+      alert('Error procesing the payment');
       this.loadingCheckout = false;
     }
   });
