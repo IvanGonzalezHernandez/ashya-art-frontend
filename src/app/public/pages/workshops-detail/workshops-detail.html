@@ -25,28 +25,34 @@
   
       <div class="row g-4 align-items-center">
         <!-- Carrusel de imágenes -->
-        <div class="col-lg-6">
-          <div id="cursoCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner rounded-4 shadow">
-  
-              <ng-container *ngFor="let img of [cursoSeleccionado.img1Url, cursoSeleccionado.img2Url, cursoSeleccionado.img3Url, cursoSeleccionado.img4Url, cursoSeleccionado.img5Url]; let i = index">
-              <div class="carousel-item" [class.active]="i === 0">
-                <div class="img-1x1">
-                  <img [src]="img" alt="Imagen curso" class="img-1x1-content">
-                </div>
-              </div>
-              </ng-container>
-  
-            </div>
-  
-            <button class="carousel-control-prev" type="button" data-bs-target="#cursoCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#cursoCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon"></span>
-            </button>
+<div class="col-lg-6" *ngIf="obtenerImagenesValidas().length > 0">
+  <div id="cursoCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner rounded-4 shadow">
+      <ng-container *ngFor="let img of obtenerImagenesValidas(); let i = index">
+        <div class="carousel-item" [class.active]="i === 0">
+          <div class="img-1x1">
+            <img [src]="img" alt="Course image" class="img-1x1-content">
           </div>
         </div>
+      </ng-container>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#cursoCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#cursoCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</div>
+
+<!-- Si no hay imágenes, muestra una imagen genérica -->
+<div class="col-lg-6 text-center" *ngIf="obtenerImagenesValidas().length === 0">
+  <div class="img-1x1 rounded-4 shadow d-flex align-items-center justify-content-center bg-light">
+    <span class="text-muted">No images available</span>
+  </div>
+</div>
+
   
         <!-- Descripción y detalles -->
         <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">
@@ -57,24 +63,47 @@
             </div>
           
             <ul class="list-unstyled mt-4">
-              <li><strong>Level:</strong> {{ cursoSeleccionado.nivel }}</li>
-              <li><strong>Duration:</strong> {{ cursoSeleccionado.duracion }}</li>
-              <li><strong>Language:</strong> I teach in German, English, Polish</li>
-              <li><strong>Location:</strong> {{ cursoSeleccionado.localizacion }}</li>
-              <li><strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}</li>
-              <li><strong>Materials:</strong> {{ cursoSeleccionado.materiales }}</li>
-              <li><strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}</li>
-<li><strong>Extra information:</strong>
-  <ul>
-    <li *ngFor="let item of (cursoSeleccionado?.informacionExtra?.split('\n') || [])">
-      {{ item }}
-    </li>
-  </ul>
-</li>
 
+              <li *ngIf="esValido(cursoSeleccionado.nivel)">
+                <strong>Level:</strong> {{ cursoSeleccionado.nivel }}
+              </li>
 
-              <li><strong>Price:</strong> {{ cursoSeleccionado.precio }}€</li>
+              <li *ngIf="esValido(cursoSeleccionado.duracion)">
+                <strong>Duration:</strong> {{ cursoSeleccionado.duracion }}
+              </li>
+
+              <li *ngIf="esValido(cursoSeleccionado.localizacion)">
+                <strong>Location:</strong> {{ cursoSeleccionado.localizacion }}
+              </li>
+
+              <li *ngIf="esValido(cursoSeleccionado.piezas)">
+                <strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}
+              </li>
+
+              <li *ngIf="esValido(cursoSeleccionado.materiales)">
+                <strong>Materials:</strong> {{ cursoSeleccionado.materiales }}
+              </li>
+
+              <li *ngIf="esValido(cursoSeleccionado.plazasMaximas)">
+                <strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}
+              </li>
+
+              <li *ngIf="esValido(cursoSeleccionado.informacionExtra)">
+                <strong>Extra information:</strong>
+                <ul>
+                  <li *ngFor="let item of (cursoSeleccionado?.informacionExtra?.split('\n') || [])">
+                    {{ item }}
+                  </li>
+                </ul>
+              </li>
+
+              <li *ngIf="esValido(cursoSeleccionado.precio)">
+                <strong>Price:</strong> {{ cursoSeleccionado.precio }}€
+              </li>
+
             </ul>
+
+
           </div>
       </div>
   

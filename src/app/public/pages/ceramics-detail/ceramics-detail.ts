@@ -90,4 +90,22 @@ export class CeramicsDetail implements OnInit {
   console.log(item);
   this.carritoService.agregarItem(item);
   }
+
+  esValido(valor: unknown): boolean {
+  return valor !== null && valor !== undefined && !(typeof valor === 'string' && valor.trim() === '');
+}
+
+obtenerImagenesValidas(): string[] {
+  if (!this.productoSeleccionado) return [];
+  const imagenes: Array<string | undefined> = [
+    this.productoSeleccionado.img1Url,
+    this.productoSeleccionado.img2Url,
+    this.productoSeleccionado.img3Url,
+    this.productoSeleccionado.img4Url,
+    this.productoSeleccionado.img5Url,
+  ];
+  // type predicate para que el resultado sea string[]
+  return imagenes.filter((img): img is string => !!img && img.trim() !== '');
+  }
+
 }

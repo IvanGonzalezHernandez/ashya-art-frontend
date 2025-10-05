@@ -219,6 +219,27 @@ get infoExtraList(): string[] {
   return txt.split(/•/g).map(s => s.trim()).filter(Boolean);
 }
 
+esValido(valor: any): boolean {
+  return valor !== null && valor !== undefined && valor !== '';
+}
+
+obtenerImagenesValidas(): string[] {
+  if (!this.cursoSeleccionado) return [];
+
+  const imagenes: (string | undefined)[] = [
+    this.cursoSeleccionado.img1Url,
+    this.cursoSeleccionado.img2Url,
+    this.cursoSeleccionado.img3Url,
+    this.cursoSeleccionado.img4Url,
+    this.cursoSeleccionado.img5Url
+  ];
+
+  // Filtra las vacías o nulas y fuerza a string[]
+  return imagenes.filter((img): img is string => !!img && img.trim() !== '');
+}
+
+
+
 
 
   

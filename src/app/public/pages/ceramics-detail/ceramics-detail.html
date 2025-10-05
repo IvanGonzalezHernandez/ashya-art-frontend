@@ -24,19 +24,17 @@
     </div>
 
     <div class="row g-4 align-items-center">
-      <!-- Image carousel -->
-      <div class="col-lg-6">
+      <!-- Carrusel de imágenes -->
+      <div class="col-lg-6" *ngIf="obtenerImagenesValidas().length > 0; else noImagenes">
         <div id="productoCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner rounded-4 shadow">
-
-            <ng-container *ngFor="let img of [productoSeleccionado.img1Url, productoSeleccionado.img2Url, productoSeleccionado.img3Url, productoSeleccionado.img4Url, productoSeleccionado.img5Url]; let i = index">
-            <div *ngIf="img" class="carousel-item" [class.active]="i === 0">
-              <div class="img-1x1">
-                <img [src]="img" alt="Product image {{ i + 1 }}" class="img-1x1-content">
+            <ng-container *ngFor="let img of obtenerImagenesValidas(); let i = index">
+              <div class="carousel-item" [class.active]="i === 0">
+                <div class="img-1x1">
+                  <img [src]="img" alt="Product image" class="img-1x1-content">
+                </div>
               </div>
-            </div>
             </ng-container>
-
           </div>
 
           <button class="carousel-control-prev" type="button" data-bs-target="#productoCarousel" data-bs-slide="prev">
@@ -47,6 +45,16 @@
           </button>
         </div>
       </div>
+
+      <!-- Si no hay imágenes -->
+      <ng-template #noImagenes>
+        <div class="col-lg-6 text-center">
+          <div class="img-1x1 rounded-4 shadow d-flex align-items-center justify-content-center bg-light">
+            <span class="text-muted">No images available</span>
+          </div>
+        </div>
+      </ng-template>
+
 
       <!-- Description and details -->
       <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">
