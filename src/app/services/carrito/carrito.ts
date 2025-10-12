@@ -30,14 +30,36 @@ export class CarritoService {
     return this.contador.asObservable();
   }
 
-  agregarItem(item: ItemCarrito) {
-    const existente = this.items.find(i => i.id === item.id && i.tipo === item.tipo);
-    const cantidad = Number(item.cantidad);
+  private isGiftCard(item: ItemCarrito): boolean {
+    return item.tipo === 'TARJETA';
+  }
 
-    if (existente) {
-      existente.cantidad += cantidad;
+  private mergeKey(item: ItemCarrito): string {
+    // Para NO TARJETA, agrupamos por id+tipo
+    return `${item.tipo}-${item.id}`;
+  }
+
+  agregarItem(item: ItemCarrito) {
+    const cantidad = Number(item.cantidad) || 1;
+
+    if (this.isGiftCard(item)) {
+      // No agrupar TARJETA: meter una línea por unidad para preservar 'destinatario'
+      for (let i = 0; i < cantidad; i++) {
+        this.items.push({
+          ...item,
+          cantidad: 1, // siempre 1 por línea
+          destinatario: (item.destinatario ?? '').trim(), // normaliza
+        });
+      }
     } else {
-      this.items.push({ ...item, cantidad });
+      // Agrupar resto por id+tipo
+      const key = this.mergeKey(item);
+      const idx = this.items.findIndex(i => this.mergeKey(i) === key);
+      if (idx >= 0) {
+        this.items[idx].cantidad += cantidad;
+      } else {
+        this.items.push({ ...item, cantidad });
+      }
     }
 
     this.persistir();
@@ -67,7 +89,7 @@ export class CarritoService {
 
   private persistir() {
     localStorage.setItem('carrito', JSON.stringify(this.items));
-    this.itemsSubject.next([...this.items]); // aquí notificamos cambios
+    this.itemsSubject.next([...this.items]);
     this.actualizarContador();
   }
 
@@ -87,5 +109,4 @@ export class CarritoService {
   validarTarjeta(codigo: string): Observable<number> {
     return this.http.post<number>(`${environment.apiUrl}/tarjetas-regalo/validar`, { codigo });
   }
-
 }

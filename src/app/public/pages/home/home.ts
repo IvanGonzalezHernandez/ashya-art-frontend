@@ -113,6 +113,8 @@ export class Home implements OnInit {
     this.homeService.getProductos().subscribe({
       next: (data) => {
         this.productos = data;
+        this.productos.forEach(p => this.procesarImagenesBase64Producto(p));
+
         this.productosCargados = true;
         this.comprobarCargaCompleta();
       },
@@ -122,6 +124,16 @@ export class Home implements OnInit {
         this.comprobarCargaCompleta();
       },
     });
+  }
+
+  private procesarImagenesBase64Producto(prod: Producto): void {
+    for (let i = 1; i <= 5; i++) {
+      const imgProp = `img${i}` as keyof Producto;
+      const urlProp = `img${i}Url` as keyof Producto;
+
+      const base64Str = prod[imgProp] as unknown as string;
+      (prod as any)[urlProp] = base64Str ? `data:image/webp;base64,${base64Str}` : '';
+    }
   }
   
 
