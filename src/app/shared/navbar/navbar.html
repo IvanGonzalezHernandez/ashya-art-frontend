@@ -31,12 +31,14 @@
 
     <!-- Carrito siempre visible a la derecha -->
     <div class="position-relative ms-auto me-3">
-      <a class="nav-link position-relative" data-bs-toggle="offcanvas" href="#offcanvasCarrito" role="button" aria-controls="offcanvasCarrito">
+      <!-- SIN data-bs-toggle/href -->
+      <a class="nav-link position-relative" role="button" (click)="abrirCarrito()">
         <i class="bi bi-cart" style="font-size: 1.5rem;"></i>
         <span class="badge bg-azul position-absolute top-0 start-100 translate-middle">
           {{ contadorCarrito }}
         </span>
       </a>
+
     </div>
     
 
