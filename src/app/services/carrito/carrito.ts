@@ -16,12 +16,17 @@ export class CarritoService {
   constructor(private http: HttpClient) {
     const itemsGuardados = localStorage.getItem('carrito');
     if (itemsGuardados) {
-      this.items = JSON.parse(itemsGuardados);
+      try {
+        this.items = JSON.parse(itemsGuardados) || [];
+      } catch {
+        this.items = [];
+      }
     }
     this.itemsSubject.next(this.items);
     this.actualizarContador();
   }
 
+  // ---------------- Observables públicos ----------------
   getItems$(): Observable<ItemCarrito[]> {
     return this.itemsSubject.asObservable();
   }
@@ -30,6 +35,7 @@ export class CarritoService {
     return this.contador.asObservable();
   }
 
+  // ---------------- Helpers de dominio ----------------
   private isGiftCard(item: ItemCarrito): boolean {
     return item.tipo === 'TARJETA';
   }
@@ -39,16 +45,27 @@ export class CarritoService {
     return `${item.tipo}-${item.id}`;
   }
 
+  // ¿El carrito está vacío?
+  isEmpty(): boolean {
+    return this.items.length === 0;
+  }
+
+  // ¿Todos los items son cursos?
+  contieneSoloCursos(): boolean {
+    return this.items.length > 0 && this.items.every(i => i.tipo === 'CURSO');
+  }
+
+  // ---------------- Mutadores ----------------
   agregarItem(item: ItemCarrito) {
     const cantidad = Number(item.cantidad) || 1;
 
     if (this.isGiftCard(item)) {
-      // No agrupar TARJETA: meter una línea por unidad para preservar 'destinatario'
+      // No agrupar TARJETA: 1 línea por unidad para preservar 'destinatario'
       for (let i = 0; i < cantidad; i++) {
         this.items.push({
           ...item,
-          cantidad: 1, // siempre 1 por línea
-          destinatario: (item.destinatario ?? '').trim(), // normaliza
+          cantidad: 1,
+          destinatario: (item.destinatario ?? '').trim(),
         });
       }
     } else {
@@ -56,17 +73,14 @@ export class CarritoService {
       const key = this.mergeKey(item);
       const idx = this.items.findIndex(i => this.mergeKey(i) === key);
       if (idx >= 0) {
-        this.items[idx].cantidad += cantidad;
+        const nueva = Number(this.items[idx].cantidad) + cantidad;
+        this.items[idx].cantidad = isFinite(nueva) ? nueva : 1;
       } else {
         this.items.push({ ...item, cantidad });
       }
     }
 
     this.persistir();
-  }
-
-  obtenerItems(): ItemCarrito[] {
-    return [...this.items];
   }
 
   eliminarItem(index: number) {
@@ -82,8 +96,23 @@ export class CarritoService {
     localStorage.removeItem('carrito'); // opcional
   }
 
+  obtenerItems(): ItemCarrito[] {
+    return [...this.items];
+  }
+
+  // ---------------- Totales ----------------
+  obtenerTotal(): number {
+    const total = this.items.reduce((sum, item) => {
+      const precio = Number(item.precio) || 0;
+      const cant = Number(item.cantidad) || 0;
+      return sum + precio * cant;
+    }, 0);
+    return Number(total.toFixed(2));
+  }
+
+  // ---------------- Persistencia local ----------------
   private actualizarContador() {
-    const total = this.items.reduce((sum, item) => sum + item.cantidad, 0);
+    const total = this.items.reduce((sum, item) => sum + (Number(item.cantidad) || 0), 0);
     this.contador.next(total);
   }
 
@@ -93,20 +122,57 @@ export class CarritoService {
     this.actualizarContador();
   }
 
-  obtenerTotal(): number {
-    return this.items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-  }
-
-  crearSesionStripe(cliente: Cliente, total: number, codigoTarjeta?: string): Observable<{ url: string }> {
+  // ---------------- API ----------------
+  crearSesionStripe(
+    cliente: Cliente,
+    total: number,
+    codigoTarjeta?: string
+  ): Observable<{ url: string }> {
     return this.http.post<{ url: string }>(`${this.apiUrl}`, { 
       carrito: { items: this.obtenerItems() },
-      cliente: cliente,
-      totalConDescuento: total,
+      cliente,
+      totalConDescuento: Number((total ?? 0).toFixed(2)),
       codigoTarjeta: codigoTarjeta?.trim().toUpperCase() || null
     });
   }
-  
+
+  // Compra 100% cubierta por tarjeta regalo (total = 0)
+  crearCompraGratuita(
+    cliente: Cliente,
+    codigoTarjeta?: string
+  ): Observable<{ success: boolean; pedidoId?: number }> {
+    return this.http.post<{ success: boolean; pedidoId?: number }>(
+      `${this.apiUrl}/gratuita`,
+      {
+        carrito: { items: this.obtenerItems() },
+        cliente,
+        codigoTarjeta: codigoTarjeta?.trim().toUpperCase() || null
+      }
+    );
+  }
+
+  // Reserva/pedido para pagar en el Atelier (solo cursos)
+  crearReservaAtelier(
+    cliente: Cliente,
+    total: number,
+    codigoTarjeta?: string
+  ): Observable<{ success: boolean; reservaId?: number }> {
+    return this.http.post<{ success: boolean; reservaId?: number }>(
+      `${this.apiUrl}/atelier`,
+      {
+        carrito: { items: this.obtenerItems() },
+        cliente,
+        totalConDescuento: Number((total ?? 0).toFixed(2)),
+        codigoTarjeta: codigoTarjeta?.trim().toUpperCase() || null
+      }
+    );
+  }
+
+  // Validación de tarjetas regalo
   validarTarjeta(codigo: string): Observable<number> {
-    return this.http.post<number>(`${environment.apiUrl}/tarjetas-regalo/validar`, { codigo });
+    return this.http.post<number>(
+      `${environment.apiUrl}/tarjetas-regalo/validar`,
+      { codigo }
+    );
   }
 }

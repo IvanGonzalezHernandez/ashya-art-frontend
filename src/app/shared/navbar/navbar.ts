@@ -20,11 +20,15 @@ export class Navbar implements OnInit {
   contadorCarrito: number = 0;
   itemsCarrito: ItemCarrito[] = [];
   
-  //Código tarjeta regalo canjeo
+  // Gift card
   codigoTarjeta: string = '';
   mensajeCodigo: string = '';
   errorCodigo: string = '';
   totalConDescuento: number | null = null;
+  descuentoAplicado: number = 0; // <— NUEVO
+
+  // Si más adelante diferencias métodos de pago
+  metodoPago: 'stripe' | 'atelier' | null = null;
 
   // Datos cliente
   cliente: Cliente = {
@@ -46,27 +50,40 @@ export class Navbar implements OnInit {
     preguntasAdicionales: ''
   };
 
-
   constructor(public carritoService: CarritoService) {}
 
   ngOnInit(): void {
-      // contador para el badge
-      this.carritoService.getContador().subscribe(contador => {
-        this.contadorCarrito = contador;
-      });
+    // contador para el badge
+    this.carritoService.getContador().subscribe(contador => {
+      this.contadorCarrito = contador;
+    });
 
-      // items para pintar el listado y reaccionar al vaciado
-      this.carritoService.getItems$().subscribe(items => {
-        this.itemsCarrito = items;
+    // items para pintar el listado y reaccionar al vaciado
+    this.carritoService.getItems$().subscribe(items => {
+      this.itemsCarrito = items;
 
-        // Abrir carrito automáticamente si hay items
-        if (items.length > 0) {
-          this.abrirCarrito();
-        }
-      });
+      // Abrir carrito automáticamente si hay items
+      if (items.length > 0) {
+        this.abrirCarrito();
+      }
+
+      // Si hay un descuento aplicado, re-calcular el total con el nuevo total bruto
+      if (this.descuentoAplicado > 0) {
+        const bruto = this.carritoService.obtenerTotal();
+        const nuevoTotal = Math.max(0, bruto - this.descuentoAplicado);
+        this.totalConDescuento = Number(nuevoTotal.toFixed(2));
+      } else {
+        this.totalConDescuento = null;
+      }
+
+      // Si ya no son solo cursos y estabas en modo atelier, reset
+      if (!this.soloCursos && this.metodoPago === 'atelier') {
+        this.metodoPago = null;
+      }
+    });
   }
 
-
+  // ======== UI Básica ========
   abrirCarrito() {
     // Cerrar modales abiertos
     const modales = document.querySelectorAll('.modal.show');
@@ -95,6 +112,7 @@ export class Navbar implements OnInit {
       this._openClienteModal();
     }
   }
+
   //Método Auxiliar para abrir el modal por problemas que he tenido con los fade
   private _openClienteModal() {
     // 2) Limpia backdrops “colgados”
@@ -112,6 +130,7 @@ export class Navbar implements OnInit {
     modal.show();
   }
 
+  // ======== Flujo de confirmación general ========
   confirmarDatos() {
     // Validar mínimos (nombre + apellido + email)
     if (!this.cliente.nombre || !this.cliente.apellido || !this.cliente.email) {
@@ -124,41 +143,137 @@ export class Navbar implements OnInit {
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
     modalInstance?.hide();
 
-    // Procesar Stripe
+    // 1) Compra gratuita (total 0€)
+    if (this.esCompraGratis) {
+      this.confirmarCompraGratis();
+      return;
+    }
+
+    // 2) Pagar en Atelier (solo cursos)
+    if (this.metodoPago === 'atelier') {
+      this.confirmarReservaAtelier();
+      return;
+    }
+
+    // 3) Stripe por defecto
     this.pagarConStripe();
   }
 
-pagarConStripe() {
-  this.loadingCheckout = true;
+  // ======== Stripe ========
+  pagarConStripe() {
+    this.loadingCheckout = true;
 
-  const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
+    const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
 
-  // Cerrar offcanvas del carrito
-  const offcanvasEl = document.getElementById('offcanvasCarrito');
-  if (offcanvasEl) {
-    const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-    bsOffcanvas?.hide();
+    // Cerrar offcanvas del carrito
+    const offcanvasEl = document.getElementById('offcanvasCarrito');
+    if (offcanvasEl) {
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      bsOffcanvas?.hide();
+    }
+
+    // Crear sesión de Stripe enviando carrito + cliente + total descontado + código
+    this.carritoService.crearSesionStripe(this.cliente, total, this.codigoTarjeta).subscribe({
+      next: (data: { url: string }) => {
+        window.location.href = data.url;
+      },
+      error: (err) => {
+        console.error('Error al crear sesión de Stripe', err);
+        alert('Error procesing the payment');
+        this.loadingCheckout = false;
+      }
+    });
   }
 
-  // Crear sesión de Stripe enviando carrito + cliente + total descontado + código
-  this.carritoService.crearSesionStripe(this.cliente, total, this.codigoTarjeta).subscribe({
-    next: (data: { url: string }) => {
-      window.location.href = data.url;
-    },
-    error: (err) => {
-      console.error('Error al crear sesión de Stripe', err);
-      alert('Error procesing the payment');
-      this.loadingCheckout = false;
+  // ======== Atelier ========
+  pagarEnAtelier() {
+    // Cierra el offcanvas del carrito
+    const offcanvasEl = document.getElementById('offcanvasCarrito');
+    if (offcanvasEl) {
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      bsOffcanvas?.hide();
     }
-  });
-}
 
+    // Marca el método de pago y abre modal cliente
+    this.metodoPago = 'atelier';
+    this.abrirModalCliente();
+  }
 
+  confirmarReservaAtelier() {
+    if (this.loadingCheckout) return;
+    this.loadingCheckout = true;
+
+    const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
+
+    // Cierra offcanvas si está abierto
+    const offcanvasEl = document.getElementById('offcanvasCarrito');
+    if (offcanvasEl) {
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      bsOffcanvas?.hide();
+    }
+
+    // Cierra modal si estuviera abierto
+    const modalEl = document.getElementById('modalCliente');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    modalInstance?.hide();
+
+    // Registrar la reserva/pedido sin pago online
+    this.carritoService.crearReservaAtelier(this.cliente, total, this.codigoTarjeta).subscribe({
+      next: () => {
+        this.loadingCheckout = false;
+        alert('Reservation confirmed! You can pay at the Atelier. You will receive an email shortly.');
+        this._resetEstadoPostCompra();
+      },
+      error: (err) => {
+        console.error('Error al confirmar reserva Atelier', err);
+        alert('Error confirming the reservation.');
+        this.loadingCheckout = false;
+      }
+    });
+  }
+
+  // ======== Compra gratis (total 0€) ========
+  confirmarCompraGratis() {
+    if (this.loadingCheckout) return;
+    this.loadingCheckout = true;
+
+    // Cierra el carrito si está abierto
+    const offcanvasEl = document.getElementById('offcanvasCarrito');
+    if (offcanvasEl) {
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      bsOffcanvas?.hide();
+    }
+
+    // Cierra modal cliente si está abierto
+    const modalEl = document.getElementById('modalCliente');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    modalInstance?.hide();
+
+    // Llama al backend para registrar la compra gratuita
+    this.carritoService.crearCompraGratuita(this.cliente, this.codigoTarjeta).subscribe({
+      next: () => {
+        this.loadingCheckout = false;
+        alert('Purchase confirmed! You will receive an email shortly.');
+        this._resetEstadoPostCompra();
+      },
+      error: (err) => {
+        console.error('Error al confirmar compra gratuita', err);
+        alert('Error confirming the purchase.');
+        this.loadingCheckout = false;
+      }
+    });
+  }
+
+  // ======== Gestión de items y gift card ========
   eliminarItem(index: number) {
     this.carritoService.eliminarItem(index);
+
+    // Si había descuento, re-evalúa el total con descuento
+    if (this.descuentoAplicado > 0) {
+      const bruto = this.carritoService.obtenerTotal();
+      this.totalConDescuento = Math.max(0, bruto - this.descuentoAplicado);
+    }
   }
-
-
 
   aplicarCodigo() {
     if (!this.codigoTarjeta.trim()) {
@@ -170,17 +285,52 @@ pagarConStripe() {
     // Llamada a tu backend para validar el código
     this.carritoService.validarTarjeta(this.codigoTarjeta).subscribe({
       next: (descuento: number) => {
-        this.totalConDescuento = this.carritoService.obtenerTotal() - descuento;
-        if (this.totalConDescuento < 0) this.totalConDescuento = 0;
-        this.mensajeCodigo = `Code applied: discount of ${descuento}€`;
+        this.descuentoAplicado = Number(descuento) || 0; // <— guarda descuento
+        const bruto = this.carritoService.obtenerTotal();
+        const total = Math.max(0, bruto - this.descuentoAplicado);
+        this.totalConDescuento = Number(total.toFixed(2));
+        this.mensajeCodigo = `Code applied: discount of ${this.descuentoAplicado}€`;
         this.errorCodigo = '';
       },
       error: () => {
         this.errorCodigo = 'Invalid or already redeemed code';
         this.mensajeCodigo = '';
+        this.descuentoAplicado = 0;
+        this.totalConDescuento = null;
       }
     });
   }
 
-  
+  quitarCodigo() {
+    this.codigoTarjeta = '';
+    this.mensajeCodigo = '';
+    this.errorCodigo = '';
+    this.totalConDescuento = null;
+    this.descuentoAplicado = 0;
+    // this.metodoPago = null; // opcional
   }
+
+  // ======== Getters de estado ========
+  get soloCursos(): boolean {
+    return (
+      this.itemsCarrito.length > 0 &&
+      this.itemsCarrito.every(item => item.tipo === 'CURSO')
+    );
+  }
+
+  get esCompraGratis(): boolean {
+    const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
+    // Redondeo a 2 decimales para evitar problemas de coma flotante
+    return this.itemsCarrito.length > 0 && Number((total ?? 0).toFixed(2)) === 0;
+  }
+
+  // ======== Utils ========
+  private _resetEstadoPostCompra() {
+    this.carritoService.vaciarCarrito();
+    this.totalConDescuento = null;
+    this.descuentoAplicado = 0;
+    this.codigoTarjeta = '';
+    this.mensajeCodigo = '';
+    this.metodoPago = null;
+  }
+}

@@ -102,15 +102,51 @@
           <input type="text" id="codigoTarjeta" class="form-control" [(ngModel)]="codigoTarjeta" placeholder="Introduce your code">
           <button class="btn btn-outline-secondary" type="button" (click)="aplicarCodigo()">Apply</button>
         </div>
-        <small *ngIf="mensajeCodigo" class="text-success">{{ mensajeCodigo }}</small>
+        <div *ngIf="mensajeCodigo" class="text-success d-flex align-items-center gap-2">
+        <small class="flex-grow-1">{{ mensajeCodigo }}</small>
+        <span class="text-danger fw-bold" role="button" style="cursor: pointer;" (click)="quitarCodigo()">×</span></div>
         <small *ngIf="errorCodigo" class="text-danger">{{ errorCodigo }}</small>
       </div>
 
-      <p class="mb-2"><strong>Total: {{ carritoService.obtenerTotal() }}€</strong></p>
-      <div class="d-grid">
-        <button class="btn bg-azul text-white" (click)="abrirModalCliente()">Proceed to Checkout</button>
-      </div>
-    </div>
+<p class="mb-2">
+  <strong *ngIf="totalConDescuento === null">
+    Total: {{ carritoService.obtenerTotal() }}€
+  </strong>
+  <strong *ngIf="totalConDescuento !== null">
+    Total:
+    <span class="text-decoration-line-through text-muted me-1">
+      {{ carritoService.obtenerTotal() }}€
+    </span>
+    {{ totalConDescuento }}€
+  </strong>
+</p>
+
+<div class="d-grid">
+  <!-- Caso normal con Stripe -->
+  <button 
+    *ngIf="!esCompraGratis"
+    class="btn bg-azul text-white" 
+    (click)="abrirModalCliente()" 
+    [disabled]="itemsCarrito.length === 0">
+    Proceed to Checkout
+  </button>
+
+  <!-- Caso especial: compra 100% cubierta -->
+  <button 
+    *ngIf="esCompraGratis"
+    class="btn bg-azul text-white" 
+    (click)="confirmarCompraGratis()">
+    Confirm Purchase
+  </button>
+</div>
+
+<!-- Botón opcional del Atelier -->
+<div class="d-grid mt-2" *ngIf="soloCursos && !esCompraGratis">
+  <button class="btn btn-outline-secondary" (click)="pagarEnAtelier()">
+    Pay at the Atelier
+  </button>
+</div>
+
   </div>
 </div>
 
