@@ -172,6 +172,100 @@
 </div>
 <div class="modal-backdrop fade show" *ngIf="tarjetaEditando"></div>
 
+<!-- ============================== -->
+<!-- GIFT CARD PURCHASES DASHBOARD -->
+<!-- ============================== -->
+<div class="mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Gift Card Purchases Dashboard</h1>
+  </div>
+
+  <div *ngIf="loadingCompras" class="text-center my-4">
+    <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
+  </div>
+
+  <!-- TABLA COMPRAS -->
+  <div class="card shadow-sm rounded-3" *ngIf="!loadingCompras">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
+          <thead class="table-azul">
+            <tr>
+              <th style="width: 15%;">Code</th>
+              <th style="width: 20%;">Recipient</th>
+              <th style="width: 10%;">Redeemed</th>
+              <th style="width: 15%;">Purchase Date</th>
+              <th style="width: 15%;">Expiration</th>
+              <th style="width: 25%;">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let compra of tarjetasCompra | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompras }">
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="compra.codigo">
+                  {{ compra.codigo }}
+                </span>
+              </td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="compra.destinatario">
+                  {{ compra.destinatario || '—' }}
+                </span>
+              </td>
+
+              <td class="text-nowrap">
+                <span
+                  class="badge"
+                  [ngClass]="compra.canjeada ? 'bg-success' : 'bg-secondary'">
+                  {{ compra.canjeada ? 'Yes' : 'No' }}
+                </span>
+              </td>
+
+              <td class="text-nowrap">{{ compra.fechaCompra | date:'yyyy-MM-dd' }}</td>
+              <td class="text-nowrap">{{ compra.fechaCaducidad | date:'yyyy-MM-dd' }}</td>
+
+              <td>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    (click)="marcarCanjeada(compra)"
+                    [disabled]="compra.canjeada">
+                    Mark as Redeemed
+                  </button>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    (click)="eliminarCompra(compra.id!)">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="(tarjetasCompra || []).length === 0">
+              <td colspan="6" class="text-center text-muted py-3">
+                No gift card purchases yet.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLES DE ABAJO -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
+    <button class="btn btn-outline-secondary" (click)="exportarCSVCompras()">Export Purchases CSV</button>
+
+    <pagination-controls
+      id="compras"
+      previousLabel="Previous"
+      nextLabel="Next"
+      (pageChange)="paginaActualCompras = $event">
+    </pagination-controls>
+  </div>
+</div>
+
 <app-feedback-modal
  *ngIf="mostrarFeedback"
  [title]="feedbackTitulo"
