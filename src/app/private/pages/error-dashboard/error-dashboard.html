@@ -1,0 +1,117 @@
+<div class="container-fluid mt-4">
+  <!-- ENCABEZADO -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Error Dashboard</h1>
+    <!-- (sin botón aquí) -->
+  </div>
+
+  <!-- SPINNER -->
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
+  </div>
+
+  <!-- TABLA -->
+  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
+          <thead class="table-azul">
+            <tr>
+              <th style="width: 14%;">Date</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">Class</th>
+              <th class="d-none d-lg-table-cell" style="width: 10%;">Method</th>
+              <th class="d-none d-xl-table-cell" style="width: 7%;">Line</th>
+              <th class="d-none d-lg-table-cell" style="width: 8%;">HTTP</th>
+              <th style="width: 18%;">Path</th>
+              <th class="d-none d-md-table-cell" style="width: 8%;">Env</th>
+              <th class="d-none d-xl-table-cell" style="width: 10%;">Server</th>
+              <th class="d-none d-xxl-table-cell" style="width: 10%;">Hash</th>
+              <th style="width: 30%;">Message</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let err of errores | paginate: { id: 'errores', itemsPerPage: 10, currentPage: paginaActual }">
+              <td class="text-nowrap">{{ err.fechaCreacion | date:'yyyy-MM-dd HH:mm' }}</td>
+
+              <td class="d-none d-md-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="err.claseError || ''">
+                  {{ err.claseError || '—' }}
+                </span>
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="err.metodoError || ''">
+                  {{ err.metodoError || '—' }}
+                </span>
+              </td>
+
+              <td class="d-none d-xl-table-cell">
+                {{ err.lineaError != null ? err.lineaError : '—' }}
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                <span class="badge bg-secondary">{{ err.metodoHttp || '—' }}</span>
+              </td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="err.rutaPeticion || ''">
+                  {{ err.rutaPeticion || '—' }}
+                </span>
+              </td>
+
+              <td class="d-none d-md-table-cell">
+                <span class="badge" [ngClass]="err.entorno === 'prod' ? 'bg-danger' : 'bg-info'">
+                  {{ err.entorno || '—' }}
+                </span>
+              </td>
+
+              <td class="d-none d-xl-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="err.servidor || ''">
+                  {{ err.servidor || '—' }}
+                </span>
+              </td>
+
+              <td class="d-none d-xxl-table-cell">
+                <span class="d-inline-block w-100 text-truncate" [title]="err.hashTraza || ''">
+                  {{ err.hashTraza || '—' }}
+                </span>
+              </td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="err.mensajeError || ''">
+                  {{ err.mensajeError || '—' }}
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="(errores || []).length === 0">
+              <td colspan="10" class="text-center text-muted py-3">No errors found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLES ABAJO -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
+    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
+
+    <pagination-controls
+      id="errores"
+      previousLabel="Previous"
+      nextLabel="Next"
+      (pageChange)="paginaActual = $event">
+    </pagination-controls>
+  </div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<app-feedback-modal
+  *ngIf="mostrarFeedback"
+  [title]="feedbackTitulo"
+  [message]="feedbackMensaje"
+  [status]="feedbackTipo"
+  (closed)="cerrarFeedback()"
+></app-feedback-modal>
