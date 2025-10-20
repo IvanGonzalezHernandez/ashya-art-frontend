@@ -68,6 +68,9 @@
               </div>
             </td>
           </tr>
+          <tr *ngIf="(productos || []).length === 0">
+            <td colspan="9" class="text-center text-muted py-3">No products yet.</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -270,6 +273,9 @@
                 </div>
               </td>
             </tr>
+          <tr *ngIf="(compras || []).length === 0">
+            <td colspan="5" class="text-center text-muted py-3">No products purchases yet.</td>
+          </tr>
           </tbody>
         </table>
       </div>

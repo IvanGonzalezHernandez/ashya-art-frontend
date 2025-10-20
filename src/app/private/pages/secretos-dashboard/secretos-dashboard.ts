@@ -6,6 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { Secreto } from '../../../models/secreto.model';
 import { SecretoService } from '../../../services/secreto/secreto';
 import { CsvExportService } from '../../../services/csv/csv-export';
+import { SecretoCompraService } from '../../../services/secreto-compra/secreto-compra';
 
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { isTooLarge, isWebpFile, fileToDataUrl } from '../../../utils/image-optimizer.util';
@@ -17,6 +18,15 @@ type SlotImagen = {
   markedForDelete: boolean;
 };
 
+// Interface mínima para las compras (si ya tienes el model, importa y elimina esto)
+interface SecretoCompraDto {
+  id?: number;
+  clienteId?: number;
+  secretoId?: number;
+  compraId?: number;
+  fechaCompra?: string | Date;
+}
+
 @Component({
   selector: 'app-secretos-dashboard',
   standalone: true,
@@ -25,9 +35,11 @@ type SlotImagen = {
   imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class SecretosDashboard implements OnInit {
+  // Loading
   loading = false;
+  loadingCompras = false;
 
-    // Límites
+  // Límites
   private readonly IMG_LIMIT_BYTES = 800 * 1024;      // 800 KB
   private readonly PDF_LIMIT_BYTES = 10 * 1024 * 1024; // 10 MB
 
@@ -37,15 +49,15 @@ export class SecretosDashboard implements OnInit {
   feedbackMensaje = '';
   feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
-  // listado
+  // Listado de secretos
   secretos: Secreto[] = [];
   paginaActual: number = 1;
 
-  // edición
+  // Edición de secretos
   secretoEditando: Secreto | null = null;
   esNuevo: boolean = false;
 
-  // slots imagen
+  // Slots imagen
   slots: SlotImagen[] = [];
 
   // PDF
@@ -53,16 +65,27 @@ export class SecretosDashboard implements OnInit {
   pdfPreviewName: string | null = null;
   pdfMarkedForDelete = false;
 
+  // Compras de secretos
+  comprasSecretos: SecretoCompraDto[] = [];
+  paginaActualCompras: number = 1;
+
   constructor(
     public secretoService: SecretoService,
-    private csvExportService: CsvExportService
+    private csvExportService: CsvExportService,
+    private secretoCompraService: SecretoCompraService
   ) {}
 
   ngOnInit(): void {
+    // Secretos
     this.loading = true;
     this.obtenerSecretos();
+
+    // Compras de secretos
+    this.loadingCompras = true;
+    this.obtenerComprasSecretos();
   }
 
+  // ===== Secretos =====
   obtenerSecretos() {
     this.secretoService.getSecretos().subscribe({
       next: (data) => {
@@ -131,34 +154,33 @@ export class SecretosDashboard implements OnInit {
   }
 
   // --- IMÁGENES (slots) ---
-async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
-  const input = event.target as HTMLInputElement;
-  if (!input.files || input.files.length === 0) return;
+  async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
 
-  const file = input.files[0];
-  input.value = ''; // permitir re-seleccionar
+    const file = input.files[0];
+    input.value = ''; // permitir re-seleccionar
 
-  // Solo WebP y <= 800 KB
-  if (!isWebpFile(file)) {
-    this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
-    return;
+    // Solo WebP y <= 800 KB
+    if (!isWebpFile(file)) {
+      this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+      return;
+    }
+    if (isTooLarge(file, this.IMG_LIMIT_BYTES)) {
+      this.mostrarModalFeedback('error', 'Image too large', `Each image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`);
+      return;
+    }
+
+    slot.file = file;
+    slot.markedForDelete = false;
+
+    try {
+      slot.previewUrl = await fileToDataUrl(file);
+    } catch {
+      this.mostrarModalFeedback('error', 'Invalid image', 'Could not read the image.');
+      slot.file = undefined;
+    }
   }
-  if (isTooLarge(file, this.IMG_LIMIT_BYTES)) {
-    this.mostrarModalFeedback('error', 'Image too large', `Each image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`);
-    return;
-  }
-
-  slot.file = file;
-  slot.markedForDelete = false;
-
-  try {
-    slot.previewUrl = await fileToDataUrl(file);
-  } catch {
-    this.mostrarModalFeedback('error', 'Invalid image', 'Could not read the image.');
-    slot.file = undefined;
-  }
-}
-
 
   eliminarSlot(slot: SlotImagen) {
     slot.file = undefined;
@@ -178,27 +200,26 @@ async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
   }
 
   // --- PDF ---
-onSeleccionarPdf(event: Event) {
-  const input = event.target as HTMLInputElement;
-  if (!input.files || input.files.length === 0) return;
+  onSeleccionarPdf(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
 
-  const file = input.files[0];
-  input.value = '';
+    const file = input.files[0];
+    input.value = '';
 
-  if (file.type !== 'application/pdf') {
-    this.mostrarModalFeedback('error', 'Invalid file', 'Only PDF files are allowed.');
-    return;
+    if (file.type !== 'application/pdf') {
+      this.mostrarModalFeedback('error', 'Invalid file', 'Only PDF files are allowed.');
+      return;
+    }
+    if (isTooLarge(file, this.PDF_LIMIT_BYTES)) {
+      this.mostrarModalFeedback('error', 'PDF too large', `The PDF must be ${(this.PDF_LIMIT_BYTES / (1024*1024)).toFixed(0)} MB or less.`);
+      return;
+    }
+
+    this.pdfFile = file;
+    this.pdfPreviewName = file.name;
+    this.pdfMarkedForDelete = false;
   }
-  if (isTooLarge(file, this.PDF_LIMIT_BYTES)) {
-    this.mostrarModalFeedback('error', 'PDF too large', `The PDF must be ${(this.PDF_LIMIT_BYTES / (1024*1024)).toFixed(0)} MB or less.`);
-    return;
-  }
-
-  this.pdfFile = file;
-  this.pdfPreviewName = file.name;
-  this.pdfMarkedForDelete = false;
-}
-
 
   eliminarPdf() {
     this.pdfFile = undefined;
@@ -214,99 +235,90 @@ onSeleccionarPdf(event: Event) {
   }
 
   // --- GUARDAR ---
-guardarCambios() {
-  if (!this.secretoEditando) return;
+  guardarCambios() {
+    if (!this.secretoEditando) return;
 
-  // 🔒 Doble validación IMÁGENES (solo WebP y <= 800 KB)
-  for (const s of this.slots) {
-    if (s.file) {
-      if (!isWebpFile(s.file)) {
-        this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
-        return;
-      }
-      if (isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
-        this.mostrarModalFeedback(
-          'error',
-          'Image too large',
-          `Each image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`
-        );
-        return;
+    // Validación imágenes
+    for (const s of this.slots) {
+      if (s.file) {
+        if (!isWebpFile(s.file)) {
+          this.mostrarModalFeedback('error', 'Invalid image', 'Only WebP images are allowed.');
+          return;
+        }
+        if (isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
+          this.mostrarModalFeedback('error', 'Image too large', `Each image must be ${(this.IMG_LIMIT_BYTES / 1024).toFixed(0)} KB or less.`);
+          return;
+        }
       }
     }
+
+    // Validación PDF
+    if (this.pdfFile) {
+      if (this.pdfFile.type !== 'application/pdf') {
+        this.mostrarModalFeedback('error', 'Invalid file', 'Only PDF files are allowed.');
+        return;
+      }
+      if (isTooLarge(this.pdfFile, this.PDF_LIMIT_BYTES)) {
+        this.mostrarModalFeedback('error', 'PDF too large', `The PDF must be ${(this.PDF_LIMIT_BYTES / (1024 * 1024)).toFixed(0)} MB or less.`);
+        return;
+      }
+    }
+
+    // DTO principal
+    const dto: any = {
+      id: this.secretoEditando.id,
+      estado: this.secretoEditando.estado,
+      fechaBaja: this.secretoEditando.fechaBaja,
+      precio: this.secretoEditando.precio,
+      nombre: this.secretoEditando.nombre,
+      subtitulo: this.secretoEditando.subtitulo,
+      descripcion: this.secretoEditando.descripcion,
+      categoria: this.secretoEditando.categoria
+    };
+
+    // Construir FormData
+    const fd = new FormData();
+    fd.append('secreto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+
+    // Imágenes: reemplazos
+    this.slots.forEach(s => {
+      if (s.file && isWebpFile(s.file) && !isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
+        fd.append(`img${s.slot}`, s.file);
+      }
+    });
+
+    // Imágenes: borrados (solo cuando editas)
+    this.slots.forEach(s => {
+      if (!this.esNuevo && s.markedForDelete) {
+        fd.append(`deleteImg${s.slot}`, 'true');
+      }
+    });
+
+    // PDF: reemplazo / borrado
+    if (this.pdfFile) {
+      fd.append('pdf', this.pdfFile);
+    }
+    if (this.pdfMarkedForDelete) {
+      fd.append('deletePdf', 'true');
+    }
+
+    // Llamada al servicio
+    const req$ = this.esNuevo
+      ? this.secretoService.crearSecreto(fd)
+      : this.secretoService.actualizarSecreto(fd, this.secretoEditando.id!);
+
+    req$.subscribe({
+      next: () => {
+        this.obtenerSecretos();
+        this.cancelarEdicion();
+        this.mostrarModalFeedback('success', 'Secret saved', 'The secret has been saved successfully.');
+      },
+      error: (e) => {
+        console.error('Error guardando secreto', e);
+        this.mostrarModalFeedback('error', 'Error saving', 'Please review fields or try again.');
+      }
+    });
   }
-
-  // 🔒 Doble validación PDF (solo PDF y <= 10 MB)
-  if (this.pdfFile) {
-    if (this.pdfFile.type !== 'application/pdf') {
-      this.mostrarModalFeedback('error', 'Invalid file', 'Only PDF files are allowed.');
-      return;
-    }
-    if (isTooLarge(this.pdfFile, this.PDF_LIMIT_BYTES)) {
-      this.mostrarModalFeedback(
-        'error',
-        'PDF too large',
-        `The PDF must be ${(this.PDF_LIMIT_BYTES / (1024 * 1024)).toFixed(0)} MB or less.`
-      );
-      return;
-    }
-  }
-
-  // DTO principal
-  const dto: any = {
-    id: this.secretoEditando.id,
-    estado: this.secretoEditando.estado,
-    fechaBaja: this.secretoEditando.fechaBaja,
-    precio: this.secretoEditando.precio,
-    nombre: this.secretoEditando.nombre,
-    subtitulo: this.secretoEditando.subtitulo,
-    descripcion: this.secretoEditando.descripcion,
-    categoria: this.secretoEditando.categoria
-  };
-
-  // Construir FormData
-  const fd = new FormData();
-  fd.append('secreto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
-
-  // Imágenes: reemplazos
-  this.slots.forEach(s => {
-    if (s.file && isWebpFile(s.file) && !isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
-      fd.append(`img${s.slot}`, s.file);
-    }
-  });
-
-  // Imágenes: borrados (solo cuando editas)
-  this.slots.forEach(s => {
-    if (!this.esNuevo && s.markedForDelete) {
-      fd.append(`deleteImg${s.slot}`, 'true');
-    }
-  });
-
-  // PDF: reemplazo / borrado
-  if (this.pdfFile) {
-    fd.append('pdf', this.pdfFile);
-  }
-  if (this.pdfMarkedForDelete) {
-    fd.append('deletePdf', 'true');
-  }
-
-  // Llamada al servicio
-  const req$ = this.esNuevo
-    ? this.secretoService.crearSecreto(fd)
-    : this.secretoService.actualizarSecreto(fd, this.secretoEditando.id!);
-
-  req$.subscribe({
-    next: () => {
-      this.obtenerSecretos();
-      this.cancelarEdicion();
-      this.mostrarModalFeedback('success', 'Secret saved', 'The secret has been saved successfully.');
-    },
-    error: (e) => {
-      console.error('Error guardando secreto', e);
-      this.mostrarModalFeedback('error', 'Error saving', 'Please review fields or try again.');
-    }
-  });
-}
-
 
   eliminarSecreto(id: number | undefined) {
     if (!id) return;
@@ -315,19 +327,19 @@ guardarCambios() {
     }
   }
 
+  // Feedback
   mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
-  this.feedbackTipo = tipo;
-  this.feedbackTitulo = titulo;
-  this.feedbackMensaje = mensaje;
-  this.mostrarFeedback = true;
+    this.feedbackTipo = tipo;
+    this.feedbackTitulo = titulo;
+    this.feedbackMensaje = mensaje;
+    this.mostrarFeedback = true;
   }
 
   cerrarFeedback() {
     this.mostrarFeedback = false;
   }
 
-
-  // --- CSV ---
+  // CSV Secretos
   exportarCSV() {
     const encabezado = ['ID', 'Name', 'Subtitle', 'Category', 'Price', 'Status', 'Fecha Baja'];
     const filas = (this.secretos || []).map(s => [
@@ -340,5 +352,36 @@ guardarCambios() {
       (s.fechaBaja ?? '')?.toString()
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'secrets.csv');
+  }
+
+  // ===== Compras de Secretos =====
+  obtenerComprasSecretos() {
+    this.secretoCompraService.getCompras().subscribe({
+      next: (data) => {
+        this.comprasSecretos = (data || []).map(c => ({
+          ...c,
+          fechaCompra: c.fechaCompra ? new Date(c.fechaCompra) : c.fechaCompra
+        }));
+        this.loadingCompras = false;
+      },
+      error: (err) => {
+        console.error('Error cargando compras de secretos', err);
+        this.loadingCompras = false;
+      }
+    });
+  }
+
+  exportarCSVComprasSecretos() {
+    const encabezado = ['ID', 'Client ID', 'Secret ID', 'Purchase ID', 'Date'];
+    const filas = (this.comprasSecretos || []).map(c => [
+      c.id?.toString() ?? '',
+      c.clienteId?.toString() ?? '',
+      c.secretoId?.toString() ?? '',
+      c.compraId?.toString() ?? '',
+      c.fechaCompra instanceof Date
+        ? c.fechaCompra.toISOString().slice(0, 10)
+        : (c.fechaCompra ?? '')
+    ]);
+    this.csvExportService.exportarCSV(encabezado, filas, 'secret-purchases.csv');
   }
 }
