@@ -35,25 +35,6 @@ export class CursosDashboard implements OnInit {
   cursosCargados = false;
   fechasCargados = false;
 
-  // Número de bullets seleccionados
-  numBullets: number = 0;
-
-  // Lista de textos (cada item = un bullet)
-  bullets: string[] = [];
-
-  // Cuando cambia el número en el select
-  onChangeNumBullets() {
-    if (this.numBullets > this.bullets.length) {
-      // Añadir elementos vacíos
-      for (let i = this.bullets.length; i < this.numBullets; i++) {
-        this.bullets.push('');
-      }
-    } else {
-      // Reducir tamaño
-      this.bullets = this.bullets.slice(0, this.numBullets);
-    }
-  }
-
   private readonly IMG_LIMIT_BYTES = 800 * 1024; // 800 KB
   private readonly IMG_MAX_W = 1600;
   private readonly IMG_MAX_H = 1600;
@@ -151,22 +132,20 @@ export class CursosDashboard implements OnInit {
       localizacion: ''
     } as unknown as Curso;
 
-      // Bullets: reset
-      this.numBullets = 0;
-      this.bullets = [];
 
     this.initSlots();
   }
 
+  onDescripcionChange(text: string) {
+  if (!this.cursoEditando) return;
+  // Normaliza saltos de línea Windows/Mac a \n
+  this.cursoEditando.descripcion = (text ?? '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
+
+
   editarCurso(curso: Curso) {
     this.esNuevo = false;
     this.cursoEditando = { ...curso };
-
-    // Bullets desde informacionExtra (separado por \n)
-    const raw = this.cursoEditando.informacionExtra ?? '';
-    this.bullets = raw ? raw.split(/\r?\n/) : [];
-    this.numBullets = this.bullets.length;
-
     this.initSlots(curso.id);
   }
 
@@ -174,9 +153,6 @@ export class CursosDashboard implements OnInit {
     this.cursoEditando = null;
     this.esNuevo = false;
     this.slots = [];
-
-    this.numBullets = 0;
-    this.bullets = [];
   }
 
  async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
@@ -211,23 +187,6 @@ export class CursosDashboard implements OnInit {
   slot.previewUrl = await fileToDataUrl(original);
 }
 
-    /** Vista previa sin vacíos */
-  get bulletsPreview(): string[] {
-    return (this.bullets ?? []).map(b => (b ?? '').trim()).filter(Boolean);
-  }
-
-  /** Cadena final para BD (saltos de línea) */
-  get informacionExtraConcat(): string {
-    return this.bulletsPreview.join('\n');
-  }
-
-  /** Cuando cambia cualquier input de bullet */
-  onBulletsChanged(): void {
-    if (this.cursoEditando) {
-      this.cursoEditando.informacionExtra = this.informacionExtraConcat;
-    }
-  }
-
   /** trackBy para no perder el foco al escribir */
   trackByIndex(index: number): number {
     return index;
@@ -249,8 +208,6 @@ export class CursosDashboard implements OnInit {
 
   guardarCambios() {
   if (!this.cursoEditando) return;
-
-  this.cursoEditando.informacionExtra = this.bullets.filter(b => b.trim() !== '').join('\n');
 
   // 🔒 Doble validación de seguridad
   for (const s of this.slots) {

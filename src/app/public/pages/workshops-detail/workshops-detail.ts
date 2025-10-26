@@ -248,11 +248,6 @@ export class WorkshopsDetail {
 
   // ================== Utilidades varias ==================
 
-  get infoExtraList(): string[] {
-    const txt = this.cursoSeleccionado?.informacionExtra ?? '';
-    return txt.split(/•/g).map(s => s.trim()).filter(Boolean);
-  }
-
   esValido(valor: any): boolean {
     return valor !== null && valor !== undefined && valor !== '';
   }

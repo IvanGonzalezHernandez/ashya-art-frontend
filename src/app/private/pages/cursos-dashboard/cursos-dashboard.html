@@ -97,7 +97,7 @@
 
               <div class="col-12">
                 <label class="form-label">Description</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion" name="descripcion" required #descripcion="ngModel"></textarea>
+                <textarea class="form-control" rows="3" [(ngModel)]="cursoEditando.descripcion" (ngModelChange)="onDescripcionChange($event)" name="descripcion" required #descripcion="ngModel"></textarea>
                 <div class="text-danger" *ngIf="descripcion.invalid && descripcion.touched">Description is required.</div>
               </div>
 
@@ -143,40 +143,6 @@
                 <div class="text-danger" *ngIf="precio.invalid && precio.touched">Price must be greater than 0.</div>
               </div>
 
-<div class="col-12">
-  <label class="form-label">Extra Information (Bullets)</label>
-
-  <!-- Selector de cantidad de bullets -->
-  <div class="mb-2">
-    <label class="me-2">Number of items:</label>
-    <select class="form-select d-inline-block w-auto"
-            [(ngModel)]="numBullets"
-            (ngModelChange)="onChangeNumBullets()"
-            name="numBullets">
-      <option *ngFor="let n of [0,1,2,3,4,5,6,7,8,9,10]" [value]="n">{{n}}</option>
-    </select>
-  </div>
-
-  <!-- Inputs dinámicos -->
-  <ul class="list-unstyled">
-    <li *ngFor="let _ of bullets; let i = index; trackBy: trackByIndex" class="mb-2">
-      <input type="text"
-             class="form-control"
-             [placeholder]="'Bullet ' + (i+1)"
-             [(ngModel)]="bullets[i]"
-             (ngModelChange)="onBulletsChanged()"
-             name="bullet-{{i}}">
-    </li>
-  </ul>
-
-  <!-- Vista previa opcional -->
-  <div *ngIf="bulletsPreview.length" class="mt-2">
-    <small class="text-muted d-block mb-1">Preview</small>
-    <ul class="mb-0">
-      <li *ngFor="let li of bulletsPreview">{{ li }}</li>
-    </ul>
-  </div>
-</div>
 
 
 
@@ -212,11 +178,6 @@
                     </div>
                   </div>
                 </div>
-
-                <small class="text-muted d-block mt-2">
-                  Tip: “Replace” uploads a new image for that slot. “Delete” clears the slot and marks it for removal; “Restore” (edit
-                  mode only) brings back the server image.
-                </small>
               </div>
               <!-- FIN BLOQUE SLOTS -->
 
