@@ -8,13 +8,14 @@ import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarritoService } from '../../../services/carrito/carrito';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, RevealAnimateDirective],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
 })

@@ -132,10 +132,9 @@
   </button>
 
   <!-- Caso especial: compra 100% cubierta -->
-  <button 
-    *ngIf="esCompraGratis"
-    class="btn bg-azul text-white" 
-    (click)="confirmarCompraGratis()">
+  <button *ngIf="esCompraGratis"
+          class="btn bg-azul text-white"
+          (click)="abrirModalCliente()">
     Confirm Purchase
   </button>
 </div>

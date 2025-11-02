@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarritoService } from '../../services/carrito/carrito';
 import { ItemCarrito } from '../../models/item-carrito';
 import { CommonModule } from '@angular/common';
@@ -50,7 +51,9 @@ export class Navbar implements OnInit {
     preguntasAdicionales: ''
   };
 
-  constructor(public carritoService: CarritoService) {}
+  constructor(public carritoService: CarritoService,
+    private router: Router, 
+    private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     // contador para el badge
@@ -232,37 +235,48 @@ export class Navbar implements OnInit {
     });
   }
 
-  // ======== Compra gratis (total 0€) ========
-  confirmarCompraGratis() {
-    if (this.loadingCheckout) return;
-    this.loadingCheckout = true;
+// ======== Compra gratis (total 0€) ========
+confirmarCompraGratis() {
+  if (this.loadingCheckout) return;
+  this.loadingCheckout = true;
 
-    // Cierra el carrito si está abierto
-    const offcanvasEl = document.getElementById('offcanvasCarrito');
-    if (offcanvasEl) {
-      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-      bsOffcanvas?.hide();
-    }
-
-    // Cierra modal cliente si está abierto
-    const modalEl = document.getElementById('modalCliente');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    modalInstance?.hide();
-
-    // Llama al backend para registrar la compra gratuita
-    this.carritoService.crearCompraGratuita(this.cliente, this.codigoTarjeta).subscribe({
-      next: () => {
-        this.loadingCheckout = false;
-        alert('Purchase confirmed! You will receive an email shortly.');
-        this._resetEstadoPostCompra();
-      },
-      error: (err) => {
-        console.error('Error al confirmar compra gratuita', err);
-        alert('Error confirming the purchase.');
-        this.loadingCheckout = false;
-      }
-    });
+  // Cierra el carrito si está abierto
+  const offcanvasEl = document.getElementById('offcanvasCarrito');
+  if (offcanvasEl) {
+    const bsOffcanvas = (window as any).bootstrap?.Offcanvas.getInstance(offcanvasEl);
+    bsOffcanvas?.hide();
   }
+
+  // Cierra modal cliente si está abierto
+  const modalEl = document.getElementById('modalCliente');
+  if (modalEl) {
+    const modalInstance = (window as any).bootstrap?.Modal.getInstance(modalEl);
+    modalInstance?.hide();
+  }
+
+  // Llama al backend para registrar la compra gratuita
+  this.carritoService.crearCompraGratuita(this.cliente, this.codigoTarjeta).subscribe({
+    next: () => {
+      this.loadingCheckout = false;
+
+      // ✅ Redirigir al home con parámetro payment=success
+      this.router.navigate(['/'], {
+        queryParams: { payment: 'success' }
+      });
+    },
+    error: (err) => {
+      console.error('Error al confirmar compra gratuita', err);
+      this.loadingCheckout = false;
+
+      // ❌ Redirigir al home con parámetro payment=error
+      this.router.navigate(['/'], {
+        queryParams: { payment: 'error' }
+      });
+    }
+  });
+}
+
+
 
   // ======== Gestión de items y gift card ========
   eliminarItem(index: number) {

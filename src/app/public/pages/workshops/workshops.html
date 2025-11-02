@@ -6,6 +6,27 @@
 <section class="py-4 bg-beige-claro" *ngIf="!loading">
   <div class="container">
 
+    <!-- Introduction to Courses -->
+    <section class="py-3 bg-beige-claro">
+      <div class="container text-center">
+        <h2 class="fw-bold mb-4" style="color:#3E3028;">
+          Courses & Workshops
+        </h2>
+
+        <p class="lead mb-4" style="max-width:720px;margin:0 auto;color:#6b5e52;">
+          Discover the joy of ceramics through our hands-on courses and creative workshops.
+          Learn essential techniques, explore new materials, and develop your artistic voice
+          in a relaxed and inspiring atmosphere.
+        </p>
+
+        <p class="mb-0" style="max-width:680px;margin:0.5rem auto 0;color:#6b5e52;">
+          Small group sessions with personalized guidance — suitable for beginners and
+          intermediate makers alike. Materials are included in most sessions.
+        </p>
+
+      </div>
+    </section>
+
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let curso of cursos">
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">

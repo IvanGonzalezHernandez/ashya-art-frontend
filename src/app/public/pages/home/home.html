@@ -5,7 +5,7 @@
        style="object-fit: cover; z-index: 1;">
   <div class="position-absolute top-0 start-0 w-100 h-100"
        style="background-color: rgba(0, 0, 0, 0.3); z-index: 2;"></div>
-  <div class="position-relative text-center text-white" style="z-index: 3;">
+  <div class="position-relative text-center text-white" style="z-index: 3;" appRevealAnimate="animate__zoomIn" [delay]="'0s'">
     <h1 class="display-3">Welcome to Ashya Art</h1>
     <p class="lead">Handcrafted ceramics with soul</p>
   </div>
@@ -17,7 +17,7 @@
     <div class="row align-items-center">
 
       <!-- Texto con botón visible solo en escritorio -->
-      <div class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0">
+      <div class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0" appRevealAnimate="animate__fadeInLeft" [delay]="'0.2s'">
         <h2 class="fw-bold mb-4">About Ashya</h2>
         <p class="text-muted fs-5">
           At Ashya, we’re passionate about creating unique handmade ceramics that blend traditional craftsmanship with modern design.  
@@ -32,7 +32,7 @@
       </div>
 
       <!-- Imagen con botón visible solo en móvil debajo de la imagen -->
-      <div class="col-lg-6 order-2 text-center">
+      <div class="col-lg-6 order-2 text-center" appRevealAnimate="animate__fadeInRight" [delay]="'0.3s'">
         <img src="assets/about/about.jpg" alt="About Ashya" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
         <a href="/about" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">Learn More</a>
       </div>
@@ -41,15 +41,23 @@
   </div>
 </section>
 
-
-
 <!-- Cursos Destacados -->
 <section class="py-4 bg-beige-claro">
   <div class="container">
 
+    <!-- Título y subtítulo de cursos -->
+    <h2 class="text-center mb-2 fw-bold" style="color: #3E3028;"
+        appRevealAnimate="animate__fadeInUp" [delay]="'0s'">
+      Our Courses
+    </h2>
+    <p class="text-center text-muted mb-4" style="max-width: 700px; margin: 0 auto; color: #6b5e52;"
+       appRevealAnimate="animate__fadeInUp" [delay]="'0.1s'">
+      Learn pottery with hands-on workshops for beginners and enthusiasts.
+    </p>
+
     <!-- Grid de cursos -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" *ngIf="!loading">
-      <div class="col" *ngFor="let curso of cursos">
+      <div class="col" *ngFor="let curso of cursos; index as i" appRevealAnimate="animate__fadeInUp" [delay]="(i * 0.1) + 's'">
 
         <!-- Tarjeta de curso -->
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden shadow-sm">
@@ -71,7 +79,7 @@
 
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ curso.precio }}€</span>
-              <a [routerLink]="['/workshops', curso.id]" class="btn text-white px-3 py-2 rounded-3" style="background-color: #3E3028;">
+              <a [routerLink]="['/workshops', curso.id]" class="btn bg-azul text-white px-3 py-2 rounded-3">
                 View Course
               </a>
             </div>
@@ -95,14 +103,14 @@
     <div class="row align-items-center">
 
       <!-- Imagen a la izquierda -->
-      <div class="col-lg-6 mb-4 mb-lg-0 order-2 order-lg-1 text-center">
+      <div class="col-lg-6 mb-4 mb-lg-0 order-2 order-lg-1 text-center" appRevealAnimate="animate__fadeInLeft" [delay]="'0.1s'">
         <img src="assets/tarjeta-regalo/plantilla-tarjeta-regalo.webp" alt="Gift Cards" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
         <!-- Botón solo visible en móvil, debajo de la imagen -->
         <a href="/workshops/gift-cards" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">Shop Gift Cards</a>
       </div>
 
       <!-- Texto a la derecha -->
-      <div class="col-lg-6 text-center text-lg-start order-1 order-lg-2">
+      <div class="col-lg-6 text-center text-lg-start order-1 order-lg-2" appRevealAnimate="animate__fadeInRight" [delay]="'0.2s'">
         <h2 class="fw-bold mb-4">Gift Cards</h2>
         <p class="text-muted fs-5">
           Give the gift of creativity with Ashya gift cards — personalized and perfect for any occasion.
@@ -125,8 +133,12 @@
 <!-- Productos Destacados -->
 <section class="py-4 bg-beige-claro">
   <div class="container">
-    <h2 class="text-center mb-4 fw-bold" style="color: #3E3028;">Our Featured Products</h2>
-    <p class="text-center text-muted mb-5" style="max-width: 700px; margin: 0 auto; color: #6b5e52;">
+    <h2 class="text-center mb-4 fw-bold" style="color: #3E3028;"
+        appRevealAnimate="animate__fadeInUp" [delay]="'0s'">
+      Our Products
+    </h2>
+    <p class="text-center text-muted mb-5" style="max-width: 700px; margin: 0 auto; color: #6b5e52;"
+       appRevealAnimate="animate__fadeInUp" [delay]="'0.1s'">
       Discover our handcrafted ceramics perfect for daily use or decoration.
     </p>
 
@@ -135,7 +147,7 @@
     </div> 
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" *ngIf="!loading">
-      <div class="col" *ngFor="let producto of productos">
+      <div class="col" *ngFor="let producto of productos; index as i" appRevealAnimate="animate__zoomIn" [delay]="(i * 0.1) + 's'">
         <div class="card h-100 shadow-sm border-0 rounded-4" style="background-color: #fff;">
           <!-- Imagen cuadrada con zoom al hover -->
           <div class="img-1x1 position-relative">
@@ -147,7 +159,7 @@
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ producto.precio }}€</span>
               <!-- <a [routerLink]="['/products', producto.id]" class="btn btn-primary" style="background-color: #3E3028; border:none;">View Product</a> -->
-              <a href="#" class="btn" style="background-color: #3E3028; color: white; border:none;">View Product</a>
+              <a href="#" class="btn bg-azul">View Product</a>
             </div>
           </div>
         </div>
@@ -156,13 +168,13 @@
   </div>
 </section>
 
-
 <!-- Instagram Grid Gallery Section -->
 <section class="py-5 bg-beige">
   <div class="container text-center">
 
     <!-- Perfil con imagen circular, nombre y botón -->
-    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-4"
+         appRevealAnimate="animate__fadeIn" [delay]="'0s'">
       <img src="assets/about/about.webp" alt="Instagram Ashya"
            class="rounded-circle shadow border border-3 border-dark me-md-3 mb-3 mb-md-0"
            style="width: 100px; height: 100px; object-fit: cover;">
@@ -177,8 +189,10 @@
 
     <!-- Galería 4x2 con imágenes -->
     <div class="row g-3">
-      <ng-container *ngFor="let imagen of imagenes">
-        <div class="col-6 col-md-3">
+      <ng-container *ngFor="let imagen of imagenes; index as i">
+        <div class="col-6 col-md-3"
+             appRevealAnimate="animate__zoomIn"
+             [delay]="(i * 0.05) + 's'">
           <a href="https://www.instagram.com/ashya_art/" target="_blank" rel="noopener noreferrer"
              class="text-decoration-none">
             <div class="position-relative overflow-hidden rounded-4 shadow" style="height: 300px;"
@@ -206,4 +220,3 @@
   [status]="feedbackTipo"
   (closed)="cerrarFeedback()"
 ></app-feedback-modal>
-

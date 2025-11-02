@@ -142,7 +142,7 @@ export class CarritoService {
     codigoTarjeta?: string
   ): Observable<{ success: boolean; pedidoId?: number }> {
     return this.http.post<{ success: boolean; pedidoId?: number }>(
-      `${this.apiUrl}/gratuita`,
+      `${this.apiUrl}/no-stripe`,
       {
         carrito: { items: this.obtenerItems() },
         cliente,
