@@ -17,4 +17,7 @@ export interface Cliente {
     personasInteresadas: 1,
     disponibilidad: '',
     preguntasAdicionales: ''
+
+    infoComercial: boolean;
+    privacidad: boolean;
 }

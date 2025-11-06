@@ -83,7 +83,9 @@ export class ClientesDashboard implements OnInit {
       tipoClase: '',
       personasInteresadas: 1,
       disponibilidad: '',
-      preguntasAdicionales: ''
+      preguntasAdicionales: '',
+      infoComercial: false,
+      privacidad: false
     };
   }
 

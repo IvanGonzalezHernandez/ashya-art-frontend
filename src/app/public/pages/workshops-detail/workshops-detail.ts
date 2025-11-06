@@ -53,7 +53,9 @@ export class WorkshopsDetail {
     tipoClase: '',
     personasInteresadas: 1,
     disponibilidad: '',
-    preguntasAdicionales: ''
+    preguntasAdicionales: '',
+    infoComercial: false,
+    privacidad: false
   };
 
   constructor(

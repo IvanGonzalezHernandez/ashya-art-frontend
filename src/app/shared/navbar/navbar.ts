@@ -48,7 +48,9 @@ export class Navbar implements OnInit {
     tipoClase: '',
     personasInteresadas: 1,
     disponibilidad: '',
-    preguntasAdicionales: ''
+    preguntasAdicionales: '',
+    infoComercial: true,
+    privacidad: false
   };
 
   constructor(public carritoService: CarritoService,
