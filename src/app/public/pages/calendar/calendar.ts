@@ -54,7 +54,9 @@ export class Calendar implements OnInit {
     private cursoService: CursoService,
     private cursoFechaService: CursoFechaService,
     private carritoService: CarritoService
-  ) {}
+  ) {
+    this.today.setHours(0, 0, 0, 0);
+  }
 
   async ngOnInit(): Promise<void> {
     try {
@@ -334,6 +336,12 @@ export class Calendar implements OnInit {
       c?.img1Url, c?.img2Url, c?.img3Url, c?.img4Url, c?.img5Url
     ].filter(Boolean) as string[];
     return candidates[0] || '';
+  }
+
+  isPast(cell: DayCell): boolean {
+    const d = new Date(cell.date);
+    d.setHours(0, 0, 0, 0);
+    return d.getTime() < this.today.getTime();
   }
 
   /** Primera imagen no vacía del curso */

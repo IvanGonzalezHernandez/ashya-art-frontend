@@ -13,25 +13,25 @@
           Courses & Workshops
         </h2>
 
-        <p class="lead mb-4" style="max-width:720px;margin:0 auto;color:#6b5e52;">
+        <p class="lead mb-4 fs-5" style="max-width:720px;margin:0 auto;color:#6b5e52;">
           Discover the joy of ceramics through our hands-on courses and creative workshops.
           Learn essential techniques, explore new materials, and develop your artistic voice
           in a relaxed and inspiring atmosphere.
         </p>
 
-        <p class="mb-0" style="max-width:680px;margin:0.5rem auto 0;color:#6b5e52;">
+        <p class="mb-0 fs-5" style="max-width:680px;margin:0.5rem auto 0;color:#6b5e52;">
           Small group sessions with personalized guidance — suitable for beginners and
           intermediate makers alike. Materials are included in most sessions.
         </p>
-
       </div>
     </section>
 
+    <!-- Grid de cursos -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let curso of cursos">
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
 
-          <!-- Imagen 1x1 con zoom al hover -->
+          <!-- Imagen 1x1 -->
           <div class="img-1x1 position-relative">
             <img
               [src]="curso.img1Url"
@@ -43,20 +43,23 @@
 
           <!-- Contenido -->
           <div class="card-body d-flex flex-column p-4">
-            <h5 class="card-title mb-1 text-dark fw-semibold text-truncate" [title]="curso.nombre">
+            <h5 class="card-title mb-1 fw-semibold text-dark text-truncate fs-5" 
+                [title]="curso.nombre">
               {{ curso.nombre }}
             </h5>
 
-            <p class="card-text text-muted mb-3 flex-grow-1 clamp-2">
+            <p class="card-text text-muted mb-3 flex-grow-1 clamp-2 fs-5" style="color:#6b5e52;">
               {{ curso.subtitulo }}
             </p>
 
             <div class="d-flex justify-content-between align-items-center mt-auto">
-              <span class="price fw-bold">{{ curso.precio }}€</span>
+              <span class="price fw-bold fs-5" style="color:#3E3028;">
+                {{ curso.precio }}€
+              </span>
 
               <a
                 [routerLink]="['/workshops', curso.id]"
-                class="btn bg-azul text-white px-3"
+                class="btn bg-azul text-white px-3 fs-6"
                 [attr.aria-label]="'View workshop ' + curso.nombre">
                 View Workshop
               </a>
@@ -70,9 +73,9 @@
   </div>
 </section>
 
-  
-  <app-valorations
+<!-- Reviews -->
+<app-valorations
   [title]="'Reviews from our workshops'"
   [itemsPerSlide]="4"
   [interval]="6000">
-  </app-valorations>
+</app-valorations>

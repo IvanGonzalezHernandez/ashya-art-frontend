@@ -5,35 +5,49 @@
 
       <!-- Texto a la izquierda en escritorio -->
       <div class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0">
-        <h2 class="fw-bold mb-4">Firing Service</h2>
-        <p class="text-muted fs-5">
+        <h2 class="fw-bold mb-4" style="color:#3E3028;">Firing Service</h2>
+
+        <p class="text-muted fs-5" style="color:#6b5e52;">
           Do you create your own ceramics and need a place to fire them?  
           At Ashya Art, you can either rent the entire kiln (80 l) or arrange for the firing of just a few pieces.
         </p>
-        <p class="text-muted">
+
+        <p class="text-muted fs-5" style="color:#6b5e52;">
           Make an appointment to bring your ceramics for firing.  
           Please ensure you bring details about the clay and glazes used — without this information we cannot accept your ceramics, as they must be fired at the correct temperatures.
         </p>
 
         <!-- Lista de precios -->
-        <h5 class="fw-bold mt-4" style="color: #3E3028;">Costs</h5>
-        <ul class="list-unstyled text-muted">
+        <h5 class="fw-bold mt-4" style="color:#3E3028;">Costs</h5>
+        <ul class="list-unstyled text-muted fs-5" style="color:#6b5e52;">
           <li>• Renting kiln (80 l) for bisque firing – <strong>35€</strong></li>
           <li>• Renting kiln (80 l) for glaze firing – <strong>40€</strong></li>
           <li>• Firing one piece only (cup size) bisque or glaze – <strong>4€</strong></li>
         </ul>
 
         <!-- Botón escritorio -->
-        <button type="button" class="btn bg-azul text-white mt-3 d-none d-lg-inline-block" data-bs-toggle="modal" data-bs-target="#modalFiringService">
+        <button 
+          type="button" 
+          class="btn bg-azul text-white mt-3 fs-5 d-none d-lg-inline-block"
+          data-bs-toggle="modal"
+          data-bs-target="#modalFiringService">
           Book Now
         </button>
       </div>
 
-      <!-- Imagen a la derecha en escritorio -->
+      <!-- Imagen a la derecha -->
       <div class="col-lg-6 order-2 text-center">
-        <img src="assets/firing/firing.webp" alt="Firing Service" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
+        <img 
+          src="assets/firing/firing.webp" 
+          alt="Firing Service"
+          class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
+        
         <!-- Botón móvil -->
-        <button type="button" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block" data-bs-toggle="modal" data-bs-target="#modalFiringService">
+        <button 
+          type="button" 
+          class="btn bg-azul text-white mt-3 fs-5 d-lg-none d-inline-block"
+          data-bs-toggle="modal"
+          data-bs-target="#modalFiringService">
           Book Now
         </button>
       </div>
@@ -42,29 +56,42 @@
   </div>
 </section>
 
+
 <!-- Modal Firing Service -->
-<div class="modal fade" id="modalFiringService" tabindex="-1" aria-labelledby="modalFiringServiceLabel" aria-hidden="true">
+<div 
+  class="modal fade"
+  id="modalFiringService"
+  tabindex="-1" 
+  aria-labelledby="modalFiringServiceLabel"
+  aria-hidden="true">
+
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
+
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title" id="modalFiringServiceLabel">Firing Service Reservation</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
+
+      <div class="modal-body fs-5" style="color:#6b5e52;">
         <p>
-          Do you create your own ceramics and need a place to fire them? At Ashya Art, you can either rent the entire kiln (80 l) or arrange for the firing of just a few pieces.
+          Do you create your own ceramics and need a place to fire them?
+          At Ashya Art, you can either rent the entire kiln (80 l) or arrange for the firing of just a few pieces.
         </p>
+
         <p>
-          Make an appointment to bring your ceramics for firing. Please ensure you bring details about the clay and glazes used — without this information we cannot accept your ceramics, as they must be fired at the correct temperatures.
+          Make an appointment to bring your ceramics for firing.  
+          Please ensure you bring details about the clay and glazes used — without this information we cannot accept your ceramics, as they must be fired at the correct temperatures.
         </p>
-        <p><strong>Costs:</strong></p>
-        <ul>
+
+        <p class="fw-bold" style="color:#3E3028;">Costs:</p>
+        <ul class="fs-5" style="color:#6b5e52;">
           <li>Renting kiln (80 l) for bisque firing – 35€</li>
           <li>Renting kiln (80 l) for glaze firing – 40€</li>
-          <li>Firing one piece only (cup size) bisque or glaze – 4€</li>
+          <li>Firing one piece only (cup size) – 4€</li>
         </ul>
 
-        <form>
+        <form class="fs-5">
 
           <!-- Service Type -->
           <div class="mb-3">
@@ -80,60 +107,96 @@
           <!-- Quantity -->
           <div class="mb-3">
             <label class="form-label fw-bold">Number of pieces</label>
-            <input type="number" class="form-control" min="1" [(ngModel)]="cliente.numeroPiezas" name="numeroPiezas" placeholder="Number of pieces">
+            <input 
+              type="number" 
+              class="form-control"
+              min="1"
+              [(ngModel)]="cliente.numeroPiezas"
+              name="numeroPiezas"
+              placeholder="Number of pieces">
           </div>
 
-          <!-- Your Name -->
+          <!-- Name -->
           <div class="mb-3">
             <label class="form-label fw-bold">Your Name</label>
-            <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" placeholder="Your full name">
+            <input 
+              type="text"
+              class="form-control"
+              [(ngModel)]="cliente.nombre"
+              name="nombre"
+              placeholder="Your full name">
           </div>
 
-          <!-- Clay & Glaze Details -->
+          <!-- Clay & Glaze -->
           <div class="mb-3">
             <label class="form-label fw-bold">Clay and glaze details</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="cliente.detallesMaterial" name="detallesMaterial" placeholder="Describe the clay and glazes used"></textarea>
+            <textarea 
+              class="form-control"
+              rows="3"
+              [(ngModel)]="cliente.detallesMaterial"
+              name="detallesMaterial"
+              placeholder="Describe the clay and glazes used">
+            </textarea>
           </div>
 
-          <!-- Your email address -->
+          <!-- Email -->
           <div class="mb-3">
             <label class="form-label fw-bold">Your email address</label>
-            <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" placeholder="email@example.com">
+            <input 
+              type="email"
+              class="form-control"
+              [(ngModel)]="cliente.email"
+              name="email"
+              placeholder="email@example.com">
           </div>
 
-          <!-- Your phone number -->
+          <!-- Phone -->
           <div class="mb-3">
             <label class="form-label fw-bold">Your phone number</label>
-            <input type="text" class="form-control" [(ngModel)]="cliente.telefono" name="telefono" placeholder="+34 600 000 000">
+            <input 
+              type="text"
+              class="form-control"
+              [(ngModel)]="cliente.telefono"
+              name="telefono"
+              placeholder="+34 600 000 000">
           </div>
 
-          <!-- Additional questions -->
+          <!-- Questions -->
           <div class="mb-3">
             <label class="form-label fw-bold">Any additional questions?</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="cliente.preguntasAdicionales" name="preguntasAdicionales" placeholder="Write here"></textarea>
+            <textarea 
+              class="form-control"
+              rows="3"
+              [(ngModel)]="cliente.preguntasAdicionales"
+              name="preguntasAdicionales"
+              placeholder="Write here">
+            </textarea>
           </div>
 
         </form>
       </div>
+
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-success" (click)="enviarSolicitudFiring()">Send</button>
+        <button class="btn btn-secondary fs-5" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn bg-azul text-white fs-5" (click)="enviarSolicitudFiring()">Send</button>
       </div>
     </div>
   </div>
 </div>
 
-  <app-feedback-modal 
-    *ngIf="mostrarFeedback"
-    [status]="feedbackTipo"
-    [title]="feedbackTitulo"
-    [message]="feedbackMensaje"
-    (closed)="cerrarFeedback()">
-  </app-feedback-modal>
 
-  <app-valorations
+<!-- Feedback -->
+<app-feedback-modal 
+  *ngIf="mostrarFeedback"
+  [status]="feedbackTipo"
+  [title]="feedbackTitulo"
+  [message]="feedbackMensaje"
+  (closed)="cerrarFeedback()">
+</app-feedback-modal>
+
+<!-- Reviews -->
+<app-valorations
   [title]="'Reviews from our workshops'"
   [itemsPerSlide]="4"
   [interval]="6000">
-  </app-valorations>
-
+</app-valorations>

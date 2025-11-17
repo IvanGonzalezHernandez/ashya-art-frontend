@@ -3,31 +3,45 @@
   <div class="container">
     <div class="row align-items-center">
 
-      <!-- Imagen a la izquierda en escritorio -->
+      <!-- Imagen a la izquierda -->
       <div class="col-lg-6 order-2 order-lg-1 text-center">
-        <img src="assets/tarjeta-regalo/plantilla-tarjeta-regalo.webp" alt="Gift Cards" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
+        <img 
+          src="assets/tarjeta-regalo/plantilla-tarjeta-regalo.webp" 
+          alt="Gift Cards" 
+          class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
+        
         <!-- Botón móvil -->
-        <a href="/gift-cards" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">Shop Gift Cards</a>
+        <a 
+          [routerLink]="['/gift-cards']"
+          class="btn bg-azul text-white mt-3 d-lg-none d-inline-block fs-5">
+          Shop Gift Cards
+        </a>
       </div>
 
-      <!-- Texto a la derecha en escritorio -->
+      <!-- Texto -->
       <div class="col-lg-6 order-1 order-lg-2 text-center text-lg-start mb-4 mb-lg-0">
-        <h2 class="fw-bold mb-4">Gift Cards</h2>
-        <p class="text-muted fs-5">
-          Give the gift of creativity with Ashya gift cards — perfect for any occasion and for anyone who loves handcrafted ceramics.
-        </p>
-        <p class="text-muted">
-          Our gift cards are valid for 6 months from the date of purchase and can be used for any product or workshop in our store.  
-          Choose from different amounts and let your loved ones explore our world of handmade art.
-        </p>
-        <p class="text-muted">
-          You can personalize your gift card with a special message to make it truly unique and memorable.
+        <h2 class="fw-bold mb-4" style="color:#3E3028;">Gift Cards</h2>
+
+        <p class="text-muted fs-5" style="color:#6b5e52;">
+          Give the gift of creativity with Ashya gift cards — perfect for any occasion
+          and for anyone who loves handcrafted ceramics.
         </p>
 
-        <!-- Lista de opciones -->
-        <h5 class="fw-bold mt-4" style="color: #3E3028;">Options</h5>
-        <ul class="list-unstyled text-muted">
-          <li>• Physical card with custom message</li>
+        <p class="text-muted fs-5" style="color:#6b5e52;">
+          Our gift cards are valid for 6 months from the date of purchase and can be used 
+          for any product or workshop in our store. Choose from different amounts and let 
+          your loved ones explore our world of handmade art.
+        </p>
+
+        <p class="text-muted fs-5" style="color:#6b5e52;">
+          You can personalize your gift card with a name to make it truly unique
+          and memorable.
+        </p>
+
+        <!-- Lista -->
+        <h5 class="fw-bold mt-4" style="color:#3E3028;">Options</h5>
+        <ul class="list-unstyled text-muted fs-5" style="color:#6b5e52;">
+          <li>• Digital card with custom name</li>
           <li>• Digital card via email</li>
           <li>• Valid for workshops and products</li>
         </ul>
@@ -37,23 +51,29 @@
   </div>
 </section>
 
+
 <!-- Gift Cards Listing -->
 <section class="py-4 bg-beige-claro">
   <div class="container">
-    <h2 class="text-center mb-4 fw-bold" style="color: #3E3028;">Choose Your Gift Card</h2>
-    <p class="text-center text-muted mb-5" style="max-width: 700px; margin: 0 auto; color: #6b5e52;">
+
+    <h2 class="text-center mb-4 fw-bold" style="color:#3E3028;">Choose Your Gift Card</h2>
+
+    <p class="text-center text-muted mb-5 fs-5" 
+       style="max-width: 700px; margin: 0 auto; color:#6b5e52;">
       Select the perfect gift card amount and surprise someone special.
     </p>
 
+    <!-- Loading -->
     <div *ngIf="loading" class="text-center my-4">
       <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-    </div> 
+    </div>
 
+    <!-- Cards -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" *ngIf="!loading">
       <div class="col" *ngFor="let card of tarjetas">
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
 
-          <!-- Imagen cuadrada -->
+          <!-- Imagen -->
           <div class="img-1x1 position-relative">
             <img
               [src]="card.imgUrl"
@@ -65,16 +85,19 @@
 
           <!-- Contenido -->
           <div class="card-body d-flex flex-column p-4">
-            <h5 class="card-title mb-1 text-dark fw-semibold text-truncate" [title]="card.nombre">
+            <h5 class="card-title mb-1 fw-semibold text-dark text-truncate fs-5" 
+                [title]="card.nombre">
               {{ card.nombre }}
             </h5>
 
             <div class="d-flex justify-content-between align-items-center mt-auto">
-              <span class="price fw-bold">{{ card.precio }}€</span>
+              <span class="price fw-bold fs-5" style="color:#3E3028;">
+                {{ card.precio }}€
+              </span>
 
               <a
                 [routerLink]="['/gift-cards', card.id]"
-                class="btn bg-azul text-white px-3"
+                class="btn bg-azul text-white px-3 fs-6"
                 [attr.aria-label]="'View gift card ' + card.nombre">
                 View details
               </a>
@@ -89,8 +112,9 @@
 </section>
 
 
-  <app-valorations
+<!-- Reviews -->
+<app-valorations
   [title]="'Reviews from our workshops'"
   [itemsPerSlide]="4"
   [interval]="6000">
-  </app-valorations>
+</app-valorations>

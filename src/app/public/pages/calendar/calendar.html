@@ -27,21 +27,22 @@
       <div class="col-12">
         <div class="grid">
           <div class="cell" *ngFor="let week of weeks; let r = index" [attr.data-row]="r">
-            <div class="day"
-                 *ngFor="let cell of week"
-                 [class.outside]="!cell.inCurrentMonth"
-                 [class.has-sessions]="cell.sessions.length"
-                 [class.selected]="selectedKey === cell.key"
-                 (click)="onSelectDay(cell)">
-              <div class="day-number">{{ cell.date.getDate() }}</div>
+          <div class="day"
+              *ngFor="let cell of week"
+              [class.outside]="!cell.inCurrentMonth"
+              [class.has-sessions]="cell.sessions.length"
+              [class.selected]="selectedKey === cell.key"
+              [class.past]="isPast(cell)"
+              (click)="!isPast(cell) && onSelectDay(cell)">
+            <div class="day-number">{{ cell.date.getDate() }}</div>
 
-              <!-- Indicador de sesiones -->
-              <div class="sessions-pill"
-                   *ngIf="cell.sessions.length"
-                   [attr.aria-label]="cell.sessions.length + ' classes'">
-                {{ cell.sessions.length }} class{{ cell.sessions.length > 1 ? 'es' : '' }}
-              </div>
+            <!-- Indicador de sesiones -->
+            <div class="sessions-pill"
+                *ngIf="cell.sessions.length"
+                [attr.aria-label]="cell.sessions.length + ' classes'">
+              {{ cell.sessions.length }} class{{ cell.sessions.length > 1 ? 'es' : '' }}
             </div>
+          </div>
           </div>
         </div>
       </div>
@@ -105,7 +106,7 @@
                   </option>
                 </select>
 
-                <button class="btn btn-success btn-sm px-3 py-2 flex-shrink-0" (click)="agregarCursoAlCarrito(fecha)">
+                <button class="btn bg-azul text-white btn-sm px-3 py-2 flex-shrink-0" (click)="agregarCursoAlCarrito(fecha)">
                   Add to cart
                 </button>
               </div>

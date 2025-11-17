@@ -34,7 +34,7 @@
   &.outside { opacity: .45; }
 
   &.selected {
-    outline: 2px solid #3E3028;
+    outline: 2px solid #3A9097;
     outline-offset: 2px;
   }
 }
@@ -79,7 +79,7 @@
   left: 50%;
   bottom: .55rem;
   transform: translateX(-50%);
-  background: #3E3028;
+  background: #3A9097;
   color: #fff;
   border-radius: 999px;
   padding: .18rem .6rem;
@@ -87,3 +87,23 @@
   font-weight: 700;
   line-height: 1;
 }
+
+.day.past {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+
+  &.has-sessions {
+    cursor: default;
+  }
+}
+
+.day.past.outside {
+  opacity: 0.25;
+}
+
+.day.past .sessions-pill {
+  background: rgba(58, 144, 151, 0.3);
+}
+
