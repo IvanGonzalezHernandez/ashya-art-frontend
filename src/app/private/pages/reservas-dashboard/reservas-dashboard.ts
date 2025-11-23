@@ -59,7 +59,8 @@ export class ReservasDashboard implements OnInit {
       fechaCurso: '',
       nombreCliente: '',
       telefono: '',
-      email: ''
+      email: '',
+      pagado: true
     };
   }
 

@@ -9,4 +9,5 @@ export interface Reservas {
     email: String;
     fechaCurso: string;
     nombreCliente: string;
+    pagado: boolean;
 }

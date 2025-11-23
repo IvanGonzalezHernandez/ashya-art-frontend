@@ -354,9 +354,10 @@
                 <tr>
                   <th style="width: 20%;">Client</th>
                   <th style="width: 15%;">Tlf</th>
-                  <th style="width: 30%;">Email</th>
+                  <th style="width: 25%;">Email</th>
                   <th style="width: 10%;">Seats</th>
-                  <th style="width: 25%;">Booked on</th>
+                  <th style="width: 15%;">Payment</th>
+                  <th style="width: 15%;">Booked on</th>
                 </tr>
               </thead>
               <tbody>
@@ -366,18 +367,40 @@
                       {{ r.nombreCliente }}
                     </span>
                   </td>
+
                   <td class="text-nowrap">{{ r.telefono }}</td>
-                  <td class="text-nowrap">{{ r.email }}</td>
+
+                  <td class="text-nowrap">
+                    <span class="d-inline-block w-100 text-truncate" [title]="r.email">
+                      {{ r.email }}
+                    </span>
+                  </td>
+
                   <td class="text-nowrap">{{ r.plazasReservadas }}</td>
-                  <td class="text-nowrap">{{ r.fechaReserva | date:'yyyy-MM-dd' }}</td>
+
+                  <!-- ESTADO DE PAGO -->
+                  <td class="text-nowrap">
+                    <span class="badge"
+                          [ngClass]="r.pagado ? 'bg-success' : 'bg-warning text-dark'">
+                      {{ r.pagado ? 'Paid' : 'Atelier' }}
+                    </span>
+                  </td>
+
+                  <td class="text-nowrap">
+                    {{ r.fechaReserva | date:'yyyy-MM-dd' }}
+                  </td>
                 </tr>
+
                 <tr *ngIf="reservasDeFecha.length === 0">
-                  <td colspan="5" class="text-center text-muted">No bookings for this date.</td>
+                  <td colspan="6" class="text-center text-muted">
+                    No bookings for this date.
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+
 
       </div>
     </div>
