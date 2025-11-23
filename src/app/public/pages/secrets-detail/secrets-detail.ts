@@ -5,11 +5,12 @@ import { Secreto } from '../../../models/secreto.model';
 import { SecretoService } from '../../../services/secreto/secreto';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { ItemCarrito } from '../../../models/item-carrito';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 @Component({
   selector: 'app-secrets-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RevealAnimateDirective],
   templateUrl: './secrets-detail.html',
   styleUrls: ['./secrets-detail.scss']
 })

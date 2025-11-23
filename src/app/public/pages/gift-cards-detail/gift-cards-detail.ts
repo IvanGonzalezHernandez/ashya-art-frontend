@@ -6,11 +6,12 @@ import { CarritoService } from '../../../services/carrito/carrito';
 import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaRegalo';
 import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
 import { ItemCarrito } from '../../../models/item-carrito';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 @Component({
   selector: 'app-gift-cards-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule], // 👈 añadir FormsModule
+  imports: [CommonModule, RouterModule, FormsModule, RevealAnimateDirective],
   templateUrl: './gift-cards-detail.html',
   styleUrls: ['./gift-cards-detail.scss']
 })

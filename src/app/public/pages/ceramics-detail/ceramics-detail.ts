@@ -6,11 +6,12 @@ import { Producto } from '../../../models/producto.model';
 import { RouterModule } from '@angular/router';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { CarritoService } from '../../../services/carrito/carrito';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 @Component({
   selector: 'app-ceramics-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RevealAnimateDirective],
   templateUrl: './ceramics-detail.html',
   styleUrls: ['./ceramics-detail.scss']
 })

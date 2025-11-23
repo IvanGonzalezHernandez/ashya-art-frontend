@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { FiringServiceService } from '../../../services/firing/firing';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { ValorationsComponent } from '../../../shared/valorations/valorations';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-firing-services',
-  imports: [CommonModule, FormsModule, FeedbackModalComponent, ValorationsComponent],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, ValorationsComponent, RevealAnimateDirective],
   standalone: true,
   templateUrl: './firing-services.html',
   styleUrl: './firing-services.scss'

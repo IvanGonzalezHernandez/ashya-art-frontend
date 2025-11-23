@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { StudioService, OpenStudioSolicitudDto } from '../../../services/studio/studio';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-studio',
-  imports: [CommonModule, FormsModule, FeedbackModalComponent],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, RevealAnimateDirective],
   templateUrl: './studio.html',
   styleUrl: './studio.scss'
 })

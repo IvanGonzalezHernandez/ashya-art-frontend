@@ -1,12 +1,14 @@
 <div *ngIf="loading" class="text-center my-4">
-    <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
+  <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
 </div> 
 
 <section class="py-5 bg-beige" *ngIf="cursoSeleccionado && !loading">
-    <div class="container">
+  <div class="container">
 
     <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
+    <nav aria-label="breadcrumb" class="mb-4"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0s'">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a routerLink="/workshops" class="text-decoration-none" style="color: #3E3028;">Workshops</a>
@@ -14,100 +16,110 @@
         <li class="breadcrumb-item active" aria-current="page">{{ cursoSeleccionado.nombre }}</li>
       </ol>
     </nav>
-  
-      <!-- Nombre y subtítulo -->
-      <div class="row mb-4">
-        <div class="col-12 text-center">
-          <h1 class="fw-bold" style="color: #3E3028;">{{ cursoSeleccionado.nombre }}</h1>
-          <p class="fs-5 text-muted">{{ cursoSeleccionado.subtitulo }}</p>
-        </div>
+
+    <!-- Nombre y subtítulo -->
+    <div class="row mb-4"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0.1s'">
+      <div class="col-12 text-center">
+        <h1 class="fw-bold" style="color: #3E3028;">{{ cursoSeleccionado.nombre }}</h1>
+        <p class="fs-5 text-muted">{{ cursoSeleccionado.subtitulo }}</p>
       </div>
-  
-      <div class="row g-4 align-items-center">
-        <!-- Carrusel de imágenes -->
-<div class="col-lg-6" *ngIf="obtenerImagenesValidas().length > 0">
-  <div id="cursoCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner rounded-4 shadow">
-      <ng-container *ngFor="let img of obtenerImagenesValidas(); let i = index">
-        <div class="carousel-item" [class.active]="i === 0">
-          <div class="img-1x1">
-            <img [src]="img" alt="Course image" class="img-1x1-content">
-          </div>
-        </div>
-      </ng-container>
     </div>
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#cursoCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#cursoCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
-    </button>
-  </div>
-</div>
+    <div class="row g-4 align-items-center">
 
-<!-- Si no hay imágenes, muestra una imagen genérica -->
-<div class="col-lg-6 text-center" *ngIf="obtenerImagenesValidas().length === 0">
-  <div class="img-1x1 rounded-4 shadow d-flex align-items-center justify-content-center bg-light">
-    <span class="text-muted">No images available</span>
-  </div>
-</div>
-
-  
-        <!-- Descripción y detalles -->
-        <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">
-            <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
-          
-            <div class="text-muted fs-5 flex-grow-1 desc-text">
-              {{ cursoSeleccionado.descripcion }}
-            </div>
-          
-            <ul class="list-unstyled mt-4">
-
-              <li *ngIf="esValido(cursoSeleccionado.nivel)">
-                <strong>Level:</strong> {{ cursoSeleccionado.nivel }}
-              </li>
-
-              <li *ngIf="esValido(cursoSeleccionado.duracion)">
-                <strong>Duration:</strong> {{ cursoSeleccionado.duracion }}
-              </li>
-
-              <li *ngIf="esValido(cursoSeleccionado.localizacion)">
-                <strong>Location:</strong> {{ cursoSeleccionado.localizacion }}
-              </li>
-
-              <li *ngIf="esValido(cursoSeleccionado.piezas)">
-                <strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}
-              </li>
-
-              <li *ngIf="esValido(cursoSeleccionado.materiales)">
-                <strong>Materials:</strong> {{ cursoSeleccionado.materiales }}
-              </li>
-
-              <li *ngIf="esValido(cursoSeleccionado.plazasMaximas)">
-                <strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}
-              </li>
-
-
-              <li *ngIf="esValido(cursoSeleccionado.precio)">
-                <strong>Price:</strong> {{ cursoSeleccionado.precio }}€
-              </li>
-
-            </ul>
-
-
+      <!-- Carrusel de imágenes -->
+      <div class="col-lg-6"
+           *ngIf="obtenerImagenesValidas().length > 0"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0.2s'">
+        <div id="cursoCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner rounded-4 shadow">
+            <ng-container *ngFor="let img of obtenerImagenesValidas(); let i = index">
+              <div class="carousel-item" [class.active]="i === 0">
+                <div class="img-1x1">
+                  <img [src]="img" alt="Course image" class="img-1x1-content">
+                </div>
+              </div>
+            </ng-container>
           </div>
+
+          <button class="carousel-control-prev" type="button" data-bs-target="#cursoCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#cursoCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
       </div>
-  
-      <!-- Botón centrado fuera del row para que quede debajo -->
-      <div class="mt-4 text-center">
-        <button class="btn text-white bg-azul px-4 py-2" (click)="openModal('modalFechasDisponibles')">
-          Reserve Course
-        </button>
+
+      <!-- Si no hay imágenes -->
+      <div class="col-lg-6 text-center"
+           *ngIf="obtenerImagenesValidas().length === 0"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0.2s'">
+        <div class="img-1x1 rounded-4 shadow d-flex align-items-center justify-content-center bg-light">
+          <span class="text-muted">No images available</span>
+        </div>
       </div>
-  
+
+      <!-- Descripción y detalles -->
+      <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start"
+           appRevealAnimate="animate__fadeInRight"
+           [delay]="'0.3s'">
+
+        <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
+
+        <div class="text-muted fs-5 flex-grow-1 desc-text">
+          {{ cursoSeleccionado.descripcion }}
+        </div>
+
+        <ul class="list-unstyled mt-4">
+          <li *ngIf="esValido(cursoSeleccionado.nivel)">
+            <strong>Level:</strong> {{ cursoSeleccionado.nivel }}
+          </li>
+
+          <li *ngIf="esValido(cursoSeleccionado.duracion)">
+            <strong>Duration:</strong> {{ cursoSeleccionado.duracion }}
+          </li>
+
+          <li *ngIf="esValido(cursoSeleccionado.localizacion)">
+            <strong>Location:</strong> {{ cursoSeleccionado.localizacion }}
+          </li>
+
+          <li *ngIf="esValido(cursoSeleccionado.piezas)">
+            <strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}
+          </li>
+
+          <li *ngIf="esValido(cursoSeleccionado.materiales)">
+            <strong>Materials:</strong> {{ cursoSeleccionado.materiales }}
+          </li>
+
+          <li *ngIf="esValido(cursoSeleccionado.plazasMaximas)">
+            <strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}
+          </li>
+
+          <li *ngIf="esValido(cursoSeleccionado.precio)">
+            <strong>Price:</strong> {{ cursoSeleccionado.precio }}€
+          </li>
+        </ul>
+
+      </div>
     </div>
-  </section>
+
+    <!-- Botón centrado -->
+    <div class="mt-4 text-center"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0.4s'">
+      <button class="btn text-white bg-azul px-4 py-2" (click)="openModal('modalFechasDisponibles')">
+        Reserve Course
+      </button>
+    </div>
+
+  </div>
+</section>
+
   
   
 <!-- Modal Bootstrap normal -->

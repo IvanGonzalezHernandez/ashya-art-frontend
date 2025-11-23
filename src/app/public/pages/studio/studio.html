@@ -3,42 +3,71 @@
   <div class="container">
     <div class="row align-items-center">
 
-      <!-- Texto -->
+      <!-- Texto con animaciones -->
       <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
-        <h2 class="fw-bold mb-4" style="color: #3E3028;">Open Studio</h2>
-        <p class="text-muted fs-5" style="color:#6b5e52;">
+
+        <h2 class="fw-bold mb-4"
+            style="color: #3E3028;"
+            appRevealAnimate="animate__fadeInLeft"
+            [delay]="'0s'">
+          Open Studio
+        </h2>
+
+        <p class="text-muted fs-5"
+           style="color:#6b5e52;"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0.1s'">
           Welcome to Ashya’s Studio, your favourite place for all-around ceramics. Located in Hamburg, we offer a fun and welcoming environment for everyone, whether you’re a newbie or a pro. Try your hand at wheel throwing, hand building, and glazing with our awesome instructors. Come hang out, get creative, and make some amazing pottery with us!
         </p>
 
-        <h5 class="fw-bold mt-4" style="color: #3E3028;">After the Beginner Course</h5>
-        <p class="text-muted fs-5" style="color:#6b5e52;">
+        <h5 class="fw-bold mt-4"
+            style="color: #3E3028;"
+            appRevealAnimate="animate__fadeInLeft"
+            [delay]="'0.2s'">
+          After the Beginner Course
+        </h5>
+
+        <p class="text-muted fs-5"
+           style="color:#6b5e52;"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0.3s'">
           After completing the <strong>Hand Building Ceramic Class</strong>, you’ll be ready for our Open Studio! Here, you can apply and further develop what you’ve learned in a supportive and inspiring environment.
         </p>
 
-        <p class="text-muted fs-5" style="color:#6b5e52;">
+        <p class="text-muted fs-5"
+           style="color:#6b5e52;"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0.4s'">
           Every <strong>Wednesday and Friday</strong> from 6 PM to 9 PM and <strong>Saturday</strong> from 4:30 PM to 8 PM, our studio is open for you to practice independently and enhance your skills. Experiment with different types of clay and techniques while enjoying the creative community.
         </p>
 
-        <!-- Summary -->
-        <ul class="list-unstyled text-muted mb-4 fs-5" style="color:#6b5e52;">
+        <ul class="list-unstyled text-muted mb-4 fs-5"
+            style="color:#6b5e52;"
+            appRevealAnimate="animate__fadeInLeft"
+            [delay]="'0.5s'">
           <li><strong>Level:</strong> Experienced level required (or completion of at least one hand-building class at Ashya Studio).</li>
           <li><strong>Materials included:</strong> 2kg of clay</li>
           <li><strong>Price:</strong> 30€ per session</li>
           <li><strong>Firing:</strong> Not included (see firing service for costs)</li>
         </ul>
 
-        <!-- Botón escritorio -->
         <button 
           type="button" 
-          class="btn bg-azul text-white mt-3 d-none d-lg-inline-block fs-5" 
-          data-bs-toggle="modal" 
-          data-bs-target="#modalOpenStudio">
+          class="btn bg-azul text-white mt-3 d-none d-lg-inline-block"
+          data-bs-toggle="modal"
+          data-bs-target="#modalOpenStudio"
+          appRevealAnimate="animate__fadeInLeft"
+          [delay]="'0.6s'">
           Book Now
         </button>
+
       </div>
 
-      <!-- Imagen -->
-      <div class="col-lg-6 text-center mb-4">
+      <!-- Imagen con animación derecha -->
+      <div class="col-lg-6 text-center mb-4"
+           appRevealAnimate="animate__fadeInRight"
+           [delay]="'0.2s'">
+
         <img 
           src="assets/studio/studio.jpg" 
           alt="Ashya Studio - Open Studio" 
@@ -47,9 +76,11 @@
         <!-- Botón móvil -->
         <button 
           type="button" 
-          class="btn bg-azul text-white mt-3 d-lg-none d-inline-block fs-5" 
-          data-bs-toggle="modal" 
-          data-bs-target="#modalOpenStudio">
+          class="btn bg-azul text-white mt-3 d-lg-none d-inline-block fs-5"
+          data-bs-toggle="modal"
+          data-bs-target="#modalOpenStudio"
+          appRevealAnimate="animate__fadeInRight"
+          [delay]="'0.3s'">
           Book Now
         </button>
       </div>

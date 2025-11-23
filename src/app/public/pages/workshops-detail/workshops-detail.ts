@@ -11,13 +11,14 @@ import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-
 import { RouterModule } from '@angular/router';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { CarritoService } from '../../../services/carrito/carrito';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-workshops-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, FeedbackModalComponent, RouterModule],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, RouterModule, RevealAnimateDirective],
   templateUrl: './workshops-detail.html',
   styleUrls: ['./workshops-detail.scss']
 })

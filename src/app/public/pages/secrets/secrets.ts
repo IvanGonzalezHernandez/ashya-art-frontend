@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SecretoService } from '../../../services/secreto/secreto';
 import { Secreto } from '../../../models/secreto.model';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 @Component({
   selector: 'app-secrets',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RevealAnimateDirective],
   templateUrl: './secrets.html',
   styleUrls: ['./secrets.scss']
 })

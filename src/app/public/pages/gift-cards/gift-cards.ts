@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaRegalo';
 import { ValorationsComponent } from '../../../shared/valorations/valorations';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 @Component({
   selector: 'app-gift-cards',
   standalone: true,
-  imports: [CommonModule, RouterModule, ValorationsComponent],
+  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective],
   templateUrl: './gift-cards.html',
   styleUrls: ['./gift-cards.scss']
 })

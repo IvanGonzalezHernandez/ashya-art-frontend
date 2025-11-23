@@ -4,7 +4,11 @@
     <div class="row align-items-center">
 
       <!-- Texto a la izquierda en escritorio -->
-      <div class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0">
+      <div 
+        class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0"
+        appRevealAnimate="animate__fadeInLeft"
+        [delay]="'0s'">
+        
         <h2 class="fw-bold mb-4" style="color:#3E3028;">Firing Service</h2>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
@@ -20,9 +24,9 @@
         <!-- Lista de precios -->
         <h5 class="fw-bold mt-4" style="color:#3E3028;">Costs</h5>
         <ul class="list-unstyled text-muted fs-5" style="color:#6b5e52;">
-          <li>• Renting kiln (80 l) for bisque firing – <strong>35€</strong></li>
-          <li>• Renting kiln (80 l) for glaze firing – <strong>40€</strong></li>
-          <li>• Firing one piece only (cup size) bisque or glaze – <strong>4€</strong></li>
+          <li>• Renting kiln (80 l) for bisque firing – 35€</li>
+          <li>• Renting kiln (80 l) for glaze firing – 40€</li>
+          <li>• Firing one piece only (cup size) bisque or glaze – 4€</li>
         </ul>
 
         <!-- Botón escritorio -->
@@ -36,7 +40,11 @@
       </div>
 
       <!-- Imagen a la derecha -->
-      <div class="col-lg-6 order-2 text-center">
+      <div 
+        class="col-lg-6 order-2 text-center"
+        appRevealAnimate="animate__fadeInRight"
+        [delay]="'0.1s'">
+        
         <img 
           src="assets/firing/firing.webp" 
           alt="Firing Service"
@@ -45,7 +53,7 @@
         <!-- Botón móvil -->
         <button 
           type="button" 
-          class="btn bg-azul text-white mt-3 fs-5 d-lg-none d-inline-block"
+          class="btn bg-azul text-white mt-3 d-lg-none d-inline-block"
           data-bs-toggle="modal"
           data-bs-target="#modalFiringService">
           Book Now
@@ -196,6 +204,8 @@
 
 <!-- Reviews -->
 <app-valorations
+  appRevealAnimate="animate__fadeInUp"
+  [delay]="'0.1s'"
   [title]="'Reviews from our workshops'"
   [itemsPerSlide]="4"
   [interval]="6000">

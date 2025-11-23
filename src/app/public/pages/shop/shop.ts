@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ShopService } from '../../../services/shop/shop';
 import { Producto } from '../../../models/producto.model';
 import { RouterModule } from '@angular/router';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RevealAnimateDirective],
   templateUrl: './shop.html',
   styleUrls: ['./shop.scss']
 })

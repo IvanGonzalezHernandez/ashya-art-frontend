@@ -6,25 +6,41 @@
   <div class="container">
 
     <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
+    <nav aria-label="breadcrumb"
+         class="mb-4"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0s'">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a routerLink="/workshops/gift-cards" class="text-decoration-none" style="color: #3E3028;">Gift Cards</a>
+          <a routerLink="/workshops/gift-cards"
+             class="text-decoration-none"
+             style="color: #3E3028;">
+            Gift Cards
+          </a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">{{ tarjetaSeleccionada.nombre }}</li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ tarjetaSeleccionada.nombre }}
+        </li>
       </ol>
     </nav>
 
     <!-- Nombre -->
-    <div class="row mb-4">
+    <div class="row mb-4"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0.1s'">
       <div class="col-12 text-center">
-        <h1 class="fw-bold" style="color: #3E3028;">{{ tarjetaSeleccionada.nombre }}</h1>
+        <h1 class="fw-bold" style="color: #3E3028;">
+          {{ tarjetaSeleccionada.nombre }}
+        </h1>
       </div>
     </div>
 
     <div class="row g-4 align-items-center">
+
       <!-- Imagen -->
-      <div class="col-lg-6 text-center">
+      <div class="col-lg-6 text-center"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0.2s'">
         <div class="img-1x1 rounded-4 shadow mx-auto">
           <img [src]="imgTarjetaUrl"
                alt="{{ tarjetaSeleccionada.nombre }}"
@@ -34,28 +50,40 @@
       </div>
 
       <!-- Detalles -->
-      <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start">
+      <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start"
+           appRevealAnimate="animate__fadeInRight"
+           [delay]="'0.3s'">
         <h3 class="fw-bold mb-3" style="color: #3E3028;">Details</h3>
 
-        <ul class="list-unstyled mt-4">
-          <li><strong>Price:</strong> {{ tarjetaSeleccionada.precio }} €</li>
+        <ul class="list-unstyled mt-4 fs-5 text-muted" style="color:#6b5e52;">
+          <li>
+            <strong>Price:</strong> {{ tarjetaSeleccionada.precio }} €
+          </li>
         </ul>
       </div>
+
     </div>
 
     <!-- Botón añadir al carrito -->
-  <div class="mt-4 text-center">
-    <button class="btn text-white bg-azul px-4 py-2"
-            data-bs-toggle="modal"
-            data-bs-target="#modalDestinatario">
-      Add to cart
-    </button>
-  </div>
+    <div class="mt-4 text-center"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0.4s'">
+      <button class="btn text-white bg-azul px-4 py-2"
+              data-bs-toggle="modal"
+              data-bs-target="#modalDestinatario">
+        Add to cart
+      </button>
+    </div>
+
   </div>
 </section>
 
 <!-- Modal Destinatario Gift Card -->
-<div class="modal fade" id="modalDestinatario" tabindex="-1" aria-labelledby="modalDestinatarioLabel" aria-hidden="true">
+<div class="modal fade"
+     id="modalDestinatario"
+     tabindex="-1"
+     aria-labelledby="modalDestinatarioLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
@@ -70,7 +98,7 @@
             <input type="text"
                    class="form-control"
                    [(ngModel)]="destinatario"
-                   placeholder="Jhon Doe"
+                   placeholder="John Doe"
                    name="destinatario"
                    maxlength="120">
           </div>

@@ -9,17 +9,25 @@
     <!-- Introduction to Courses -->
     <section class="py-3 bg-beige-claro">
       <div class="container text-center">
-        <h2 class="fw-bold mb-4" style="color:#3E3028;">
+        <h2 class="fw-bold mb-4" style="color:#3E3028;"
+            appRevealAnimate="animate__fadeInUp"
+            [delay]="'0s'">
           Courses & Workshops
         </h2>
 
-        <p class="lead mb-4 fs-5" style="max-width:720px;margin:0 auto;color:#6b5e52;">
+        <p class="lead mb-4 fs-5"
+           style="max-width:720px;margin:0 auto;color:#6b5e52;"
+           appRevealAnimate="animate__fadeInUp"
+           [delay]="'0.1s'">
           Discover the joy of ceramics through our hands-on courses and creative workshops.
           Learn essential techniques, explore new materials, and develop your artistic voice
           in a relaxed and inspiring atmosphere.
         </p>
 
-        <p class="mb-0 fs-5" style="max-width:680px;margin:0.5rem auto 0;color:#6b5e52;">
+        <p class="mb-0 fs-5"
+           style="max-width:680px;margin:0.5rem auto 0;color:#6b5e52;"
+           appRevealAnimate="animate__fadeInUp"
+           [delay]="'0.2s'">
           Small group sessions with personalized guidance — suitable for beginners and
           intermediate makers alike. Materials are included in most sessions.
         </p>
@@ -28,7 +36,10 @@
 
     <!-- Grid de cursos -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let curso of cursos">
+      <div class="col"
+           *ngFor="let curso of cursos; index as i"
+           appRevealAnimate="animate__fadeInUp"
+           [delay]="(i * 0.1) + 's'">
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
 
           <!-- Imagen 1x1 -->
@@ -75,6 +86,8 @@
 
 <!-- Reviews -->
 <app-valorations
+  appRevealAnimate="animate__fadeInUp"
+  [delay]="'0.1s'"
   [title]="'Reviews from our workshops'"
   [itemsPerSlide]="4"
   [interval]="6000">

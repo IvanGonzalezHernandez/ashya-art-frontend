@@ -4,7 +4,10 @@
     <div class="row align-items-center">
 
       <!-- Imagen a la izquierda -->
-      <div class="col-lg-6 order-2 order-lg-1 text-center">
+      <div
+        class="col-lg-6 order-2 order-lg-1 text-center"
+        appRevealAnimate="animate__fadeInLeft"
+        [delay]="'0.1s'">
         <img 
           src="assets/tarjeta-regalo/plantilla-tarjeta-regalo.webp" 
           alt="Gift Cards" 
@@ -19,7 +22,11 @@
       </div>
 
       <!-- Texto -->
-      <div class="col-lg-6 order-1 order-lg-2 text-center text-lg-start mb-4 mb-lg-0">
+      <div
+        class="col-lg-6 order-1 order-lg-2 text-center text-lg-start mb-4 mb-lg-0"
+        appRevealAnimate="animate__fadeInRight"
+        [delay]="'0s'">
+        
         <h2 class="fw-bold mb-4" style="color:#3E3028;">Gift Cards</h2>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
@@ -56,10 +63,17 @@
 <section class="py-4 bg-beige-claro">
   <div class="container">
 
-    <h2 class="text-center mb-4 fw-bold" style="color:#3E3028;">Choose Your Gift Card</h2>
+    <h2 class="text-center mb-4 fw-bold"
+        style="color:#3E3028;"
+        appRevealAnimate="animate__fadeInUp"
+        [delay]="'0s'">
+      Choose Your Gift Card
+    </h2>
 
     <p class="text-center text-muted mb-5 fs-5" 
-       style="max-width: 700px; margin: 0 auto; color:#6b5e52;">
+       style="max-width: 700px; margin: 0 auto; color:#6b5e52;"
+       appRevealAnimate="animate__fadeInUp"
+       [delay]="'0.1s'">
       Select the perfect gift card amount and surprise someone special.
     </p>
 
@@ -70,7 +84,12 @@
 
     <!-- Cards -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" *ngIf="!loading">
-      <div class="col" *ngFor="let card of tarjetas">
+      <div
+        class="col"
+        *ngFor="let card of tarjetas; index as i"
+        appRevealAnimate="animate__fadeInUp"
+        [delay]="(i * 0.1) + 's'">
+        
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
 
           <!-- Imagen -->
@@ -114,6 +133,8 @@
 
 <!-- Reviews -->
 <app-valorations
+  appRevealAnimate="animate__fadeInUp"
+  [delay]="'0.1s'"
   [title]="'Reviews from our workshops'"
   [itemsPerSlide]="4"
   [interval]="6000">

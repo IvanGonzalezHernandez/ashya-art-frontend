@@ -4,13 +4,14 @@ import { RouterModule } from '@angular/router';
 import { Curso } from '../../../models/curso.model';
 import { CursoService } from '../../../services/curso/curso';
 import { ValorationsComponent } from '../../../shared/valorations/valorations';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 @Component({
   selector: 'app-workshops',
   standalone: true,
   templateUrl: './workshops.html',
   styleUrls: ['./workshops.scss'],
-  imports: [CommonModule, RouterModule, ValorationsComponent]
+  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective]
 })
 export class Workshops implements OnInit {
   loading = false;

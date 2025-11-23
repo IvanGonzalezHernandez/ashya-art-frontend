@@ -2,7 +2,9 @@
   <div class="container">
 
     <!-- Header -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-3"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0s'">
       <h2 class="m-0 fw-bold" [style.color]="brandColor">{{ current | date:'MMMM yyyy' }}</h2>
       <div class="d-flex gap-2">
         <button class="btn btn-sm btn-outline-secondary" (click)="prevMonth()">&laquo;</button>
@@ -15,34 +17,45 @@
     <div *ngIf="loading" class="text-center my-4">
       <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
     </div>
-    <div *ngIf="!loading && error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="!loading && error"
+         class="alert alert-danger"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0.05s'">
+      {{ error }}
+    </div>
 
     <!-- Weekdays -->
-    <div class="row g-2 text-center small fw-semibold text-muted mb-1">
+    <div class="row g-2 text-center small fw-semibold text-muted mb-1"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0.1s'">
       <div class="col" *ngFor="let w of ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']">{{ w }}</div>
     </div>
 
     <!-- Calendar grid -->
-    <div class="row g-2">
+    <div class="row g-2"
+         appRevealAnimate="animate__fadeInUp"
+         [delay]="'0.15s'">
       <div class="col-12">
         <div class="grid">
-          <div class="cell" *ngFor="let week of weeks; let r = index" [attr.data-row]="r">
-          <div class="day"
-              *ngFor="let cell of week"
-              [class.outside]="!cell.inCurrentMonth"
-              [class.has-sessions]="cell.sessions.length"
-              [class.selected]="selectedKey === cell.key"
-              [class.past]="isPast(cell)"
-              (click)="!isPast(cell) && onSelectDay(cell)">
-            <div class="day-number">{{ cell.date.getDate() }}</div>
+          <div class="cell"
+               *ngFor="let week of weeks; let r = index"
+               [attr.data-row]="r">
+            <div class="day"
+                 *ngFor="let cell of week"
+                 [class.outside]="!cell.inCurrentMonth"
+                 [class.has-sessions]="cell.sessions.length"
+                 [class.selected]="selectedKey === cell.key"
+                 [class.past]="isPast(cell)"
+                 (click)="!isPast(cell) && onSelectDay(cell)">
+              <div class="day-number">{{ cell.date.getDate() }}</div>
 
-            <!-- Indicador de sesiones -->
-            <div class="sessions-pill"
-                *ngIf="cell.sessions.length"
-                [attr.aria-label]="cell.sessions.length + ' classes'">
-              {{ cell.sessions.length }} class{{ cell.sessions.length > 1 ? 'es' : '' }}
+              <!-- Indicador de sesiones -->
+              <div class="sessions-pill"
+                   *ngIf="cell.sessions.length"
+                   [attr.aria-label]="cell.sessions.length + ' classes'">
+                {{ cell.sessions.length }} class{{ cell.sessions.length > 1 ? 'es' : '' }}
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>

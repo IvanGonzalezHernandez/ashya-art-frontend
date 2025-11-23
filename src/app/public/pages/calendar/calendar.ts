@@ -10,6 +10,7 @@ import { ItemCarrito } from '../../../models/item-carrito';
 import { CursoService } from '../../../services/curso/curso';
 import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
 import { CarritoService } from '../../../services/carrito/carrito';
+import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 
 declare const bootstrap: any;
 
@@ -23,7 +24,7 @@ type DayCell = {
 @Component({
   selector: 'app-calendar-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, RevealAnimateDirective],
   templateUrl: './calendar.html',
   styleUrls: ['./calendar.scss']
 })

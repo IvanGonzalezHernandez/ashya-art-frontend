@@ -1,14 +1,24 @@
 <!-- Introducción general a Shop -->
 <section class="py-3 bg-beige-claro">
   <div class="container text-center">
-    <h2 class="fw-bold mb-4" style="color: #3E3028;">Shop Our Ceramics</h2>
+    <h2 class="fw-bold mb-4" style="color: #3E3028;"
+        appRevealAnimate="animate__fadeInUp"
+        [delay]="'0s'">
+      Shop Our Ceramics
+    </h2>
 
-    <p class="lead mb-5 fs-5" style="max-width: 700px; margin: 0 auto; color: #6b5e52;">
+    <p class="lead mb-5 fs-5"
+       style="max-width: 700px; margin: 0 auto; color: #6b5e52;"
+       appRevealAnimate="animate__fadeInUp"
+       [delay]="'0.1s'">
       Discover our handcrafted ceramics perfect for daily use or decoration.
       Each piece is carefully made to bring beauty and function into your home.
     </p>
 
-    <p class="fs-5" style="color: #6b5e52; max-width: 600px; margin: 0 auto;">
+    <p class="fs-5"
+       style="color: #6b5e52; max-width: 600px; margin: 0 auto;"
+       appRevealAnimate="animate__fadeInUp"
+       [delay]="'0.2s'">
       Browse our collection and find the perfect piece that speaks to your style and passion for handmade art.
     </p>
   </div>
@@ -24,7 +34,10 @@
   <div class="container">
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let producto of productos">
+      <div class="col"
+           *ngFor="let producto of productos; index as i"
+           appRevealAnimate="animate__fadeInUp"
+           [delay]="(i * 0.1) + 's'">
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
 
           <!-- Imagen 1x1 -->
@@ -49,7 +62,6 @@
             </p>
 
             <div class="d-flex justify-content-between align-items-center mt-auto">
-              
               <span class="price fw-bold fs-5" style="color:#3E3028;">
                 {{ producto.precio }}€
               </span>
@@ -76,7 +88,9 @@
   <div class="container text-center">
 
     <!-- Perfil con imagen circular, nombre y botón -->
-    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-4"
+         appRevealAnimate="animate__fadeIn"
+         [delay]="'0s'">
       <img src="assets/about/about.webp" alt="Instagram Ashya"
            class="rounded-circle shadow border border-3 border-dark me-md-3 mb-3 mb-md-0"
            style="width: 100px; height: 100px; object-fit: cover;">
@@ -91,8 +105,10 @@
 
     <!-- Galería 4x2 con imágenes -->
     <div class="row g-3">
-      <ng-container *ngFor="let imagen of imagenes">
-        <div class="col-6 col-md-3">
+      <ng-container *ngFor="let imagen of imagenes; index as i">
+        <div class="col-6 col-md-3"
+             appRevealAnimate="animate__zoomIn"
+             [delay]="(i * 0.05) + 's'">
           <a href="https://www.instagram.com/ashya_art/" target="_blank" rel="noopener noreferrer"
              class="text-decoration-none">
             <div class="position-relative overflow-hidden rounded-4 shadow" style="height: 300px;"
@@ -107,7 +123,6 @@
           </a>
         </div>
       </ng-container>
-      
     </div>
 
   </div>
