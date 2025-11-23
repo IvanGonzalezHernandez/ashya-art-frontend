@@ -181,59 +181,109 @@
   <div class="modal fade" id="modalFechasDisponibles" tabindex="-1" aria-labelledby="modalFechasDisponiblesLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content shadow-lg">
+
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title" id="modalFechasDisponiblesLabel">Available Dates</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
+
         <div class="modal-body">
+
           <div *ngIf="cursosFecha.length > 0; else noFechas">
+
             <div *ngFor="let fecha of cursosFecha" class="card mb-3">
+
               <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
-                <div>
-                  <h5 class="card-title mb-1">{{ fecha.fecha | date:'dd/MM/yyyy' }}</h5>
-                  <p class="mb-1">
+
+                <!-- IZQUIERDA -->
+                <div class="me-md-3">
+
+                  <!-- Fecha (gris si pasada o si FULL) -->
+                  <h5 class="card-title mb-1"
+                      [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {
+                        'opacity': '0.45',
+                        'font-style': 'italic'
+                      } : {}">
+                    {{ fecha.fecha | date:'dd/MM/yyyy' }}
+                  </h5>
+
+                  <!-- Horario -->
+                  <p class="mb-1"
+                    [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {'opacity': '0.45'} : {}">
                     {{ fecha.horaInicio }} - {{ fecha.horaFin }}
                   </p>
-                  <p class="mb-0">Available seats: <strong>{{ fecha.plazasDisponibles }}</strong></p>
+
+                  <!-- Available seats -->
+                  <p class="mb-0"
+                    [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {'opacity': '0.45'} : {}">
+                    Available:
+                    <strong>{{ fecha.plazasDisponibles }}</strong> seats
+                  </p>
+
                 </div>
+
+                <!-- DERECHA -->
                 <div class="d-flex align-items-center mt-3 mt-md-0">
+
                   <label for="plazasSelect{{fecha.id}}" class="me-2 mb-0">Quantity:</label>
+
+                  <!-- Select disabled si NO se puede reservar -->
                   <select
                     id="plazasSelect{{fecha.id}}"
                     class="form-select me-3"
                     style="width: 80px;"
                     [(ngModel)]="cantidades[fecha.id]"
                     name="cantidad{{fecha.id}}"
-                  >
-                    <option
-                      *ngFor="let _ of [].constructor(fecha.plazasDisponibles); let i = index"
-                      [value]="i + 1"
-                    >
-                      {{ i + 1 }}
-                    </option>
+                    [disabled]="fecha.plazasDisponibles === 0 || isPastDate(fecha.fecha)">
+
+                    <!-- Opción gris si no reservable -->
+                    <option *ngIf="fecha.plazasDisponibles === 0 || isPastDate(fecha.fecha)" value="0">0</option>
+
+                    <!-- Opciones normales -->
+                    <ng-container *ngIf="fecha.plazasDisponibles > 0 && !isPastDate(fecha.fecha)">
+                      <option *ngFor="let _ of [].constructor(fecha.plazasDisponibles); let i = index" [value]="i + 1">
+                        {{ i + 1 }}
+                      </option>
+                    </ng-container>
+
                   </select>
-                  <button class="btn bg-azul text-white" (click)="agregarCursoAlCarrito(fecha)">Add to cart</button>
+
+                  <!-- Botón Add to cart solo si SE PUEDE reservar -->
+                  <button
+                    *ngIf="fecha.plazasDisponibles > 0 && !isPastDate(fecha.fecha)"
+                    class="btn bg-azul text-white"
+                    (click)="agregarCursoAlCarrito(fecha)">
+                    Add to cart
+                  </button>
+
                 </div>
               </div>
             </div>
-  
+
             <div class="text-center mt-4">
-              <!-- Aquí llamamos al método que cierra este modal y abre el otro -->
-              <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">Dates don't fit my schedule, send a message</button>
+              <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">
+                Dates don't fit my schedule, send a message
+              </button>
             </div>
+
           </div>
-  
+
+          <!-- SIN FECHAS -->
           <ng-template #noFechas>
             <p>There are no available dates for this course.</p>
-  
             <div class="text-center mt-4">
-              <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">Request a course date</button>
+              <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">
+                Request a course date
+              </button>
             </div>
           </ng-template>
+
         </div>
+
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
+
       </div>
     </div>
   </div>

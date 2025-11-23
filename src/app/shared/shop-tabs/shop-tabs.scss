@@ -1,22 +1,89 @@
-.nav-tabs {
-  border-bottom: 2px solid #d2c7b8; /* línea base */
+/* === BARRA SUBNAV PEGADA AL NAVBAR === */
+
+/* Sticky justo debajo del navbar */
+.sticky-subnav {
+  position: sticky;
+  z-index: 1020;
 }
 
-.nav-tabs .nav-link {
-  color: #3E3028;
-  border: none;
-  background: transparent;
-  padding: 0.5rem 1.5rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border-bottom: 3px solid transparent; /* línea invisible por defecto */
+/* Rectángulo blanco centrado que envuelve SOLO los tabs */
+.subnav-container {
+  max-width: 300px;
+  margin: 0 auto;
+  background: #ffff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  padding: 8px 16px;
 }
 
-.nav-tabs .nav-link:hover {
-  border-bottom-color: rgba(62, 48, 40, 0.2); /* línea tenue al pasar */
+/* === ESTILO DE LAS TABS (MISMA ESTÉTICA QUE EL NAV) === */
+
+.custom-tabs {
+  border-bottom: none !important;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
-.nav-tabs .nav-link.active {
-  border-bottom-color: #3E3028; /* línea visible en pestaña activa */
-  font-weight: 700;
+.custom-tabs .nav-link {
+  border: none !important;
+  background: transparent !important;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #000 !important;
+  position: relative;
+  padding: 12px 20px;
+  transition: all 0.25s ease;
 }
+
+.custom-tabs .nav-link:hover {
+  opacity: 0.85;
+}
+
+.custom-tabs .nav-link.active {
+  color: #3A9097 !important;
+}
+
+/* Subrayado animado */
+.custom-tabs .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  width: 100%;
+  height: 2px;
+  background-color: #3A9097;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+  border-radius: 10px;
+}
+
+.custom-tabs .nav-link.active::after,
+.custom-tabs .nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Desktop (>= 992px): usamos el top que ya tienes */
+@media (min-width: 992px) {
+  .sticky-subnav {
+    top: 86px;   /* o el valor que ya te encaja en desktop */
+  }
+
+  .subnav-container {
+    max-width: 500px;
+  }
+}
+
+/* Mobile / tablet (< 992px): pegamos más la subnav al nav */
+@media (max-width: 991.98px) {
+  .sticky-subnav {
+    top: 56px;   /* 👈 más pequeño, prueba 56–60px hasta que quede pegado */
+  }
+
+  /* Opcional: hacer la caja un pelín más ancha en móvil */
+  .subnav-container {
+    max-width: 100%;
+    margin: 0 12px;
+  }
+}
+

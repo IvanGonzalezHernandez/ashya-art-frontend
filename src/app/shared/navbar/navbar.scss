@@ -1,0 +1,56 @@
+.logo-hover {
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.logo-hover:hover {
+    transform: scale(1.06); /* +6% de tamaño, muy sutil */
+}
+
+.nav-link-ashya {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #000 !important;
+  transition: all 0.25s ease;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+/* Hover elegante (texto sin cambiar de color, solo más visible) */
+.nav-link-ashya:hover {
+  opacity: 0.85;
+}
+
+/* Texto azul cuando está activo */
+.nav-link-ashya.active {
+  color: #3A9097 !important;   /* 🔵 azul Ashya */
+}
+
+/* Subrayado animado en active y hover */
+.nav-link-ashya.active::after,
+.nav-link-ashya:hover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: #3A9097;   
+  border-radius: 10px;
+  transform: scaleX(1);
+  transition: transform 0.25s ease;
+}
+
+/* Línea oculta por defecto */
+.nav-link-ashya::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: #3A9097;
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+

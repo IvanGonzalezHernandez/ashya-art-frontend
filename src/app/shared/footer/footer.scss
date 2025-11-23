@@ -1,0 +1,27 @@
+/* Hover en enlaces del footer */
+footer a {
+  transition: color 0.25s ease;
+}
+
+footer a:hover {
+  color: #3A9097 !important; /* azul de tu app */
+}
+
+/* Icono (Instagram) animación suave */
+footer i {
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+footer i:hover {
+  transform: scale(1.18);      /* un poco más grande */
+  color: #3A9097 !important;   /* mismo azul */
+}
+
+/* Logo inferior: ligera animación al hover */
+footer img {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+footer img:hover {
+  transform: scale(1.06); /* +6% de tamaño, muy sutil */
+}

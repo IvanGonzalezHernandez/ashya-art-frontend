@@ -344,6 +344,15 @@ export class Calendar implements OnInit {
     return d.getTime() < this.today.getTime();
   }
 
+  isPastDate(value: string | Date): boolean {
+    const d = this.parseDateFlexible(value);
+    if (!d) {
+      return false;
+    }
+    d.setHours(0, 0, 0, 0);
+    return d.getTime() < this.today.getTime();
+  }
+
   /** Primera imagen no vacía del curso */
   private firstImg(c?: Curso): string {
     if (!c) return '';

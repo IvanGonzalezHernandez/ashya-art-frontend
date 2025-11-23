@@ -51,7 +51,7 @@
   </div>
 </section>
 
-<!-- === MODAL (reutilizado con Workshops) === -->
+<!-- === MODAL  === -->
 <div class="modal fade" id="modalFechasDisponibles" tabindex="-1" aria-labelledby="modalFechasDisponiblesLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
@@ -78,11 +78,26 @@
                      class="rounded-3 shadow-sm flex-shrink-0"
                      style="width:72px;height:72px;object-fit:cover;">
                 <div class="text-truncate flex-grow-1">
-                  <h5 class="card-title mb-1 text-truncate">{{ getNombre(fecha) }}</h5>
-                  <div class="text-muted small text-truncate" *ngIf="getSubtitulo(fecha)">
+
+                  <!-- Nombre (gris/italic si pasada o sin plazas) -->
+                  <h5 class="card-title mb-1 text-truncate"
+                      [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {
+                        'opacity': '0.45',
+                        'font-style': 'italic'
+                      } : {}">
+                    {{ getNombre(fecha) }}
+                  </h5>
+
+                  <!-- Subtítulo -->
+                  <div class="text-muted small text-truncate"
+                       *ngIf="getSubtitulo(fecha)"
+                       [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {'opacity': '0.45'} : {}">
                     {{ getSubtitulo(fecha) }}
                   </div>
-                  <div class="small mt-1 text-nowrap">
+
+                  <!-- Fecha · horario · seats -->
+                  <div class="small mt-1 text-nowrap"
+                       [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {'opacity': '0.45'} : {}">
                     {{ fecha.fecha | date:'dd/MM/yyyy' }} · {{ fecha.horaInicio }} - {{ fecha.horaFin }}
                     · Seats: <strong>{{ fecha.plazasDisponibles }}</strong>
                   </div>
@@ -96,17 +111,30 @@
                 </div>
 
                 <label for="plazasSelect{{fecha.id}}" class="visually-hidden">Quantity</label>
+
                 <select id="plazasSelect{{fecha.id}}"
                         class="form-select form-select-sm"
                         style="width: 80px;"
                         [(ngModel)]="cantidades[fecha.id]"
-                        name="cantidad{{fecha.id}}">
-                  <option *ngFor="let _ of [].constructor(fecha.plazasDisponibles); let i = index" [value]="i + 1">
-                    {{ i + 1 }}
-                  </option>
+                        name="cantidad{{fecha.id}}"
+                        [disabled]="fecha.plazasDisponibles === 0 || isPastDate(fecha.fecha)">
+
+                  <!-- Si NO se puede reservar: solo 0 -->
+                  <option *ngIf="fecha.plazasDisponibles === 0 || isPastDate(fecha.fecha)" value="0">0</option>
+
+                  <!-- Si se puede reservar: 1..N -->
+                  <ng-container *ngIf="fecha.plazasDisponibles > 0 && !isPastDate(fecha.fecha)">
+                    <option *ngFor="let _ of [].constructor(fecha.plazasDisponibles); let i = index"
+                            [value]="i + 1">
+                      {{ i + 1 }}
+                    </option>
+                  </ng-container>
                 </select>
 
-                <button class="btn bg-azul text-white btn-sm px-3 py-2 flex-shrink-0" (click)="agregarCursoAlCarrito(fecha)">
+                <!-- Botón solo si hay plazas y fecha futura -->
+                <button class="btn bg-azul text-white btn-sm px-3 py-2 flex-shrink-0"
+                        *ngIf="fecha.plazasDisponibles > 0 && !isPastDate(fecha.fecha)"
+                        (click)="agregarCursoAlCarrito(fecha)">
                   Add to cart
                 </button>
               </div>

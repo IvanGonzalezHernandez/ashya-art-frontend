@@ -53,6 +53,27 @@ export class Navbar implements OnInit {
     privacidad: false
   };
 
+  prefijos = [
+  { codigo: '+1', pais: 'USA / Canada' },
+  { codigo: '+34', pais: 'Spain' },
+  { codigo: '+49', pais: 'Germany' },
+  { codigo: '+33', pais: 'France' },
+  { codigo: '+351', pais: 'Portugal' },
+  { codigo: '+44', pais: 'United Kingdom' },
+  { codigo: '+39', pais: 'Italy' },
+  { codigo: '+40', pais: 'Romania' },
+  { codigo: '+48', pais: 'Poland' },
+  { codigo: '+43', pais: 'Austria' },
+  { codigo: '+41', pais: 'Switzerland' },
+  { codigo: '+386', pais: 'Slovenia' },
+  { codigo: '+385', pais: 'Croatia' },
+  { codigo: '+90', pais: 'Turkey' },
+  // … puedes añadir más si quieres
+];
+
+prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
+
+
   constructor(public carritoService: CarritoService,
     private router: Router, 
     private route: ActivatedRoute) {}
@@ -143,6 +164,9 @@ export class Navbar implements OnInit {
       return;
     }
 
+    // Combinar prefijo + número ANTES de enviar al backend
+    this.cliente.telefono = `${this.prefijoSeleccionado} ${this.cliente.telefono}`.trim();
+
     // Cerrar modal
     const modalEl = document.getElementById('modalCliente');
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
@@ -205,37 +229,45 @@ export class Navbar implements OnInit {
   }
 
   confirmarReservaAtelier() {
-    if (this.loadingCheckout) return;
-    this.loadingCheckout = true;
+  if (this.loadingCheckout) return;
+  this.loadingCheckout = true;
 
-    const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
+  const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
 
-    // Cierra offcanvas si está abierto
-    const offcanvasEl = document.getElementById('offcanvasCarrito');
-    if (offcanvasEl) {
-      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-      bsOffcanvas?.hide();
-    }
-
-    // Cierra modal si estuviera abierto
-    const modalEl = document.getElementById('modalCliente');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    modalInstance?.hide();
-
-    // Registrar la reserva/pedido sin pago online
-    this.carritoService.crearReservaAtelier(this.cliente, total, this.codigoTarjeta).subscribe({
-      next: () => {
-        this.loadingCheckout = false;
-        alert('Reservation confirmed! You can pay at the Atelier. You will receive an email shortly.');
-        this._resetEstadoPostCompra();
-      },
-      error: (err) => {
-        console.error('Error al confirmar reserva Atelier', err);
-        alert('Error confirming the reservation.');
-        this.loadingCheckout = false;
-      }
-    });
+  // Cierra offcanvas si está abierto
+  const offcanvasEl = document.getElementById('offcanvasCarrito');
+  if (offcanvasEl) {
+    const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+    bsOffcanvas?.hide();
   }
+
+  // Cierra modal si estuviera abierto
+  const modalEl = document.getElementById('modalCliente');
+  const modalInstance = bootstrap.Modal.getInstance(modalEl);
+  modalInstance?.hide();
+
+  // Registrar la reserva/pedido sin pago online
+  this.carritoService.crearReservaAtelier(this.cliente, total, this.codigoTarjeta).subscribe({
+    next: () => {
+      this.loadingCheckout = false;
+      this._resetEstadoPostCompra();
+
+      // Redirección igual que en compra gratuita
+      this.router.navigate(['/'], {
+        queryParams: { payment: 'success' }
+      });
+    },
+    error: (err) => {
+      console.error('Error al confirmar reserva Atelier', err);
+      this.loadingCheckout = false;
+
+      this.router.navigate(['/'], {
+        queryParams: { payment: 'error' }
+      });
+    }
+  });
+}
+
 
 // ======== Compra gratis (total 0€) ========
 confirmarCompraGratis() {
@@ -260,6 +292,7 @@ confirmarCompraGratis() {
   this.carritoService.crearCompraGratuita(this.cliente, this.codigoTarjeta).subscribe({
     next: () => {
       this.loadingCheckout = false;
+      this._resetEstadoPostCompra();
 
       // ✅ Redirigir al home con parámetro payment=success
       this.router.navigate(['/'], {

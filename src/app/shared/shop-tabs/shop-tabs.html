@@ -1,19 +1,24 @@
-<ul class="nav nav-tabs justify-content-center custom-tabs bg-beige-claro">
-  <li class="nav-item">
-    <a class="nav-link"
-       [routerLink]="['/shop']"
-       routerLinkActive="active"
-       [routerLinkActiveOptions]="{ exact: true }">
-      Ceramics
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"
-       [routerLink]="['/shop/secrets']"
-       routerLinkActive="active">
-      Secrets
-    </a>
-  </li>
-</ul>
+<div class="subnav-outer sticky-subnav">
+  <div class="subnav-container">
+    <ul class="nav nav-tabs justify-content-center custom-tabs">
+      <li class="nav-item">
+        <a class="nav-link"
+           [routerLink]="['/shop']"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          Ceramics
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link"
+           [routerLink]="['/shop/secrets']"
+           routerLinkActive="active">
+          Secrets
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
 
 <router-outlet></router-outlet>

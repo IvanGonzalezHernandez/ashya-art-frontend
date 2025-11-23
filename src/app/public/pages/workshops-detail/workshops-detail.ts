@@ -37,6 +37,8 @@ export class WorkshopsDetail {
   feedbackMensaje: string = '';
   feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
+  today: Date = new Date();
+
   cliente: Cliente = {
     id: 0,
     telefono: '',
@@ -63,7 +65,9 @@ export class WorkshopsDetail {
     private cursoFechaService: CursoFechaService,
     private route: ActivatedRoute,
     private carritoService: CarritoService
-  ) {}
+  ) {
+    this.today.setHours(0, 0, 0, 0);
+  }
 
   // ================== Overlay utils (clave) ==================
 
@@ -265,4 +269,12 @@ export class WorkshopsDetail {
     ];
     return imagenes.filter((img): img is string => !!img && img.trim() !== '');
   }
+
+isPastDate(date: string | Date): boolean {
+  const d = new Date(date);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  return d < today;
+}
+
 }
