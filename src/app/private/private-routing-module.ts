@@ -14,15 +14,19 @@ import { NewsletterDashboard } from './pages/newsletter-dashboard/newsletter-das
 import { SecretosDashboard } from './pages/secretos-dashboard/secretos-dashboard';
 import { ErrorDashboard } from './pages/error-dashboard/error-dashboard';
 
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: Login },
+
   {
     path: 'dashboard',
     component: Layout,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     children: [
       { path: 'inicio', component: Dashboard },
-      { path: 'cursos', component: CursosDashboard },             
+      { path: 'cursos', component: CursosDashboard },              
       { path: 'reservas', component: ReservasDashboard },         
       { path: 'productos', component: ProductosDashboard },       
       { path: 'tarjetas-regalo', component: TarjetasRegaloDashboard },

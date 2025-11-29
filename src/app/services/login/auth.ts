@@ -1,14 +1,15 @@
+// src/app/services/login/auth.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environments';
 import { Observable } from 'rxjs';
 
-interface AuthRequest {
+export interface AuthDto {
   email: string;
   password: string;
 }
 
-interface AuthResponse {
+export interface AuthResponse {
   token: string;
 }
 
@@ -16,12 +17,13 @@ interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
+
   private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
-    const body: AuthRequest = { email, password };
+    const body: AuthDto = { email, password };
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, body);
   }
 
