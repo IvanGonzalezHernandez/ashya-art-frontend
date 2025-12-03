@@ -3,52 +3,60 @@
   <div class="container">
     <div class="row align-items-center">
 
-      <!-- Texto con animaciones -->
+      <!-- Texto -->
       <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
 
         <h2 class="fw-bold mb-4"
-            style="color: #3E3028;"
+            style="color:#3E3028;"
             appRevealAnimate="animate__fadeInLeft"
             [delay]="'0s'">
           Open Studio
         </h2>
 
-        <p class="text-muted fs-5"
-           style="color:#6b5e52;"
+        <!-- Primer párrafo (sin clr-negro) -->
+        <p class="fs-5"
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0.1s'">
-          Welcome to Ashya’s Studio, your favourite place for all-around ceramics. Located in Hamburg, we offer a fun and welcoming environment for everyone, whether you’re a newbie or a pro. Try your hand at wheel throwing, hand building, and glazing with our awesome instructors. Come hang out, get creative, and make some amazing pottery with us!
+          Welcome to Ashya’s Studio, your favourite place for all-around ceramics.
+          Located in Hamburg, we offer a fun and welcoming environment for everyone,
+          whether you’re a newbie or a pro. Try your hand at wheel throwing, hand building, 
+          and glazing with our awesome instructors.
         </p>
 
-        <h5 class="fw-bold mt-4"
-            style="color: #3E3028;"
+        <!-- Segundo título (CON clr-negro) -->
+        <h5 class="fw-bold mt-4 clr-negro"
             appRevealAnimate="animate__fadeInLeft"
             [delay]="'0.2s'">
           After the Beginner Course
         </h5>
 
-        <p class="text-muted fs-5"
-           style="color:#6b5e52;"
+        <!-- Segundo párrafo (sin clr-negro) -->
+        <p class="fs-5"
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0.3s'">
-          After completing the <strong>Hand Building Ceramic Class</strong>, you’ll be ready for our Open Studio! Here, you can apply and further develop what you’ve learned in a supportive and inspiring environment.
+          After completing the 
+          Hand Building Ceramic Class,
+          you’ll be ready for our Open Studio! Apply and develop what you’ve learned
+          in a supportive and inspiring environment.
         </p>
 
-        <p class="text-muted fs-5"
-           style="color:#6b5e52;"
+        <!-- Tercer párrafo (puede ir sin clr-negro también) -->
+        <p class="fs-5"
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0.4s'">
-          Every <strong>Wednesday and Friday</strong> from 6 PM to 9 PM and <strong>Saturday</strong> from 4:30 PM to 8 PM, our studio is open for you to practice independently and enhance your skills. Experiment with different types of clay and techniques while enjoying the creative community.
+          Every Wednesday and Friday from 6 PM to 9 PM and 
+          Saturday from 4:30 PM to 8 PM, our studio is open
+          for you to practice independently and enhance your skills.
         </p>
 
-        <ul class="list-unstyled text-muted mb-4 fs-5"
-            style="color:#6b5e52;"
+        <!-- Lista: solo los textos antes de los ":" llevan clr-negro -->
+        <ul class="list-unstyled mb-4 fs-5"
             appRevealAnimate="animate__fadeInLeft"
             [delay]="'0.5s'">
-          <li><strong>Level:</strong> Experienced level required (or completion of at least one hand-building class at Ashya Studio).</li>
-          <li><strong>Materials included:</strong> 2kg of clay</li>
-          <li><strong>Price:</strong> 30€ per session</li>
-          <li><strong>Firing:</strong> Not included (see firing service for costs)</li>
+          <li><span class="fw-bold clr-negro">Level:</span> Experienced level required (or completion of at least one hand-building class at Ashya Studio).</li>
+          <li><span class="fw-bold clr-negro">Materials included:</span> 2kg of clay</li>
+          <li><span class="fw-bold clr-negro">Price:</span> 30€ per session</li>
+          <li><span class="fw-bold clr-negro">Firing:</span> Not included (see firing service for costs)</li>
         </ul>
 
         <button 
@@ -63,7 +71,7 @@
 
       </div>
 
-      <!-- Imagen con animación derecha -->
+      <!-- Imagen -->
       <div class="col-lg-6 text-center mb-4"
            appRevealAnimate="animate__fadeInRight"
            [delay]="'0.2s'">
@@ -73,10 +81,9 @@
           alt="Ashya Studio - Open Studio" 
           class="img-fluid rounded-4 shadow">
 
-        <!-- Botón móvil -->
         <button 
           type="button" 
-          class="btn bg-azul text-white mt-3 d-lg-none d-inline-block fs-5"
+          class="btn bg-azul text-white mt-3 d-lg-none d-inline-block"
           data-bs-toggle="modal"
           data-bs-target="#modalOpenStudio"
           appRevealAnimate="animate__fadeInRight"
@@ -137,7 +144,8 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="modal-body fs-5">
+      <div class="modal-body">
+
         <p>
           Reserve your spot for our Open Studio sessions. Sessions run every 
           <strong>Wednesday and Friday (6:00 PM – 9:00 PM)</strong> and 
@@ -151,7 +159,8 @@
         </p>
 
         <form>
-          <!-- Fecha -->
+
+          <!-- Date -->
           <div class="mb-3">
             <label class="form-label fw-bold">Preferred date</label>
             <input 
@@ -161,7 +170,7 @@
               name="fecha">
           </div>
 
-          <!-- Franja horaria -->
+          <!-- Time slot -->
           <div class="mb-3">
             <label class="form-label fw-bold">Time slot</label>
             <select 
@@ -175,7 +184,7 @@
             </select>
           </div>
 
-          <!-- Nombre -->
+          <!-- Name -->
           <div class="mb-3">
             <label class="form-label fw-bold">Your Name</label>
             <input 
@@ -197,7 +206,7 @@
               placeholder="email@example.com">
           </div>
 
-          <!-- Teléfono -->
+          <!-- Phone -->
           <div class="mb-3">
             <label class="form-label fw-bold">Your phone number</label>
             <input 
@@ -208,7 +217,7 @@
               placeholder="+34 600 000 000">
           </div>
 
-          <!-- Preguntas -->
+          <!-- Questions -->
           <div class="mb-3">
             <label class="form-label fw-bold">Any additional questions?</label>
             <textarea 
@@ -223,13 +232,14 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-secondary fs-5" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn bg-azul text-white fs-5" (click)="enviarSolicitudOpenStudio()">Send</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn bg-azul text-white" (click)="enviarSolicitudOpenStudio()">Send</button>
       </div>
 
     </div>
   </div>
 </div>
+
 
 
 <!-- Feedback Modal -->

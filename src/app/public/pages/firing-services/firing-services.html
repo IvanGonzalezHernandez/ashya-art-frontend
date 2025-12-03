@@ -12,27 +12,32 @@
         <h2 class="fw-bold mb-4" style="color:#3E3028;">Firing Service</h2>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-          Do you create your own ceramics and need a place to fire them?  
-          At Ashya Art, you can either rent the entire kiln (80 l) or arrange for the firing of just a few pieces.
+          Do you create your own ceramics and need a place to fire them? At Ashya Art, 
+          you can either rent the entire kiln (80l or 90 l) or arrange for the firing of just a few pieces.
         </p>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-          Make an appointment to bring your ceramics for firing.  
-          Please ensure you bring details about the clay and glazes used — without this information we cannot accept your ceramics, as they must be fired at the correct temperatures.
+        Please ensure you bring details about the clay and glazes used — without this information 
+        we cannot accept your ceramics, as they must be fired at the correct temperatures.
         </p>
 
         <!-- Lista de precios -->
         <h5 class="fw-bold mt-4" style="color:#3E3028;">Costs</h5>
         <ul class="list-unstyled text-muted fs-5" style="color:#6b5e52;">
-          <li>• Renting kiln (80 l) for bisque firing – 35€</li>
-          <li>• Renting kiln (80 l) for glaze firing – 40€</li>
-          <li>• Firing one piece only (cup size) bisque or glaze – 4€</li>
+          <li>•	Renting Kiln (80l) for the bisk firing – 35€</li>
+          <li>•	Renting Kiln (90l) for the bisk firing – 40€</li>
+          <li>•	Renting Kiln (90l) or the glaze firing – 45€</li>
+          <li>• Firing one piece only (size of the cup) bisk or glaze – 4€</li>
         </ul>
+
+        <p class="text-muted fs-5" style="color:#6b5e52;">
+          Make an appointment to bring your ceramics for firing.
+        </p>
 
         <!-- Botón escritorio -->
         <button 
           type="button" 
-          class="btn bg-azul text-white mt-3 fs-5 d-none d-lg-inline-block"
+          class="btn bg-azul text-white mt-3 d-none d-lg-inline-block"
           data-bs-toggle="modal"
           data-bs-target="#modalFiringService">
           Book Now
@@ -81,36 +86,23 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="modal-body fs-5" style="color:#6b5e52;">
-        <p>
-          Do you create your own ceramics and need a place to fire them?
-          At Ashya Art, you can either rent the entire kiln (80 l) or arrange for the firing of just a few pieces.
-        </p>
+      <div class="modal-body">
+        <form>
 
-        <p>
-          Make an appointment to bring your ceramics for firing.  
-          Please ensure you bring details about the clay and glazes used — without this information we cannot accept your ceramics, as they must be fired at the correct temperatures.
-        </p>
+        <!-- Service Type -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Type of service</label>
+          <select class="form-select" [(ngModel)]="cliente.tipoServicio" name="tipoServicio">
+            <option value="" disabled selected>Select an option</option>
 
-        <p class="fw-bold" style="color:#3E3028;">Costs:</p>
-        <ul class="fs-5" style="color:#6b5e52;">
-          <li>Renting kiln (80 l) for bisque firing – 35€</li>
-          <li>Renting kiln (80 l) for glaze firing – 40€</li>
-          <li>Firing one piece only (cup size) – 4€</li>
-        </ul>
+            <option value="kiln80_bisque">Renting Kiln (80L) – Bisque firing (35€)</option>
+            <option value="kiln90_bisque">Renting Kiln (90L) – Bisque firing (40€)</option>
+            <option value="kiln90_glaze">Renting Kiln (90L) – Glaze firing (45€)</option>
+            <option value="single_piece">Firing one piece (cup size) – Bisque or glaze (4€)</option>
 
-        <form class="fs-5">
+          </select>
+        </div>
 
-          <!-- Service Type -->
-          <div class="mb-3">
-            <label class="form-label fw-bold">Type of service</label>
-            <select class="form-select" [(ngModel)]="cliente.tipoServicio" name="tipoServicio">
-              <option value="" disabled selected>Select an option</option>
-              <option value="entireKilnBisque">Rent entire kiln – Bisque firing (35€)</option>
-              <option value="entireKilnGlaze">Rent entire kiln – Glaze firing (40€)</option>
-              <option value="singlePiece">Single piece firing (4€)</option>
-            </select>
-          </div>
 
           <!-- Quantity -->
           <div class="mb-3">
@@ -143,8 +135,7 @@
               rows="3"
               [(ngModel)]="cliente.detallesMaterial"
               name="detallesMaterial"
-              placeholder="Describe the clay and glazes used">
-            </textarea>
+              placeholder="Describe the clay and glazes used"></textarea>
           </div>
 
           <!-- Email -->
@@ -177,20 +168,20 @@
               rows="3"
               [(ngModel)]="cliente.preguntasAdicionales"
               name="preguntasAdicionales"
-              placeholder="Write here">
-            </textarea>
+              placeholder="Write here"></textarea>
           </div>
 
         </form>
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-secondary fs-5" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn bg-azul text-white fs-5" (click)="enviarSolicitudFiring()">Send</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn bg-azul text-white" (click)="enviarSolicitudFiring()">Send</button>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <!-- Feedback -->
@@ -208,5 +199,5 @@
   [delay]="'0.1s'"
   [title]="'Reviews from our workshops'"
   [itemsPerSlide]="4"
-  [interval]="6000">
+  [interval]="12000">
 </app-valorations>

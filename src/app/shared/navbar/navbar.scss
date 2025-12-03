@@ -53,4 +53,13 @@
   transition: transform 0.25s ease;
 }
 
+.cart-hover {
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+
+.cart-hover:hover {
+    transform: scale(1.06); /* +6% igual que el logo */
+}
+
 

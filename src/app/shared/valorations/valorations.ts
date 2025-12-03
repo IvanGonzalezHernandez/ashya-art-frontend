@@ -73,7 +73,7 @@ export class ValorationsComponent implements OnInit, OnChanges, AfterViewInit, O
   five = Array(5).fill(0);
 
   averageRating = 5.0;   // nota media global
-  totalReviews = 47;     // número de reseñas
+  totalReviews = 50;     // número de reseñas
 
   private bsCarousel?: Carousel;
   private viewReady = false;
