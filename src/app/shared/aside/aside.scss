@@ -3,3 +3,10 @@ aside .nav-link.active {
   color: #fff !important;
   border-radius: 0.25rem;
 }
+
+.disabled-link {
+  opacity: 0.4 !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+}
+

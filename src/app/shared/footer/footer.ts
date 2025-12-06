@@ -24,6 +24,8 @@ export class Footer {
   feedbackMensaje: string = '';
   feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
+  currentYear = new Date().getFullYear();
+
   constructor(private newsletterService: NewsletterService) {}
 
   suscribirse() {

@@ -18,6 +18,13 @@ export class App implements OnInit {
     // Suscribirse a cambios de ruta(para google analytics)
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        //Scroll al inicio en cada cambio de ruta
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        });
+        // Google Analytics
         gtag('event', 'page_view', {
           page_path: event.urlAfterRedirects
         });
