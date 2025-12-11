@@ -75,35 +75,30 @@
           {{ cursoSeleccionado.descripcion }}
         </div>
 
-        <ul class="list-unstyled mt-4">
+        <ul class="list-unstyled mt-4 detalles-curso">
           <li *ngIf="esValido(cursoSeleccionado.nivel)">
             <strong>Level:</strong> {{ cursoSeleccionado.nivel }}
           </li>
-
           <li *ngIf="esValido(cursoSeleccionado.duracion)">
             <strong>Duration:</strong> {{ cursoSeleccionado.duracion }}
           </li>
-
           <li *ngIf="esValido(cursoSeleccionado.localizacion)">
             <strong>Location:</strong> {{ cursoSeleccionado.localizacion }}
           </li>
-
           <li *ngIf="esValido(cursoSeleccionado.piezas)">
             <strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}
           </li>
-
           <li *ngIf="esValido(cursoSeleccionado.materiales)">
             <strong>Materials:</strong> {{ cursoSeleccionado.materiales }}
           </li>
-
           <li *ngIf="esValido(cursoSeleccionado.plazasMaximas)">
             <strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}
           </li>
-
           <li *ngIf="esValido(cursoSeleccionado.precio)">
             <strong>Price:</strong> {{ cursoSeleccionado.precio }}€
           </li>
         </ul>
+
 
       </div>
     </div>
@@ -113,7 +108,7 @@
          appRevealAnimate="animate__fadeInUp"
          [delay]="'0.4s'">
       <button class="btn text-white bg-azul px-4 py-2" (click)="openModal('modalFechasDisponibles')">
-        Reserve Course
+        Book Workshop
       </button>
     </div>
 

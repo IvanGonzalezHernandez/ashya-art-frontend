@@ -4,3 +4,31 @@
   word-break: break-word;
   hyphens: auto;
 }
+
+.detalles-curso {
+  font-size: 1.1rem;      /* más grande */
+  line-height: 1.5;        /* más cómodo de leer */
+  color: #3E3028;          /* mismo tono elegante que el resto */
+}
+
+.detalles-curso strong {
+  font-size: 1.1rem;      /* un pelín más grande los labels */
+}
+
+/* Solo afecta a pantallas grandes (desktop) */
+@media (min-width: 992px) {
+  .desc-text {
+    max-height: 320px;   /* ajusta si quieres más/menos altura */
+    overflow-y: auto;    /* scroll suave si se pasa */
+    padding-right: 8px;  /* para separar del borde */
+  }
+
+  /* scrollbar premium y discreto */
+  .desc-text::-webkit-scrollbar {
+    width: 6px;
+  }
+  .desc-text::-webkit-scrollbar-thumb {
+    background-color: #c5b8b0;
+    border-radius: 10px;
+  }
+}

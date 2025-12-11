@@ -53,13 +53,22 @@
       <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start"
            appRevealAnimate="animate__fadeInRight"
            [delay]="'0.3s'">
-        <h3 class="fw-bold mb-3" style="color: #3E3028;">Details</h3>
 
-        <ul class="list-unstyled mt-4 fs-5 text-muted" style="color:#6b5e52;">
+        <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
+
+        <p class="text-muted fs-5 mb-3 desc-gift">
+          This gift card can be redeemed through the Ashya Art online shop.  
+          It can be used during checkout to book any available workshop or to purchase
+          handmade ceramic pieces from our collection.
+        </p>
+        
+
+        <ul class="list-unstyled mt-4 detalles-curso">
           <li>
             <strong>Price:</strong> {{ tarjetaSeleccionada.precio }} €
           </li>
         </ul>
+
       </div>
 
     </div>
@@ -86,15 +95,22 @@
      aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
+      
+      <!-- Header -->
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title" id="modalDestinatarioLabel">Gift Card – Recipient</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
 
+      <!-- Body -->
       <div class="modal-body">
         <form>
           <div class="mb-3">
             <label class="form-label fw-bold">Recipient name</label>
+            <small class="text-muted d-block mb-2">
+              Please enter the name of the person who will receive this gift card.
+            </small>
+            
             <input type="text"
                    class="form-control"
                    [(ngModel)]="destinatario"
@@ -105,15 +121,18 @@
         </form>
       </div>
 
+      <!-- Footer -->
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        
         <button class="btn bg-azul text-white"
                 [disabled]="!(destinatario && destinatario.trim().length >= 2)"
                 (click)="confirmarDestinatario()"
                 data-bs-dismiss="modal">
-          Confirm & add to cart
+          Add to cart
         </button>
       </div>
+
     </div>
   </div>
 </div>

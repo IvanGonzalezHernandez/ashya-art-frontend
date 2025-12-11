@@ -85,7 +85,7 @@ private agregarTarjetaAlCarrito(tarjeta: TarjetaRegalo, destinatario: string) {
     id: tarjeta.id,
     tipo: 'TARJETA',
     nombre: tarjeta.nombre,
-    subtitulo: 'Tarjeta regalo para ' + destinatario,
+    subtitulo: 'Gift card for ' + destinatario,
     precio: tarjeta.precio ?? 0,
     cantidad: 1,
     fecha: '',
