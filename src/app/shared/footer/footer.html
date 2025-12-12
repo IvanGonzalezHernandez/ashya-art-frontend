@@ -96,7 +96,18 @@
             class="form-control mb-2"
             required
           />
-          <button type="submit" class="btn mb-2 bg-azul text-white">Subscribe</button>
+          <button 
+            type="submit" 
+            class="btn mb-2 bg-azul text-white"
+            [disabled]="form.invalid || newsletterLoading"
+          >
+            <ng-container *ngIf="!newsletterLoading; else loadingTpl">
+              Subscribe
+            </ng-container>
+            <ng-template #loadingTpl>
+              Processing...
+            </ng-template>
+          </button>
         </form>
       </div>
 
