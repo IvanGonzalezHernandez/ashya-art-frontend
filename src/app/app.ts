@@ -1,34 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
-
-declare let gtag: Function;
+import { filter } from 'rxjs/operators';
+import { AnalyticsConsentService } from './services/analytics-consent/analytics-consent';
+import { CookieBannerComponent } from './shared/cookie-banner/cookie-banner';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CookieBannerComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
 export class App implements OnInit {
   protected title = 'ashya-art-frontend';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private analyticsConsent: AnalyticsConsentService
+  ) {}
 
   ngOnInit() {
-    // Suscribirse a cambios de ruta(para google analytics)
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        //Scroll al inicio en cada cambio de ruta
+    // Si ya aceptó cookies anteriormente, carga GA al arrancar
+    this.analyticsConsent.initOnAppStart();
+
+    // Suscribirse a cambios de ruta (para page_view)
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(event => {
+        // Scroll al inicio en cada cambio de ruta
         window.scrollTo({
           top: 0,
           left: 0,
           behavior: 'smooth'
         });
-        // Google Analytics
-        gtag('event', 'page_view', {
-          page_path: event.urlAfterRedirects
-        });
-      }
-    });
+
+        // Google Analytics SOLO si hay consentimiento
+        this.analyticsConsent.trackPageView(event.urlAfterRedirects);
+      });
   }
 }
