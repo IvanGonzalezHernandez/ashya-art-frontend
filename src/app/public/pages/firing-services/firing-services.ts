@@ -19,6 +19,8 @@ export class FiringServices {
 
   constructor(private firingServiceService: FiringServiceService) {}
 
+  firingLoading = false;
+
   // Modal de feedback
   mostrarFeedback: boolean = false;
   feedbackTitulo: string = '';
@@ -35,49 +37,63 @@ export class FiringServices {
     preguntasAdicionales: ''
   };
 
-enviarSolicitudFiring() {
-  this.firingServiceService.solicitarFiring(this.cliente).subscribe({
-    next: () => {
-      this.mostrarModalFeedback(
-        'success',
-        'Request sent',
-        'Thank you for submitting your firing service request. You will receive a confirmation email shortly, and one of our team members will contact you to coordinate the details.'
-      );
+  enviarSolicitudFiring(): void {
+    if (this.firingLoading) return;
 
-      const modal = document.getElementById('modalFiringService');
-      if (modal) {
-        const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
-        modalInstance.hide();
+    this.firingLoading = true;
+
+    this.firingServiceService.solicitarFiring(this.cliente).subscribe({
+      next: () => {
+        try {
+          this.mostrarModalFeedback(
+            'success',
+            'Request sent',
+            'Thank you for submitting your firing service request. You will receive a confirmation email shortly, and one of our team members will contact you to coordinate the details.'
+          );
+
+          const modal = document.getElementById('modalFiringService');
+          if (modal) {
+            const modalInstance =
+              bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+            modalInstance.hide();
+          }
+
+          // Reiniciar el formulario
+          this.cliente = {
+            tipoServicio: '',
+            numeroPiezas: 1,
+            nombre: '',
+            detallesMaterial: '',
+            email: '',
+            telefono: '',
+            preguntasAdicionales: ''
+          };
+        } finally {
+          this.firingLoading = false;
+        }
+      },
+      error: (err) => {
+        try {
+          console.error('Error sending firing request', err);
+
+          const modal = document.getElementById('modalFiringService');
+          if (modal) {
+            const modalInstance =
+              bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+            modalInstance.hide();
+          }
+
+          this.mostrarModalFeedback(
+            'error',
+            'Request error',
+            'An error occurred while sending the firing request. Please try again later.'
+          );
+        } finally {
+          this.firingLoading = false;
+        }
       }
-
-      // Reiniciar el formulario
-      this.cliente = {
-        tipoServicio: '',
-        numeroPiezas: 1,
-        nombre: '',
-        detallesMaterial: '',
-        email: '',
-        telefono: '',
-        preguntasAdicionales: ''
-      };
-    },
-    error: (err) => {
-      console.error('Error sending firing request', err);
-
-      const modal = document.getElementById('modalFiringService');
-      if (modal) {
-        const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
-        modalInstance.hide();
-      }
-
-      this.mostrarModalFeedback(
-        'error',
-        'Request error',
-        'An error occurred while sending the firing request. Please try again later.'
-      );
-    }
-  });
-}
+    });
+  }
 
   mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
         this.feedbackTipo = tipo;

@@ -177,7 +177,21 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button class="btn bg-azul text-white" (click)="enviarSolicitudCurso()">Send</button>
+          <button
+          type="button"
+          class="btn bg-azul text-white"
+          [disabled]="cursoLoading"
+          (click)="enviarSolicitudCurso()"
+        >
+          <ng-container *ngIf="!cursoLoading; else loadingCursoTpl">
+            Send
+          </ng-container>
+
+          <ng-template #loadingCursoTpl>
+            Processing...
+          </ng-template>
+        </button>
+
         </div>
       </div>
     </div>

@@ -176,7 +176,21 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn bg-azul text-white" (click)="enviarSolicitudFiring()">Send</button>
+        <button
+        type="button"
+        class="btn bg-azul text-white"
+        [disabled]="firingLoading"
+        (click)="enviarSolicitudFiring()"
+      >
+        <ng-container *ngIf="!firingLoading; else loadingFiringTpl">
+          Send
+        </ng-container>
+
+        <ng-template #loadingFiringTpl>
+          Processing...
+        </ng-template>
+      </button>
+
       </div>
     </div>
   </div>

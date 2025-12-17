@@ -36,11 +36,11 @@ import { MaintenanceService } from '../../../services/maintenance/maintenance';
       align-items:center;
       justify-content:center;
       padding: 24px;
-      background: #f7f3ee;
+      background: #EFE5DB;
     }
     .card{
       width: min(460px, 100%);
-      background: #fff;
+      background: #F9F3EC;
       border-radius: 26px;
       padding: 28px;
       box-shadow: 0 25px 60px rgba(0,0,0,.12);
@@ -62,7 +62,7 @@ import { MaintenanceService } from '../../../services/maintenance/maintenance';
       border: none;
       border-radius: 999px;
       padding: 12px 18px;
-      background: #2f6f8a;
+      background: #3A9097;
       color: #fff;
       font-weight: 700;
       cursor: pointer;

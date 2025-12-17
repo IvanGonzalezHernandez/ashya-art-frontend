@@ -46,7 +46,7 @@ styles: [`
   /* Card central */
   .cookie-card{
     width: min(460px, 100%);
-    background: rgba(247, 243, 238, 0.95); /* beige Ashya */
+    background: #F9F3EC; /* beige Ashya */
     border-radius: 26px;
     padding: 26px 26px 22px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.25);
@@ -102,9 +102,9 @@ styles: [`
 
   /* Azul Ashya */
   .cookie-btn-primary{
-    background: #2f6f8a;
+    background: #3A9097;
     color: #fff;
-    border: 1px solid #2f6f8a;
+    border: 1px solid #3A9097;
     box-shadow: 0 10px 22px rgba(47,111,138,.25);
   }
 

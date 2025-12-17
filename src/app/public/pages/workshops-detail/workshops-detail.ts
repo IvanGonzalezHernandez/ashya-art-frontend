@@ -24,6 +24,7 @@ declare var bootstrap: any;
 })
 export class WorkshopsDetail {
   loading = false;
+  cursoLoading = false;
   cursosCargados = false;
 
   cursos: Curso[] = [];
@@ -222,24 +223,36 @@ export class WorkshopsDetail {
     setTimeout(() => this.carritoService.agregarItem(item), 0);
   }
 
-  enviarSolicitudCurso() {
+  enviarSolicitudCurso(): void {
+    if (this.cursoLoading) return;
+
+    this.cursoLoading = true;
+
     this.cursoService.solicitarCurso(this.cliente).subscribe({
       next: async () => {
-        this.mostrarModalFeedback(
-          'success',
-          'Request sent',
-          'Thank you for submitting your request. You will receive a confirmation email shortly, and one of our team members will contact you as soon as possible to coordinate the details.'
-        );
-        await this.closeAnyOverlay();
+        try {
+          this.mostrarModalFeedback(
+            'success',
+            'Request sent',
+            'Thank you for submitting your request. You will receive a confirmation email shortly, and one of our team members will contact you as soon as possible to coordinate the details.'
+          );
+          await this.closeAnyOverlay();
+        } finally {
+          this.cursoLoading = false;
+        }
       },
       error: async (err) => {
-        console.error('Error sending request', err);
-        await this.closeAnyOverlay();
-        this.mostrarModalFeedback(
-          'error',
-          'Request error',
-          'An error occurred while sending the request. Please try again later.'
-        );
+        try {
+          console.error('Error sending request', err);
+          await this.closeAnyOverlay();
+          this.mostrarModalFeedback(
+            'error',
+            'Request error',
+            'An error occurred while sending the request. Please try again later.'
+          );
+        } finally {
+          this.cursoLoading = false;
+        }
       }
     });
   }
