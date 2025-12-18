@@ -157,6 +157,16 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content shadow-lg">
 
+      <!-- OVERLAY PROCESSING -->
+      <div class="processing-overlay" *ngIf="loadingCheckout">
+        <div class="processing-box">
+          <div class="spinner-border spinner-azul" role="status" aria-label="Processing"></div>
+          <div class="mt-2 fw-semibold">Processing…</div>
+          <div class="small text-muted">Please wait</div>
+        </div>
+      </div>
+
+
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title" id="modalClienteLabel">Your Information</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -288,7 +298,12 @@
 
           <div class="modal-footer px-0">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn bg-azul text-white" [disabled]="clienteForm.invalid">Continue</button>
+            <button type="submit" class="btn bg-azul text-white"
+            [disabled]="clienteForm.invalid || loadingCheckout">
+            <span *ngIf="!loadingCheckout">Continue</span>
+            <span *ngIf="loadingCheckout">Processing…</span>
+          </button>
+
           </div>
         </form>
       </div>

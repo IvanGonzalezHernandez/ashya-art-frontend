@@ -157,41 +157,37 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
   }
 
   // ======== Flujo de confirmación general ========
-  confirmarDatos() {
-    // Validar mínimos (nombre + apellido + email)
-    if (!this.cliente.nombre || !this.cliente.apellido || !this.cliente.email) {
-      alert('Please complete the required fields: name, last name and email.');
-      return;
-    }
+confirmarDatos() {
+  if (this.loadingCheckout) return;
 
-    // Combinar prefijo + número ANTES de enviar al backend
-    this.cliente.telefono = `${this.prefijoSeleccionado} ${this.cliente.telefono}`.trim();
-
-    // Cerrar modal
-    const modalEl = document.getElementById('modalCliente');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    modalInstance?.hide();
-
-    // 1) Compra gratuita (total 0€)
-    if (this.esCompraGratis) {
-      this.confirmarCompraGratis();
-      return;
-    }
-
-    // 2) Pagar en Atelier (solo cursos)
-    if (this.metodoPago === 'atelier') {
-      this.confirmarReservaAtelier();
-      return;
-    }
-
-    // 3) Stripe por defecto
-    this.pagarConStripe();
+  if (!this.cliente.nombre || !this.cliente.apellido || !this.cliente.email) {
+    alert('Please complete the required fields: name, last name and email.');
+    return;
   }
+
+  this.loadingCheckout = true;
+
+  const tel = (this.cliente.telefono || '').trim();
+  const telSinPrefijo = tel.replace(/^\+\d+\s*/, '');
+  this.cliente.telefono = `${this.prefijoSeleccionado} ${telSinPrefijo}`.trim();
+
+  if (this.esCompraGratis) {
+    this.confirmarCompraGratis();
+    return;
+  }
+
+  if (this.metodoPago === 'atelier') {
+    this.confirmarReservaAtelier();
+    return;
+  }
+
+  this.pagarConStripe();
+}
+
+
 
   // ======== Stripe ========
   pagarConStripe() {
-    this.loadingCheckout = true;
-
     const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
 
     // Cerrar offcanvas del carrito
@@ -208,7 +204,7 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
       },
       error: (err) => {
         console.error('Error al crear sesión de Stripe', err);
-        alert('Error procesing the payment');
+        alert('Error processing the payment');
         this.loadingCheckout = false;
       }
     });
@@ -228,88 +224,56 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
     this.abrirModalCliente();
   }
 
-  confirmarReservaAtelier() {
-  if (this.loadingCheckout) return;
-  this.loadingCheckout = true;
-
+confirmarReservaAtelier() {
   const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
 
-  // Cierra offcanvas si está abierto
-  const offcanvasEl = document.getElementById('offcanvasCarrito');
-  if (offcanvasEl) {
-    const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-    bsOffcanvas?.hide();
-  }
-
-  // Cierra modal si estuviera abierto
-  const modalEl = document.getElementById('modalCliente');
-  const modalInstance = bootstrap.Modal.getInstance(modalEl);
-  modalInstance?.hide();
-
-  // Registrar la reserva/pedido sin pago online
   this.carritoService.crearReservaAtelier(this.cliente, total, this.codigoTarjeta).subscribe({
     next: () => {
       this.loadingCheckout = false;
       this._resetEstadoPostCompra();
 
-      // Redirección igual que en compra gratuita
-      this.router.navigate(['/'], {
-        queryParams: { payment: 'success' }
-      });
+      // si quieres cerrar el modal al terminar:
+      const modalEl = document.getElementById('modalCliente');
+      (window as any).bootstrap?.Modal.getInstance(modalEl)?.hide();
+
+      this.router.navigate(['/'], { queryParams: { payment: 'success' } });
     },
     error: (err) => {
       console.error('Error al confirmar reserva Atelier', err);
       this.loadingCheckout = false;
 
-      this.router.navigate(['/'], {
-        queryParams: { payment: 'error' }
-      });
+      // opcional cerrar modal también en error
+      // (window as any).bootstrap?.Modal.getInstance(document.getElementById('modalCliente'))?.hide();
+
+      this.router.navigate(['/'], { queryParams: { payment: 'error' } });
     }
   });
 }
 
 
+
 // ======== Compra gratis (total 0€) ========
 confirmarCompraGratis() {
-  if (this.loadingCheckout) return;
-  this.loadingCheckout = true;
 
-  // Cierra el carrito si está abierto
-  const offcanvasEl = document.getElementById('offcanvasCarrito');
-  if (offcanvasEl) {
-    const bsOffcanvas = (window as any).bootstrap?.Offcanvas.getInstance(offcanvasEl);
-    bsOffcanvas?.hide();
-  }
-
-  // Cierra modal cliente si está abierto
-  const modalEl = document.getElementById('modalCliente');
-  if (modalEl) {
-    const modalInstance = (window as any).bootstrap?.Modal.getInstance(modalEl);
-    modalInstance?.hide();
-  }
-
-  // Llama al backend para registrar la compra gratuita
   this.carritoService.crearCompraGratuita(this.cliente, this.codigoTarjeta).subscribe({
     next: () => {
       this.loadingCheckout = false;
       this._resetEstadoPostCompra();
 
-      // ✅ Redirigir al home con parámetro payment=success
-      this.router.navigate(['/'], {
-        queryParams: { payment: 'success' }
-      });
+      const modalEl = document.getElementById('modalCliente');
+      (window as any).bootstrap?.Modal.getInstance(modalEl)?.hide();
+
+      this.router.navigate(['/'], { queryParams: { payment: 'success' } });
     },
     error: (err) => {
       console.error('Error al confirmar compra gratuita', err);
       this.loadingCheckout = false;
 
-      // ❌ Redirigir al home con parámetro payment=error
-      this.router.navigate(['/'], {
-        queryParams: { payment: 'error' }
-      });
+      this.router.navigate(['/'], { queryParams: { payment: 'error' } });
     }
   });
 }
+
 
 
 
