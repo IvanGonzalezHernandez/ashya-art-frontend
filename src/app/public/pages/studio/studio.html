@@ -6,66 +6,150 @@
       <!-- Texto -->
       <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
 
+        <!-- Todo el texto entra a la vez -->
         <h2 class="fw-bold mb-4"
             style="color:#3E3028;"
             appRevealAnimate="animate__fadeInLeft"
             [delay]="'0s'">
-          Open Studio
+          Open Studio & Membership
         </h2>
 
-        <!-- Primer párrafo (sin clr-negro) -->
-        <p class="fs-5"
+        <p class="text-muted fs-5"
            appRevealAnimate="animate__fadeInLeft"
-           [delay]="'0.1s'">
-          Welcome to Ashya’s Studio, your favourite place for all-around ceramics.
-          Located in Hamburg, we offer a fun and welcoming environment for everyone,
-          whether you’re a newbie or a pro. Try your hand at wheel throwing, hand building, 
-          and glazing with our awesome instructors.
+           [delay]="'0s'">
+          Welcome to Ashya’s Studio, your favourite place for all around ceramics. Located in Hamburg,
+          we offer a fun and welcoming environment for everyone, whether you’re a beginner
+          (who joined my ceramics course) or a pro with experience.
+          Come hang out, get creative, and make some amazing pottery with us!
         </p>
 
-        <!-- Segundo título (CON clr-negro) -->
-        <h5 class="fw-bold mt-4 clr-negro"
-            appRevealAnimate="animate__fadeInLeft"
-            [delay]="'0.2s'">
-          After the Beginner Course
-        </h5>
-
-        <!-- Segundo párrafo (sin clr-negro) -->
-        <p class="fs-5"
+        <p class="text-muted fs-5"
            appRevealAnimate="animate__fadeInLeft"
-           [delay]="'0.3s'">
-          After completing the 
-          Hand Building Ceramic Class,
-          you’ll be ready for our Open Studio! Apply and develop what you’ve learned
-          in a supportive and inspiring environment.
+           [delay]="'0s'">
+          Every <span class="fw-bold" style="color:#3E3028;">Monday, Wednesday and Friday</span> from
+          <span class="fw-bold" style="color:#3E3028;">6 PM to 9 PM</span> and
+          <span class="fw-bold" style="color:#3E3028;">Saturday</span> from
+          <span class="fw-bold" style="color:#3E3028;">4:30 PM to 8 PM</span>,
+          our studio is open for you to practice independently and enhance your skills.
+          Experiment with different types of clay and techniques in an inspiring community.
         </p>
 
-        <!-- Tercer párrafo (puede ir sin clr-negro también) -->
-        <p class="fs-5"
-           appRevealAnimate="animate__fadeInLeft"
-           [delay]="'0.4s'">
-          Every Wednesday and Friday from 6 PM to 9 PM and 
-          Saturday from 4:30 PM to 8 PM, our studio is open
-          for you to practice independently and enhance your skills.
-        </p>
+        <!-- Level -->
+        <div class="mb-3"
+             appRevealAnimate="animate__fadeInLeft"
+             [delay]="'0s'">
+          <div class="fw-bold mb-1" style="color:#3E3028;">Level</div>
+          <div class="text-muted fs-5">
+            Experienced level required (or completion of at least one hand-building class at Ashya Studio).
+          </div>
+        </div>
 
-        <!-- Lista: solo los textos antes de los ":" llevan clr-negro -->
-        <ul class="list-unstyled mb-4 fs-5"
-            appRevealAnimate="animate__fadeInLeft"
-            [delay]="'0.5s'">
-          <li><span class="fw-bold clr-negro">Level:</span> Experienced level required (or completion of at least one hand-building class at Ashya Studio).</li>
-          <li><span class="fw-bold clr-negro">Materials included:</span> 2kg of clay</li>
-          <li><span class="fw-bold clr-negro">Price:</span> 30€ per session</li>
-          <li><span class="fw-bold clr-negro">Firing:</span> Not included (see firing service for costs)</li>
-        </ul>
+        <!-- Options accordion (solo 1 abierto) -->
+        <div class="accordion mb-4"
+             id="openStudioOptions"
+             appRevealAnimate="animate__fadeInLeft"
+             [delay]="'0s'">
 
-        <button 
-          type="button" 
-          class="btn bg-azul text-white mt-3 d-none d-lg-inline-block"
-          data-bs-toggle="modal"
-          data-bs-target="#modalOpenStudio"
+          <!-- 1 time entry -->
+          <div class="accordion-item border-0 rounded-4 shadow-sm mb-2 overflow-hidden">
+            <h2 class="accordion-header" id="optOneHeader">
+              <button class="accordion-button"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#optOne"
+                      aria-expanded="true"
+                      aria-controls="optOne"
+                      style="background:#fff; color:#3E3028;">
+                1 time entry — <span class="fw-bold ms-2">30€ / person</span>
+              </button>
+            </h2>
+
+            <div id="optOne"
+                 class="accordion-collapse collapse show"
+                 aria-labelledby="optOneHeader"
+                 data-bs-parent="#openStudioOptions">
+              <div class="accordion-body bg-white">
+                <ul class="list-unstyled mb-0 text-muted fs-5">
+                  <li class="mb-2"><strong style="color:#3E3028;">Included:</strong> tools and bisque firing</li>
+                  <li class="mb-2"><strong style="color:#3E3028;">Not included:</strong> glaze firing (see firing service for costs), clay and glazes (extra paid depending on the amount)</li>
+                  <li><strong style="color:#3E3028;">Clay cost:</strong> 4€ per 1kg</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 10 times entry -->
+          <div class="accordion-item border-0 rounded-4 shadow-sm mb-2 overflow-hidden">
+            <h2 class="accordion-header" id="optTwoHeader">
+              <button class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#optTwo"
+                      aria-expanded="false"
+                      aria-controls="optTwo"
+                      style="background:#fff; color:#3E3028;">
+                10 times entry — <span class="fw-bold ms-2">200€ / person</span>
+              </button>
+            </h2>
+
+            <div id="optTwo"
+                 class="accordion-collapse collapse"
+                 aria-labelledby="optTwoHeader"
+                 data-bs-parent="#openStudioOptions">
+              <div class="accordion-body bg-white">
+                <ul class="list-unstyled mb-0 text-muted fs-5">
+                  <li class="mb-2"><strong style="color:#3E3028;">Included:</strong> tools, bisque firing, your own storage space</li>
+                  <li><strong style="color:#3E3028;">Not included:</strong> glaze firing (see firing service for costs), clay and glazes (extra paid depending on the amount)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unlimited entry -->
+          <div class="accordion-item border-0 rounded-4 shadow-sm overflow-hidden">
+            <h2 class="accordion-header" id="optThreeHeader">
+              <button class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#optThree"
+                      aria-expanded="false"
+                      aria-controls="optThree"
+                      style="background:#fff; color:#3E3028;">
+                Unlimited entry — <span class="fw-bold ms-2">50€ / month</span>
+                <span class="text-muted ms-2">(min. 6 months)</span>
+              </button>
+            </h2>
+
+            <div id="optThree"
+                 class="accordion-collapse collapse"
+                 aria-labelledby="optThreeHeader"
+                 data-bs-parent="#openStudioOptions">
+              <div class="accordion-body bg-white">
+                <ul class="list-unstyled mb-0 text-muted fs-5">
+                  <li class="mb-2"><strong style="color:#3E3028;">Minimum total:</strong> 300€ / person</li>
+                  <li class="mb-2"><strong style="color:#3E3028;">Included:</strong> tools, bisque firing, your own storage space</li>
+                  <li><strong style="color:#3E3028;">Not included:</strong> glaze firing (see firing service for costs), clay and glazes (extra paid depending on the amount)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="text-muted fs-5 mb-3"
           appRevealAnimate="animate__fadeInLeft"
-          [delay]="'0.6s'">
+          [delay]="'0s'">
+          Interested in joining the Open Studio?
+          Send me a message using the form below and I’ll get back to you with all the details.
+        </p>
+
+        <!-- Botón desktop (igual que antes) -->
+        <button
+          type="button"
+          class="btn bg-azul text-white mt-2 d-none d-lg-inline-block"
+          appRevealAnimate="animate__fadeInLeft"
+          [delay]="'0s'"
+          (click)="abrirModalOpenStudio()">
           Book Now
         </button>
 
@@ -76,18 +160,18 @@
            appRevealAnimate="animate__fadeInRight"
            [delay]="'0.2s'">
 
-        <img 
-          src="assets/studio/studio.jpg" 
-          alt="Ashya Studio - Open Studio" 
+        <img
+          src="assets/studio/studio.jpg"
+          alt="Ashya Studio - Open Studio"
           class="img-fluid rounded-4 shadow">
 
-        <button 
-          type="button" 
+        <!-- Botón móvil debajo de la imagen -->
+        <button
+          type="button"
           class="btn bg-azul text-white mt-3 d-lg-none d-inline-block"
-          data-bs-toggle="modal"
-          data-bs-target="#modalOpenStudio"
           appRevealAnimate="animate__fadeInRight"
-          [delay]="'0.3s'">
+          [delay]="'0.2s'"
+          (click)="abrirModalOpenStudio()">
           Book Now
         </button>
       </div>
@@ -128,112 +212,160 @@
 </section>
 
 
-<!-- Modal Open Studio -->
-<div 
-  class="modal fade" 
-  id="modalOpenStudio" 
-  tabindex="-1" 
-  aria-labelledby="modalOpenStudioLabel" 
+<!-- MODAL OPEN STUDIO -->
+<div
+  class="modal fade"
+  id="modalOpenStudio"
+  tabindex="-1"
+  aria-labelledby="modalOpenStudioLabel"
   aria-hidden="true">
 
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content shadow-lg">
 
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title" id="modalOpenStudioLabel">Open Studio Reservation</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title" id="modalOpenStudioLabel">Open Studio Request</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
 
-        <p>
-          Reserve your spot for our Open Studio sessions. Sessions run every 
-          <strong>Wednesday and Friday (6:00 PM – 9:00 PM)</strong> and 
-          <strong>Saturday (4:30 PM – 8:00 PM)</strong>.
+        <p class="mb-2">
+          Tell us what you’re interested in and we’ll get back to you with more information.
         </p>
 
-        <p>
-          Includes <strong>2 kg of clay</strong>. 
-          <strong>Firing not included</strong> (see firing service for costs). 
-          Price: <strong>30€ per session</strong>.
-        </p>
-
-        <form>
-
-          <!-- Date -->
-          <div class="mb-3">
-            <label class="form-label fw-bold">Preferred date</label>
-            <input 
-              type="date" 
-              class="form-control" 
-              [(ngModel)]="reserva.fecha" 
-              name="fecha">
+        <div class="alert alert-light border rounded-3 mb-4" style="background: #fff;">
+          <div class="fw-bold" style="color:#3E3028;">Important</div>
+          <div class="text-muted">
+            Experienced level required (or completion of at least one hand-building class at Ashya Studio).
+            <br>
+            <strong>Not included:</strong> glaze firing, clay and glazes (extra paid). Clay cost: <strong>4€ / 1kg</strong>.
           </div>
+        </div>
 
-          <!-- Time slot -->
+        <form #openStudioForm="ngForm" (ngSubmit)="enviarSolicitudOpenStudio(openStudioForm)" novalidate>
+
+          <!-- Interest / Option -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Time slot</label>
-            <select 
-              class="form-select" 
-              [(ngModel)]="reserva.franjaHoraria" 
-              name="franjaHoraria">
-              <option value="" disabled selected>Select a time slot</option>
-              <option value="wednesday_18_21">Wednesday 18:00 – 21:00</option>
-              <option value="friday_18_21">Friday 18:00 – 21:00</option>
-              <option value="saturday_16_30_20">Saturday 16:30 – 20:00</option>
+            <label class="form-label fw-bold">What are you interested in? *</label>
+            <select
+              class="form-select"
+              [(ngModel)]="reserva.option"
+              name="option"
+              required
+              #option="ngModel">
+
+              <option value="" disabled>Select an option</option>
+              <option value="1_time_entry">1 time entry — 30€ / person</option>
+              <option value="10_times_entry">10 times entry — 200€ / person</option>
+              <option value="unlimited_entry">Unlimited entry — 50€ / month</option>
             </select>
+
+            <div class="text-danger small mt-1" *ngIf="option.invalid && option.touched">
+              Please select an option.
+            </div>
+
+            <div class="form-text text-muted">
+              Included: tools + bisque firing (storage space included for 10 times / Unlimited).
+            </div>
           </div>
 
           <!-- Name -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your Name</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              [(ngModel)]="reserva.nombre" 
-              name="nombre" 
+            <label class="form-label fw-bold">Your Name *</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="reserva.nombre"
+              name="nombre"
+              required
+              #nombre="ngModel"
               placeholder="Your full name">
+
+            <div class="text-danger small mt-1" *ngIf="nombre.invalid && nombre.touched">
+              Name is required.
+            </div>
           </div>
 
           <!-- Email -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your email address</label>
-            <input 
-              type="email" 
-              class="form-control" 
-              [(ngModel)]="reserva.email" 
-              name="email" 
+            <label class="form-label fw-bold">Your email address *</label>
+            <input
+              type="email"
+              class="form-control"
+              [(ngModel)]="reserva.email"
+              name="email"
+              required
+              email
+              #email="ngModel"
               placeholder="email@example.com">
+
+            <div class="text-danger small mt-1" *ngIf="email.errors?.['required'] && email.touched">
+              Email is required.
+            </div>
+
+            <div class="text-danger small mt-1" *ngIf="email.errors?.['email'] && email.touched">
+              Please enter a valid email address.
+            </div>
           </div>
 
-          <!-- Phone -->
+          <!-- Phone (REQUIRED) -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your phone number</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              [(ngModel)]="reserva.telefono" 
-              name="telefono" 
-              placeholder="+34 600 000 000">
+            <label class="form-label fw-bold">Your phone number *</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="reserva.telefono"
+              name="telefono"
+              required
+              pattern="[-0-9()+ ]{3,20}"
+              #telefono="ngModel"
+              placeholder="+49 600 000 000">
+
+            <div class="text-danger small mt-1" *ngIf="telefono.errors?.['required'] && telefono.touched">
+              Phone number is required.
+            </div>
+
+            <div class="text-danger small mt-1" *ngIf="telefono.errors?.['pattern'] && telefono.touched">
+              Enter a valid phone number (3–20 characters).
+            </div>
           </div>
 
-          <!-- Questions -->
+
+          <!-- Message (optional) -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Any additional questions?</label>
-            <textarea 
-              class="form-control" 
-              rows="3" 
-              [(ngModel)]="reserva.preguntasAdicionales" 
-              name="preguntasAdicionales" 
-              placeholder="Write here"></textarea>
+            <label class="form-label fw-bold">Message (optional)</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              [(ngModel)]="reserva.preguntasAdicionales"
+              name="preguntasAdicionales"
+              placeholder="Tell us a bit about your experience level or any questions you may have."></textarea>
+          </div>
+
+          <div class="modal-footer px-0">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              class="btn bg-azul text-white"
+              [disabled]="openStudioForm.invalid || openStudioLoading">
+
+              <ng-container *ngIf="!openStudioLoading; else loadingTpl">
+                Send
+              </ng-container>
+
+              <ng-template #loadingTpl>
+                <span class="me-2"></span>
+                Processing...
+              </ng-template>
+
+            </button>
           </div>
 
         </form>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn bg-azul text-white" (click)="enviarSolicitudOpenStudio()">Send</button>
       </div>
 
     </div>
@@ -241,12 +373,12 @@
 </div>
 
 
-
 <!-- Feedback Modal -->
-<app-feedback-modal 
+<app-feedback-modal
   *ngIf="mostrarFeedback"
   [status]="feedbackTipo"
   [title]="feedbackTitulo"
   [message]="feedbackMensaje"
   (closed)="cerrarFeedback()">
 </app-feedback-modal>
+

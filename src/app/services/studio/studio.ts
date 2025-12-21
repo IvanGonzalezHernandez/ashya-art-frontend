@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
 
 export interface OpenStudioSolicitudDto {
-  fecha: string;
-  franjaHoraria: string;
+  option: string,
   nombre: string;
   email: string;
   telefono: string;
