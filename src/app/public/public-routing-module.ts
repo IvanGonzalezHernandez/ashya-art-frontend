@@ -53,7 +53,7 @@ const routes: Routes = [
       { path: 'calendar', component: Calendar },
       { path: 'about', component: About },
       { path: 'studio', component: Studio },
-      { path: 'shipping', loadComponent: () => import('./pages/shipping/shipping').then(m => m.Shipping) },
+      { path: 'conditions', loadComponent: () => import('./pages/shipping/shipping').then(m => m.Shipping) },
       { path: 'imprint', loadComponent: () => import('./pages/imprint/imprint').then(m => m.Imprint) },
       { path: 'privacy-policy', loadComponent: () => import('./pages/privacy-policy/privacy-policy').then(m => m.PrivacyPolicy) },
 

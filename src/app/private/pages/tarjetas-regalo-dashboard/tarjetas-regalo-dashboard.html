@@ -40,6 +40,12 @@
                 </div>
               </td>
             </tr>
+            
+            <tr *ngIf="(tarjetas || []).length === 0">
+              <td colspan="3" class="text-center text-muted py-3">
+                No gift cards yet.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

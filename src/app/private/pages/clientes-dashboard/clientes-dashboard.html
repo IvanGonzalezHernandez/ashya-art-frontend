@@ -111,6 +111,12 @@
                 </div>
               </td>
             </tr>
+            
+            <tr *ngIf="(clientes || []).length === 0">
+              <td colspan="12" class="text-center text-muted py-3">
+                No clients yet.
+              </td>
+            </tr>
           </tbody>
 
         </table>

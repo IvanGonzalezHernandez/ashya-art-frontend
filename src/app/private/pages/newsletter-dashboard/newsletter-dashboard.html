@@ -53,6 +53,12 @@
                 </div>
               </td>
             </tr>
+            
+            <tr *ngIf="(newsletters || []).length === 0">
+              <td colspan="4" class="text-center text-muted py-3">
+                No clients yet.
+              </td>
+            </tr>
           </tbody>
 
         </table>
