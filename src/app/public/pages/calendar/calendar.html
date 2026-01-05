@@ -1,4 +1,4 @@
-<section class="py-4 bg-beige">
+<section class="py-4 bg-beige calendar-section">
   <div class="container">
 
     <!-- Header -->
@@ -17,6 +17,7 @@
     <div *ngIf="loading" class="text-center my-4">
       <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
     </div>
+
     <div *ngIf="!loading && error"
          class="alert alert-danger"
          appRevealAnimate="animate__fadeInUp"
@@ -36,7 +37,7 @@
          appRevealAnimate="animate__fadeInUp"
          [delay]="'0.15s'">
       <div class="col-12">
-        <div class="grid">
+        <div class="grid calendar-grid">
           <div class="cell"
                *ngFor="let week of weeks; let r = index"
                [attr.data-row]="r">
@@ -65,35 +66,42 @@
 </section>
 
 <!-- === MODAL  === -->
-<div class="modal fade" id="modalFechasDisponibles" tabindex="-1" aria-labelledby="modalFechasDisponiblesLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+<div class="modal fade"
+     id="calendar_modalFechasDisponibles"
+     tabindex="-1"
+     aria-labelledby="calendar_modalFechasDisponiblesLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title" id="modalFechasDisponiblesLabel">
+        <h5 class="modal-title" id="calendar_modalFechasDisponiblesLabel">
           Available Dates
           <span *ngIf="selectedDate">&nbsp;— {{ selectedDate | date:'EEEE, dd/MM/yyyy' }}</span>
         </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
         <div *ngIf="cursosFecha.length > 0; else noFechas">
 
           <!-- Lista de cursos del día -->
-          <div *ngFor="let fecha of cursosFecha" class="card mb-3">
-            <div class="card-body d-flex flex-column flex-md-row align-items-stretch justify-content-between w-100 flex-wrap gap-3">
+          <div *ngFor="let fecha of cursosFecha" class="card mb-3 calendar-modal-card">
+            <div class="card-body calendar-modal-row">
 
               <!-- IZQ: imagen + info -->
-              <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+              <div class="calendar-modal-left">
                 <img *ngIf="getImg(fecha)"
                      [src]="getImg(fecha)"
                      alt="Course"
-                     class="rounded-3 shadow-sm flex-shrink-0"
-                     style="width:72px;height:72px;object-fit:cover;">
-                <div class="text-truncate flex-grow-1">
+                     class="calendar-modal-img">
+
+                <div class="calendar-modal-info">
 
                   <!-- Nombre (gris/italic si pasada o sin plazas) -->
-                  <h5 class="card-title mb-1 text-truncate"
+                  <h5 class="card-title mb-1 calendar-modal-title"
                       [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {
                         'opacity': '0.45',
                         'font-style': 'italic'
@@ -102,32 +110,39 @@
                   </h5>
 
                   <!-- Subtítulo -->
-                  <div class="text-muted small text-truncate"
+                  <div class="text-muted small calendar-modal-subtitle"
                        *ngIf="getSubtitulo(fecha)"
                        [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {'opacity': '0.45'} : {}">
                     {{ getSubtitulo(fecha) }}
                   </div>
 
-                  <!-- Fecha · horario · seats -->
-                  <div class="small mt-1 text-nowrap"
+                  <!-- Fecha · horario · seats (RESPONSIVE, sin nowrap) -->
+                  <div class="small mt-1 calendar-modal-meta"
                        [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {'opacity': '0.45'} : {}">
-                    {{ fecha.fecha | date:'dd/MM/yyyy' }} · {{ fecha.horaInicio }} - {{ fecha.horaFin }}
-                    · Seats: <strong>{{ fecha.plazasDisponibles }}</strong>
+
+                    <span class="meta-item">{{ fecha.fecha | date:'dd/MM/yyyy' }}</span>
+
+                    <span class="meta-sep d-none d-md-inline">·</span>
+
+                    <span class="meta-item">{{ fecha.horaInicio }} - {{ fecha.horaFin }}</span>
+
+                    <span class="meta-sep d-none d-md-inline">·</span>
+
+                    <span class="meta-item">Seats: <strong>{{ fecha.plazasDisponibles }}</strong></span>
                   </div>
                 </div>
               </div>
 
               <!-- DCHA: precio + cantidad + botón -->
-              <div class="actions d-flex align-items-center justify-content-end flex-wrap flex-shrink-0 gap-2 ms-md-3 w-auto">
-                <div class="fw-semibold text-nowrap" *ngIf="getPrecio(fecha) !== null">
+              <div class="calendar-modal-actions">
+                <div class="fw-semibold calendar-modal-price" *ngIf="getPrecio(fecha) !== null">
                   €{{ getPrecio(fecha) | number:'1.2-2' }}
                 </div>
 
                 <label for="plazasSelect{{fecha.id}}" class="visually-hidden">Quantity</label>
 
                 <select id="plazasSelect{{fecha.id}}"
-                        class="form-select form-select-sm"
-                        style="width: 80px;"
+                        class="form-select form-select-sm calendar-modal-qty"
                         [(ngModel)]="cantidades[fecha.id]"
                         name="cantidad{{fecha.id}}"
                         [disabled]="fecha.plazasDisponibles === 0 || isPastDate(fecha.fecha)">
@@ -145,12 +160,14 @@
                 </select>
 
                 <!-- Botón solo si hay plazas y fecha futura -->
-                <button class="btn bg-azul text-white btn-sm px-3 py-2 flex-shrink-0"
+                <button type="button"
+                        class="btn bg-azul text-white btn-sm calendar-modal-btn"
                         *ngIf="fecha.plazasDisponibles > 0 && !isPastDate(fecha.fecha)"
                         (click)="agregarCursoAlCarrito(fecha)">
                   Add to cart
                 </button>
               </div>
+
             </div>
           </div>
 
@@ -158,7 +175,7 @@
 
         <!-- Si no hay cursos -->
         <ng-template #noFechas>
-          <p>There are no available dates for this day.</p>
+          <p class="mb-0">There are no available dates for this day.</p>
         </ng-template>
       </div>
 

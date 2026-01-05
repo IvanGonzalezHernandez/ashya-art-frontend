@@ -168,29 +168,22 @@ export class Calendar implements OnInit {
     this.openModalFechasDisponibles();
   }
 
-  // === Modal compartido ===
-  private prepareModalById(id: string): HTMLElement | null {
-    const el = document.getElementById(id);
-    if (!el) return null;
-    if (el.parentElement !== document.body) document.body.appendChild(el);
-    return el;
-  }
+private openModalFechasDisponibles(): void {
+  const el = document.getElementById('calendar_modalFechasDisponibles');
+  if (!el) return;
 
-  private resetOverlays() {
-    document.querySelectorAll('.modal-backdrop, .offcanvas-backdrop').forEach(el => el.remove());
-    document.body.classList.remove('modal-open');
-    document.body.style.removeProperty('overflow');
-    document.body.style.removeProperty('padding-right');
-  }
+  // Cierra cualquier modal abierto antes (por si vienes de otro)
+  document.querySelectorAll('.modal.show').forEach((m) => {
+    bootstrap.Modal.getInstance(m)?.hide();
+  });
 
-  private openModalFechasDisponibles(): void {
-    const el = this.prepareModalById('modalFechasDisponibles');
-    if (!el) return;
-    const modal = bootstrap.Modal.getOrCreateInstance(el, { backdrop: true, keyboard: true, focus: true });
-    el.addEventListener('hidden.bs.modal', () => this.resetOverlays(), { once: true });
-    this.resetOverlays();
-    modal.show();
-  }
+  bootstrap.Modal.getOrCreateInstance(el, {
+    backdrop: true,
+    keyboard: true,
+    focus: true
+  }).show();
+}
+
 
   // ================== Acciones ==================
   async agregarCursoAlCarrito(fecha: CursoFecha) {
@@ -217,7 +210,7 @@ export class Calendar implements OnInit {
     this.carritoService.agregarItem(item);
 
     // Cierra modal tras añadir
-    const el = document.getElementById('modalFechasDisponibles');
+    const el = document.getElementById('calendar_modalFechasDisponibles');
     if (el) bootstrap.Modal.getOrCreateInstance(el).hide();
   }
 
