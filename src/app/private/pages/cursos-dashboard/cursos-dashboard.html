@@ -186,7 +186,22 @@
 
               <div class="col-12 d-flex justify-content-end gap-2 mt-3">
                 <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-                <button type="submit" class="btn bg-azul text-white" [disabled]="cursoForm.invalid">Save</button>
+                <button
+                  type="submit"
+                  class="btn bg-azul text-white"
+                  [disabled]="cursoForm.invalid || cursoSaving">
+
+                  <ng-container *ngIf="!cursoSaving; else savingTpl">
+                    Save
+                  </ng-container>
+
+                  <ng-template #savingTpl>
+                    <span class="me-2" aria-hidden="true"></span>
+                    Processing...
+                  </ng-template>
+
+                </button>
+
               </div>
             </div>
           </form>
@@ -451,7 +466,21 @@
 
         <div class="modal-footer">
           <button class="btn btn-secondary" (click)="cancelarEdicionCursoFecha()">Cancel</button>
-          <button class="btn bg-azul text-white" (click)="guardarCursoFecha()">Save</button>
+          <button
+            type="button"
+            class="btn bg-azul text-white"
+            (click)="guardarCursoFecha()"
+            [disabled]="cursoFechaSaving">
+
+            <ng-container *ngIf="!cursoFechaSaving; else savingTpl">
+              Save
+            </ng-container>
+
+            <ng-template #savingTpl>
+              <span class="me-2" aria-hidden="true"></span>
+              Processing...
+            </ng-template>
+          </button>
         </div>
       </div>
     </div>

@@ -65,6 +65,8 @@ export class CursosDashboard implements OnInit {
   paginaActualCursoFecha: number = 1;
   cursoFechaEditando: CursoFecha | null = null;
   esNuevaCursoFecha: boolean = false;
+  cursoFechaSaving = false;
+  cursoSaving = false;
 
   constructor(
     public cursoService: CursoService,
@@ -206,8 +208,9 @@ export class CursosDashboard implements OnInit {
     slot.markedForDelete = false;
   }
 
-  guardarCambios() {
-  if (!this.cursoEditando) return;
+
+guardarCambios() {
+  if (!this.cursoEditando || this.cursoSaving) return;
 
   // 🔒 Doble validación de seguridad
   for (const s of this.slots) {
@@ -247,7 +250,6 @@ export class CursosDashboard implements OnInit {
 
   this.slots.forEach(s => {
     if (s.file) {
-      // (opcional) seguridad extra en runtime
       if (isWebpFile(s.file) && !isTooLarge(s.file, this.IMG_LIMIT_BYTES)) {
         fd.append(`img${s.slot}`, s.file);
       }
@@ -262,13 +264,19 @@ export class CursosDashboard implements OnInit {
     ? this.cursoService.crearCurso(fd)
     : this.cursoService.actualizarCurso(fd, this.cursoEditando.id);
 
+  this.cursoSaving = true;
+
   req$.subscribe({
     next: () => {
+      this.cursoSaving = false;
+
       this.obtenerCursos();
       this.cancelarEdicion();
       this.mostrarModalFeedback('success', 'Course saved', 'The course has been saved successfully.');
     },
     error: (e) => {
+      this.cursoSaving = false;
+
       console.error('Error guardando curso', e);
       this.mostrarModalFeedback('error', 'Error saving course', 'Please review fields or try again.');
     }
@@ -332,29 +340,43 @@ eliminarCurso(id: number) {
     this.esNuevaCursoFecha = false;
   }
 
-  guardarCursoFecha() {
-    if (!this.cursoFechaEditando) return;
+guardarCursoFecha() {
+  if (!this.cursoFechaEditando || this.cursoFechaSaving) return;
 
-    const creating = this.esNuevaCursoFecha;
+  const creating = this.esNuevaCursoFecha;
 
-    const req$ = creating
-      ? this.cursoFechaService.crearCursoFecha(this.cursoFechaEditando)
-      : this.cursoFechaService.actualizarCursoFecha(this.cursoFechaEditando);
+  const req$ = creating
+    ? this.cursoFechaService.crearCursoFecha(this.cursoFechaEditando)
+    : this.cursoFechaService.actualizarCursoFecha(this.cursoFechaEditando);
 
-    req$.subscribe({
-      next: () => {
-        this.obtenerCursoFechas();
-        this.cursoFechaEditando = null;
-        this.esNuevaCursoFecha = false;
-        this.mostrarModalFeedback('success', creating ? 'Date created' : 'Date saved',
-          'The date has been saved successfully.');
-      },
-      error: (e) => {
-        console.error('Error guardando fecha de curso', e);
-        this.mostrarModalFeedback('error', 'Error saving date', 'Please review fields or try again.');
-      }
-    });
-  }
+  this.cursoFechaSaving = true;
+
+  req$.subscribe({
+    next: () => {
+      this.cursoFechaSaving = false;
+
+      this.obtenerCursoFechas();
+      this.cursoFechaEditando = null;
+      this.esNuevaCursoFecha = false;
+
+      this.mostrarModalFeedback(
+        'success',
+        creating ? 'Date created' : 'Date saved',
+        'The date has been saved successfully.'
+      );
+    },
+    error: (e) => {
+      this.cursoFechaSaving = false;
+
+      console.error('Error guardando fecha de curso', e);
+      this.mostrarModalFeedback(
+        'error',
+        'Error saving date',
+        'Please review fields or try again.'
+      );
+    }
+  });
+}
 
 
 
