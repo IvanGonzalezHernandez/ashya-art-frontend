@@ -285,15 +285,28 @@
           </div>
 
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="privacidad" name="privacidad" required [(ngModel)]="cliente.privacidad" #privacidad="ngModel">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="privacidad"
+              name="privacidad"
+              required
+              [(ngModel)]="cliente.privacidad"
+              #privacidad="ngModel"
+            >
+
             <label class="form-check-label" for="privacidad">
-              I accept the <a href="/privacy-policy" target="_blank">privacy policy</a> *
+              I accept the
+              <a routerLink="/privacy-policy" target="_blank">privacy & cookies policy</a>
+              and the
+              <a routerLink="/conditions" target="_blank">terms & conditions</a>
+              *
             </label>
+
             <div class="text-danger" *ngIf="privacidad.invalid && privacidad.touched">
-              You must accept the privacy policy.
+              You must accept the privacy & cookies policy and the terms & conditions.
             </div>
           </div>
-
 
 
           <div class="modal-footer px-0">
