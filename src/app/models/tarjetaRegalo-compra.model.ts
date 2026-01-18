@@ -11,4 +11,7 @@ export interface TarjetaRegaloCompra {
   idTarjeta?: number;
   idCliente?: number;
   idCompra?: number;
+
+  email?: string;
+  precio?: number;
 }

@@ -157,10 +157,6 @@
                 </div>
               </div>
 
-              <small class="text-muted d-block mt-2">
-                Tip: “Replace” sube una nueva imagen. “Delete” la elimina (se marca para borrado);
-                “Restore” (solo en edición) vuelve a la imagen guardada en el servidor.
-              </small>
             </div>
             <!-- FIN SLOT -->
 
@@ -168,7 +164,7 @@
 
           <div class="d-flex justify-content-end gap-2 mt-3">
             <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-            <button type="submit" class="btn btn-success" [disabled]="tarjetaForm.invalid">Save</button>
+            <button type="submit" class="btn bg-azul text-white" [disabled]="tarjetaForm.invalid">Save</button>
           </div>
         </form>
       </div>
@@ -198,8 +194,9 @@
           <thead class="table-azul">
             <tr>
               <th style="width: 15%;">Code</th>
-              <th style="width: 20%;">Recipient</th>
+              <th style="width: 20%;">Client</th>
               <th style="width: 10%;">Redeemed</th>
+              <th style="width: 10%;">Price</th>
               <th style="width: 15%;">Purchase Date</th>
               <th style="width: 15%;">Expiration</th>
               <th style="width: 25%;">Actions</th>
@@ -215,8 +212,8 @@
               </td>
 
               <td>
-                <span class="d-inline-block w-100 text-truncate" [title]="compra.destinatario">
-                  {{ compra.destinatario || '—' }}
+                <span class="d-inline-block w-100 text-truncate" [title]="compra.email">
+                  {{ compra.email || '—' }}
                 </span>
               </td>
 
@@ -227,6 +224,8 @@
                   {{ compra.canjeada ? 'Yes' : 'No' }}
                 </span>
               </td>
+
+              <td class="text-nowrap">{{ compra.precio | currency:'EUR' }}</td>
 
               <td class="text-nowrap">{{ compra.fechaCompra | date:'yyyy-MM-dd' }}</td>
               <td class="text-nowrap">{{ compra.fechaCaducidad | date:'yyyy-MM-dd' }}</td>
@@ -239,17 +238,19 @@
                     [disabled]="compra.canjeada">
                     Mark as Redeemed
                   </button>
+                  <!--
                   <button
                     class="btn btn-danger btn-sm"
                     (click)="eliminarCompra(compra.id!)">
                     Delete
                   </button>
+                  -->
                 </div>
               </td>
             </tr>
 
             <tr *ngIf="(tarjetasCompra || []).length === 0">
-              <td colspan="6" class="text-center text-muted py-3">
+              <td colspan="7" class="text-center text-muted py-3">
                 No gift card purchases yet.
               </td>
             </tr>

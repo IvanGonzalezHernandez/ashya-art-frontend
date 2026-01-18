@@ -229,41 +229,65 @@
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
-          <thead class="table-azul">
-            <tr>
-              <th style="width: 26%;">Course</th>
-              <th style="width: 16%;">Date</th>
-              <th style="width: 14%;">Start</th>
-              <th style="width: 14%;">End</th>
-              <th style="width: 14%;">Available</th>
-              <th style="width: 16%;">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let cursoFecha of cursoFechas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }">
-              <td>
-                <span class="d-inline-block w-100 text-truncate" [title]="cursoFecha.nombreCurso">
-                  {{ cursoFecha.nombreCurso }}
+        <thead class="table-azul">
+          <tr>
+            <th style="width: 42%;">Course</th>
+
+            <!-- Solo móvil -->
+            <th class="d-table-cell d-md-none" style="width: 38%;">When</th>
+
+            <!-- md+ -->
+            <th class="d-none d-md-table-cell" style="width: 18%;">Date</th>
+            <th class="d-none d-lg-table-cell" style="width: 12%;">Start</th>
+            <th class="d-none d-lg-table-cell" style="width: 12%;">End</th>
+            <th class="d-none d-md-table-cell" style="width: 16%;">Available</th>
+
+            <th style="width: 20%;">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let cursoFecha of cursoFechas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }">
+
+            <td>
+              <span class="d-inline-block w-100 text-truncate" [title]="cursoFecha.nombreCurso">
+                {{ cursoFecha.nombreCurso }}
+              </span>
+            </td>
+
+            <!-- Solo móvil: metes fecha + horas + plazas en 2 líneas -->
+            <td class="d-table-cell d-md-none align-middle">
+              <div class="small fw-semibold text-truncate" [title]="cursoFecha.fecha">
+                {{ cursoFecha.fecha }}
+              </div>
+
+              <div class="small text-muted">
+                <span class="d-block">
+                  {{ cursoFecha.horaInicio }} – {{ cursoFecha.horaFin }}
                 </span>
-              </td>
+                <span class="d-block">
+                  {{ cursoFecha.plazasDisponibles }} seats
+                </span>
+              </div>
+            </td>
 
-              <td class="text-nowrap">{{ cursoFecha.fecha }}</td>
-              <td class="text-nowrap">{{ cursoFecha.horaInicio }}</td>
-              <td class="text-nowrap">{{ cursoFecha.horaFin }}</td>
-              <td class="text-nowrap">{{ cursoFecha.plazasDisponibles }}</td>
 
-              <td>
-                <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
-                  <button class="btn btn-secondary btn-sm" (click)="verDetalleCursoFecha(cursoFecha)">Detail</button>
-                  <button class="btn btn-primary btn-sm" (click)="editarCursoFecha(cursoFecha)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarCursoFecha(cursoFecha.id)">Delete</button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="(cursoFechas || []).length === 0">
-              <td colspan="7" class="text-center text-muted py-3">No dates yet.</td>
-            </tr>
-          </tbody>
+            <!-- md+ -->
+            <td class="d-none d-md-table-cell text-nowrap">{{ cursoFecha.fecha }}</td>
+            <td class="d-none d-lg-table-cell text-nowrap">{{ cursoFecha.horaInicio }}</td>
+            <td class="d-none d-lg-table-cell text-nowrap">{{ cursoFecha.horaFin }}</td>
+            <td class="d-none d-md-table-cell text-nowrap">{{ cursoFecha.plazasDisponibles }}</td>
+
+            <td>
+              <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
+                <button class="btn btn-secondary btn-sm" (click)="verDetalleCursoFecha(cursoFecha)">Detail</button>
+                <button class="btn btn-primary btn-sm" (click)="editarCursoFecha(cursoFecha)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="eliminarCursoFecha(cursoFecha.id)">Delete</button>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
         </table>
       </div>
     </div>
@@ -280,130 +304,148 @@
     </pagination-controls>
   </div>
 
- <!-- DETALLE CURSO/FECHA + RESERVAS (ABAJO) -->
+ <!-- DETALLE CURSO/FECHA + RESERVAS -->
 <div class="card shadow-sm rounded-3 mb-5" *ngIf="cursoFechaSeleccionada">
+
+  <!-- HEADER -->
   <div class="card-header bg-azul text-white d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-2">
       <i class="bi bi-calendar3"></i>
       <span class="fw-semibold">Date Detail</span>
     </div>
-    <button type="button" class="btn-close btn-close-white" (click)="cerrarDetalleCursoFecha()"></button>
+    <button type="button" class="btn-close btn-close-white"
+            (click)="cerrarDetalleCursoFecha()"></button>
   </div>
 
   <div class="card-body">
     <div class="row g-4">
-      <!-- Columna: info principal -->
+
+      <!-- INFO PRINCIPAL -->
       <div class="col-12 col-lg-4">
         <h6 class="text-uppercase text-muted mb-3">Course date</h6>
+
         <ul class="list-group list-group-flush rounded border">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span class="text-muted small"><i class="bi bi-journal-text me-1"></i> Course</span>
-            <span class="fw-semibold text-end d-inline-block text-truncate" style="max-width: 60%;" [title]="cursoFechaSeleccionada.nombreCurso">
+            <span class="text-muted small">
+              <i class="bi bi-journal-text me-1"></i> Course
+            </span>
+            <span class="fw-semibold text-end d-inline-block text-truncate"
+                  style="max-width: 60%;"
+                  [title]="cursoFechaSeleccionada.nombreCurso">
               {{ cursoFechaSeleccionada.nombreCurso }}
             </span>
           </li>
+
           <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted small"><i class="bi bi-calendar-date me-1"></i> Date</span>
+            <span class="text-muted small">
+              <i class="bi bi-calendar-date me-1"></i> Date
+            </span>
             <span class="fw-semibold">{{ cursoFechaSeleccionada.fecha }}</span>
           </li>
+
           <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted small"><i class="bi bi-clock me-1"></i> Start</span>
+            <span class="text-muted small">
+              <i class="bi bi-clock me-1"></i> Start
+            </span>
             <span class="fw-semibold">{{ cursoFechaSeleccionada.horaInicio }}</span>
           </li>
+
           <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted small"><i class="bi bi-clock-history me-1"></i> End</span>
+            <span class="text-muted small">
+              <i class="bi bi-clock-history me-1"></i> End
+            </span>
             <span class="fw-semibold">{{ cursoFechaSeleccionada.horaFin }}</span>
           </li>
+
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span class="text-muted small"><i class="bi bi-ticket-perforated me-1"></i> Status</span>
-            <span class="fw-semibold">
-              <span class="badge"
-                    [ngClass]="cursoFechaSeleccionada.plazasDisponibles > 0 ? 'bg-success' : 'bg-danger'">
-                {{ cursoFechaSeleccionada.plazasDisponibles > 0 ? 'Open' : 'Full' }}
-              </span>
+            <span class="text-muted small">
+              <i class="bi bi-ticket-perforated me-1"></i> Status
+            </span>
+            <span class="badge"
+                  [ngClass]="cursoFechaSeleccionada.plazasDisponibles > 0 ? 'bg-success' : 'bg-danger'">
+              {{ cursoFechaSeleccionada.plazasDisponibles > 0 ? 'Open' : 'Full' }}
             </span>
           </li>
+
           <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted small"><i class="bi bi-people me-1"></i> Available</span>
+            <span class="text-muted small">
+              <i class="bi bi-people me-1"></i> Available
+            </span>
             <span class="fw-semibold">{{ cursoFechaSeleccionada.plazasDisponibles }}</span>
           </li>
         </ul>
       </div>
 
-      <!-- Columna: KPIs -->
+      <!-- KPIs + CLIENTS -->
       <div class="col-12 col-lg-8">
+
+        <!-- KPIs -->
         <h6 class="text-uppercase text-muted mb-3">Summary</h6>
         <div class="row g-3">
           <div class="col-12 col-sm-4">
             <div class="border rounded-3 p-3 h-100">
-              <div class="text-muted small d-flex align-items-center gap-2">
-                <i class="bi bi-clipboard-check"></i> Bookings
+              <div class="text-muted small">
+                <i class="bi bi-clipboard-check me-1"></i> Bookings
               </div>
               <div class="fs-4 fw-bold mt-1">{{ reservasDeFecha.length }}</div>
             </div>
           </div>
+
           <div class="col-12 col-sm-4">
             <div class="border rounded-3 p-3 h-100">
-              <div class="text-muted small d-flex align-items-center gap-2">
-                <i class="bi bi-123"></i> Reserved seats
+              <div class="text-muted small">
+                <i class="bi bi-123 me-1"></i> Reserved seats
               </div>
               <div class="fs-4 fw-bold mt-1">{{ totalPlazasReservadas }}</div>
             </div>
           </div>
+
           <div class="col-12 col-sm-4">
             <div class="border rounded-3 p-3 h-100">
-              <div class="text-muted small d-flex align-items-center gap-2">
-                <i class="bi bi-person-check"></i> Available now
+              <div class="text-muted small">
+                <i class="bi bi-person-check me-1"></i> Available now
               </div>
-              <div class="fs-4 fw-bold mt-1">{{ cursoFechaSeleccionada.plazasDisponibles }}</div>
+              <div class="fs-4 fw-bold mt-1">
+                {{ cursoFechaSeleccionada.plazasDisponibles }}
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Tabla de reservas -->
+        <!-- CLIENTS -->
         <div class="mt-4">
           <h6 class="text-uppercase text-muted mb-2">Clients</h6>
-          <div class="table-responsive">
+
+          <!-- TABLA DESKTOP -->
+          <div class="table-responsive d-none d-md-block">
             <table class="table table-hover table-striped mb-0 align-middle">
               <thead class="table-azul">
                 <tr>
-                  <th style="width: 20%;">Client</th>
-                  <th style="width: 15%;">Tlf</th>
-                  <th style="width: 25%;">Email</th>
-                  <th style="width: 10%;">Seats</th>
-                  <th style="width: 15%;">Payment</th>
-                  <th style="width: 15%;">Booked on</th>
+                  <th>Client</th>
+                  <th>Tlf</th>
+                  <th>Email</th>
+                  <th>Seats</th>
+                  <th>Payment</th>
+                  <th>Booked on</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let r of reservasDeFecha">
-                  <td>
-                    <span class="d-inline-block w-100 text-truncate" [title]="r.nombreCliente">
-                      {{ r.nombreCliente }}
-                    </span>
+                  <td class="text-truncate" [title]="r.nombreCliente">
+                    {{ r.nombreCliente }}
                   </td>
-
                   <td class="text-nowrap">{{ r.telefono }}</td>
-
-                  <td class="text-nowrap">
-                    <span class="d-inline-block w-100 text-truncate" [title]="r.email">
-                      {{ r.email }}
-                    </span>
+                  <td class="text-truncate" [title]="r.email">
+                    {{ r.email }}
                   </td>
-
-                  <td class="text-nowrap">{{ r.plazasReservadas }}</td>
-
-                  <!-- ESTADO DE PAGO -->
-                  <td class="text-nowrap">
+                  <td>{{ r.plazasReservadas }}</td>
+                  <td>
                     <span class="badge"
                           [ngClass]="r.pagado ? 'bg-success' : 'bg-warning text-dark'">
                       {{ r.pagado ? 'Paid' : 'Atelier' }}
                     </span>
                   </td>
-
-                  <td class="text-nowrap">
-                    {{ r.fechaReserva | date:'yyyy-MM-dd' }}
-                  </td>
+                  <td>{{ r.fechaReserva | date:'yyyy-MM-dd' }}</td>
                 </tr>
 
                 <tr *ngIf="reservasDeFecha.length === 0">
@@ -414,13 +456,60 @@
               </tbody>
             </table>
           </div>
+
+          <!-- CARDS MÓVIL -->
+          <div class="d-block d-md-none">
+            <div *ngIf="reservasDeFecha.length === 0"
+                 class="text-center text-muted">
+              No bookings for this date.
+            </div>
+
+            <div class="card shadow-sm mb-2"
+                 *ngFor="let r of reservasDeFecha">
+              <div class="card-body py-3">
+
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div class="fw-semibold text-truncate"
+                       style="max-width: 70%;"
+                       [title]="r.nombreCliente">
+                    {{ r.nombreCliente }}
+                  </div>
+
+                  <span class="badge"
+                        [ngClass]="r.pagado ? 'bg-success' : 'bg-warning text-dark'">
+                    {{ r.pagado ? 'Paid' : 'Atelier' }}
+                  </span>
+                </div>
+
+                <div class="small text-muted text-truncate mt-1"
+                     [title]="r.email">
+                  <i class="bi bi-envelope me-1"></i>{{ r.email }}
+                </div>
+
+                <div class="d-flex justify-content-between small text-muted mt-2">
+                  <span class="text-truncate" style="max-width: 70%;">
+                    <i class="bi bi-telephone me-1"></i>{{ r.telefono }}
+                  </span>
+                  <span class="fw-semibold">
+                    {{ r.plazasReservadas }} seats
+                  </span>
+                </div>
+
+                <div class="small text-muted mt-2">
+                  <i class="bi bi-calendar-check me-1"></i>
+                  {{ r.fechaReserva | date:'yyyy-MM-dd' }}
+                </div>
+
+              </div>
+            </div>
+          </div>
+
         </div>
-
-
       </div>
     </div>
   </div>
 </div>
+
 
 
 

@@ -237,36 +237,61 @@ export class TarjetasRegaloDashboard implements OnInit {
     this.csvExportService.exportarCSV(encabezado, filas, 'gift-card-purchases.csv');
   }
 
-  // (Opcionales si añades botones de acción)
-  marcarCanjeada(compra: TarjetaRegaloCompra) {
-    if (!compra?.id || compra.canjeada) return;
-    this.tarjetaCompraService.marcarCanjeada(compra.id).subscribe({
+marcarCanjeada(compra: TarjetaRegaloCompra) {
+  if (!compra?.id || compra.canjeada) return;
+
+  const confirmar = confirm(
+    `Are you sure you want to mark the code ${compra.codigo} as redeemed?\nThis action cannot be undone.`
+  );
+
+  if (!confirmar) return;
+
+  this.tarjetaCompraService.marcarCanjeada(compra.id).subscribe({
+    next: () => {
+      compra.canjeada = true;
+      this.mostrarModalFeedback(
+        'success',
+        'Marked as redeemed',
+        `Code ${compra.codigo} marked as redeemed.`
+      );
+    },
+    error: err => {
+      console.error('Error marked as redeemed', err);
+      this.mostrarModalFeedback(
+        'error',
+        'Error',
+        'Could not mark as redeemed.'
+      );
+    }
+  });
+}
+
+
+eliminarCompra(id: number) {
+  if (!id) return;
+
+  if (confirm('Are you sure you want to delete this gift card purchase? This action cannot be undone.')) {
+    this.tarjetaCompraService.eliminarCompra(id).subscribe({
       next: () => {
-        compra.canjeada = true;
-        this.mostrarModalFeedback('success', 'Marked as redeemed', `Code ${compra.codigo} marked as redeemed.`);
+        this.obtenerTarjetasCompra();
+        this.mostrarModalFeedback(
+          'success',
+          'Deleted',
+          'Purchase deleted successfully.'
+        );
       },
       error: err => {
-        console.error('Error marcando canjeada', err);
-        this.mostrarModalFeedback('error', 'Error', 'Could not mark as redeemed.');
+        console.error('Error deleting purchase', err);
+        this.mostrarModalFeedback(
+          'error',
+          'Error deleting',
+          'Could not delete the purchase.'
+        );
       }
     });
   }
+}
 
-  eliminarCompra(id: number) {
-    if (!id) return;
-    if (confirm('¿Estás seguro de eliminar esta compra de tarjeta regalo?')) {
-      this.tarjetaCompraService.eliminarCompra(id).subscribe({
-        next: () => {
-          this.obtenerTarjetasCompra();
-          this.mostrarModalFeedback('success', 'Deleted', 'Purchase deleted successfully.');
-        },
-        error: err => {
-          console.error('Error eliminando compra', err);
-          this.mostrarModalFeedback('error', 'Error deleting', 'Could not delete the purchase.');
-        }
-      });
-    }
-  }
 
   // ===== FEEDBACK =====
   mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
