@@ -114,7 +114,6 @@ export class WorkshopsDetail {
   private prepareModalById(id: string): HTMLElement | null {
     const el = document.getElementById(id);
     if (!el) return null;
-    if (el.parentElement !== document.body) document.body.appendChild(el);
     // No crear instancias duplicadas: usa siempre getOrCreate
     return el;
   }
