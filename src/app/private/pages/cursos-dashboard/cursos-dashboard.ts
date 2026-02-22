@@ -120,6 +120,7 @@ export class CursosDashboard implements OnInit {
       subtitulo: '',
       descripcion: '',
       precio: 0,
+      orden: 0,
       img1: null,
       img2: null,
       img3: null,
@@ -242,7 +243,8 @@ guardarCambios() {
     materiales: this.cursoEditando.materiales,
     plazasMaximas: this.cursoEditando.plazasMaximas,
     informacionExtra: this.cursoEditando.informacionExtra,
-    localizacion: this.cursoEditando.localizacion
+    localizacion: this.cursoEditando.localizacion,
+    orden: this.cursoEditando.orden
   };
 
   const fd = new FormData();

@@ -141,6 +141,11 @@
               </div>
 
               <div class="col-md-6">
+                <label class="form-label">Order</label>
+                <input type="number" class="form-control" [(ngModel)]="cursoEditando.orden" name="orden" min="1" />
+              </div>
+
+              <div class="col-md-6">
                 <label class="form-label">Price</label>
                 <input type="number" class="form-control" [(ngModel)]="cursoEditando.precio" name="precio" min="0" step="0.01" required #precio="ngModel" />
                 <div class="text-danger" *ngIf="precio.invalid && precio.touched">Price cannot be negative.</div>

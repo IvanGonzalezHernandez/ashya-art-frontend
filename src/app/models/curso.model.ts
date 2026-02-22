@@ -13,6 +13,8 @@ export interface Curso {
   plazasMaximas?: number;
   informacionExtra?: string;
   localizacion: string;
+  orden?: number;
+
   img1?: any;
   img2?: any;
   img3?: any;
