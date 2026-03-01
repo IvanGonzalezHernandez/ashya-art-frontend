@@ -62,4 +62,8 @@ eliminarNewsletter(id: number): Observable<void> {
   suscribirse(newsletter: Partial<Newsletter>): Observable<Newsletter> {
     return this.http.post<Newsletter>(`${this.apiUrl}/suscribirse`, newsletter);
   }
+
+  suscribirseCheckout(email: string): Observable<Newsletter> {
+    return this.http.post<Newsletter>(`${this.apiUrl}/suscribirse-checkout`, { email });
+  }
 }

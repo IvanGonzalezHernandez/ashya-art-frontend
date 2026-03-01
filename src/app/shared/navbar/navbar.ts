@@ -6,6 +6,7 @@ import { ItemCarrito } from '../../models/item-carrito';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Cliente } from '../../models/cliente.model';
+import { NewsletterService } from '../../services/newsletter/newsletter';
 
 declare var bootstrap: any;
 
@@ -75,6 +76,7 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
 
 
   constructor(public carritoService: CarritoService,
+    private newsletterService: NewsletterService,
     private router: Router, 
     private route: ActivatedRoute) {}
 
@@ -171,6 +173,21 @@ confirmarDatos() {
   const telSinPrefijo = tel.replace(/^\+\d+\s*/, '');
   this.cliente.telefono = `${this.prefijoSeleccionado} ${telSinPrefijo}`.trim();
 
+  if (this.cliente.infoComercial && this.cliente.email) {
+    this.newsletterService.suscribirseCheckout(this.cliente.email).subscribe({
+      next: () => this.continuarCheckout(),
+      error: (err) => {
+        console.warn('No se pudo suscribir en checkout, se continúa con el pago', err);
+        this.continuarCheckout();
+      }
+    });
+    return;
+  }
+
+  this.continuarCheckout();
+}
+
+private continuarCheckout() {
   if (this.esCompraGratis) {
     this.confirmarCompraGratis();
     return;
