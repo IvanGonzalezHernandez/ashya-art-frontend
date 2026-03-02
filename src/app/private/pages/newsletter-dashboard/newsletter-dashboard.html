@@ -23,7 +23,7 @@
               <!--<th style="width: 8%;">ID</th>-->
               <th style="width: 32%;">Email</th>
               <th class="d-none d-md-table-cell" style="width: 24%;">Registration Date</th>
-              <th style="width: 20%;">Status</th>
+              <th class="d-none d-md-table-cell" style="width: 20%;">Status</th>
               <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
@@ -42,7 +42,7 @@
                 {{ newsletter.fechaRegistro | date:'yyyy-MM-dd' }}
               </td>
 
-              <td>
+              <td class="d-none d-md-table-cell">
                 <span class="badge" [ngClass]="newsletter.estado ? 'bg-success' : 'bg-danger'">
                   {{ newsletter.estado ? 'Active' : 'Inactive' }}
                 </span>
