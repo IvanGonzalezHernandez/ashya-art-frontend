@@ -1,10 +1,12 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Newsletter Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Newsletter</h1>
+    <!--
     <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearNewsletter()">+ New Newsletter</button>
     </div>
+    -->
   </div>
 
   <div *ngIf="loading" class="text-center my-4">
@@ -21,13 +23,13 @@
               <!--<th style="width: 8%;">ID</th>-->
               <th style="width: 32%;">Email</th>
               <th class="d-none d-md-table-cell" style="width: 24%;">Registration Date</th>
-              <th style="width: 16%;">Status</th>
-              <th style="width: 20%;">Actions</th>
+              <th style="width: 20%;">Status</th>
+              <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr *ngFor="let newsletter of newsletters | paginate: { id: 'newsletters', itemsPerPage: 5, currentPage: paginaActual }">
+            <tr *ngFor="let newsletter of newsletters | paginate: { id: 'newsletters', itemsPerPage: 10, currentPage: paginaActual }">
               <!--<td class="text-muted">{{ newsletter.id }}</td>-->
 
               <td>
@@ -49,7 +51,7 @@
               <td>
                 <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarNewsletter(newsletter)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarNewsletter(newsletter.id)">Delete</button>
+                <!-- <button class="btn btn-danger btn-sm" (click)="eliminarNewsletter(newsletter.id)">Delete</button>-->
                 </div>
               </td>
             </tr>
@@ -98,6 +100,7 @@
                 name="email"
                 [(ngModel)]="newsletterEditando.email"
                 required
+                disabled
               />
             </div>
 
@@ -110,6 +113,7 @@
                 [ngModel]="newsletterEditando.fechaRegistro | date:'yyyy-MM-dd'"
                 (ngModelChange)="newsletterEditando.fechaRegistro = $event"
                 required
+                disabled
               />
             </div>
 

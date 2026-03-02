@@ -139,12 +139,11 @@ eliminarNewsletter(id: number) {
   }
 
   exportarCSV() {
-    const encabezado = ['ID', 'Email', 'Register date', 'Estate'];
+    const encabezado = ['Email', 'Registration Date', 'Status'];
     const filas = this.newsletters.map(newsletter => [
-      newsletter.id,
       newsletter.email,
       newsletter.fechaRegistro.toString(),
-      newsletter.estado ? 'Activo' : 'Inactivo'
+      newsletter.estado ? 'Active' : 'Inactive'
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'newsletter.csv');
   }
