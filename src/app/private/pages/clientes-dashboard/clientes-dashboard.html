@@ -1,9 +1,9 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Clients Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Clients</h1>
     <div class="d-flex gap-2 flex-wrap">
-      <button class="btn btn-success" (click)="crearCliente()">+ New Client</button>
+    <!--<button class="btn btn-success" (click)="crearCliente()">+ New Client</button>-->
     </div>
   </div>
 
@@ -21,21 +21,16 @@
               <!--<th style="width: 6%;">ID</th>-->
               <th style="width: 12%;">Name</th>
               <th class="d-none d-md-table-cell" style="width: 12%;">Surname</th>
-              <th style="width: 10%;">Phone</th>
-              <th class="d-none d-md-table-cell" style="width: 18%;">Email</th>
-              <th class="d-none d-lg-table-cell" style="width: 14%;">Street</th>
-              <th class="d-none d-lg-table-cell" style="width: 6%;">Number</th>
-              <th class="d-none d-xl-table-cell" style="width: 6%;">Floor</th>
-              <th class="d-none d-xl-table-cell" style="width: 10%;">Province</th>
-              <th class="d-none d-lg-table-cell" style="width: 10%;">City</th>
-              <th class="d-none d-lg-table-cell" style="width: 10%;">Country</th>
-              <th class="d-none d-xl-table-cell" style="width: 6%;">Postal</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">Phone</th>
+              <th style="width: 20%;">Email</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">City</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">Country</th>
               <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr *ngFor="let cliente of clientes | paginate: { id: 'clientes', itemsPerPage: 5, currentPage: paginaActual }">
+            <tr *ngFor="let cliente of clientes | paginate: { id: 'clientes', itemsPerPage: 10, currentPage: paginaActual }">
               <!--td class="text-muted">{{ cliente.id }}</td>-->
 
               <td>
@@ -50,70 +45,41 @@
                 </span>
               </td>
 
-              <td>
+              <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="cliente.telefono">
                   {{ cliente.telefono }}
                 </span>
               </td>
 
-              <td class="d-none d-md-table-cell">
+              <td>
                 <span class="d-inline-block w-100 text-truncate" [title]="cliente.email">
                   {{ cliente.email }}
                 </span>
               </td>
 
-              <td class="d-none d-lg-table-cell">
-                <span class="d-inline-block w-100 text-truncate" [title]="cliente.calle">
-                  {{ cliente.calle }}
-                </span>
-              </td>
-
-              <td class="d-none d-lg-table-cell">
-                <span class="d-inline-block w-100 text-truncate" [title]="cliente.numero">
-                  {{ cliente.numero }}
-                </span>
-              </td>
-
-              <td class="d-none d-xl-table-cell">
-                <span class="d-inline-block w-100 text-truncate" [title]="cliente.piso">
-                  {{ cliente.piso }}
-                </span>
-              </td>
-
-              <td class="d-none d-xl-table-cell">
-                <span class="d-inline-block w-100 text-truncate" [title]="cliente.provincia">
-                  {{ cliente.provincia }}
-                </span>
-              </td>
-
-              <td class="d-none d-lg-table-cell">
+              <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="cliente.ciudad">
                   {{ cliente.ciudad }}
                 </span>
               </td>
 
-              <td class="d-none d-lg-table-cell">
+              <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="cliente.pais">
                   {{ cliente.pais }}
                 </span>
               </td>
 
-              <td class="d-none d-xl-table-cell">
-                <span class="d-inline-block w-100 text-truncate" [title]="cliente.codigoPostal">
-                  {{ cliente.codigoPostal }}
-                </span>
-              </td>
-
               <td>
                 <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
-                  <button class="btn btn-primary btn-sm" (click)="editarCliente(cliente)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarCliente(cliente.id)">Delete</button>
+                  <button class="btn btn-secondary btn-sm" (click)="verDetalleCliente(cliente)">Detail</button>
+                  <!--<button class="btn btn-primary btn-sm" (click)="editarCliente(cliente)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarCliente(cliente.id)">Delete</button>-->
                 </div>
               </td>
             </tr>
             
             <tr *ngIf="(clientes || []).length === 0">
-              <td colspan="12" class="text-center text-muted py-3">
+              <td colspan="7" class="text-center text-muted py-3">
                 No clients yet.
               </td>
             </tr>
@@ -126,7 +92,7 @@
 
   <!-- CONTROLES DE ABAJO -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
-    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export Clients CSV</button>
+    <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
     <pagination-controls
       id="clientes"
       previousLabel="Previous"
@@ -141,7 +107,7 @@
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title">{{ esNuevo ? 'Create Cliente' : 'Edit Cliente' }}</h5>
+        <h5 class="modal-title">{{ modoDetalle ? 'Client Detail' : (esNuevo ? 'Create Cliente' : 'Edit Cliente') }}</h5>
         <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
       </div>
 
@@ -150,62 +116,62 @@
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Tlf</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.telefono" name="telefono" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.telefono" name="telefono" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Name</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.nombre" name="nombre" required />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.nombre" name="nombre" required [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Surname</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.apellido" name="apellido" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.apellido" name="apellido" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Email</label>
-              <input type="email" class="form-control" [(ngModel)]="clienteEditando.email" name="email" />
+              <input type="email" class="form-control" [(ngModel)]="clienteEditando.email" name="email" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Street</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.calle" name="calle" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.calle" name="calle" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-3">
               <label class="form-label">Number</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.numero" name="numero" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.numero" name="numero" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-3">
               <label class="form-label">Floor</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.piso" name="piso" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.piso" name="piso" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Province</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.provincia" name="provincia" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.provincia" name="provincia" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">City</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.ciudad" name="ciudad" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.ciudad" name="ciudad" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Pais</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.pais" name="pais" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.pais" name="pais" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Postal code</label>
-              <input type="text" class="form-control" [(ngModel)]="clienteEditando.codigoPostal" name="codigoPostal" />
+              <input type="text" class="form-control" [(ngModel)]="clienteEditando.codigoPostal" name="codigoPostal" [disabled]="modoDetalle" />
             </div>
 
             <div class="col-12 d-flex justify-content-end gap-2 mt-3">
-              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-              <button type="submit" class="btn btn-success" [disabled]="clienteForm.invalid">Save</button>
+              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">{{ modoDetalle ? 'Close' : 'Cancel' }}</button>
+              <button *ngIf="!modoDetalle" type="submit" class="btn btn-success" [disabled]="clienteForm.invalid">Save</button>
             </div>
           </div>
         </form>

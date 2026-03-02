@@ -27,6 +27,7 @@ export class ClientesDashboard implements OnInit {
   paginaActual: number = 1;
   clienteEditando: Cliente | null = null;
   esNuevo: boolean = false;
+  modoDetalle: boolean = false;
 
   constructor(
     private clienteService: ClienteService,
@@ -91,16 +92,25 @@ export class ClientesDashboard implements OnInit {
 
   editarCliente(cliente: Cliente) {
     this.esNuevo = false;
+    this.modoDetalle = false;
+    this.clienteEditando = { ...cliente };
+  }
+
+  verDetalleCliente(cliente: Cliente) {
+    this.esNuevo = false;
+    this.modoDetalle = true;
     this.clienteEditando = { ...cliente };
   }
 
   cancelarEdicion() {
     this.clienteEditando = null;
     this.esNuevo = false;
+    this.modoDetalle = false;
   }
 
 guardarCambios() {
   if (!this.clienteEditando) return;
+  if (this.modoDetalle) return;
 
   if (this.esNuevo) {
     this.clienteService.crearCliente(this.clienteEditando).subscribe({
@@ -148,12 +158,11 @@ eliminarCliente(id: number) {
 
 
   exportarCSV() {
-    const encabezado = ['ID', 'Tlf', 'Name', 'Surname', 'Email', 'Street', 'Number', 'Floor', 'Province', 'City', 'Country', 'Postal Code'];
+    const encabezado = ['Name', 'Surname', 'Tlf', 'Email', 'Street', 'Number', 'Floor', 'Province', 'City', 'Country', 'Postal Code'];
     const filas = this.clientes.map(cliente => [
-      cliente.id,
-      cliente.telefono,
       cliente.nombre,
       cliente.apellido,
+      cliente.telefono,
       cliente.email,
       cliente.calle,
       cliente.numero,
