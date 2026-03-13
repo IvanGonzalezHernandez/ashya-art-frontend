@@ -9,6 +9,7 @@ export interface DashboardTotals {
   totalProductos: number;
   totalReservas: number;
   totalIngresos: number;
+  totalNewsletter: number;
 }
 
 @Injectable({

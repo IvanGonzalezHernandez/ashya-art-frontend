@@ -1,7 +1,7 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Bookings Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Bookings</h1>
     <div class="d-flex gap-2">
       <!-- <button class="btn btn-success" (click)="crearReserva()">+ New Reserva</button> -->
     </div>
@@ -28,12 +28,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let reserva of reservas | paginate: { id: 'reservas', itemsPerPage: 5, currentPage: paginaActual }">
+            <tr *ngFor="let reserva of reservas | paginate: { id: 'reservas', itemsPerPage: 10, currentPage: paginaActual }">
               <!--<td class="text-muted">{{ reserva.id }}</td>-->
 
               <td>
                 <span class="d-inline-block w-100 text-truncate" [title]="reserva.nombreCliente">
-                  {{ reserva.nombreCliente }}
+                  {{ reserva.email }}
                 </span>
               </td>
 

@@ -15,6 +15,7 @@ export class Dashboard implements OnInit, AfterViewInit {
   totalProductos: number = 0;
   totalReservas: number = 0;
   totalIngresos: number = 0;
+  totalNewsletter: number = 0;
 
   // La gráfica con mock
   resumenLabels: string[] = ['January', 'February', 'March', 'April', 'May'];
@@ -39,6 +40,7 @@ export class Dashboard implements OnInit, AfterViewInit {
         this.totalProductos = data.totalProductos;
         this.totalReservas  = data.totalReservas;
         this.totalIngresos  = data.totalIngresos;
+        this.totalNewsletter = data.totalNewsletter;
       },
       error: err => console.error('Error loading dashboard totals', err)
     });
