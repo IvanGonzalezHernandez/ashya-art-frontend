@@ -10,6 +10,8 @@ export interface DashboardTotals {
   totalReservas: number;
   totalIngresos: number;
   totalIngresosNetos: number;
+  totalTarjetasRegalo: number;
+  totalSecretos: number;
   totalNewsletter: number;
   pagosTarjeta: number;
   pagosPaypal: number;

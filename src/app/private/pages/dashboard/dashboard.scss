@@ -1,0 +1,14 @@
+.dashboard-kpi-col {
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .dashboard-kpi-row {
+    flex-wrap: nowrap;
+  }
+
+  .dashboard-kpi-col {
+    flex: 0 0 calc(100% / 7);
+    max-width: calc(100% / 7);
+  }
+}
