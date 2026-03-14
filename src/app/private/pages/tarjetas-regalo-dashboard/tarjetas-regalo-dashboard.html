@@ -1,7 +1,7 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Gift Card Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Gift Card</h1>
     <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearTarjeta()">+ New Gift Card</button>
     </div>
@@ -180,7 +180,7 @@
 <!-- ============================== -->
 <div class="container-fluid mt-5">
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Gift Card Purchases Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Gift Card Purchases</h1>
   </div>
 
   <div *ngIf="loadingCompras" class="text-center my-4">
@@ -194,19 +194,19 @@
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th style="width: 15%;">Code</th>
-              <th style="width: 20%;">Client</th>
-              <th style="width: 10%;">Redeemed</th>
-              <th style="width: 10%;">Price</th>
-              <th style="width: 15%;">Purchase Date</th>
-              <th style="width: 15%;">Expiration</th>
-              <th style="width: 25%;">Actions</th>
+              <th class="d-none d-md-table-cell" style="width: 15%;">Code</th>
+              <th style="width: 45%;">Client</th>
+              <th style="width: 20%;">Redeemed</th>
+              <th class="d-none d-md-table-cell" style="width: 10%;">Price</th>
+              <th class="d-none d-lg-table-cell" style="width: 15%;">Purchase Date</th>
+              <th class="d-none d-lg-table-cell" style="width: 15%;">Expiration</th>
+              <th class="d-none d-md-table-cell" style="width: 25%;">Actions</th>
             </tr>
           </thead>
 
           <tbody>
             <tr *ngFor="let compra of tarjetasCompra | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompras }">
-              <td>
+              <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="compra.codigo">
                   {{ compra.codigo }}
                 </span>
@@ -226,12 +226,12 @@
                 </span>
               </td>
 
-              <td class="text-nowrap">{{ compra.precio | currency:'EUR' }}</td>
+              <td class="text-nowrap d-none d-md-table-cell">{{ compra.precio | currency:'EUR' }}</td>
 
-              <td class="text-nowrap">{{ compra.fechaCompra | date:'yyyy-MM-dd' }}</td>
-              <td class="text-nowrap">{{ compra.fechaCaducidad | date:'yyyy-MM-dd' }}</td>
+              <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaCompra | date:'yyyy-MM-dd' }}</td>
+              <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaCaducidad | date:'yyyy-MM-dd' }}</td>
 
-              <td>
+              <td class="d-none d-md-table-cell">
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button
                     class="btn btn-primary btn-sm"
