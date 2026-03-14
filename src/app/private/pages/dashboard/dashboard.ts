@@ -18,8 +18,8 @@ export class Dashboard implements OnInit, AfterViewInit {
   totalNewsletter: number = 0;
 
   // La gráfica con mock
-  resumenLabels: string[] = ['January', 'February', 'March', 'April', 'May'];
-  resumenDatos: number[] = [1200, 1500, 1800, 1300, 1700];
+  resumenLabels: string[] = [];
+  resumenDatos: number[] = [];
 
   private chart?: Chart;
 
@@ -41,6 +41,9 @@ export class Dashboard implements OnInit, AfterViewInit {
         this.totalReservas  = data.totalReservas;
         this.totalIngresos  = data.totalIngresos;
         this.totalNewsletter = data.totalNewsletter;
+        this.resumenLabels = data.resumenLabels ?? [];
+        this.resumenDatos = data.resumenDatos ?? [];
+        this.updateChart();
       },
       error: err => console.error('Error loading dashboard totals', err)
     });
@@ -76,5 +79,16 @@ export class Dashboard implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+  private updateChart(): void {
+    if (!this.chart) {
+      this.renderChart();
+      return;
+    }
+
+    this.chart.data.labels = this.resumenLabels;
+    this.chart.data.datasets[0].data = this.resumenDatos;
+    this.chart.update();
   }
 }

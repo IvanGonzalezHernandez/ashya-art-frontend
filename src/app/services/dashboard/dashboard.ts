@@ -10,6 +10,8 @@ export interface DashboardTotals {
   totalReservas: number;
   totalIngresos: number;
   totalNewsletter: number;
+  resumenLabels: string[];
+  resumenDatos: number[];
 }
 
 @Injectable({
