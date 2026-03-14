@@ -15,7 +15,11 @@ export class Dashboard implements OnInit, AfterViewInit {
   totalProductos: number = 0;
   totalReservas: number = 0;
   totalIngresos: number = 0;
+  totalIngresosNetos: number = 0;
   totalNewsletter: number = 0;
+  pagosTarjeta: number = 0;
+  pagosPaypal: number = 0;
+  pagosOtros: number = 0;
 
   // La gráfica con mock
   resumenLabels: string[] = [];
@@ -40,7 +44,11 @@ export class Dashboard implements OnInit, AfterViewInit {
         this.totalProductos = data.totalProductos;
         this.totalReservas  = data.totalReservas;
         this.totalIngresos  = data.totalIngresos;
+        this.totalIngresosNetos = data.totalIngresosNetos ?? 0;
         this.totalNewsletter = data.totalNewsletter;
+        this.pagosTarjeta = data.pagosTarjeta ?? 0;
+        this.pagosPaypal = data.pagosPaypal ?? 0;
+        this.pagosOtros = data.pagosOtros ?? 0;
         this.resumenLabels = data.resumenLabels ?? [];
         this.resumenDatos = data.resumenDatos ?? [];
         this.updateChart();

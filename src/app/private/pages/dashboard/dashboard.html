@@ -1,5 +1,4 @@
 <div class="container-fluid mt-4">
-  <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Control Panel</h1>
     <div class="d-flex gap-2 flex-wrap">
@@ -7,10 +6,7 @@
     </div>
   </div>
 
-  <!-- TARJETAS RESUMEN -->
   <div class="row row-cols-1 row-cols-md-2 row-cols-xl-5 g-4">
-    
-    <!-- Clientes -->
     <div class="col">
       <div class="card h-100 shadow-sm rounded-3 text-white bg-azul">
         <div class="card-body d-flex align-items-center justify-content-between">
@@ -23,7 +19,6 @@
       </div>
     </div>
 
-    <!-- Reservas -->
     <div class="col">
       <div class="card h-100 shadow-sm rounded-3 text-white bg-warning">
         <div class="card-body d-flex align-items-center justify-content-between">
@@ -36,7 +31,6 @@
       </div>
     </div>
 
-    <!-- Newsletter -->
     <div class="col">
       <div class="card h-100 shadow-sm rounded-3 text-white bg-info">
         <div class="card-body d-flex align-items-center justify-content-between">
@@ -49,7 +43,6 @@
       </div>
     </div>
 
-    <!-- Productos -->
     <div class="col">
       <div class="card h-100 shadow-sm rounded-3 text-white bg-success">
         <div class="card-body d-flex align-items-center justify-content-between">
@@ -62,13 +55,13 @@
       </div>
     </div>
 
-    <!-- Ingresos -->
     <div class="col">
       <div class="card h-100 shadow-sm rounded-3 text-white bg-danger">
         <div class="card-body d-flex align-items-center justify-content-between">
           <div class="me-3">
             <h6 class="card-title mb-1">Revenue</h6>
-            <p class="fs-4 fw-bold mb-0 text-truncate">€{{ totalIngresos }}</p>
+            <p class="fs-4 fw-bold mb-0 text-truncate">&euro;{{ totalIngresos }}</p>
+            <small class="d-block mt-1 opacity-75">Net: &euro;{{ totalIngresosNetos }}</small>
           </div>
           <i class="bi bi-currency-euro fs-1 opacity-75"></i>
         </div>
@@ -76,12 +69,54 @@
     </div>
   </div>
 
-  <!-- GRÁFICA -->
   <div class="card mt-5 shadow-sm rounded-3">
     <div class="card-body">
       <h5 class="card-title mb-3">Monthly Report</h5>
       <div class="position-relative" style="width: 100%; max-width: 100%;">
         <canvas id="resumenChart" style="width: 100%; max-width: 100%; height: 320px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-4 shadow-sm rounded-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Payment Methods</h5>
+      <div class="row row-cols-1 row-cols-md-3 g-3">
+        <div class="col">
+          <div class="border rounded-3 p-3 h-100 bg-light">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h6 class="mb-1">Card</h6>
+                <p class="fs-4 fw-bold mb-0">{{ pagosTarjeta }}</p>
+              </div>
+              <i class="bi bi-credit-card fs-2 text-primary"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="border rounded-3 p-3 h-100 bg-light">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h6 class="mb-1">PayPal</h6>
+                <p class="fs-4 fw-bold mb-0">{{ pagosPaypal }}</p>
+              </div>
+              <i class="bi bi-paypal fs-2 text-info"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="border rounded-3 p-3 h-100 bg-light">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h6 class="mb-1">Other</h6>
+                <p class="fs-4 fw-bold mb-0">{{ pagosOtros }}</p>
+              </div>
+              <i class="bi bi-wallet2 fs-2 text-secondary"></i>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
