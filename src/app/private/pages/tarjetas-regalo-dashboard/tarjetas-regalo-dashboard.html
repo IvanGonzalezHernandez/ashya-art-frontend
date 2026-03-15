@@ -18,20 +18,29 @@
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th style="width: 32%;">Name</th>
+              <th class="d-none d-md-table-cell" style="width: 28%;">Name</th>
               <th style="width: 12%;">Price</th>
+              <th style="width: 15%;">Visibility</th>
               <th style="width: 20%;">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let tarjeta of tarjetas | paginate: { id: 'tarjetas', itemsPerPage: 5, currentPage: paginaActual }">
-              <td>
+              <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="tarjeta.nombre">
                   {{ tarjeta.nombre }}
                 </span>
               </td>
 
               <td class="text-nowrap">{{ tarjeta.precio | currency:'EUR' }}</td>
+
+              <td class="text-nowrap">
+                <span
+                  class="badge"
+                  [ngClass]="tarjeta.estado !== false ? 'bg-success' : 'bg-secondary'">
+                  {{ tarjeta.estado !== false ? 'Visible' : 'Hidden' }}
+                </span>
+              </td>
 
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
@@ -42,7 +51,7 @@
             </tr>
             
             <tr *ngIf="(tarjetas || []).length === 0">
-              <td colspan="3" class="text-center text-muted py-3">
+              <td colspan="4" class="text-center text-muted py-3">
                 No gift cards yet.
               </td>
             </tr>
@@ -98,11 +107,22 @@
                 min="0.01"
                 step="0.01"
                 required
-                disabled
+                [disabled]="!esNueva"
               />
             </div>
 
             <!-- SLOT ÚNICO DE IMAGEN -->
+            <div class="col-md-6">
+              <label class="form-label">Visibility</label>
+              <select
+                class="form-select"
+                name="estado"
+                [(ngModel)]="tarjetaEditando.estado">
+                <option [ngValue]="true">Visible</option>
+                <option [ngValue]="false">Hidden</option>
+              </select>
+            </div>
+
             <div class="col-12">
               <label class="form-label">Image</label>
 
@@ -196,10 +216,11 @@
             <tr>
               <th class="d-none d-md-table-cell" style="width: 15%;">Code</th>
               <th style="width: 45%;">Client</th>
-              <th style="width: 20%;">Redeemed</th>
               <th class="d-none d-md-table-cell" style="width: 10%;">Price</th>
               <th class="d-none d-lg-table-cell" style="width: 15%;">Purchase Date</th>
               <th class="d-none d-lg-table-cell" style="width: 15%;">Expiration</th>
+              <th style="width: 20%;">Redeemed</th>
+              <th class="d-none d-lg-table-cell" style="width: 15%;">Redeemed On</th>
               <th class="d-none d-md-table-cell" style="width: 25%;">Actions</th>
             </tr>
           </thead>
@@ -218,6 +239,11 @@
                 </span>
               </td>
 
+              <td class="text-nowrap d-none d-md-table-cell">{{ compra.precio | currency:'EUR' }}</td>
+
+              <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaCompra | date:'yyyy-MM-dd' }}</td>
+              <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaCaducidad | date:'yyyy-MM-dd' }}</td>
+
               <td class="text-nowrap">
                 <span
                   class="badge"
@@ -226,10 +252,7 @@
                 </span>
               </td>
 
-              <td class="text-nowrap d-none d-md-table-cell">{{ compra.precio | currency:'EUR' }}</td>
-
-              <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaCompra | date:'yyyy-MM-dd' }}</td>
-              <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaCaducidad | date:'yyyy-MM-dd' }}</td>
+              <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaBaja | date:'yyyy-MM-dd' }}</td>
 
               <td class="d-none d-md-table-cell">
                 <div class="d-flex flex-column flex-md-row gap-2">
@@ -251,7 +274,7 @@
             </tr>
 
             <tr *ngIf="(tarjetasCompra || []).length === 0">
-              <td colspan="7" class="text-center text-muted py-3">
+              <td colspan="8" class="text-center text-muted py-3">
                 No gift card purchases yet.
               </td>
             </tr>
@@ -263,7 +286,7 @@
 
   <!-- CONTROLES DE ABAJO -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
-    <button class="btn btn-outline-secondary" (click)="exportarCSVCompras()">Export Purchases CSV</button>
+    <button class="btn btn-outline-secondary" (click)="exportarCSVCompras()">Export CSV</button>
 
     <pagination-controls
       id="compras"

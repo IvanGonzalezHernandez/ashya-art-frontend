@@ -18,6 +18,10 @@ export class TarjetaRegaloService {
     return this.http.get<TarjetaRegalo[]>(this.apiUrl);
   }
 
+  getTarjetasHabilitadas(): Observable<TarjetaRegalo[]> {
+    return this.http.get<TarjetaRegalo[]>(`${this.apiUrl}/habilitadas`);
+  }
+
   getTarjetaPorId(id: number): Observable<TarjetaRegalo> {
     return this.http.get<TarjetaRegalo>(`${this.apiUrl}/${id}`);
   }

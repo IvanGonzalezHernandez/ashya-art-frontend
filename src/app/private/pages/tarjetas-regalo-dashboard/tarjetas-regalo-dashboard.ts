@@ -88,6 +88,7 @@ export class TarjetasRegaloDashboard implements OnInit {
       id: 0,
       nombre: '',
       precio: 0,
+      estado: true,
       img: ''
     } as TarjetaRegalo;
 
@@ -225,14 +226,15 @@ export class TarjetasRegaloDashboard implements OnInit {
   }
 
   exportarCSVCompras() {
-    const encabezado = ['ID', 'Code', 'Recipient', 'Redeemed', 'Purchase', 'Expires'];
+    const encabezado = ['ID', 'Code', 'Recipient', 'Redeemed', 'Purchase', 'Expires', 'Deactivated'];
     const filas = (this.tarjetasCompra || []).map(c => [
       c.id?.toString() ?? '',
       c.codigo ?? '',
       c.destinatario ?? '',
       c.canjeada ? 'Yes' : 'No',
       c.fechaCompra ?? '',
-      c.fechaCaducidad ?? ''
+      c.fechaCaducidad ?? '',
+      c.fechaBaja ?? ''
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'gift-card-purchases.csv');
   }

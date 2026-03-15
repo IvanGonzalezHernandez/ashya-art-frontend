@@ -25,7 +25,7 @@ export class GiftCards implements OnInit {
   }
 
   private cargarTarjetas(): void {
-    this.tarjetaRegaloService.getTarjetas().subscribe({
+    this.tarjetaRegaloService.getTarjetasHabilitadas().subscribe({
       next: (data) => {
         this.tarjetas = data;
         this.tarjetas.forEach(card => this.procesarImagenesBase64(card));
