@@ -25,6 +25,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     children: [
+      { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       { path: 'inicio', component: Dashboard },
       { path: 'cursos', component: CursosDashboard },              
       { path: 'reservas', component: ReservasDashboard },         
