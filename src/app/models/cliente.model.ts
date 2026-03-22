@@ -1,3 +1,17 @@
+export interface ClienteCursoReserva {
+    curso: string;
+    fechaCurso: string;
+    fechaReserva: string;
+    plazasReservadas: number;
+}
+
+export interface ClienteTarjetaRegalo {
+    tarjeta: string;
+    canjeada: boolean;
+    fechaCompra: string;
+    fechaCaducidad: string;
+}
+
 export interface Cliente {
     id: number;
     telefono: string;
@@ -12,6 +26,8 @@ export interface Cliente {
     pais: string;
     codigoPostal: string;
     fechaAlta?: string;
+    cursos?: ClienteCursoReserva[];
+    tarjetas?: ClienteTarjetaRegalo[];
 
     // Nuevos campos
     tipoClase: '',

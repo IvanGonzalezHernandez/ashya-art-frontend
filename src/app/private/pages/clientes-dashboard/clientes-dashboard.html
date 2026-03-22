@@ -184,6 +184,68 @@
                 disabled />
             </div>
 
+            <div class="col-12" *ngIf="modoDetalle">
+              <label class="form-label">Booked Courses</label>
+
+              <div class="table-responsive border rounded">
+                <table class="table table-sm table-striped mb-0 align-middle">
+                  <thead>
+                    <tr>
+                      <th>Course</th>
+                      <th>Course Date</th>
+                      <th>Booked On</th>
+                      <th>Seats</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let reserva of (clienteEditando.cursos || [])">
+                      <td>{{ reserva.curso }}</td>
+                      <td class="text-nowrap">{{ reserva.fechaCurso | date:'yyyy-MM-dd' }}</td>
+                      <td class="text-nowrap">{{ reserva.fechaReserva | date:'yyyy-MM-dd HH:mm' }}</td>
+                      <td>{{ reserva.plazasReservadas }}</td>
+                    </tr>
+
+                    <tr *ngIf="(clienteEditando.cursos || []).length === 0">
+                      <td colspan="4" class="text-center text-muted py-3">No booked courses.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="col-12" *ngIf="modoDetalle">
+              <label class="form-label">Gift Cards</label>
+
+              <div class="table-responsive border rounded">
+                <table class="table table-sm table-striped mb-0 align-middle">
+                  <thead>
+                    <tr>
+                      <th>Gift Card</th>
+                      <th>Status</th>
+                      <th>Purchase Date</th>
+                      <th>Expiration Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let tarjeta of (clienteEditando.tarjetas || [])">
+                      <td>{{ tarjeta.tarjeta }}</td>
+                      <td>
+                        <span class="badge" [ngClass]="tarjeta.canjeada ? 'bg-success' : 'bg-secondary'">
+                          {{ tarjeta.canjeada ? 'Redeemed' : 'Active' }}
+                        </span>
+                      </td>
+                      <td class="text-nowrap">{{ tarjeta.fechaCompra | date:'yyyy-MM-dd' }}</td>
+                      <td class="text-nowrap">{{ tarjeta.fechaCaducidad | date:'yyyy-MM-dd' }}</td>
+                    </tr>
+
+                    <tr *ngIf="(clienteEditando.tarjetas || []).length === 0">
+                      <td colspan="4" class="text-center text-muted py-3">No gift cards.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div class="col-12 d-flex justify-content-end gap-2 mt-3">
               <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">{{ modoDetalle ? 'Close' : 'Cancel' }}</button>
               <button *ngIf="!modoDetalle" type="submit" class="btn btn-success" [disabled]="clienteForm.invalid">Save</button>
