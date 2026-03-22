@@ -11,6 +11,7 @@ export interface Cliente {
     ciudad: string;
     pais: string;
     codigoPostal: string;
+    fechaAlta?: string;
 
     // Nuevos campos
     tipoClase: '',

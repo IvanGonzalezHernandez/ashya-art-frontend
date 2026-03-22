@@ -158,7 +158,7 @@ eliminarCliente(id: number) {
 
 
   exportarCSV() {
-    const encabezado = ['Name', 'Surname', 'Tlf', 'Email', 'Street', 'Number', 'Floor', 'Province', 'City', 'Country', 'Postal Code'];
+    const encabezado = ['Name', 'Surname', 'Tlf', 'Email', 'Street', 'Number', 'Floor', 'Province', 'City', 'Country', 'Postal Code', 'Registration'];
     const filas = this.clientes.map(cliente => [
       cliente.nombre,
       cliente.apellido,
@@ -170,7 +170,8 @@ eliminarCliente(id: number) {
       cliente.provincia,
       cliente.ciudad,
       cliente.pais,
-      cliente.codigoPostal
+      cliente.codigoPostal,
+      cliente.fechaAlta ?? ''
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'clients.csv');
   }

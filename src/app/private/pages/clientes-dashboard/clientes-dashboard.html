@@ -25,6 +25,7 @@
               <th style="width: 20%;">Email</th>
               <th class="d-none d-md-table-cell" style="width: 12%;">City</th>
               <th class="d-none d-md-table-cell" style="width: 12%;">Country</th>
+              <th class="d-none d-lg-table-cell" style="width: 12%;">Registration</th>
               <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
@@ -69,6 +70,10 @@
                 </span>
               </td>
 
+              <td class="d-none d-lg-table-cell text-nowrap">
+                {{ cliente.fechaAlta ? (cliente.fechaAlta | date:'yyyy-MM-dd') : '-' }}
+              </td>
+
               <td>
                 <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
                   <button class="btn btn-secondary btn-sm" (click)="verDetalleCliente(cliente)">Detail</button>
@@ -79,7 +84,7 @@
             </tr>
             
             <tr *ngIf="(clientes || []).length === 0">
-              <td colspan="7" class="text-center text-muted py-3">
+              <td colspan="8" class="text-center text-muted py-3">
                 No clients yet.
               </td>
             </tr>
@@ -169,6 +174,16 @@
               <input type="text" class="form-control" [(ngModel)]="clienteEditando.codigoPostal" name="codigoPostal" [disabled]="modoDetalle" />
             </div>
 
+            <div class="col-md-6">
+              <label class="form-label">Registration</label>
+              <input
+                type="text"
+                class="form-control"
+                [ngModel]="clienteEditando.fechaAlta ? (clienteEditando.fechaAlta | date:'yyyy-MM-dd') : ''"
+                name="fechaAlta"
+                disabled />
+            </div>
+
             <div class="col-12 d-flex justify-content-end gap-2 mt-3">
               <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">{{ modoDetalle ? 'Close' : 'Cancel' }}</button>
               <button *ngIf="!modoDetalle" type="submit" class="btn btn-success" [disabled]="clienteForm.invalid">Save</button>
@@ -189,4 +204,3 @@
   [status]="feedbackTipo"
   (closed)="cerrarFeedback()"
 ></app-feedback-modal>
-
