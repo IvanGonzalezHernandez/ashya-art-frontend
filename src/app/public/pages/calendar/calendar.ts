@@ -75,7 +75,7 @@ export class Calendar implements OnInit {
   // ================== Carga de datos ==================
   private async cargarDatos(): Promise<void> {
     const fechas$ = this.cursoFechaService.getCursoFechas();
-    const cursos$ = this.cursoService.getCursos();
+    const cursos$ = this.cursoService.getCursosHabilitados();
 
     await new Promise<void>((resolve) => {
       let gotFechas = false, gotCursos = false;

@@ -1,7 +1,7 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Course Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Courses</h1>
     <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearCurso()">+ New Course</button>
     </div>
@@ -20,8 +20,9 @@
             <tr>
               <th style="width: 14%;">Name</th>
               <th class="d-none d-md-table-cell" style="width: 14%;">Subtitle</th>
-              <th class="d-none d-lg-table-cell" style="width: 26%;">Description</th>
+              <th class="d-none d-lg-table-cell" style="width: 22%;">Description</th>
               <th style="width: 10%;">Price</th>
+              <th style="width: 14%;">Visibility</th>
               <th style="width: 16%;">Actions</th>
             </tr>
           </thead>
@@ -47,15 +48,23 @@
 
               <td class="text-nowrap">{{ curso.precio | currency:'EUR' }}</td>
 
+              <td class="text-nowrap">
+                <span
+                  class="badge"
+                  [ngClass]="curso.estado !== false ? 'bg-success' : 'bg-secondary'">
+                  {{ curso.estado !== false ? 'Visible' : 'Hidden' }}
+                </span>
+              </td>
+
               <td>
                 <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarCurso(curso)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarCurso(curso.id)">Delete</button>
+                  <!-- <button class="btn btn-danger btn-sm" (click)="eliminarCurso(curso.id)">Delete</button> -->
                 </div>
               </td>
             </tr>
           <tr *ngIf="(cursos|| []).length === 0">
-              <td colspan="5" class="text-center text-muted py-3">No courses yet.</td>
+              <td colspan="6" class="text-center text-muted py-3">No courses yet.</td>
           </tr>
           </tbody>
         </table>
@@ -65,7 +74,7 @@
 
   <!-- CONTROLES CURSOS -->
   <div class="d-flex justify-content-between align-items-center mt-3 mb-5 flex-wrap">
-    <button class="btn btn-outline-secondary" (click)="exportarCursosCSV()">Export Courses CSV</button>
+    <button class="btn btn-outline-secondary" (click)="exportarCursosCSV()">Export CSV</button>
     <pagination-controls
       id="cursos"
       previousLabel="Previous"
@@ -151,6 +160,14 @@
                 <div class="text-danger" *ngIf="precio.invalid && precio.touched">Price cannot be negative.</div>
               </div>
 
+              <div class="col-md-6">
+                <label class="form-label">Visibility</label>
+                <select class="form-select" [(ngModel)]="cursoEditando.estado" name="estado">
+                  <option [ngValue]="true">Visible</option>
+                  <option [ngValue]="false">Hidden</option>
+                </select>
+              </div>
+
 
 
 
@@ -219,7 +236,7 @@
 
   <!-- ENCABEZADO FECHAS -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Date Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Dates</h1>
     <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearCursoFecha()">+ Add Date</button>
     </div>
@@ -287,7 +304,7 @@
               <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
                 <button class="btn btn-secondary btn-sm" (click)="verDetalleCursoFecha(cursoFecha)">Detail</button>
                 <button class="btn btn-primary btn-sm" (click)="editarCursoFecha(cursoFecha)">Edit</button>
-                <button class="btn btn-danger btn-sm" (click)="eliminarCursoFecha(cursoFecha.id)">Delete</button>
+                <!-- <button class="btn btn-danger btn-sm" (click)="eliminarCursoFecha(cursoFecha.id)">Delete</button> -->
               </div>
             </td>
 
@@ -300,7 +317,7 @@
 
   <!-- CONTROLES FECHAS -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-    <button class="btn btn-outline-secondary" (click)="exportarCursoFechasCSV()">Export Dates CSV</button>
+    <button class="btn btn-outline-secondary" (click)="exportarCursoFechasCSV()">Export CSV</button>
     <pagination-controls
       id="fechas"
       previousLabel="Previous"

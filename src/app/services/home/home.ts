@@ -15,7 +15,7 @@ export class HomeService {
   constructor(private http: HttpClient) {}
 
   getCursos(): Observable<Curso[]> {
-    return this.http.get<Curso[]>(this.apiCursos);
+    return this.http.get<Curso[]>(`${this.apiCursos}/habilitados`);
   }
 
   getProductos(): Observable<Producto[]> {

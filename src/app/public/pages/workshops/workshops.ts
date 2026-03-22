@@ -27,7 +27,7 @@ export class Workshops implements OnInit {
   }
 
   private cargarCursos(): void {
-    this.cursoService.getCursos().subscribe({
+    this.cursoService.getCursosHabilitados().subscribe({
       next: (data) => {
         this.cursos = data;
         this.cursos.forEach(curso => this.procesarImagenesBase64(curso));

@@ -130,6 +130,7 @@ export class CursosDashboard implements OnInit {
       duracion: '',
       piezas: '',
       materiales: '',
+      estado: true,
       plazasMaximas: 0,
       informacionExtra: '',
       localizacion: ''
@@ -241,6 +242,7 @@ guardarCambios() {
     duracion: this.cursoEditando.duracion,
     piezas: this.cursoEditando.piezas,
     materiales: this.cursoEditando.materiales,
+    estado: this.cursoEditando.estado ?? true,
     plazasMaximas: this.cursoEditando.plazasMaximas,
     informacionExtra: this.cursoEditando.informacionExtra,
     localizacion: this.cursoEditando.localizacion,
