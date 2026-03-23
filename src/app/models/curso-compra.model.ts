@@ -5,8 +5,8 @@ export interface Reservas {
     plazasReservadas: number;
     fechaReserva: Date;
     nombreCurso: string;
-    telefono: String;
-    email: String;
+    telefono: string;
+    email: string;
     fechaCurso: string;
     nombreCliente: string;
     pagado: boolean;
