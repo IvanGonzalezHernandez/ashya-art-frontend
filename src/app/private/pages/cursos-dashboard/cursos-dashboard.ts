@@ -449,15 +449,16 @@ eliminarCursoFecha(id: number) {
   // --- EXPORTACIÓN CSV ---
 
   exportarCursosCSV() {
-    const encabezadoCursos = ['ID', 'Nombre', 'Subtítulo', 'Descripción', 'Precio'];
-    const filasCursos = (this.cursos || []).map(curso => [
+    const headers = ['ID', 'Name', 'Subtitle', 'Description', 'Price', 'Visibility'];
+    const rows = (this.cursos || []).map(curso => [
       curso.id,
       curso.nombre,
       curso.subtitulo,
       curso.descripcion,
-      curso.precio
+      curso.precio,
+      curso.estado !== false ? 'Visible' : 'Hidden'
     ]);
-    this.csvExportService.exportarCSV(encabezadoCursos, filasCursos, 'courses.csv');
+    this.csvExportService.exportarCSV(headers, rows, 'courses.csv');
   }
 
   exportarCursoFechasCSV() {
@@ -473,3 +474,4 @@ eliminarCursoFecha(id: number) {
     this.csvExportService.exportarCSV(encabezadoCursoFechas, filasCursoFechas, 'course-dates.csv');
   }
 }
+
