@@ -106,6 +106,9 @@
         <small class="flex-grow-1">{{ mensajeCodigo }}</small>
         <span class="text-danger fw-bold" role="button" style="cursor: pointer;" (click)="quitarCodigo()">×</span></div>
         <small *ngIf="errorCodigo" class="text-danger">{{ errorCodigo }}</small>
+        <div *ngIf="avisoPerdidaTarjeta" class="alert alert-warning py-2 px-3 mt-2 mb-0">
+          <small>⚠ {{ avisoPerdidaTarjeta }}</small>
+        </div>
       </div>
 
 <p class="mb-2">
