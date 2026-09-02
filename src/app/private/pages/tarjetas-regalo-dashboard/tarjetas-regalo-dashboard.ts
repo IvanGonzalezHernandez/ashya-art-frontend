@@ -54,6 +54,10 @@ export class TarjetasRegaloDashboard implements OnInit {
   tarjetasCompra: TarjetaRegaloCompra[] = [];
   paginaActualCompras: number = 1;
 
+  // Edición manual de canjeo (Redeemed / Redeemed On)
+  compraEditando: TarjetaRegaloCompra | null = null;
+  edicionCanjeo: { canjeada: boolean; fechaBaja: string } = { canjeada: false, fechaBaja: '' };
+
   constructor(
     private tarjetaService: TarjetaRegaloService,
     private csvExportService: CsvExportService,
@@ -221,6 +225,48 @@ export class TarjetasRegaloDashboard implements OnInit {
         console.error('Error al cargar tarjetas compra', err);
         this.loadingCompras = false;
         this.mostrarModalFeedback('error', 'Error loading purchases', 'Could not load gift card purchases.');
+      }
+    });
+  }
+
+  editarCanjeo(compra: TarjetaRegaloCompra) {
+    this.compraEditando = compra;
+    this.edicionCanjeo = {
+      canjeada: compra.canjeada,
+      fechaBaja: (compra.fechaBaja ?? '').substring(0, 10)
+    };
+  }
+
+  cancelarEdicionCanjeo() {
+    this.compraEditando = null;
+  }
+
+  guardarCanjeo() {
+    if (!this.compraEditando?.id) return;
+
+    if (this.edicionCanjeo.canjeada && !this.edicionCanjeo.fechaBaja) {
+      this.mostrarModalFeedback(
+        'error',
+        'Redeemed On required',
+        'You must set a Redeemed On date when marking this purchase as redeemed manually.'
+      );
+      return;
+    }
+
+    const fechaBaja = this.edicionCanjeo.canjeada ? this.edicionCanjeo.fechaBaja : null;
+    const compra = this.compraEditando;
+
+    this.tarjetaCompraService.actualizarCanjeo(compra.id!, this.edicionCanjeo.canjeada, fechaBaja).subscribe({
+      next: actualizado => {
+        compra.canjeada = actualizado.canjeada;
+        compra.fechaBaja = actualizado.fechaBaja;
+        this.cancelarEdicionCanjeo();
+        this.mostrarModalFeedback('success', 'Purchase updated', `Code ${compra.codigo} updated successfully.`);
+      },
+      error: err => {
+        console.error('Error updating redemption', err);
+        const mensaje = typeof err?.error === 'string' ? err.error : 'Could not update the redemption status.';
+        this.mostrarModalFeedback('error', 'Error updating', mensaje);
       }
     });
   }

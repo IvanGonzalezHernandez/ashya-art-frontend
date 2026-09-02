@@ -37,4 +37,12 @@ eliminarCompra(id: number): Observable<void> {
 
   return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
 }
+
+actualizarCanjeo(id: number, canjeada: boolean, fechaBaja: string | null): Observable<TarjetaRegaloCompra> {
+  const token = this.auth.obtenerToken();
+
+  const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+
+  return this.http.put<TarjetaRegaloCompra>(`${this.apiUrl}/${id}`, { canjeada, fechaBaja }, { headers });
+}
 }

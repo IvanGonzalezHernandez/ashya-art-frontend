@@ -219,8 +219,9 @@
               <th class="d-none d-md-table-cell" style="width: 10%;">Price</th>
               <th class="d-none d-lg-table-cell" style="width: 15%;">Purchase Date</th>
               <th class="d-none d-lg-table-cell" style="width: 15%;">Expiration</th>
-              <th style="width: 20%;">Redeemed</th>
+              <th style="width: 15%;">Redeemed</th>
               <th class="d-none d-lg-table-cell" style="width: 15%;">Redeemed On</th>
+              <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
 
@@ -252,10 +253,14 @@
               </td>
 
               <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaBaja | date:'yyyy-MM-dd' }}</td>
+
+              <td>
+                <button class="btn btn-primary btn-sm" (click)="editarCanjeo(compra)">Edit</button>
+              </td>
             </tr>
 
             <tr *ngIf="(tarjetasCompra || []).length === 0">
-              <td colspan="7" class="text-center text-muted py-3">
+              <td colspan="8" class="text-center text-muted py-3">
                 No gift card purchases yet.
               </td>
             </tr>
@@ -277,6 +282,60 @@
     </pagination-controls>
   </div>
 </div>
+
+<!-- MODAL EDICIÓN CANJEO (COMPRA) -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">
+  <div class="modal-dialog">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-azul text-white">
+        <h5 class="modal-title">Edit Gift Card Purchase</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicionCanjeo()"></button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="guardarCanjeo()" #canjeoForm="ngForm" novalidate>
+          <div class="row g-3">
+
+            <div class="col-12">
+              <label class="form-label">Code</label>
+              <input type="text" class="form-control" [value]="compraEditando.codigo" disabled />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Redeemed</label>
+              <select
+                class="form-select"
+                name="canjeada"
+                [(ngModel)]="edicionCanjeo.canjeada">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+
+            <div class="col-12" *ngIf="edicionCanjeo.canjeada">
+              <label class="form-label">Redeemed On</label>
+              <input
+                type="date"
+                class="form-control"
+                name="fechaBaja"
+                [(ngModel)]="edicionCanjeo.fechaBaja"
+                required
+              />
+            </div>
+
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" class="btn btn-secondary" (click)="cancelarEdicionCanjeo()">Cancel</button>
+            <button type="submit" class="btn bg-azul text-white" [disabled]="canjeoForm.invalid">Save</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="compraEditando"></div>
 
 <app-feedback-modal
  *ngIf="mostrarFeedback"
