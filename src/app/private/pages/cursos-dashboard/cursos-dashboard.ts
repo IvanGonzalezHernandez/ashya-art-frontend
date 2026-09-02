@@ -14,6 +14,7 @@ import { TruncatePipe } from '../../../pipes/truncate/truncate-pipe';
 import { Reservas } from '../../../models/curso-compra.model';
 import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-modal';
 import { convertToWebPUnderLimit,fileToDataUrl,isTooLarge,isWebpFile } from '../../../utils/image-optimizer.util';
 
 type SlotImagen = {
@@ -28,7 +29,7 @@ type SlotImagen = {
   standalone: true,
   templateUrl: './cursos-dashboard.html',
   styleUrls: ['./cursos-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, TruncatePipe,  FeedbackModalComponent]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, TruncatePipe,  FeedbackModalComponent, ConfirmModalComponent]
 })
 export class CursosDashboard implements OnInit {
   loading = false;
@@ -309,7 +310,13 @@ eliminarCurso(id: number) {
   obtenerCursoFechas() {
     this.cursoFechaService.getCursoFechas().subscribe({
       next: (data) => {
-        this.cursoFechas = data;
+        const hoy = new Date().toISOString().substring(0, 10);
+        this.cursoFechas = (data || []).slice().sort((a, b) => {
+          const aFutura = a.fecha >= hoy;
+          const bFutura = b.fecha >= hoy;
+          if (aFutura !== bFutura) return aFutura ? -1 : 1;
+          return `${a.fecha}T${a.horaInicio}`.localeCompare(`${b.fecha}T${b.horaInicio}`);
+        });
         this.fechasCargados = true;
         this.comprobarCargaCompleta();
       },
@@ -384,19 +391,31 @@ guardarCursoFecha() {
 
 
 
-eliminarCursoFecha(id: number) {
-  if (confirm('¿Estás seguro de eliminar esta fecha de curso?')) {
-    this.cursoFechaService.eliminarCursoFecha(id).subscribe({
-      next: () => {
-        this.obtenerCursoFechas();
-        this.mostrarModalFeedback('success', 'Date deleted', 'The date has been deleted successfully.');
-      },
-      error: (e) => {
-        console.error('Error eliminando fecha de curso', e);
-        this.mostrarModalFeedback('error', 'Error deleting date', 'There was a problem deleting the date. Please try again.');
-      }
-    });
-  }
+cursoFechaAEliminar: CursoFecha | null = null;
+
+pedirConfirmacionEliminarFecha(cursoFecha: CursoFecha) {
+  this.cursoFechaAEliminar = cursoFecha;
+}
+
+cancelarEliminarFecha() {
+  this.cursoFechaAEliminar = null;
+}
+
+confirmarEliminarFecha() {
+  const cursoFecha = this.cursoFechaAEliminar;
+  if (!cursoFecha) return;
+  this.cursoFechaAEliminar = null;
+
+  this.cursoFechaService.eliminarCursoFecha(cursoFecha.id).subscribe({
+    next: () => {
+      this.obtenerCursoFechas();
+      this.mostrarModalFeedback('success', 'Date deleted', 'The date has been deleted successfully.');
+    },
+    error: (e) => {
+      console.error('Error eliminando fecha de curso', e);
+      this.mostrarModalFeedback('error', 'Error deleting date', 'There was a problem deleting the date. Please try again.');
+    }
+  });
 }
 
 

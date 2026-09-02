@@ -304,7 +304,7 @@
               <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
                 <button class="btn btn-secondary btn-sm" (click)="verDetalleCursoFecha(cursoFecha)">Detail</button>
                 <button class="btn btn-primary btn-sm" (click)="editarCursoFecha(cursoFecha)">Edit</button>
-                <!-- <button class="btn btn-danger btn-sm" (click)="eliminarCursoFecha(cursoFecha.id)">Delete</button> -->
+                <button class="btn btn-danger btn-sm" (click)="pedirConfirmacionEliminarFecha(cursoFecha)">Delete</button>
               </div>
             </td>
 
@@ -564,6 +564,16 @@
   </div>
   <div class="modal-backdrop fade show" *ngIf="cursoFechaEditando"></div>
 </div>
+
+<app-confirm-modal
+  *ngIf="cursoFechaAEliminar"
+  title="Delete date"
+  [message]="'Are you sure you want to delete the date ' + cursoFechaAEliminar.fecha + ' for ' + cursoFechaAEliminar.nombreCurso + '? This action cannot be undone.'"
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  (confirmed)="confirmarEliminarFecha()"
+  (cancelled)="cancelarEliminarFecha()"
+></app-confirm-modal>
 
 <app-feedback-modal
   *ngIf="mostrarFeedback"
