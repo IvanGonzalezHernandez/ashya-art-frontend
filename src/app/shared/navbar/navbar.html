@@ -106,8 +106,14 @@
         <small class="flex-grow-1">{{ mensajeCodigo }}</small>
         <span class="text-danger fw-bold" role="button" style="cursor: pointer;" (click)="quitarCodigo()">×</span></div>
         <small *ngIf="errorCodigo" class="text-danger">{{ errorCodigo }}</small>
-        <div *ngIf="avisoPerdidaTarjeta" class="alert alert-warning py-2 px-3 mt-2 mb-0">
-          <small>⚠ {{ avisoPerdidaTarjeta }}</small>
+        <div *ngIf="avisoPerdidaTarjeta" class="gift-card-warning mt-2">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <div>
+            <strong>You'll lose {{ avisoPerdidaTarjeta.perdido }}€ of this gift card</strong>
+            <p class="mb-0">
+              It's worth {{ avisoPerdidaTarjeta.valor }}€ but your order only comes to {{ avisoPerdidaTarjeta.total }}€ — any unused balance can't be saved for later. Add another course or a product to your cart to make the most of it.
+            </p>
+          </div>
         </div>
       </div>
 

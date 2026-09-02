@@ -28,7 +28,7 @@ export class Navbar implements OnInit {
   errorCodigo: string = '';
   totalConDescuento: number | null = null;
   descuentoAplicado: number = 0; // <— NUEVO
-  avisoPerdidaTarjeta: string = '';
+  avisoPerdidaTarjeta: { valor: number; total: number; perdido: number } | null = null;
 
   // Si más adelante diferencias métodos de pago
   metodoPago: 'stripe' | 'atelier' | null = null;
@@ -330,7 +330,7 @@ confirmarCompraGratis() {
         this.mensajeCodigo = '';
         this.descuentoAplicado = 0;
         this.totalConDescuento = null;
-        this.avisoPerdidaTarjeta = '';
+        this.avisoPerdidaTarjeta = null;
       }
     });
   }
@@ -338,10 +338,13 @@ confirmarCompraGratis() {
   // Si la tarjeta vale más que el total del carrito, el sobrante no se guarda: se pierde al canjearla.
   private actualizarAvisoPerdida(bruto: number) {
     if (this.descuentoAplicado > bruto) {
-      const perdido = Number((this.descuentoAplicado - bruto).toFixed(2));
-      this.avisoPerdidaTarjeta = `Your gift card is worth ${this.descuentoAplicado}€ but your order total is only ${bruto}€. You will lose the remaining ${perdido}€ — it cannot be used later or refunded.`;
+      this.avisoPerdidaTarjeta = {
+        valor: this.descuentoAplicado,
+        total: Number(bruto.toFixed(2)),
+        perdido: Number((this.descuentoAplicado - bruto).toFixed(2))
+      };
     } else {
-      this.avisoPerdidaTarjeta = '';
+      this.avisoPerdidaTarjeta = null;
     }
   }
 
@@ -351,7 +354,7 @@ confirmarCompraGratis() {
     this.errorCodigo = '';
     this.totalConDescuento = null;
     this.descuentoAplicado = 0;
-    this.avisoPerdidaTarjeta = '';
+    this.avisoPerdidaTarjeta = null;
     // this.metodoPago = null; // opcional
   }
 

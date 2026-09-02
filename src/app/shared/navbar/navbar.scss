@@ -81,5 +81,36 @@
   box-shadow: 0 10px 30px rgba(0,0,0,.15);
 }
 
+.gift-card-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: .7rem .85rem;
+  background: #fff8e8;
+  border: 1px solid #f3dfa8;
+  border-left: 3px solid #e0a530;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(224, 165, 48, .12);
+
+  i {
+    color: #c9891a;
+    font-size: 1rem;
+    line-height: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  strong {
+    display: block;
+    font-size: .82rem;
+    color: #7a5610;
+  }
+
+  p {
+    font-size: .78rem;
+    line-height: 1.4;
+    color: #8a6a25;
+  }
+}
+
 
 
