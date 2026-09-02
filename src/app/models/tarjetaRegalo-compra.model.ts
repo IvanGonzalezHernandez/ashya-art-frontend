@@ -7,6 +7,7 @@ export interface TarjetaRegaloCompra {
   fechaCompra?: string;
   fechaCaducidad?: string;
   fechaBaja?: string | null;
+  montoUtilizado?: number | null;
   estado?: boolean;
   idTarjeta?: number;
   idCliente?: number;

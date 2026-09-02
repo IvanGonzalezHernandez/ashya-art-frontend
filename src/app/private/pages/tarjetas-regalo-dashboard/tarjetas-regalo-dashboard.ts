@@ -272,7 +272,7 @@ export class TarjetasRegaloDashboard implements OnInit {
   }
 
   exportarCSVCompras() {
-    const encabezado = ['Code', 'Client', 'Price', 'Purchase Date', 'Expiration', 'Redeemed', 'Redeemed On'];
+    const encabezado = ['Code', 'Client', 'Price', 'Purchase Date', 'Expiration', 'Redeemed', 'Redeemed On', 'Amount Spent'];
     const filas = (this.tarjetasCompra || []).map(c => [
       c.codigo ?? '',
       c.email ?? '',
@@ -280,7 +280,8 @@ export class TarjetasRegaloDashboard implements OnInit {
       c.fechaCompra ?? '',
       c.fechaCaducidad ?? '',
       c.canjeada ? 'Yes' : 'No',
-      c.fechaBaja ?? ''
+      c.fechaBaja ?? '',
+      c.canjeada ? (c.montoUtilizado != null ? c.montoUtilizado.toString() : 'Unknown') : ''
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'gift-card-purchases.csv');
   }

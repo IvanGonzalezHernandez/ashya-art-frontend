@@ -214,13 +214,14 @@
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
           <thead class="table-azul">
             <tr>
-              <th class="d-none d-md-table-cell" style="width: 15%;">Code</th>
-              <th style="width: 45%;">Client</th>
-              <th class="d-none d-md-table-cell" style="width: 10%;">Price</th>
-              <th class="d-none d-lg-table-cell" style="width: 15%;">Purchase Date</th>
-              <th class="d-none d-lg-table-cell" style="width: 15%;">Expiration</th>
-              <th style="width: 15%;">Redeemed</th>
-              <th class="d-none d-lg-table-cell" style="width: 15%;">Redeemed On</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">Code</th>
+              <th style="width: 30%;">Client</th>
+              <th class="d-none d-md-table-cell" style="width: 8%;">Price</th>
+              <th class="d-none d-lg-table-cell" style="width: 12%;">Purchase Date</th>
+              <th class="d-none d-lg-table-cell" style="width: 12%;">Expiration</th>
+              <th style="width: 12%;">Redeemed</th>
+              <th class="d-none d-lg-table-cell" style="width: 12%;">Redeemed On</th>
+              <th class="d-none d-xl-table-cell" style="width: 12%;">Amount Spent</th>
               <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
@@ -254,13 +255,25 @@
 
               <td class="text-nowrap d-none d-lg-table-cell">{{ compra.fechaBaja | date:'yyyy-MM-dd' }}</td>
 
+              <td class="text-nowrap d-none d-xl-table-cell">
+                <ng-container *ngIf="compra.canjeada; else notRedeemedSpent">
+                  <span *ngIf="compra.montoUtilizado != null; else unknownSpent">
+                    {{ compra.montoUtilizado | currency:'EUR' }}
+                  </span>
+                  <ng-template #unknownSpent>
+                    <span class="text-muted" title="Redeemed manually — actual amount spent was not tracked.">Unknown</span>
+                  </ng-template>
+                </ng-container>
+                <ng-template #notRedeemedSpent>—</ng-template>
+              </td>
+
               <td>
                 <button class="btn btn-primary btn-sm" (click)="editarCanjeo(compra)">Edit</button>
               </td>
             </tr>
 
             <tr *ngIf="(tarjetasCompra || []).length === 0">
-              <td colspan="8" class="text-center text-muted py-3">
+              <td colspan="9" class="text-center text-muted py-3">
                 No gift card purchases yet.
               </td>
             </tr>
