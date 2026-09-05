@@ -11,7 +11,6 @@ export interface DashboardTotals {
   totalIngresos: number;
   totalIngresosNetos: number;
   totalTarjetasRegalo: number;
-  totalSecretos: number;
   totalNewsletter: number;
   pagosTarjeta: number;
   pagosPaypal: number;

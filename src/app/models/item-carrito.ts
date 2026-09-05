@@ -1,6 +1,6 @@
 export interface ItemCarrito {
   id: number;
-  tipo: 'CURSO' | 'PRODUCTO' | 'SECRETO' | 'TARJETA';
+  tipo: 'CURSO' | 'PRODUCTO' | 'TARJETA';
   nombre: string;
   subtitulo: string;
   precio: number;

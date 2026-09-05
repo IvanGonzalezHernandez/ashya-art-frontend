@@ -11,7 +11,6 @@ import { ProductosDashboard } from './pages/productos-dashboard/productos-dashbo
 import { TarjetasRegaloDashboard } from './pages/tarjetas-regalo-dashboard/tarjetas-regalo-dashboard';
 import { ClientesDashboard } from './pages/clientes-dashboard/clientes-dashboard';
 import { NewsletterDashboard } from './pages/newsletter-dashboard/newsletter-dashboard';
-import { SecretosDashboard } from './pages/secretos-dashboard/secretos-dashboard';
 import { ErrorDashboard } from './pages/error-dashboard/error-dashboard';
 
 import { AuthGuard } from './guards/auth.guard';
@@ -33,7 +32,6 @@ const routes: Routes = [
       { path: 'tarjetas-regalo', component: TarjetasRegaloDashboard },
       { path: 'clientes', component: ClientesDashboard },
       { path: 'newsletter', component: NewsletterDashboard },
-      { path: 'secretos', component: SecretosDashboard },
       { path: 'errors', component: ErrorDashboard }
     ]
   }

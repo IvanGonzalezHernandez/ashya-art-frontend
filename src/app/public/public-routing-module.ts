@@ -38,16 +38,11 @@ const routes: Routes = [
         path: 'products/:id',
         loadComponent: () => import('./pages/ceramics-detail/ceramics-detail').then(m => m.CeramicsDetail)
       },
-            {
-        path: 'secrets/:id',
-        loadComponent: () => import('./pages/secrets-detail/secrets-detail').then(m => m.SecretsDetail)
-      },
       {
         path: 'shop',
         component: ShopTabs,
         children: [
           { path: '', component: Shop },
-          { path: 'secrets', loadComponent: () => import('./pages/secrets/secrets').then(m => m.Secrets) },
         ]
       },
       { path: 'calendar', component: Calendar },

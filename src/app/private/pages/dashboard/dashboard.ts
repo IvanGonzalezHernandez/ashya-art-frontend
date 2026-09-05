@@ -17,7 +17,6 @@ export class Dashboard implements OnInit, AfterViewInit {
   totalIngresos: number = 0;
   totalIngresosNetos: number = 0;
   totalTarjetasRegalo: number = 0;
-  totalSecretos: number = 0;
   totalNewsletter: number = 0;
   pagosTarjeta: number = 0;
   pagosPaypal: number = 0;
@@ -48,7 +47,6 @@ export class Dashboard implements OnInit, AfterViewInit {
         this.totalIngresos  = data.totalIngresos;
         this.totalIngresosNetos = data.totalIngresosNetos ?? 0;
         this.totalTarjetasRegalo = data.totalTarjetasRegalo ?? 0;
-        this.totalSecretos = data.totalSecretos ?? 0;
         this.totalNewsletter = data.totalNewsletter;
         this.pagosTarjeta = data.pagosTarjeta ?? 0;
         this.pagosPaypal = data.pagosPaypal ?? 0;
