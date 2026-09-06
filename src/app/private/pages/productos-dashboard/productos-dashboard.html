@@ -303,22 +303,40 @@
               <div class="col-md-6">
                 <label class="form-label">ID Cliente</label>
                 <input
+                  *ngIf="esNuevoCompra"
                   type="number"
                   class="form-control"
                   name="idCliente"
                   [(ngModel)]="compraEditando.idCliente"
                   required
                 />
+                <input
+                  *ngIf="!esNuevoCompra"
+                  type="text"
+                  class="form-control"
+                  [value]="compraEditando.nombreCliente"
+                  disabled
+                  readonly
+                />
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">ID Producto</label>
                 <input
+                  *ngIf="esNuevoCompra"
                   type="number"
                   class="form-control"
                   name="idProducto"
                   [(ngModel)]="compraEditando.idProducto"
                   required
+                />
+                <input
+                  *ngIf="!esNuevoCompra"
+                  type="text"
+                  class="form-control"
+                  [value]="compraEditando.nombreProducto"
+                  disabled
+                  readonly
                 />
               </div>
 
