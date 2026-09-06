@@ -29,7 +29,6 @@ export class GiftCards implements OnInit {
     this.tarjetaRegaloService.getTarjetasHabilitadas().subscribe({
       next: (data) => {
         this.tarjetas = data;
-        this.tarjetas.forEach(card => this.procesarImagenesBase64(card));
         this.loading = false;
       },
       error: (err) => {
@@ -37,13 +36,5 @@ export class GiftCards implements OnInit {
         this.loading = false;
       }
     });
-  }
-
-  private procesarImagenesBase64(card: TarjetaRegalo): void {
-    if (card.img) {
-      (card as any).imgUrl = `data:image/webp;base64,${card.img}`;
-    } else {
-      (card as any).imgUrl = '';
-    }
   }
 }

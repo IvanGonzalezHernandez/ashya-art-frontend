@@ -10,15 +10,9 @@ export interface Producto {
     medidas?: string | null;
     estado?: boolean;
 
-    img1?: string | null; 
-    img2?: string | null;
-    img3?: string | null;
-    img4?: string | null;
-    img5?: string | null;
-
-    img1Url?: string;
-    img2Url?: string;
-    img3Url?: string;
-    img4Url?: string;
-    img5Url?: string;
+    img1Url?: string | null;
+    img2Url?: string | null;
+    img3Url?: string | null;
+    img4Url?: string | null;
+    img5Url?: string | null;
 }

@@ -153,7 +153,6 @@ export class WorkshopsDetail {
     this.cursoService.getCursosHabilitados().subscribe({
       next: (data) => {
         this.cursos = data;
-        this.cursos.forEach(curso => this.procesarImagenesBase64(curso));
       },
       error: (err) => console.error('Error cargando cursos', err),
     });
@@ -163,7 +162,6 @@ export class WorkshopsDetail {
     this.cursoService.getCursoPorId(id).subscribe({
       next: (curso) => {
         this.cursoSeleccionado = curso;
-        if (curso) this.procesarImagenesBase64(curso);
         this.cursosCargados = true;
         this.comprobarCargaCompleta();
       },
@@ -179,15 +177,6 @@ export class WorkshopsDetail {
       },
       error: (err) => console.error(`Error cargando fechas del curso con ID ${id}`, err),
     });
-  }
-
-  private procesarImagenesBase64(curso: Curso): void {
-    for (let i = 1; i <= 5; i++) {
-      const imgProp = `img${i}` as keyof Curso;
-      const urlProp = `img${i}Url` as keyof Curso;
-      const base64Str = curso[imgProp] as unknown as string;
-      (curso as any)[urlProp] = base64Str ? `data:image/webp;base64,${base64Str}` : '';
-    }
   }
 
   private comprobarCargaCompleta(): void {
@@ -275,7 +264,7 @@ export class WorkshopsDetail {
 
   obtenerImagenesValidas(): string[] {
     if (!this.cursoSeleccionado) return [];
-    const imagenes: (string | undefined)[] = [
+    const imagenes: (string | null | undefined)[] = [
       this.cursoSeleccionado.img1Url,
       this.cursoSeleccionado.img2Url,
       this.cursoSeleccionado.img3Url,

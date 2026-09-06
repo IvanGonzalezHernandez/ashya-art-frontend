@@ -87,13 +87,13 @@ export class ProductosDashboard implements OnInit {
     });
   }
 
-  /** Inicializa los 5 slots; si hay id, precarga las URLs de backend para restore/preview */
-  private initSlots(productoId?: number) {
+  /** Inicializa los 5 slots; si hay producto, precarga las URLs ya resueltas para restore/preview */
+  private initSlots(producto?: Producto) {
     this.slots = Array.from({ length: 5 }, (_, i) => {
       const slotNum = i + 1;
       return {
         slot: slotNum,
-        previewUrl: productoId ? this.productoService.getImagenUrl(productoId, slotNum) : null,
+        previewUrl: producto ? ((producto as any)[`img${slotNum}Url`] ?? null) : null,
         markedForDelete: false
       } as SlotImagen;
     });
@@ -111,11 +111,11 @@ export class ProductosDashboard implements OnInit {
       precio: 0,
       medidas: '',
       material: '',
-      img1: null,
-      img2: null,
-      img3: null,
-      img4: null,
-      img5: null
+      img1Url: null,
+      img2Url: null,
+      img3Url: null,
+      img4Url: null,
+      img5Url: null
     } as Producto;
 
     this.initSlots(); // sin id => sin previews del server
@@ -124,7 +124,7 @@ export class ProductosDashboard implements OnInit {
   editarProducto(producto: Producto) {
     this.esNuevoProducto = false;
     this.productoEditando = { ...producto };
-    this.initSlots(producto.id); // precarga previews desde backend por slot
+    this.initSlots(producto); // precarga previews ya resueltas
   }
 
   cancelarEdicionProducto() {
@@ -173,7 +173,7 @@ async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
   restaurarSlot(slot: SlotImagen) {
     if (!this.productoEditando || this.esNuevoProducto) return;
     slot.file = undefined;
-    slot.previewUrl = this.productoService.getImagenUrl(this.productoEditando.id, slot.slot);
+    slot.previewUrl = (this.productoEditando as any)[`img${slot.slot}Url`] ?? null;
     slot.markedForDelete = false;
   }
 

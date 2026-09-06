@@ -102,7 +102,6 @@ export class Calendar implements OnInit {
       cursos$.subscribe({
         next: (data) => {
           (data || []).forEach((c: Curso) => {
-            this.procesarImagenesBase64Curso(c); // crea img1Url..img5Url si vienen base64
             this.cursosMap.set(Number(c.id), c);
           });
           gotCursos = true;
@@ -115,18 +114,6 @@ export class Calendar implements OnInit {
         }
       });
     });
-  }
-
-  /** Procesa imágenes base64 del curso y genera img1Url..img5Url */
-  private procesarImagenesBase64Curso(curso: Curso): void {
-    // Si tu backend usa otro mime (jpeg/png), ajusta aquí
-    const mime = (curso as any).imgMime ?? 'image/webp';
-    for (let i = 1; i <= 5; i++) {
-      const imgProp = `img${i}` as keyof Curso;
-      const urlProp = `img${i}Url` as keyof Curso;
-      const base64Str = curso[imgProp] as unknown as string;
-      (curso as any)[urlProp] = base64Str ? `data:${mime};base64,${base64Str}` : '';
-    }
   }
 
   // ================== Navegación de mes ==================
@@ -234,11 +221,10 @@ private openModalFechasDisponibles(): void {
       if (img) return img;
     }
 
-    // 2) carga detalle y procesa base64
+    // 2) carga detalle
     try {
       const cursoDet = await firstValueFrom(this.cursoService.getCursoPorId(cursoId));
       if (cursoDet) {
-        this.procesarImagenesBase64Curso(cursoDet);
         this.cursosMap.set(cursoId, cursoDet);
         return this.firstImg(cursoDet) || '';
       }

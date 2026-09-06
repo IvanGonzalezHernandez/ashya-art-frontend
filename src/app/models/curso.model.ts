@@ -15,15 +15,9 @@ export interface Curso {
   localizacion: string;
   orden?: number;
 
-  img1?: any;
-  img2?: any;
-  img3?: any;
-  img4?: any;
-  img5?: any;
-
-  img1Url?: string;
-  img2Url?: string;
-  img3Url?: string;
-  img4Url?: string;
-  img5Url?: string;
+  img1Url?: string | null;
+  img2Url?: string | null;
+  img3Url?: string | null;
+  img4Url?: string | null;
+  img5Url?: string | null;
 }

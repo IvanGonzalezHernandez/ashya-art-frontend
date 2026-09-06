@@ -103,12 +103,12 @@ export class CursosDashboard implements OnInit {
     });
   }
 
-  private initSlots(cursoId?: number) {
+  private initSlots(curso?: Curso) {
     this.slots = Array.from({ length: 5 }, (_, i) => {
       const slotNum = i + 1;
       return {
         slot: slotNum,
-        previewUrl: cursoId ? this.cursoService.getImagenUrl(cursoId, slotNum) : null,
+        previewUrl: curso ? ((curso as any)[`img${slotNum}Url`] ?? null) : null,
         markedForDelete: false
       } as SlotImagen;
     });
@@ -123,11 +123,11 @@ export class CursosDashboard implements OnInit {
       descripcion: '',
       precio: 0,
       orden: 0,
-      img1: null,
-      img2: null,
-      img3: null,
-      img4: null,
-      img5: null,
+      img1Url: null,
+      img2Url: null,
+      img3Url: null,
+      img4Url: null,
+      img5Url: null,
       nivel: '',
       duracion: '',
       piezas: '',
@@ -152,7 +152,7 @@ export class CursosDashboard implements OnInit {
   editarCurso(curso: Curso) {
     this.esNuevo = false;
     this.cursoEditando = { ...curso };
-    this.initSlots(curso.id);
+    this.initSlots(curso);
   }
 
   cancelarEdicion() {
@@ -208,7 +208,7 @@ export class CursosDashboard implements OnInit {
   restaurarSlot(slot: SlotImagen) {
     if (!this.cursoEditando || this.esNuevo) return;
     slot.file = undefined;
-    slot.previewUrl = this.cursoService.getImagenUrl(this.cursoEditando.id, slot.slot);
+    slot.previewUrl = (this.cursoEditando as any)[`img${slot.slot}Url`] ?? null;
     slot.markedForDelete = false;
   }
 

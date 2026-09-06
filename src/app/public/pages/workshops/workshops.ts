@@ -31,7 +31,6 @@ export class Workshops implements OnInit {
     this.cursoService.getCursosHabilitados().subscribe({
       next: (data) => {
         this.cursos = data;
-        this.cursos.forEach(curso => this.procesarImagenesBase64(curso));
         this.cursosCargados = true;
         this.comprobarCargaCompleta();
       },
@@ -41,20 +40,6 @@ export class Workshops implements OnInit {
         this.comprobarCargaCompleta();
       }
     });
-  }  
-
-  private procesarImagenesBase64(curso: Curso): void {
-    for (let i = 1; i <= 5; i++) {
-      const imgProp = `img${i}` as keyof Curso;
-      const urlProp = `img${i}Url` as keyof Curso;
-
-      const base64Str = curso[imgProp] as unknown as string;
-      if (base64Str) {
-        (curso as any)[urlProp] = `data:image/webp;base64,${base64Str}`;
-      } else {
-        (curso as any)[urlProp] = '';
-      }
-    }
   }
 
   private comprobarCargaCompleta(): void {

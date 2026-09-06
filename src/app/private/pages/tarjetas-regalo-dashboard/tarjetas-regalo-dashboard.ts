@@ -93,7 +93,7 @@ export class TarjetasRegaloDashboard implements OnInit {
       nombre: '',
       precio: 0,
       estado: true,
-      img: ''
+      imgUrl: null
     } as TarjetaRegalo;
 
     this.imgSlot = { previewUrl: null, markedForDelete: false };
@@ -103,7 +103,7 @@ export class TarjetasRegaloDashboard implements OnInit {
     this.esNueva = false;
     this.tarjetaEditando = { ...tarjeta };
     this.imgSlot = {
-      previewUrl: tarjeta.id ? this.getImgUrl(tarjeta.id) : null,
+      previewUrl: tarjeta.imgUrl ?? null,
       markedForDelete: false
     };
   }
@@ -144,7 +144,7 @@ export class TarjetasRegaloDashboard implements OnInit {
   restaurarImagen() {
     if (!this.tarjetaEditando || this.esNueva || !this.tarjetaEditando.id) return;
     this.imgSlot.file = undefined;
-    this.imgSlot.previewUrl = this.getImgUrl(this.tarjetaEditando.id);
+    this.imgSlot.previewUrl = this.tarjetaEditando.imgUrl ?? null;
     this.imgSlot.markedForDelete = false;
   }
 
@@ -208,10 +208,6 @@ export class TarjetasRegaloDashboard implements OnInit {
       t.estado !== false ? 'Visible' : 'Hidden'
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'gift-cards.csv');
-  }
-
-  getImgUrl(id: number): string {
-    return this.tarjetaService.getImagenUrl(id);
   }
 
   // ===== COMPRAS TARJETAS =====

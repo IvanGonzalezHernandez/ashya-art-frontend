@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Producto } from '../../models/producto.model';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environments';
+import { resolverUrlsProducto } from '../../utils/entity-image-url.util';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,7 @@ export class ProductoService {
   constructor(private http: HttpClient) {}
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl);
+    return this.http.get<Producto[]>(this.apiUrl).pipe(map(lista => lista.map(resolverUrlsProducto)));
   }
 
  // Igual que cursos: POST multipart (FormData con 'producto', 'img1'..'img5', 'deleteImgN' opcional)
@@ -30,17 +32,12 @@ export class ProductoService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // URL directa para cada slot (preview en el modal)
-  getImagenUrl(idProducto: number, slot: number): string {
-    return `${this.apiUrl}/${idProducto}/imagen/${slot}`;
-  }
-  
   crearProductoConImagenes(formData: FormData): Observable<Producto> {
-    return this.http.post<Producto>(`${this.apiUrl}`, formData);
+    return this.http.post<Producto>(`${this.apiUrl}`, formData).pipe(map(resolverUrlsProducto));
   }
 
   actualizarProductoConImagenes(id: number, formData: FormData): Observable<Producto> {
-    return this.http.put<Producto>(`${this.apiUrl}/${id}`, formData);
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, formData).pipe(map(resolverUrlsProducto));
   }
 
 

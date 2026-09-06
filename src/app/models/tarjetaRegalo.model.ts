@@ -3,6 +3,5 @@ export interface TarjetaRegalo {
     nombre: string;
     precio: number;
     estado?: boolean;
-    img: string;
-    imgUrl: String;
+    imgUrl?: string | null;
 }

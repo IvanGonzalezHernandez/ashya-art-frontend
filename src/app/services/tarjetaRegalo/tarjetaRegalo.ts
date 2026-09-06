@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environments';
 import { TarjetaRegalo } from '../../models/tarjetaRegalo.model';
 import { AuthService } from '../login/auth';
+import { resolverUrlTarjeta } from '../../utils/entity-image-url.util';
 
 @Injectable({ providedIn: 'root' })
 export class TarjetaRegaloService {
@@ -15,20 +17,15 @@ export class TarjetaRegaloService {
 
   // ---- Lectura ----
   getTarjetas(): Observable<TarjetaRegalo[]> {
-    return this.http.get<TarjetaRegalo[]>(this.apiUrl);
+    return this.http.get<TarjetaRegalo[]>(this.apiUrl).pipe(map(lista => lista.map(resolverUrlTarjeta)));
   }
 
   getTarjetasHabilitadas(): Observable<TarjetaRegalo[]> {
-    return this.http.get<TarjetaRegalo[]>(`${this.apiUrl}/habilitadas`);
+    return this.http.get<TarjetaRegalo[]>(`${this.apiUrl}/habilitadas`).pipe(map(lista => lista.map(resolverUrlTarjeta)));
   }
 
   getTarjetaPorId(id: number): Observable<TarjetaRegalo> {
-    return this.http.get<TarjetaRegalo>(`${this.apiUrl}/${id}`);
-  }
-
-  // Para usar en <img [src]>
-  getImagenUrl(id: number): string {
-    return `${this.apiUrl}/${id}/imagen`;
+    return this.http.get<TarjetaRegalo>(`${this.apiUrl}/${id}`).pipe(map(resolverUrlTarjeta));
   }
 
   // ---- Escritura (multipart/form-data) ----

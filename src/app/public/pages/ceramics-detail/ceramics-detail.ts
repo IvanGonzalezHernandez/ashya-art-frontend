@@ -46,9 +46,6 @@ export class CeramicsDetail implements OnInit {
     this.shopService.getProductoPorId(id).subscribe({
       next: (producto) => {
         this.productoSeleccionado = producto;
-        if (producto) {
-          this.procesarImagenesBase64(producto);
-        }
         this.productoCargado = true;
         this.loading = false;
       },
@@ -57,20 +54,6 @@ export class CeramicsDetail implements OnInit {
         this.loading = false;
       }
     });
-  }
-
-  private procesarImagenesBase64(producto: Producto): void {
-    for (let i = 1; i <= 5; i++) {
-      const imgProp = `img${i}` as keyof Producto;
-      const urlProp = `img${i}Url` as keyof Producto;
-
-      const base64Str = producto[imgProp] as unknown as string;
-      if (base64Str) {
-        (producto as any)[urlProp] = `data:image/webp;base64,${base64Str}`;
-      } else {
-        (producto as any)[urlProp] = '';
-      }
-    }
   }
 
   agregarProductoAlCarrito(producto: any) {
@@ -99,7 +82,7 @@ export class CeramicsDetail implements OnInit {
 
 obtenerImagenesValidas(): string[] {
   if (!this.productoSeleccionado) return [];
-  const imagenes: Array<string | undefined> = [
+  const imagenes: Array<string | null | undefined> = [
     this.productoSeleccionado.img1Url,
     this.productoSeleccionado.img2Url,
     this.productoSeleccionado.img3Url,

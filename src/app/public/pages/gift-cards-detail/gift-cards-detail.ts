@@ -58,18 +58,8 @@ export class GiftCardsDetail implements OnInit {
     });
   }
 
-  private toDataUrl(base64?: string | null): string {
-    if (!base64) return '';
-    return base64.startsWith('data:') ? base64 : `data:image/webp;base64,${base64}`;
-  }
-
   get imgTarjetaUrl(): string {
-    const b64 = (this.tarjetaSeleccionada as any)?.img as string | undefined | null;
-    const existingUrl = (this.tarjetaSeleccionada as any)?.imgUrl as string | undefined | null;
-    if (existingUrl && (existingUrl.startsWith('data:') || existingUrl.startsWith('http'))) {
-      return existingUrl;
-    }
-    return this.toDataUrl(b64);
+    return this.tarjetaSeleccionada?.imgUrl || '';
   }
 
  confirmarDestinatario(): void {
