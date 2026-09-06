@@ -27,4 +27,8 @@ export class ProductoCompraService {
   eliminarProductoCompra(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  actualizarSeguimiento(id: number, numeroSeguimiento: string): Observable<ProductoCompra> {
+    return this.http.put<ProductoCompra>(`${this.apiUrl}/${id}/seguimiento`, { numeroSeguimiento });
+  }
 }

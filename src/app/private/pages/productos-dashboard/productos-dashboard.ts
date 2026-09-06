@@ -58,6 +58,10 @@ export class ProductosDashboard implements OnInit {
   compraEditando: ProductoCompra | null = null;
   esNuevoCompra: boolean = false;
 
+  // Numero de seguimiento (input en curso por fila, antes de enviar el email)
+  seguimientoInputs: Record<number, string | undefined> = {};
+  enviandoSeguimiento: Record<number, boolean> = {};
+
   constructor(
     private productoService: ProductoService,
     private productoCompraService: ProductoCompraService,
@@ -344,6 +348,27 @@ eliminarProducto(id: number) {
         this.obtenerCompras();
       });
     }
+  }
+
+  enviarSeguimiento(compra: ProductoCompra) {
+    const numero = (this.seguimientoInputs[compra.id] ?? compra.numeroSeguimiento ?? '').trim();
+    if (!numero) return;
+
+    this.enviandoSeguimiento[compra.id] = true;
+
+    this.productoCompraService.actualizarSeguimiento(compra.id, numero).subscribe({
+      next: (actualizada) => {
+        compra.numeroSeguimiento = actualizada.numeroSeguimiento;
+        delete this.seguimientoInputs[compra.id];
+        this.enviandoSeguimiento[compra.id] = false;
+        this.mostrarModalFeedback('success', 'Tracking number sent', `The tracking number was emailed to ${compra.nombreCliente}.`);
+      },
+      error: (e) => {
+        console.error('Error enviando numero de seguimiento', e);
+        this.enviandoSeguimiento[compra.id] = false;
+        this.mostrarModalFeedback('error', 'Error sending tracking number', 'Please review the tracking number or try again.');
+      }
+    });
   }
 
   mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {

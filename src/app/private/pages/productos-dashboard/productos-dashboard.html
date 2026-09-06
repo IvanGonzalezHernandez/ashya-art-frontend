@@ -252,12 +252,13 @@
           <thead class="table-azul">
             <tr>
               <!-- <th style="width: 8%;">ID</th> -->
-              <th style="width: 24%;">Customer</th>
-              <th style="width: 24%;">Product</th>
-              <th style="width: 8%;">Quantity</th>
-              <th style="width: 10%;">Unit Price</th>
-              <th style="width: 14%;">Date</th>
-              <th style="width: 12%;">Actions</th>
+              <th style="width: 18%;">Customer</th>
+              <th style="width: 18%;">Product</th>
+              <th style="width: 7%;">Quantity</th>
+              <th style="width: 9%;">Unit Price</th>
+              <th style="width: 12%;">Date</th>
+              <th style="width: 22%;">Tracking Number</th>
+              <th style="width: 14%;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -279,6 +280,26 @@
               <td class="text-nowrap">{{ compra.fechaCompra | date:'short' }}</td>
 
               <td>
+                <div class="d-flex gap-2 align-items-center">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Tracking #"
+                    [ngModel]="seguimientoInputs[compra.id] ?? compra.numeroSeguimiento ?? ''"
+                    (ngModelChange)="seguimientoInputs[compra.id] = $event" />
+                  <button
+                    class="btn btn-sm text-nowrap"
+                    [class.btn-success]="!compra.numeroSeguimiento"
+                    [class.btn-outline-secondary]="!!compra.numeroSeguimiento"
+                    [disabled]="enviandoSeguimiento[compra.id] || !((seguimientoInputs[compra.id] ?? compra.numeroSeguimiento ?? '').trim())"
+                    (click)="enviarSeguimiento(compra)">
+                    {{ enviandoSeguimiento[compra.id] ? 'Sending…' : (compra.numeroSeguimiento ? 'Resend' : 'Send') }}
+                  </button>
+                </div>
+                <div *ngIf="compra.numeroSeguimiento" class="text-success small mt-1">✓ Email sent</div>
+              </td>
+
+              <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarCompra(compra)">Edit</button>
                   <button class="btn btn-danger btn-sm" (click)="eliminarCompra(compra.id)">Delete</button>
@@ -286,7 +307,7 @@
               </td>
             </tr>
           <tr *ngIf="(compras || []).length === 0">
-            <td colspan="6" class="text-center text-muted py-3">No products purchases yet.</td>
+            <td colspan="7" class="text-center text-muted py-3">No products purchases yet.</td>
           </tr>
           </tbody>
         </table>

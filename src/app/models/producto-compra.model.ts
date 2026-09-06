@@ -7,4 +7,5 @@ export interface ProductoCompra {
     cantidad: number,
     fechaCompra: Date;
     precio?: number;
+    numeroSeguimiento?: string | null;
 }
