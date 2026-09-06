@@ -6,15 +6,28 @@ import { FeedbackModalComponent } from '../../shared/feedback-modal/feedback-mod
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
+import { TranslatePipe } from '@ngx-translate/core';
+import { SUPPORTED_LANGUAGES, SupportedLanguage, LanguageService } from '../../services/language/language';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, TranslatePipe],
   templateUrl: './footer.html',
   styleUrls: ['./footer.scss']
 })
 export class Footer {
+
+  readonly languages = SUPPORTED_LANGUAGES;
+
+  constructor(
+    private newsletterService: NewsletterService,
+    public languageService: LanguageService
+  ) {}
+
+  cambiarIdioma(lang: SupportedLanguage): void {
+    this.languageService.use(lang);
+  }
 
   // Email del input
   emailSuscripcion: string = '';
@@ -27,8 +40,6 @@ export class Footer {
 
   currentYear = new Date().getFullYear();
   newsletterLoading: boolean = false;
-
-  constructor(private newsletterService: NewsletterService) {}
 
 suscribirse() {
   if (!this.emailSuscripcion.trim()) {

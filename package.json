@@ -20,6 +20,8 @@
     "@fullcalendar/daygrid": "^6.1.18",
     "@fullcalendar/interaction": "^6.1.18",
     "@fullcalendar/timegrid": "^6.1.18",
+    "@ngx-translate/core": "^18.0.0",
+    "@ngx-translate/http-loader": "^18.0.0",
     "animate.css": "^4.1.1",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
