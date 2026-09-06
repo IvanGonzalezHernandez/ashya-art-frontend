@@ -82,11 +82,11 @@
            [delay]="'0.3s'">
         <h3 class="fw-bold mb-3" style="color: #3E3028;">{{ 'COMMON.DESCRIPTION' | translate }}</h3>
 
-        <div class="text-muted fs-5 flex-grow-1" style="overflow-wrap: break-word;">
-          <p>{{ productoSeleccionado.descripcion }}</p>
+        <div class="text-muted fs-5 flex-grow-1 desc-text">
+          {{ productoSeleccionado.descripcion }}
         </div>
 
-        <ul class="list-unstyled mt-4 fs-5 text-muted" style="color:#6b5e52;">
+        <ul class="list-unstyled mt-4 detalles-curso">
           <li>
             <strong>{{ 'COMMON.PRICE' | translate }}:</strong> {{ productoSeleccionado.precio }} €
           </li>
