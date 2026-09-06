@@ -355,7 +355,7 @@ cerrarFeedback() {
 }
 
   exportarCSVCompras() {
-    const encabezado = ['ID', 'ID Cliente', 'Nombre Cliente', 'ID Producto', 'Nombre Producto', 'Cantidad', 'Fecha Compra'];
+    const encabezado = ['ID', 'ID Cliente', 'Nombre Cliente', 'ID Producto', 'Nombre Producto', 'Cantidad', 'Precio Unitario', 'Fecha Compra'];
     const filas = this.compras.map(compra => [
       compra.id,
       compra.idCliente,
@@ -363,6 +363,7 @@ cerrarFeedback() {
       compra.idProducto,
       compra.nombreProducto,
       compra.cantidad,
+      compra.precio ?? '',
       compra.fechaCompra.toString()
     ]);
     this.csvExportService.exportarCSV(encabezado, filas, 'producto_compras.csv');

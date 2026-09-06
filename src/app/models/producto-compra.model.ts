@@ -6,4 +6,5 @@ export interface ProductoCompra {
     nombreProducto: string;
     cantidad: number,
     fechaCompra: Date;
+    precio?: number;
 }

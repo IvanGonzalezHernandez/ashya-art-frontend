@@ -101,12 +101,13 @@ export class ReservasDashboard implements OnInit {
   }
 
   exportarCSV() {
-    const encabezado = ['Client', 'Course', 'Date', 'Reserved Seats', 'Payment', 'Book Date'];
+    const encabezado = ['Client', 'Course', 'Date', 'Reserved Seats', 'Unit Price', 'Payment', 'Book Date'];
     const filas = (this.reservas || []).map(reserva => [
       reserva.email ?? '',
       reserva.nombreCurso ?? '',
       reserva.fechaCurso ?? '',
       reserva.plazasReservadas ?? 0,
+      reserva.precio ?? '',
       reserva.pagado ? 'Paid' : 'Atelier',
       reserva.fechaReserva ? new Date(reserva.fechaReserva).toISOString().slice(0, 10) : ''
     ]);

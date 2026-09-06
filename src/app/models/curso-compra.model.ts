@@ -10,4 +10,5 @@ export interface Reservas {
     fechaCurso: string;
     nombreCliente: string;
     pagado: boolean;
+    precio?: number;
 }

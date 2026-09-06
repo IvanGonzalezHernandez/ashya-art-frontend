@@ -237,10 +237,11 @@
           <thead class="table-azul">
             <tr>
               <!-- <th style="width: 8%;">ID</th> -->
-              <th style="width: 28%;">Customer</th>
-              <th style="width: 28%;">Product</th>
-              <th style="width: 10%;">Quantity</th>
-              <th style="width: 16%;">Date</th>
+              <th style="width: 24%;">Customer</th>
+              <th style="width: 24%;">Product</th>
+              <th style="width: 8%;">Quantity</th>
+              <th style="width: 10%;">Unit Price</th>
+              <th style="width: 14%;">Date</th>
               <th style="width: 12%;">Actions</th>
             </tr>
           </thead>
@@ -258,6 +259,8 @@
 
               <td class="text-nowrap">{{ compra.cantidad }}</td>
 
+              <td class="text-nowrap">{{ compra.precio | currency:'EUR' }}</td>
+
               <td class="text-nowrap">{{ compra.fechaCompra | date:'short' }}</td>
 
               <td>
@@ -268,7 +271,7 @@
               </td>
             </tr>
           <tr *ngIf="(compras || []).length === 0">
-            <td colspan="5" class="text-center text-muted py-3">No products purchases yet.</td>
+            <td colspan="6" class="text-center text-muted py-3">No products purchases yet.</td>
           </tr>
           </tbody>
         </table>

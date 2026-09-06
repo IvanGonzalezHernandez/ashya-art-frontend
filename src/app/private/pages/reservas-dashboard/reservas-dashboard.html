@@ -19,12 +19,13 @@
           <thead class="table-azul">
             <tr>
               <!--<th style="width: 8%;">ID</th>-->
-              <th style="width: 34%;">Client</th>
-              <th style="width: 34%;">Course</th>
-              <th class="d-none d-md-table-cell" style="width: 14%;">Date</th>
-              <th class="d-none d-md-table-cell" style="width: 12%;">Reserved Seats</th>
-              <th class="d-none d-md-table-cell" style="width: 14%;">Payment</th>
-              <th class="d-none d-lg-table-cell" style="width: 18%;">Book date</th>
+              <th style="width: 28%;">Client</th>
+              <th style="width: 28%;">Course</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">Date</th>
+              <th class="d-none d-md-table-cell" style="width: 10%;">Reserved Seats</th>
+              <th class="d-none d-md-table-cell" style="width: 10%;">Unit Price</th>
+              <th class="d-none d-md-table-cell" style="width: 12%;">Payment</th>
+              <th class="d-none d-lg-table-cell" style="width: 16%;">Book date</th>
               <!-- <th style="width: 10%;">Actions</th> -->
             </tr>
           </thead>
@@ -53,6 +54,10 @@
               </td>
 
               <td class="text-nowrap d-none d-md-table-cell">
+                {{ reserva.precio | currency:'EUR' }}
+              </td>
+
+              <td class="text-nowrap d-none d-md-table-cell">
                 <span class="badge" [ngClass]="reserva.pagado ? 'bg-success' : 'bg-warning text-dark'">
                   {{ reserva.pagado ? 'Paid' : 'Atelier' }}
                 </span>
@@ -73,7 +78,7 @@
             </tr>
 
             <tr *ngIf="(reservas || []).length === 0">
-              <td colspan="6" class="text-center text-muted py-3">
+              <td colspan="7" class="text-center text-muted py-3">
                 No bookings yet.
               </td>
             </tr>
