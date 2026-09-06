@@ -269,12 +269,17 @@
         </thead>
 
         <tbody>
-          <tr *ngFor="let cursoFecha of cursoFechas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }">
+          <tr
+            *ngFor="let cursoFecha of cursoFechas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }"
+            [class.tr-proxima-clase]="cursoFecha.id === proximaCursoFechaId">
 
             <td>
-              <span class="d-inline-block w-100 text-truncate" [title]="cursoFecha.nombreCurso">
-                {{ cursoFecha.nombreCurso }}
-              </span>
+              <div class="d-flex align-items-center">
+                <span class="text-truncate" [title]="cursoFecha.nombreCurso">
+                  {{ cursoFecha.nombreCurso }}
+                </span>
+                <span *ngIf="cursoFecha.id === proximaCursoFechaId" class="badge bg-azul ms-2">Next</span>
+              </div>
             </td>
 
             <!-- Solo móvil: metes fecha + horas + plazas en 2 líneas -->

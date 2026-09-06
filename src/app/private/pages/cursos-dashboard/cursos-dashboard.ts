@@ -63,6 +63,7 @@ export class CursosDashboard implements OnInit {
 
   // CURSOFECHA
   cursoFechas: CursoFecha[] = [];
+  proximaCursoFechaId: number | null = null;
   paginaActualCursoFecha: number = 1;
   cursoFechaEditando: CursoFecha | null = null;
   esNuevaCursoFecha: boolean = false;
@@ -310,13 +311,11 @@ eliminarCurso(id: number) {
   obtenerCursoFechas() {
     this.cursoFechaService.getCursoFechas().subscribe({
       next: (data) => {
-        const hoy = new Date().toISOString().substring(0, 10);
-        this.cursoFechas = (data || []).slice().sort((a, b) => {
-          const aFutura = a.fecha >= hoy;
-          const bFutura = b.fecha >= hoy;
-          if (aFutura !== bFutura) return aFutura ? -1 : 1;
-          return `${a.fecha}T${a.horaInicio}`.localeCompare(`${b.fecha}T${b.horaInicio}`);
-        });
+        this.cursoFechas = (data || []).slice().sort((a, b) =>
+          // Orden descendente puro: la fecha más lejana primero, la más antigua al final.
+          `${b.fecha}T${b.horaInicio}`.localeCompare(`${a.fecha}T${a.horaInicio}`)
+        );
+        this.proximaCursoFechaId = this.calcularProximaCursoFechaId(this.cursoFechas);
         this.fechasCargados = true;
         this.comprobarCargaCompleta();
       },
@@ -326,6 +325,22 @@ eliminarCurso(id: number) {
         this.comprobarCargaCompleta();
       }
     });
+  }
+
+  // Entre las fechas con instante >= ahora, la de instante más cercano (la que viene justo después de hoy).
+  private calcularProximaCursoFechaId(fechas: CursoFecha[]): number | null {
+    const ahora = new Date();
+    const ahoraKey = `${ahora.toISOString().substring(0, 10)}T${ahora.toTimeString().substring(0, 8)}`;
+
+    let proxima: CursoFecha | null = null;
+    for (const cf of fechas) {
+      const key = `${cf.fecha}T${cf.horaInicio}`;
+      if (key < ahoraKey) continue;
+      if (!proxima || key < `${proxima.fecha}T${proxima.horaInicio}`) {
+        proxima = cf;
+      }
+    }
+    return proxima ? proxima.id : null;
   }
 
   crearCursoFecha() {
