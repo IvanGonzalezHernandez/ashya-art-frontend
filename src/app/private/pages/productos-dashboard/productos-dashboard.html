@@ -1,7 +1,7 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO PRODUCTOS -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Product Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Products</h1>
     <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearProducto()">+ New Product</button>
     </div>
@@ -219,7 +219,7 @@
 
   <!-- ENCABEZADO COMPRAS -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-    <h1 class="display-6 fw-semibold">Product Purchases Dashboard</h1>
+    <h1 class="display-6 fw-semibold">Product Purchases</h1>
     <div class="d-flex gap-2 flex-wrap">
       <button class="btn btn-success" (click)="crearCompra()">+ New Purchase</button>
     </div>
@@ -304,7 +304,7 @@
             <div class="row g-3">
 
               <div class="col-md-6">
-                <label class="form-label">ID Cliente</label>
+                <label class="form-label">Client</label>
                 <input
                   *ngIf="esNuevoCompra"
                   type="number"
@@ -324,7 +324,7 @@
               </div>
 
               <div class="col-md-6">
-                <label class="form-label">ID Producto</label>
+                <label class="form-label">Product</label>
                 <input
                   *ngIf="esNuevoCompra"
                   type="number"
@@ -344,7 +344,7 @@
               </div>
 
               <div class="col-md-6">
-                <label class="form-label">Cantidad</label>
+                <label class="form-label">Quantity</label>
                 <input
                   type="number"
                   class="form-control"
@@ -356,7 +356,7 @@
               </div>
 
               <div class="col-md-6">
-                <label class="form-label">Fecha Compra</label>
+                <label class="form-label">Purchase Date</label>
                 <input
                   type="datetime-local"
                   class="form-control"
