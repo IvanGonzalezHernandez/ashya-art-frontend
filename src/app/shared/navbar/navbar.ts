@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarritoService } from '../../services/carrito/carrito';
@@ -22,6 +22,8 @@ declare var bootstrap: any;
 export class Navbar implements OnInit {
   readonly languages = SUPPORTED_LANGUAGES;
   readonly flagIcons = LANGUAGE_FLAG_ICONS;
+
+  @ViewChild('langDropdownBtn') langDropdownBtn?: ElementRef<HTMLElement>;
 
   loadingCheckout = false;
   contadorCarrito: number = 0;
@@ -90,6 +92,18 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
 
   cambiarIdioma(lang: SupportedLanguage): void {
     this.languageService.use(lang);
+  }
+
+  toggleLangDropdown(): void {
+    const el = this.langDropdownBtn?.nativeElement;
+    if (!el) return;
+    bootstrap.Dropdown.getOrCreateInstance(el).toggle();
+  }
+
+  seleccionarIdiomaDesktop(lang: SupportedLanguage): void {
+    this.cambiarIdioma(lang);
+    const el = this.langDropdownBtn?.nativeElement;
+    if (el) bootstrap.Dropdown.getOrCreateInstance(el).hide();
   }
 
   ngOnInit(): void {

@@ -35,17 +35,18 @@
       <!-- Selector de idioma (banderas) -->
       <div class="dropdown me-3 d-none d-lg-block">
         <button
+          #langDropdownBtn
           class="btn btn-sm lang-toggle dropdown-toggle d-flex align-items-center gap-1"
           type="button"
-          data-bs-toggle="dropdown"
           aria-expanded="false"
           aria-label="Select language"
+          (click)="toggleLangDropdown()"
         >
           <img [src]="flagIcons[languageService.current]" [alt]="languageService.current" class="flag-icon">
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
           <li *ngFor="let lang of languages">
-            <button class="dropdown-item d-flex align-items-center gap-2" type="button" (click)="cambiarIdioma(lang)">
+            <button class="dropdown-item d-flex align-items-center gap-2" type="button" (click)="seleccionarIdiomaDesktop(lang)">
               <img [src]="flagIcons[lang]" [alt]="lang" class="flag-icon">
               <span>{{ lang.toUpperCase() }}</span>
             </button>
