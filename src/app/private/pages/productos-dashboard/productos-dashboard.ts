@@ -111,6 +111,7 @@ export class ProductosDashboard implements OnInit {
       precio: 0,
       medidas: '',
       material: '',
+      estado: true,
       img1Url: null,
       img2Url: null,
       img3Url: null,
@@ -208,7 +209,8 @@ async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
     stock: this.productoEditando.stock,
     precio: this.productoEditando.precio,
     medidas: this.productoEditando.medidas,
-    material: this.productoEditando.material
+    material: this.productoEditando.material,
+    estado: this.productoEditando.estado ?? true
   };
   formData.append('producto', new Blob([JSON.stringify(productoDto)], { type: 'application/json' }));
 

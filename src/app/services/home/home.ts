@@ -21,6 +21,6 @@ export class HomeService {
   }
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiProductos).pipe(map(lista => lista.map(resolverUrlsProducto)));
+    return this.http.get<Producto[]>(`${this.apiProductos}/habilitados`).pipe(map(lista => lista.map(resolverUrlsProducto)));
   }
 }

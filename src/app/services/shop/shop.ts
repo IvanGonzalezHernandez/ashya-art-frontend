@@ -16,7 +16,7 @@ export class ShopService {
   constructor(private http: HttpClient) {}
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiProductos).pipe(map(lista => lista.map(resolverUrlsProducto)));
+    return this.http.get<Producto[]>(`${this.apiProductos}/habilitados`).pipe(map(lista => lista.map(resolverUrlsProducto)));
   }
 
   getProductoPorId(id: number): Observable<Producto> {

@@ -26,6 +26,7 @@
             <th style="width: 8%;" class="d-none d-lg-table-cell">Materials</th>
             <th style="width: 6%;">Stock</th>
             <th style="width: 6%;">Price</th>
+            <th style="width: 10%;">Visibility</th>
             <th style="width: 12%;">Actions</th>
           </tr>
         </thead>
@@ -61,15 +62,23 @@
 
             <td class="text-nowrap">{{ producto.precio | currency:'EUR' }}</td>
 
+            <td class="text-nowrap">
+              <span
+                class="badge"
+                [ngClass]="producto.estado !== false ? 'bg-success' : 'bg-secondary'">
+                {{ producto.estado !== false ? 'Visible' : 'Hidden' }}
+              </span>
+            </td>
+
             <td>
               <div class="d-flex flex-column flex-md-row gap-2">
                 <button class="btn btn-primary btn-sm" (click)="editarProducto(producto)">Edit</button>
-                <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">Delete</button>
+                <!-- <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">Delete</button> -->
               </div>
             </td>
           </tr>
           <tr *ngIf="(productos || []).length === 0">
-            <td colspan="9" class="text-center text-muted py-3">No products yet.</td>
+            <td colspan="10" class="text-center text-muted py-3">No products yet.</td>
           </tr>
         </tbody>
       </table>
@@ -147,6 +156,15 @@
                 <input type="number" class="form-control" [(ngModel)]="productoEditando.precio" name="precio" />
               </div>
 
+              <!-- Visibility -->
+              <div class="col-md-6">
+                <label class="form-label">Visibility</label>
+                <select class="form-select" [(ngModel)]="productoEditando.estado" name="estado">
+                  <option [ngValue]="true">Visible</option>
+                  <option [ngValue]="false">Hidden</option>
+                </select>
+              </div>
+
               <!-- BLOQUE: GESTIÓN DE 5 SLOTS DE IMAGEN -->
               <div class="col-12">
                 <label class="form-label">Images (up to 5)</label>
@@ -220,9 +238,6 @@
   <!-- ENCABEZADO COMPRAS -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Product Purchases</h1>
-    <div class="d-flex gap-2 flex-wrap">
-      <button class="btn btn-success" (click)="crearCompra()">+ New Purchase</button>
-    </div>
   </div>
 
   <div *ngIf="loading" class="text-center my-4">
