@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Cliente } from '../../models/cliente.model';
 import { NewsletterService } from '../../services/newsletter/newsletter';
+import { SUPPORTED_LANGUAGES, LANGUAGE_FLAG_ICONS, SupportedLanguage, LanguageService } from '../../services/language/language';
 
 declare var bootstrap: any;
 
@@ -18,6 +19,9 @@ declare var bootstrap: any;
   styleUrls: ['./navbar.scss']
 })
 export class Navbar implements OnInit {
+  readonly languages = SUPPORTED_LANGUAGES;
+  readonly flagIcons = LANGUAGE_FLAG_ICONS;
+
   loadingCheckout = false;
   contadorCarrito: number = 0;
   itemsCarrito: ItemCarrito[] = [];
@@ -78,8 +82,13 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
 
   constructor(public carritoService: CarritoService,
     private newsletterService: NewsletterService,
-    private router: Router, 
-    private route: ActivatedRoute) {}
+    private router: Router,
+    private route: ActivatedRoute,
+    public languageService: LanguageService) {}
+
+  cambiarIdioma(lang: SupportedLanguage): void {
+    this.languageService.use(lang);
+  }
 
   ngOnInit(): void {
     // contador para el badge

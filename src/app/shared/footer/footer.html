@@ -105,23 +105,8 @@
 
     </div>
 
-    <!-- Selector de idioma -->
-    <div class="text-center mt-4">
-      <select
-        class="form-select form-select-sm d-inline-block w-auto"
-        [ngModel]="languageService.current"
-        (ngModelChange)="cambiarIdioma($event)"
-        name="idioma"
-        aria-label="Select language"
-      >
-        <option *ngFor="let lang of languages" [value]="lang">
-          {{ 'LANGUAGE.' + lang.toUpperCase() | translate }}
-        </option>
-      </select>
-    </div>
-
     <!-- Logo centrado -->
-    <div class="text-center mt-3">
+    <div class="text-center">
       <a routerLink="/">
         <img src="assets/logo/logo.png" alt="Logo" width="80" />
       </a>

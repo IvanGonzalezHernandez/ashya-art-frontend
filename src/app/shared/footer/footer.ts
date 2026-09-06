@@ -6,28 +6,17 @@ import { FeedbackModalComponent } from '../../shared/feedback-modal/feedback-mod
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
-import { TranslatePipe } from '@ngx-translate/core';
-import { SUPPORTED_LANGUAGES, SupportedLanguage, LanguageService } from '../../services/language/language';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, TranslatePipe],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule],
   templateUrl: './footer.html',
   styleUrls: ['./footer.scss']
 })
 export class Footer {
 
-  readonly languages = SUPPORTED_LANGUAGES;
-
-  constructor(
-    private newsletterService: NewsletterService,
-    public languageService: LanguageService
-  ) {}
-
-  cambiarIdioma(lang: SupportedLanguage): void {
-    this.languageService.use(lang);
-  }
+  constructor(private newsletterService: NewsletterService) {}
 
   // Email del input
   emailSuscripcion: string = '';

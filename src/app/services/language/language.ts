@@ -6,6 +6,13 @@ export type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
 
 export const DEFAULT_LANGUAGE: SupportedLanguage = 'en';
 
+/** Rutas a los iconos SVG de bandera (propios, no dependen de la fuente de emoji del sistema). */
+export const LANGUAGE_FLAG_ICONS: Record<SupportedLanguage, string> = {
+  en: 'assets/flags/gb.svg',
+  de: 'assets/flags/de.svg',
+  es: 'assets/flags/es.svg'
+};
+
 const STORAGE_KEY = 'ashya_lang';
 
 function isSupportedLanguage(value: string | null): value is SupportedLanguage {

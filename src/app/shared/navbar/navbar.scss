@@ -53,6 +53,29 @@
   transition: transform 0.25s ease;
 }
 
+.flag-icon {
+  width: 22px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.lang-toggle {
+  border: 1px solid #dee2e6;
+  background: #fff;
+}
+
+.lang-toggle-mobile {
+  border: 1px solid #dee2e6;
+  background: #fff;
+
+  &.active {
+    border-color: #3A9097;
+    background: rgba(58, 144, 151, 0.1);
+  }
+}
+
 .cart-hover {
     display: inline-block;
     transition: transform 0.25s ease;
