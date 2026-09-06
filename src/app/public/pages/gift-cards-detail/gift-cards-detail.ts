@@ -7,11 +7,12 @@ import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaReg
 import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-gift-cards-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, RevealAnimateDirective],
+  imports: [CommonModule, RouterModule, FormsModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './gift-cards-detail.html',
   styleUrls: ['./gift-cards-detail.scss']
 })

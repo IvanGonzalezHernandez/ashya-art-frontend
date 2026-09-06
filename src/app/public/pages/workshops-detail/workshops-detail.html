@@ -1,6 +1,6 @@
 <div *ngIf="loading" class="text-center my-4">
   <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-</div> 
+</div>
 
 <section class="py-5 bg-beige" *ngIf="cursoSeleccionado && !loading">
   <div class="container">
@@ -11,7 +11,7 @@
          [delay]="'0s'">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a routerLink="/workshops" class="text-decoration-none" style="color: #3E3028;">Workshops</a>
+          <a routerLink="/workshops" class="text-decoration-none" style="color: #3E3028;">{{ 'WORKSHOPS_DETAIL.BREADCRUMB' | translate }}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">{{ cursoSeleccionado.nombre }}</li>
       </ol>
@@ -60,7 +60,7 @@
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0.2s'">
         <div class="img-1x1 rounded-4 shadow d-flex align-items-center justify-content-center bg-light">
-          <span class="text-muted">No images available</span>
+          <span class="text-muted">{{ 'COMMON.NO_IMAGES_AVAILABLE' | translate }}</span>
         </div>
       </div>
 
@@ -69,7 +69,7 @@
            appRevealAnimate="animate__fadeInRight"
            [delay]="'0.3s'">
 
-        <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
+        <h3 class="fw-bold mb-3" style="color: #3E3028;">{{ 'COMMON.DESCRIPTION' | translate }}</h3>
 
         <div class="text-muted fs-5 flex-grow-1 desc-text">
           {{ cursoSeleccionado.descripcion }}
@@ -77,25 +77,25 @@
 
         <ul class="list-unstyled mt-4 detalles-curso">
           <li *ngIf="esValido(cursoSeleccionado.nivel)">
-            <strong>Level:</strong> {{ cursoSeleccionado.nivel }}
+            <strong>{{ 'WORKSHOPS_DETAIL.LEVEL' | translate }}</strong> {{ cursoSeleccionado.nivel }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.duracion)">
-            <strong>Duration:</strong> {{ cursoSeleccionado.duracion }}
+            <strong>{{ 'WORKSHOPS_DETAIL.DURATION' | translate }}</strong> {{ cursoSeleccionado.duracion }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.localizacion)">
-            <strong>Location:</strong> {{ cursoSeleccionado.localizacion }}
+            <strong>{{ 'WORKSHOPS_DETAIL.LOCATION' | translate }}</strong> {{ cursoSeleccionado.localizacion }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.piezas)">
-            <strong>Pieces Created:</strong> {{ cursoSeleccionado.piezas }}
+            <strong>{{ 'WORKSHOPS_DETAIL.PIECES_CREATED' | translate }}</strong> {{ cursoSeleccionado.piezas }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.materiales)">
-            <strong>Materials:</strong> {{ cursoSeleccionado.materiales }}
+            <strong>{{ 'WORKSHOPS_DETAIL.MATERIALS' | translate }}</strong> {{ cursoSeleccionado.materiales }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.plazasMaximas)">
-            <strong>Max. Seats:</strong> {{ cursoSeleccionado.plazasMaximas }}
+            <strong>{{ 'WORKSHOPS_DETAIL.MAX_SEATS' | translate }}</strong> {{ cursoSeleccionado.plazasMaximas }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.precio)">
-            <strong>Price:</strong> {{ cursoSeleccionado.precio }}€
+            <strong>{{ 'WORKSHOPS_DETAIL.PRICE' | translate }}</strong> {{ cursoSeleccionado.precio }}€
           </li>
         </ul>
 
@@ -108,21 +108,21 @@
          appRevealAnimate="animate__fadeInUp"
          [delay]="'0.4s'">
       <button class="btn text-white bg-azul px-4 py-2" (click)="openModal('modalFechasDisponibles')">
-        Book Workshop
+        {{ 'WORKSHOPS_DETAIL.BOOK_WORKSHOP' | translate }}
       </button>
     </div>
 
   </div>
 </section>
 
-  
-  
+
+
 <!-- Modal Bootstrap normal -->
 <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
-          <h5 class="modal-title" id="modalReservaLabel">Reserve Course</h5>
+          <h5 class="modal-title" id="modalReservaLabel">{{ 'WORKSHOPS_DETAIL.RESERVE_TITLE' | translate }}</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -130,53 +130,53 @@
 
             <!-- Tipo de clase -->
             <div class="mb-3">
-                <label class="form-label fw-bold">Class type</label>
+                <label class="form-label fw-bold">{{ 'WORKSHOPS_DETAIL.CLASS_TYPE' | translate }}</label>
                 <select class="form-select" [(ngModel)]="cliente.tipoClase" name="tipoClase">
-                <option value="" disabled selected>Select an option</option>
+                <option value="" disabled selected>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
                 <option *ngFor="let curso of cursos" [value]="curso.nombre">{{ curso.nombre }}</option>
                 </select>
             </div>
 
             <!-- Personas interesadas -->
             <div class="mb-3">
-                <label class="form-label fw-bold">How many people are interested?</label>
-                <input type="number" class="form-control" min="1" [(ngModel)]="cliente.personasInteresadas" name="personasInteresadas" placeholder="Number of people">
+                <label class="form-label fw-bold">{{ 'WORKSHOPS_DETAIL.HOW_MANY_PEOPLE' | translate }}</label>
+                <input type="number" class="form-control" min="1" [(ngModel)]="cliente.personasInteresadas" name="personasInteresadas" [placeholder]="'WORKSHOPS_DETAIL.PEOPLE_PLACEHOLDER' | translate">
             </div>
-  
+
             <!-- Your Name -->
             <div class="mb-3">
-              <label class="form-label fw-bold">Your Name</label>
-              <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" placeholder="Your full name">
+              <label class="form-label fw-bold">{{ 'COMMON.YOUR_NAME' | translate }}</label>
+              <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" [placeholder]="'COMMON.NAME_PLACEHOLDER' | translate">
             </div>
 
             <!-- Disponibilidad -->
             <div class="mb-3">
-                <label class="form-label fw-bold">Your availability for the class (on which days/hours are you available?)</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="cliente.disponibilidad" name="disponibilidad" placeholder="Write your available days/hours"></textarea>
+                <label class="form-label fw-bold">{{ 'WORKSHOPS_DETAIL.AVAILABILITY' | translate }}</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="cliente.disponibilidad" name="disponibilidad" [placeholder]="'WORKSHOPS_DETAIL.AVAILABILITY_PLACEHOLDER' | translate"></textarea>
             </div>
-  
+
             <!-- Your email address -->
             <div class="mb-3">
-              <label class="form-label fw-bold">Your email address</label>
-              <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" placeholder="email@example.com">
+              <label class="form-label fw-bold">{{ 'COMMON.YOUR_EMAIL' | translate }}</label>
+              <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" [placeholder]="'COMMON.EMAIL_PLACEHOLDER' | translate">
             </div>
-  
+
             <!-- Your phone number -->
             <div class="mb-3">
-              <label class="form-label fw-bold">Your phone number</label>
+              <label class="form-label fw-bold">{{ 'COMMON.YOUR_PHONE' | translate }}</label>
               <input type="text" class="form-control" [(ngModel)]="cliente.telefono" name="telefono" placeholder="+34 600 000 000">
             </div>
 
             <!-- Preguntas adicionales -->
             <div class="mb-3">
-                <label class="form-label fw-bold">Do you have any additional questions to me?</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="cliente.preguntasAdicionales" name="preguntasAdicionales" placeholder="Write here"></textarea>
+                <label class="form-label fw-bold">{{ 'COMMON.ADDITIONAL_QUESTIONS' | translate }}</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="cliente.preguntasAdicionales" name="preguntasAdicionales" [placeholder]="'COMMON.ADDITIONAL_QUESTIONS_PLACEHOLDER' | translate"></textarea>
             </div>
-  
+
           </form>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">{{ 'COMMON.CANCEL' | translate }}</button>
           <button
           type="button"
           class="btn bg-azul text-white"
@@ -184,11 +184,11 @@
           (click)="enviarSolicitudCurso()"
         >
           <ng-container *ngIf="!cursoLoading; else loadingCursoTpl">
-            Send
+            {{ 'COMMON.SEND' | translate }}
           </ng-container>
 
           <ng-template #loadingCursoTpl>
-            Processing...
+            {{ 'COMMON.PROCESSING' | translate }}
           </ng-template>
         </button>
 
@@ -196,15 +196,15 @@
       </div>
     </div>
   </div>
-  
-  
+
+
   <!-- Modal para mostrar fechas disponibles -->
   <div class="modal fade" id="modalFechasDisponibles" tabindex="-1" aria-labelledby="modalFechasDisponiblesLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content shadow-lg">
 
         <div class="modal-header bg-azul text-white">
-          <h5 class="modal-title" id="modalFechasDisponiblesLabel">Available Dates</h5>
+          <h5 class="modal-title" id="modalFechasDisponiblesLabel">{{ 'WORKSHOPS_DETAIL.AVAILABLE_DATES_TITLE' | translate }}</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
 
@@ -237,8 +237,8 @@
                   <!-- Available seats -->
                   <p class="mb-0"
                     [ngStyle]="(isPastDate(fecha.fecha) || fecha.plazasDisponibles === 0) ? {'opacity': '0.45'} : {}">
-                    Available:
-                    <strong>{{ fecha.plazasDisponibles }}</strong> seats
+                    {{ 'WORKSHOPS_DETAIL.AVAILABLE_LABEL' | translate }}
+                    <strong>{{ fecha.plazasDisponibles }}</strong> {{ 'WORKSHOPS_DETAIL.SEATS' | translate }}
                   </p>
 
                 </div>
@@ -246,7 +246,7 @@
                 <!-- DERECHA -->
                 <div class="d-flex align-items-center mt-3 mt-md-0">
 
-                  <label for="plazasSelect{{fecha.id}}" class="me-2 mb-0">Quantity:</label>
+                  <label for="plazasSelect{{fecha.id}}" class="me-2 mb-0">{{ 'COMMON.QUANTITY' | translate }}:</label>
 
                   <!-- Select disabled si NO se puede reservar -->
                   <select
@@ -274,7 +274,7 @@
                     *ngIf="fecha.plazasDisponibles > 0 && !isPastDate(fecha.fecha)"
                     class="btn bg-azul text-white"
                     (click)="agregarCursoAlCarrito(fecha)">
-                    Add to cart
+                    {{ 'COMMON.ADD_TO_CART' | translate }}
                   </button>
 
                 </div>
@@ -283,7 +283,7 @@
 
             <div class="text-center mt-4">
               <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">
-                Dates don't fit my schedule, send a message
+                {{ 'WORKSHOPS_DETAIL.SCHEDULE_DOESNT_FIT' | translate }}
               </button>
             </div>
 
@@ -291,10 +291,10 @@
 
           <!-- SIN FECHAS -->
           <ng-template #noFechas>
-            <p>There are no available dates for this course.</p>
+            <p>{{ 'WORKSHOPS_DETAIL.NO_DATES' | translate }}</p>
             <div class="text-center mt-4">
               <button class="btn btn-outline-primary" (click)="abrirModalReservaDesdeModalFechas()">
-                Request a course date
+                {{ 'WORKSHOPS_DETAIL.REQUEST_A_DATE' | translate }}
               </button>
             </div>
           </ng-template>
@@ -302,14 +302,14 @@
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">{{ 'COMMON.CLOSE' | translate }}</button>
         </div>
 
       </div>
     </div>
   </div>
 
-  <app-feedback-modal 
+  <app-feedback-modal
     *ngIf="mostrarFeedback"
     [status]="feedbackTipo"
     [title]="feedbackTitulo"

@@ -8,7 +8,7 @@
       <h2 class="m-0 fw-bold" [style.color]="brandColor">{{ current | date:'MMMM yyyy' }}</h2>
       <div class="d-flex gap-2">
         <button class="btn btn-sm btn-outline-secondary" (click)="prevMonth()">&laquo;</button>
-        <button class="btn btn-sm btn-outline-secondary" (click)="thisMonth()">Today</button>
+        <button class="btn btn-sm btn-outline-secondary" (click)="thisMonth()">{{ 'CALENDAR.TODAY' | translate }}</button>
         <button class="btn btn-sm btn-outline-secondary" (click)="nextMonth()">&raquo;</button>
       </div>
     </div>
@@ -22,14 +22,14 @@
          class="alert alert-danger"
          appRevealAnimate="animate__fadeInUp"
          [delay]="'0.05s'">
-      {{ error }}
+      {{ 'CALENDAR.ERROR_LOADING' | translate }}
     </div>
 
     <!-- Weekdays -->
     <div class="row g-2 text-center small fw-semibold text-muted mb-1"
          appRevealAnimate="animate__fadeInUp"
          [delay]="'0.1s'">
-      <div class="col" *ngFor="let w of ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']">{{ w }}</div>
+      <div class="col" *ngFor="let w of weekdayKeys">{{ ('CALENDAR.' + w) | translate }}</div>
     </div>
 
     <!-- Calendar grid -->
@@ -54,7 +54,7 @@
               <div class="sessions-pill"
                    *ngIf="cell.sessions.length"
                    [attr.aria-label]="cell.sessions.length + ' classes'">
-                {{ cell.sessions.length }} class{{ cell.sessions.length > 1 ? 'es' : '' }}
+                {{ cell.sessions.length }} {{ (cell.sessions.length > 1 ? 'CALENDAR.CLASSES' : 'CALENDAR.CLASS') | translate }}
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title" id="calendar_modalFechasDisponiblesLabel">
-          Available Dates
+          {{ 'CALENDAR.AVAILABLE_DATES_TITLE' | translate }}
           <span *ngIf="selectedDate">&nbsp;— {{ selectedDate | date:'EEEE, dd/MM/yyyy' }}</span>
         </h5>
         <button type="button"
@@ -128,7 +128,7 @@
 
                     <span class="meta-sep d-none d-md-inline">·</span>
 
-                    <span class="meta-item">Seats: <strong>{{ fecha.plazasDisponibles }}</strong></span>
+                    <span class="meta-item">{{ 'CALENDAR.SEATS' | translate }} <strong>{{ fecha.plazasDisponibles }}</strong></span>
                   </div>
                 </div>
               </div>
@@ -139,7 +139,7 @@
                   €{{ getPrecio(fecha) | number:'1.2-2' }}
                 </div>
 
-                <label for="plazasSelect{{fecha.id}}" class="visually-hidden">Quantity</label>
+                <label for="plazasSelect{{fecha.id}}" class="visually-hidden">{{ 'COMMON.QUANTITY' | translate }}</label>
 
                 <select id="plazasSelect{{fecha.id}}"
                         class="form-select form-select-sm calendar-modal-qty"
@@ -164,7 +164,7 @@
                         class="btn bg-azul text-white btn-sm calendar-modal-btn"
                         *ngIf="fecha.plazasDisponibles > 0 && !isPastDate(fecha.fecha)"
                         (click)="agregarCursoAlCarrito(fecha)">
-                  Add to cart
+                  {{ 'COMMON.ADD_TO_CART' | translate }}
                 </button>
               </div>
 
@@ -175,12 +175,12 @@
 
         <!-- Si no hay cursos -->
         <ng-template #noFechas>
-          <p class="mb-0">There are no available dates for this day.</p>
+          <p class="mb-0">{{ 'CALENDAR.NO_DATES_DAY' | translate }}</p>
         </ng-template>
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">{{ 'COMMON.CLOSE' | translate }}</button>
       </div>
     </div>
   </div>

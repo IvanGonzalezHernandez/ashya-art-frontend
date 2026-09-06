@@ -4,34 +4,32 @@
     <div class="row align-items-center">
 
       <!-- Texto a la izquierda en escritorio -->
-      <div 
+      <div
         class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0"
         appRevealAnimate="animate__fadeInLeft"
         [delay]="'0s'">
-        
-        <h2 class="fw-bold mb-4" style="color:#3E3028;">Firing Service</h2>
+
+        <h2 class="fw-bold mb-4" style="color:#3E3028;">{{ 'FIRING_SERVICES.TITLE' | translate }}</h2>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-          Do you create your own ceramics and need a place to fire them? At Ashya Art, 
-          you can either rent the entire kiln (80l or 90 l) or arrange for the firing of just a few pieces.
+          {{ 'FIRING_SERVICES.P1' | translate }}
         </p>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-        Please ensure you bring details about the clay and glazes used — without this information 
-        we cannot accept your ceramics, as they must be fired at the correct temperatures.
+        {{ 'FIRING_SERVICES.P2' | translate }}
         </p>
 
         <!-- Lista de precios -->
-        <h5 class="fw-bold mt-4" style="color:#3E3028;">Costs</h5>
+        <h5 class="fw-bold mt-4" style="color:#3E3028;">{{ 'FIRING_SERVICES.COSTS' | translate }}</h5>
         <ul class="list-unstyled text-muted fs-5" style="color:#6b5e52;">
-          <li>•	Renting Kiln (80l) for the bisk firing – 35€</li>
-          <li>•	Renting Kiln (90l) for the bisk firing – 40€</li>
-          <li>•	Renting Kiln (90l) or the glaze firing – 45€</li>
-          <li>• Firing one piece only (size of the cup) bisk or glaze – 4€</li>
+          <li>•	{{ 'FIRING_SERVICES.COST_1' | translate }}</li>
+          <li>•	{{ 'FIRING_SERVICES.COST_2' | translate }}</li>
+          <li>•	{{ 'FIRING_SERVICES.COST_3' | translate }}</li>
+          <li>• {{ 'FIRING_SERVICES.COST_4' | translate }}</li>
         </ul>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-          Make an appointment to bring your ceramics for firing.
+          {{ 'FIRING_SERVICES.P3' | translate }}
         </p>
 
         <!-- Botón escritorio -->
@@ -39,28 +37,28 @@
           type="button"
           class="btn bg-azul text-white mt-3 d-none d-lg-inline-block"
           (click)="abrirModalFiring()">
-          Book Now
+          {{ 'COMMON.BOOK_NOW' | translate }}
         </button>
 
       </div>
 
       <!-- Imagen a la derecha -->
-      <div 
+      <div
         class="col-lg-6 order-2 text-center"
         appRevealAnimate="animate__fadeInRight"
         [delay]="'0.1s'">
-        
-        <img 
-          src="assets/firing/firing.webp" 
+
+        <img
+          src="assets/firing/firing.webp"
           alt="Firing Service"
           class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
-        
+
         <!-- Botón móvil -->
         <button
           type="button"
           class="btn bg-azul text-white mt-3 d-lg-none d-inline-block"
           (click)="abrirModalFiring()">
-          Book Now
+          {{ 'COMMON.BOOK_NOW' | translate }}
         </button>
 
       </div>
@@ -81,7 +79,7 @@
     <div class="modal-content shadow-lg">
 
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title" id="modalFiringServiceLabel">Firing Service Reservation</h5>
+        <h5 class="modal-title" id="modalFiringServiceLabel">{{ 'FIRING_SERVICES.MODAL_TITLE' | translate }}</h5>
         <button
           type="button"
           class="btn-close btn-close-white"
@@ -95,7 +93,7 @@
 
           <!-- TYPE OF SERVICE -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Type of service *</label>
+            <label class="form-label fw-bold">{{ 'FIRING_SERVICES.TYPE_OF_SERVICE' | translate }}</label>
             <select
               class="form-select"
               [(ngModel)]="cliente.tipoServicio"
@@ -103,21 +101,21 @@
               required
               #tipoServicio="ngModel">
 
-              <option value="" disabled>Select an option</option>
-              <option value="kiln80_bisque">Renting Kiln (80L) – Bisque firing (35€)</option>
-              <option value="kiln90_bisque">Renting Kiln (90L) – Bisque firing (40€)</option>
-              <option value="kiln90_glaze">Renting Kiln (90L) – Glaze firing (45€)</option>
-              <option value="single_piece">Firing one piece (cup size) – Bisque or glaze (4€)</option>
+              <option value="" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+              <option value="kiln80_bisque">{{ 'FIRING_SERVICES.SERVICE_1' | translate }}</option>
+              <option value="kiln90_bisque">{{ 'FIRING_SERVICES.SERVICE_2' | translate }}</option>
+              <option value="kiln90_glaze">{{ 'FIRING_SERVICES.SERVICE_3' | translate }}</option>
+              <option value="single_piece">{{ 'FIRING_SERVICES.SERVICE_4' | translate }}</option>
             </select>
 
             <div class="text-danger" *ngIf="tipoServicio.invalid && tipoServicio.touched">
-              Please select an option.
+              {{ 'COMMON.VALIDATION.SELECT_OPTION_REQUIRED' | translate }}
             </div>
           </div>
 
           <!-- NUMBER OF PIECES -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Number of pieces *</label>
+            <label class="form-label fw-bold">{{ 'FIRING_SERVICES.NUMBER_OF_PIECES' | translate }}</label>
             <input
               type="number"
               class="form-control"
@@ -126,16 +124,16 @@
               name="numeroPiezas"
               required
               #numeroPiezas="ngModel"
-              placeholder="Number of pieces">
+              [placeholder]="'FIRING_SERVICES.PIECES_PLACEHOLDER' | translate">
 
             <div class="text-danger" *ngIf="numeroPiezas.invalid && numeroPiezas.touched">
-              Please enter at least 1 piece.
+              {{ 'COMMON.VALIDATION.PIECES_REQUIRED' | translate }}
             </div>
           </div>
 
           <!-- NAME -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your Name *</label>
+            <label class="form-label fw-bold">{{ 'COMMON.YOUR_NAME' | translate }} *</label>
             <input
               type="text"
               class="form-control"
@@ -143,16 +141,16 @@
               name="nombre"
               required
               #nombre="ngModel"
-              placeholder="Your full name">
+              [placeholder]="'COMMON.NAME_PLACEHOLDER' | translate">
 
             <div class="text-danger" *ngIf="nombre.invalid && nombre.touched">
-              Name is required.
+              {{ 'COMMON.VALIDATION.NAME_REQUIRED' | translate }}
             </div>
           </div>
 
           <!-- CLAY & GLAZE -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Clay and glaze details *</label>
+            <label class="form-label fw-bold">{{ 'FIRING_SERVICES.CLAY_GLAZE_DETAILS' | translate }}</label>
             <textarea
               class="form-control"
               rows="3"
@@ -161,16 +159,16 @@
               required
               minlength="10"
               #detallesMaterial="ngModel"
-              placeholder="Describe the clay and glazes used"></textarea>
+              [placeholder]="'FIRING_SERVICES.CLAY_GLAZE_PLACEHOLDER' | translate"></textarea>
 
             <div class="text-danger" *ngIf="detallesMaterial.invalid && detallesMaterial.touched">
-              Please provide details (min 10 characters).
+              {{ 'COMMON.VALIDATION.DETAILS_REQUIRED' | translate }}
             </div>
           </div>
 
           <!-- EMAIL -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your email address *</label>
+            <label class="form-label fw-bold">{{ 'COMMON.YOUR_EMAIL' | translate }} *</label>
             <input
               type="email"
               class="form-control"
@@ -179,19 +177,19 @@
               required
               email
               #email="ngModel"
-              placeholder="email@example.com">
+              [placeholder]="'COMMON.EMAIL_PLACEHOLDER' | translate">
 
             <div class="text-danger" *ngIf="email.errors?.['required'] && email.touched">
-              Email is required.
+              {{ 'COMMON.VALIDATION.EMAIL_REQUIRED' | translate }}
             </div>
             <div class="text-danger" *ngIf="email.errors?.['email'] && email.touched">
-              Please enter a valid email address.
+              {{ 'COMMON.VALIDATION.EMAIL_INVALID' | translate }}
             </div>
           </div>
 
           <!-- PHONE -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your phone number *</label>
+            <label class="form-label fw-bold">{{ 'COMMON.YOUR_PHONE' | translate }} *</label>
             <input
               type="text"
               class="form-control"
@@ -203,25 +201,25 @@
               placeholder="+49 600 000 000">
 
             <div class="text-danger" *ngIf="telefono.invalid && telefono.touched">
-              Enter your phone number (3–20 characters).
+              {{ 'COMMON.VALIDATION.PHONE_INVALID' | translate }}
             </div>
           </div>
 
           <!-- QUESTIONS -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Any additional questions?</label>
+            <label class="form-label fw-bold">{{ 'COMMON.ADDITIONAL_QUESTIONS' | translate }}</label>
             <textarea
               class="form-control"
               rows="3"
               [(ngModel)]="cliente.preguntasAdicionales"
               name="preguntasAdicionales"
-              placeholder="Write here"></textarea>
+              [placeholder]="'COMMON.ADDITIONAL_QUESTIONS_PLACEHOLDER' | translate"></textarea>
           </div>
 
           <!-- FOOTER -->
           <div class="modal-footer px-0">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              Cancel
+              {{ 'COMMON.CANCEL' | translate }}
             </button>
 
             <button
@@ -230,12 +228,12 @@
               [disabled]="firingForm.invalid || firingLoading">
 
               <ng-container *ngIf="!firingLoading; else loadingTpl">
-                Send
+                {{ 'COMMON.SEND' | translate }}
               </ng-container>
 
               <ng-template #loadingTpl>
                 <span class="me-2" aria-hidden="true"></span>
-                Processing...
+                {{ 'COMMON.PROCESSING' | translate }}
               </ng-template>
 
             </button>
@@ -262,7 +260,7 @@
 <app-valorations
   appRevealAnimate="animate__fadeInUp"
   [delay]="'0.1s'"
-  [title]="'Reviews from our workshops'"
+  [title]="'VALORATIONS.WORKSHOPS_TITLE' | translate"
   [itemsPerSlide]="4"
   [interval]="12000">
 </app-valorations>

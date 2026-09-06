@@ -5,12 +5,13 @@ import { FiringServiceService } from '../../../services/firing/firing';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { ValorationsComponent } from '../../../shared/valorations/valorations';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-firing-services',
-  imports: [CommonModule, FormsModule, FeedbackModalComponent, ValorationsComponent, RevealAnimateDirective],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, ValorationsComponent, RevealAnimateDirective, TranslatePipe],
   standalone: true,
   templateUrl: './firing-services.html',
   styleUrl: './firing-services.scss'
@@ -19,7 +20,7 @@ export class FiringServices {
 
   @ViewChild('firingForm') firingForm?: NgForm;
 
-  constructor(private firingServiceService: FiringServiceService) {}
+  constructor(private firingServiceService: FiringServiceService, private translate: TranslateService) {}
 
   firingLoading = false;
 
@@ -127,8 +128,8 @@ export class FiringServices {
           setTimeout(() => {
             this.mostrarModalFeedback(
               'success',
-              'Request sent',
-              'Thank you for submitting your firing service request. You will receive a confirmation email shortly, and one of our team members will contact you to coordinate the details.'
+              this.translate.instant('FIRING_SERVICES.FEEDBACK.REQUEST_SENT_TITLE'),
+              this.translate.instant('FIRING_SERVICES.FEEDBACK.REQUEST_SENT_MSG')
             );
           }, 0);
         });
@@ -142,8 +143,8 @@ export class FiringServices {
           setTimeout(() => {
             this.mostrarModalFeedback(
               'error',
-              'Request error',
-              'An error occurred while sending the firing request. Please try again later.'
+              this.translate.instant('FIRING_SERVICES.FEEDBACK.REQUEST_ERROR_TITLE'),
+              this.translate.instant('FIRING_SERVICES.FEEDBACK.REQUEST_ERROR_MSG')
             );
           }, 0);
         });

@@ -4,11 +4,12 @@ import { ShopService } from '../../../services/shop/shop';
 import { Producto } from '../../../models/producto.model';
 import { RouterModule } from '@angular/router';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealAnimateDirective],
+  imports: [CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './shop.html',
   styleUrls: ['./shop.scss']
 })

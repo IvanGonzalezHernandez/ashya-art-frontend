@@ -11,36 +11,35 @@
             style="color:#3E3028;"
             appRevealAnimate="animate__fadeInLeft"
             [delay]="'0s'">
-          Open Studio & Membership
+          {{ 'STUDIO.TITLE' | translate }}
         </h2>
 
         <p class="text-muted fs-5"
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0s'">
-          Welcome to Ashya’s Studio, your favourite place for all around ceramics. Located in Hamburg,
-          we offer a fun and welcoming environment for everyone, whether you’re a beginner
-          (who joined my ceramics course) or a pro with experience.
-          Come hang out, get creative, and make some amazing pottery with us!
+          {{ 'STUDIO.P1' | translate }}
         </p>
 
         <p class="text-muted fs-5"
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0s'">
-          Every <span class="fw-bold" style="color:#3E3028;">Monday, Wednesday and Friday</span> from
-          <span class="fw-bold" style="color:#3E3028;">6 PM to 9 PM</span> and
-          <span class="fw-bold" style="color:#3E3028;">Saturday</span> from
-          <span class="fw-bold" style="color:#3E3028;">4:30 PM to 8 PM</span>,
-          our studio is open for you to practice independently and enhance your skills.
-          Experiment with different types of clay and techniques in an inspiring community.
+          {{ 'STUDIO.P2_PRE' | translate }}
+          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_DAYS' | translate }}</span>
+          {{ 'STUDIO.P2_FROM' | translate }}
+          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_HOURS1' | translate }}</span>
+          {{ 'STUDIO.P2_AND' | translate }}
+          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_SATURDAY' | translate }}</span>
+          {{ 'STUDIO.P2_FROM' | translate }}
+          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_HOURS2' | translate }}</span>{{ 'STUDIO.P2_POST' | translate }}
         </p>
 
         <!-- Level -->
         <div class="mb-3"
              appRevealAnimate="animate__fadeInLeft"
              [delay]="'0s'">
-          <div class="fw-bold mb-1" style="color:#3E3028;">Level</div>
+          <div class="fw-bold mb-1" style="color:#3E3028;">{{ 'STUDIO.LEVEL_LABEL' | translate }}</div>
           <div class="text-muted fs-5">
-            Experienced level required (or completion of at least one hand-building class at Ashya Studio).
+            {{ 'STUDIO.LEVEL_TEXT' | translate }}
           </div>
         </div>
 
@@ -60,7 +59,7 @@
                       aria-expanded="true"
                       aria-controls="optOne"
                       style="background:#fff; color:#3E3028;">
-                1 time entry — <span class="fw-bold ms-2">30€ / person</span>
+                {{ 'STUDIO.OPT1_TITLE' | translate }} — <span class="fw-bold ms-2">{{ 'STUDIO.OPT1_PRICE' | translate }}</span>
               </button>
             </h2>
 
@@ -70,9 +69,9 @@
                  data-bs-parent="#openStudioOptions">
               <div class="accordion-body bg-white">
                 <ul class="list-unstyled mb-0 text-muted fs-5">
-                  <li class="mb-2"><strong style="color:#3E3028;">Included:</strong> tools and bisque firing</li>
-                  <li class="mb-2"><strong style="color:#3E3028;">Not included:</strong> glaze firing (see firing service for costs), clay and glazes (extra paid depending on the amount)</li>
-                  <li><strong style="color:#3E3028;">Clay cost:</strong> 4€ per 1kg</li>
+                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_INCLUDED' | translate }}</li>
+                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_NOT_INCLUDED' | translate }}</li>
+                  <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_CLAY_COST_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_CLAY_COST' | translate }}</li>
                 </ul>
               </div>
             </div>
@@ -88,7 +87,7 @@
                       aria-expanded="false"
                       aria-controls="optTwo"
                       style="background:#fff; color:#3E3028;">
-                10 times entry — <span class="fw-bold ms-2">200€ / person</span>
+                {{ 'STUDIO.OPT2_TITLE' | translate }} — <span class="fw-bold ms-2">{{ 'STUDIO.OPT2_PRICE' | translate }}</span>
               </button>
             </h2>
 
@@ -98,8 +97,8 @@
                  data-bs-parent="#openStudioOptions">
               <div class="accordion-body bg-white">
                 <ul class="list-unstyled mb-0 text-muted fs-5">
-                  <li class="mb-2"><strong style="color:#3E3028;">Included:</strong> tools, bisque firing, your own storage space</li>
-                  <li><strong style="color:#3E3028;">Not included:</strong> glaze firing (see firing service for costs), clay and glazes (extra paid depending on the amount)</li>
+                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT2_INCLUDED' | translate }}</li>
+                  <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT2_NOT_INCLUDED' | translate }}</li>
                 </ul>
               </div>
             </div>
@@ -115,8 +114,8 @@
                       aria-expanded="false"
                       aria-controls="optThree"
                       style="background:#fff; color:#3E3028;">
-                Unlimited entry — <span class="fw-bold ms-2">50€ / month</span>
-                <span class="text-muted ms-2">(min. 6 months)</span>
+                {{ 'STUDIO.OPT3_TITLE' | translate }} — <span class="fw-bold ms-2">{{ 'STUDIO.OPT3_PRICE' | translate }}</span>
+                <span class="text-muted ms-2">{{ 'STUDIO.OPT3_MIN_MONTHS' | translate }}</span>
               </button>
             </h2>
 
@@ -126,9 +125,9 @@
                  data-bs-parent="#openStudioOptions">
               <div class="accordion-body bg-white">
                 <ul class="list-unstyled mb-0 text-muted fs-5">
-                  <li class="mb-2"><strong style="color:#3E3028;">Minimum total:</strong> 300€ / person</li>
-                  <li class="mb-2"><strong style="color:#3E3028;">Included:</strong> tools, bisque firing, your own storage space</li>
-                  <li><strong style="color:#3E3028;">Not included:</strong> glaze firing (see firing service for costs), clay and glazes (extra paid depending on the amount)</li>
+                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT3_MIN_TOTAL_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_MIN_TOTAL' | translate }}</li>
+                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_INCLUDED' | translate }}</li>
+                  <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_NOT_INCLUDED' | translate }}</li>
                 </ul>
               </div>
             </div>
@@ -139,8 +138,7 @@
         <p class="text-muted fs-5 mb-3"
           appRevealAnimate="animate__fadeInLeft"
           [delay]="'0s'">
-          Interested in joining the Open Studio?
-          Send me a message using the form below and I’ll get back to you with all the details.
+          {{ 'STUDIO.CTA_TEXT' | translate }}
         </p>
 
         <!-- Botón desktop (igual que antes) -->
@@ -150,7 +148,7 @@
           appRevealAnimate="animate__fadeInLeft"
           [delay]="'0s'"
           (click)="abrirModalOpenStudio()">
-          Book Now
+          {{ 'COMMON.BOOK_NOW' | translate }}
         </button>
 
       </div>
@@ -172,7 +170,7 @@
           appRevealAnimate="animate__fadeInRight"
           [delay]="'0.2s'"
           (click)="abrirModalOpenStudio()">
-          Book Now
+          {{ 'COMMON.BOOK_NOW' | translate }}
         </button>
       </div>
 
@@ -186,9 +184,9 @@
   <div class="container">
 
     <div class="row text-center mb-3">
-      <h3 class="fw-bold mb-2" style="color: #3E3028; font-size: 1.75rem;">Find Us Here</h3>
+      <h3 class="fw-bold mb-2" style="color: #3E3028; font-size: 1.75rem;">{{ 'STUDIO.FIND_US_HERE' | translate }}</h3>
       <p class="text-muted fs-5" style="max-width: 600px; margin: 0 auto; color:#6b5e52;">
-        Ashya Art & Keramik Studio – Pinneberger Ch 74, 22523 Hamburg, Germany
+        {{ 'STUDIO.ADDRESS_LINE' | translate }}
       </p>
     </div>
 
@@ -224,22 +222,22 @@
     <div class="modal-content shadow-lg">
 
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title" id="modalOpenStudioLabel">Open Studio Request</h5>
+        <h5 class="modal-title" id="modalOpenStudioLabel">{{ 'STUDIO.MODAL_TITLE' | translate }}</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
 
         <p class="mb-2">
-          Tell us what you’re interested in and we’ll get back to you with more information.
+          {{ 'STUDIO.MODAL_INTRO' | translate }}
         </p>
 
         <div class="alert alert-light border rounded-3 mb-4" style="background: #fff;">
-          <div class="fw-bold" style="color:#3E3028;">Important</div>
+          <div class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.IMPORTANT' | translate }}</div>
           <div class="text-muted">
-            Experienced level required (or completion of at least one hand-building class at Ashya Studio).
+            {{ 'STUDIO.IMPORTANT_TEXT_1' | translate }}
             <br>
-            <strong>Not included:</strong> glaze firing, clay and glazes (extra paid). Clay cost: <strong>4€ / 1kg</strong>.
+            <strong>{{ 'STUDIO.IMPORTANT_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.IMPORTANT_TEXT_2' | translate }} <strong>{{ 'STUDIO.OPT1_CLAY_COST' | translate }}</strong>.
           </div>
         </div>
 
@@ -247,7 +245,7 @@
 
           <!-- Interest / Option -->
           <div class="mb-3">
-            <label class="form-label fw-bold">What are you interested in? *</label>
+            <label class="form-label fw-bold">{{ 'STUDIO.INTERESTED_IN' | translate }}</label>
             <select
               class="form-select"
               [(ngModel)]="reserva.option"
@@ -255,21 +253,21 @@
               required
               #option="ngModel">
 
-              <option value="" disabled>Select an option</option>
-              <option value="1_time_entry">1 time entry — 30€ / person</option>
-              <option value="10_times_entry">10 times entry — 200€ / person</option>
-              <option value="unlimited_entry">Unlimited entry — 50€ / month</option>
+              <option value="" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+              <option value="1_time_entry">{{ 'STUDIO.OPTION_1' | translate }}</option>
+              <option value="10_times_entry">{{ 'STUDIO.OPTION_2' | translate }}</option>
+              <option value="unlimited_entry">{{ 'STUDIO.OPTION_3' | translate }}</option>
             </select>
 
             <div class="text-danger small mt-1" *ngIf="option.invalid && option.touched">
-              Please select an option.
+              {{ 'COMMON.VALIDATION.SELECT_OPTION_REQUIRED' | translate }}
             </div>
 
           </div>
 
           <!-- Name -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your Name *</label>
+            <label class="form-label fw-bold">{{ 'COMMON.YOUR_NAME' | translate }} *</label>
             <input
               type="text"
               class="form-control"
@@ -277,16 +275,16 @@
               name="nombre"
               required
               #nombre="ngModel"
-              placeholder="Your full name">
+              [placeholder]="'COMMON.NAME_PLACEHOLDER' | translate">
 
             <div class="text-danger small mt-1" *ngIf="nombre.invalid && nombre.touched">
-              Name is required.
+              {{ 'COMMON.VALIDATION.NAME_REQUIRED' | translate }}
             </div>
           </div>
 
           <!-- Email -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your email address *</label>
+            <label class="form-label fw-bold">{{ 'COMMON.YOUR_EMAIL' | translate }} *</label>
             <input
               type="email"
               class="form-control"
@@ -295,20 +293,20 @@
               required
               email
               #email="ngModel"
-              placeholder="email@example.com">
+              [placeholder]="'COMMON.EMAIL_PLACEHOLDER' | translate">
 
             <div class="text-danger small mt-1" *ngIf="email.errors?.['required'] && email.touched">
-              Email is required.
+              {{ 'COMMON.VALIDATION.EMAIL_REQUIRED' | translate }}
             </div>
 
             <div class="text-danger small mt-1" *ngIf="email.errors?.['email'] && email.touched">
-              Please enter a valid email address.
+              {{ 'COMMON.VALIDATION.EMAIL_INVALID' | translate }}
             </div>
           </div>
 
           <!-- Phone (REQUIRED) -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Your phone number *</label>
+            <label class="form-label fw-bold">{{ 'COMMON.YOUR_PHONE' | translate }} *</label>
             <input
               type="text"
               class="form-control"
@@ -320,29 +318,29 @@
               placeholder="+49 600 000 000">
 
             <div class="text-danger small mt-1" *ngIf="telefono.errors?.['required'] && telefono.touched">
-              Phone number is required.
+              {{ 'COMMON.VALIDATION.PHONE_REQUIRED' | translate }}
             </div>
 
             <div class="text-danger small mt-1" *ngIf="telefono.errors?.['pattern'] && telefono.touched">
-              Enter a valid phone number (3–20 characters).
+              {{ 'COMMON.VALIDATION.PHONE_INVALID' | translate }}
             </div>
           </div>
 
 
           <!-- Message (optional) -->
           <div class="mb-3">
-            <label class="form-label fw-bold">Message (optional)</label>
+            <label class="form-label fw-bold">{{ 'STUDIO.MESSAGE_OPTIONAL' | translate }}</label>
             <textarea
               class="form-control"
               rows="3"
               [(ngModel)]="reserva.preguntasAdicionales"
               name="preguntasAdicionales"
-              placeholder="Tell us a bit about your experience level or any questions you may have."></textarea>
+              [placeholder]="'STUDIO.MESSAGE_PLACEHOLDER' | translate"></textarea>
           </div>
 
           <div class="modal-footer px-0">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              Cancel
+              {{ 'COMMON.CANCEL' | translate }}
             </button>
 
             <button
@@ -351,12 +349,12 @@
               [disabled]="openStudioForm.invalid || openStudioLoading">
 
               <ng-container *ngIf="!openStudioLoading; else loadingTpl">
-                Send
+                {{ 'COMMON.SEND' | translate }}
               </ng-container>
 
               <ng-template #loadingTpl>
                 <span class="me-2"></span>
-                Processing...
+                {{ 'COMMON.PROCESSING' | translate }}
               </ng-template>
 
             </button>
@@ -378,4 +376,3 @@
   [message]="feedbackMensaje"
   (closed)="cerrarFeedback()">
 </app-feedback-modal>
-

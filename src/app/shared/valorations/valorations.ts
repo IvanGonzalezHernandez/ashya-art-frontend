@@ -2,6 +2,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { Carousel } from 'bootstrap';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /** Modelo de la reseña */
 export interface Review {
@@ -43,7 +44,7 @@ export const REVIEWS_DATA: Review[] = [
 @Component({
   selector: 'app-valorations',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './valorations.html',
   styleUrls: ['./valorations.scss']
 })

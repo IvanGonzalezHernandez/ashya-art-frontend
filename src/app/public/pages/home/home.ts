@@ -9,13 +9,14 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, RevealAnimateDirective],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
 })
@@ -34,9 +35,10 @@ export class Home implements OnInit {
   productos: Producto[] = [];
 
   constructor(private homeService: HomeService,
-              private route: ActivatedRoute, 
+              private route: ActivatedRoute,
               private router: Router,
-              private carritoService: CarritoService) {}
+              private carritoService: CarritoService,
+              private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.loading = true;
@@ -53,14 +55,14 @@ export class Home implements OnInit {
 
           this.mostrarModalFeedback(
             'success',
-            'Payment successful',
-            'Thank you! Your payment was completed. You will receive an email shortly with your invoice and your order number.'
+            this.translate.instant('HOME.FEEDBACK.PAYMENT_SUCCESS_TITLE'),
+            this.translate.instant('HOME.FEEDBACK.PAYMENT_SUCCESS_MSG')
           );
         } else {
           this.mostrarModalFeedback(
             'error',
-            'Payment failed',
-            'Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +49 163 86 81 397.'
+            this.translate.instant('HOME.FEEDBACK.PAYMENT_ERROR_TITLE'),
+            this.translate.instant('HOME.FEEDBACK.PAYMENT_ERROR_MSG')
           );
         }
         // Limpiar query params para que no vuelva a abrir el modal al refrescar

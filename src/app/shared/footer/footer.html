@@ -5,20 +5,20 @@
 
       <!-- Ubicación -->
       <div class="col-md-3 mb-4 mb-md-0">
-        <h6 class="fw-bold text-uppercase">Location</h6>
+        <h6 class="fw-bold text-uppercase">{{ 'FOOTER.LOCATION' | translate }}</h6>
 
         <!-- Address -->
-        <a 
-          href="https://www.google.com/maps?q=Pinneberger+Ch+74,+22523+Hamburg,+Germany" 
-          target="_blank" 
-          rel="noopener" 
+        <a
+          href="https://www.google.com/maps?q=Pinneberger+Ch+74,+22523+Hamburg,+Germany"
+          target="_blank"
+          rel="noopener"
           class="text-dark text-decoration-none d-block hover-link mb-1"
         >
           Pinneberger Ch 74, 22523 Hamburg
         </a>
 
         <!-- Email -->
-        <a 
+        <a
           href="mailto:ashyaxart&#64;gmail.com"
           class="text-dark text-decoration-none d-block hover-link mb-1"
         >
@@ -26,7 +26,7 @@
         </a>
 
         <!-- Phone -->
-        <a 
+        <a
           href="https://wa.me/491638681397"
           target="_blank"
           rel="noopener"
@@ -39,14 +39,14 @@
 
       <!-- Información Ashya -->
       <div class="col-md-3 mb-4 mb-md-0">
-        <h6 class="fw-bold text-uppercase">Ashya</h6>
+        <h6 class="fw-bold text-uppercase">{{ 'FOOTER.ASHYA' | translate }}</h6>
 
         <p class="mb-1">
-          <a routerLink="/about" class="text-dark text-decoration-none">About Ashya</a>
+          <a routerLink="/about" class="text-dark text-decoration-none">{{ 'FOOTER.ABOUT_ASHYA' | translate }}</a>
         </p>
 
         <p class="mb-1">
-          <a routerLink="/studio" class="text-dark text-decoration-none">The Studio</a>
+          <a routerLink="/studio" class="text-dark text-decoration-none">{{ 'FOOTER.THE_STUDIO' | translate }}</a>
         </p>
 
         <div class="d-flex justify-content-center justify-content-md-start gap-3 mt-2">
@@ -58,46 +58,46 @@
 
       <!-- Ayuda / Legal -->
       <div class="col-md-3 mb-4 mb-md-0">
-        <h6 class="fw-bold text-uppercase">Help</h6>
+        <h6 class="fw-bold text-uppercase">{{ 'FOOTER.HELP' | translate }}</h6>
 
         <p class="mb-1">
-          <a routerLink="/conditions" class="text-dark text-decoration-none">Terms &amp; Conditions</a>
+          <a routerLink="/conditions" class="text-dark text-decoration-none">{{ 'FOOTER.TERMS' | translate }}</a>
         </p>
 
         <p class="mb-1">
-          <a routerLink="/imprint" class="text-dark text-decoration-none">Impressum / Imprint</a>
+          <a routerLink="/imprint" class="text-dark text-decoration-none">{{ 'FOOTER.IMPRESSUM' | translate }}</a>
         </p>
 
         <p class="mb-1">
-          <a routerLink="/privacy-policy" class="text-dark text-decoration-none">Privacy &amp; Cookies Policy</a>
+          <a routerLink="/privacy-policy" class="text-dark text-decoration-none">{{ 'FOOTER.PRIVACY' | translate }}</a>
         </p>
       </div>
 
       <!-- Newsletter -->
       <div class="col-md-3">
-        <h6 class="fw-bold text-uppercase">Newsletter</h6>
-        <p>Be the first to see our special offers.</p>
+        <h6 class="fw-bold text-uppercase">{{ 'FOOTER.NEWSLETTER' | translate }}</h6>
+        <p>{{ 'FOOTER.NEWSLETTER_TEXT' | translate }}</p>
 
         <form class="d-flex flex-column" (ngSubmit)="suscribirse()" #form="ngForm">
           <input
             type="email"
             name="email"
             [(ngModel)]="emailSuscripcion"
-            placeholder="Enter your email"
+            [placeholder]="'FOOTER.EMAIL_PLACEHOLDER' | translate"
             aria-label="Email for newsletter"
             class="form-control mb-2"
             required
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             class="btn mb-2 bg-azul text-white"
             [disabled]="form.invalid || newsletterLoading"
           >
             <ng-container *ngIf="!newsletterLoading; else loadingTpl">
-              Subscribe
+              {{ 'FOOTER.SUBSCRIBE' | translate }}
             </ng-container>
             <ng-template #loadingTpl>
-              Processing...
+              {{ 'FOOTER.PROCESSING' | translate }}
             </ng-template>
           </button>
         </form>
@@ -122,14 +122,14 @@
 
     <!-- Créditos -->
     <div class="text-center mt-4 small text-muted">
-      Designed by 
+      {{ 'FOOTER.DESIGNED_BY' | translate }}
       <a href="https://www.linkedin.com/in/alina-chis"
          target="_blank"
          rel="noopener"
          class="text-decoration-none text-muted fw-semibold d-inline-flex align-items-center gap-1">
         Alina Chiș <i class="bi bi-linkedin"></i>
       </a>
-      & Developed by 
+      &amp; {{ 'FOOTER.DEVELOPED_BY' | translate }}
       <a href="https://www.linkedin.com/in/iván-gonzález-hernández"
          target="_blank"
          rel="noopener"
@@ -140,7 +140,7 @@
 
     <!-- Copyright -->
     <div class="text-center mt-3 small text-muted">
-      © {{ currentYear }} Ashya Art. All rights reserved.
+      © {{ currentYear }} {{ 'FOOTER.RIGHTS_RESERVED' | translate }}
     </div>
 
   </div>

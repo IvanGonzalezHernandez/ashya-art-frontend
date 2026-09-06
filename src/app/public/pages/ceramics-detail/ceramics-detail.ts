@@ -7,11 +7,12 @@ import { RouterModule } from '@angular/router';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ceramics-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealAnimateDirective],
+  imports: [CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './ceramics-detail.html',
   styleUrls: ['./ceramics-detail.scss']
 })

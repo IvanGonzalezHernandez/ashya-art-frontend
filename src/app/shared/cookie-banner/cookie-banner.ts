@@ -1,27 +1,28 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsConsentService } from '../../services/analytics-consent/analytics-consent';
 
 @Component({
   selector: 'app-cookie-banner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   template: `
     <div class="cookie-wrap" *ngIf="show">
       <div class="cookie-card" role="dialog" aria-live="polite" aria-label="Cookie consent">
         <div class="cookie-text">
-          <h6 class="cookie-title">Cookies & Analytics</h6>
+          <h6 class="cookie-title">{{ 'COOKIE_BANNER.TITLE' | translate }}</h6>
           <p class="cookie-desc">
-            We use cookies to analyze website usage (Google Analytics). You can accept or reject their use.
+            {{ 'COOKIE_BANNER.DESC' | translate }}
           </p>
         </div>
 
         <div class="cookie-actions">
           <button type="button" class="btn cookie-btn cookie-btn-outline" (click)="reject()">
-            Reject
+            {{ 'COOKIE_BANNER.REJECT' | translate }}
           </button>
           <button type="button" class="btn cookie-btn cookie-btn-primary" (click)="accept()">
-            Accept
+            {{ 'COOKIE_BANNER.ACCEPT' | translate }}
           </button>
         </div>
       </div>

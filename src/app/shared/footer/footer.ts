@@ -6,17 +6,21 @@ import { FeedbackModalComponent } from '../../shared/feedback-modal/feedback-mod
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, TranslatePipe],
   templateUrl: './footer.html',
   styleUrls: ['./footer.scss']
 })
 export class Footer {
 
-  constructor(private newsletterService: NewsletterService) {}
+  constructor(
+    private newsletterService: NewsletterService,
+    private translate: TranslateService
+  ) {}
 
   // Email del input
   emailSuscripcion: string = '';
@@ -34,8 +38,8 @@ suscribirse() {
   if (!this.emailSuscripcion.trim()) {
     this.mostrarModalFeedback(
       'error',
-      'Invalid email',
-      'Please enter a valid email address to subscribe.'
+      this.translate.instant('FOOTER.INVALID_EMAIL_TITLE'),
+      this.translate.instant('FOOTER.INVALID_EMAIL_MSG')
     );
     return;
   }
@@ -62,8 +66,8 @@ suscribirse() {
         this.emailSuscripcion = '';
         this.mostrarModalFeedback(
           'success',
-          'Subscription confirmed',
-          'Thank you for subscribing! You will receive a confirmation email shortly.'
+          this.translate.instant('FOOTER.SUB_CONFIRMED_TITLE'),
+          this.translate.instant('FOOTER.SUB_CONFIRMED_MSG')
         );
       },
       error: err => {
@@ -79,12 +83,12 @@ suscribirse() {
           (backendMessage && backendMessage.toLowerCase().includes('already subscribed'));
 
         const message = yaSuscrito
-          ? 'This email is already registered.'
-          : 'An error occurred while subscribing. Please try again later.';
+          ? this.translate.instant('FOOTER.ALREADY_SUBSCRIBED_MSG')
+          : this.translate.instant('FOOTER.SUB_GENERIC_ERROR_MSG');
 
         this.mostrarModalFeedback(
           'error',
-          'Subscription error',
+          this.translate.instant('FOOTER.SUB_ERROR_TITLE'),
           message
         );
       }
@@ -92,7 +96,7 @@ suscribirse() {
     });
 }
 
-  
+
   // Mostrar el modal
   mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
     this.feedbackTipo = tipo;

@@ -8,13 +8,14 @@ import { FormsModule } from '@angular/forms';
 import { Cliente } from '../../models/cliente.model';
 import { NewsletterService } from '../../services/newsletter/newsletter';
 import { SUPPORTED_LANGUAGES, LANGUAGE_FLAG_ICONS, SupportedLanguage, LanguageService } from '../../services/language/language';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule, TranslatePipe],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
@@ -84,7 +85,8 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
     private newsletterService: NewsletterService,
     private router: Router,
     private route: ActivatedRoute,
-    public languageService: LanguageService) {}
+    public languageService: LanguageService,
+    private translate: TranslateService) {}
 
   cambiarIdioma(lang: SupportedLanguage): void {
     this.languageService.use(lang);
@@ -173,7 +175,7 @@ confirmarDatos() {
   if (this.loadingCheckout) return;
 
   if (!this.cliente.nombre || !this.cliente.apellido || !this.cliente.email) {
-    alert('Please complete the required fields: name, last name and email.');
+    alert(this.translate.instant('NAVBAR.REQUIRED_FIELDS_ALERT'));
     return;
   }
 
@@ -231,7 +233,7 @@ private continuarCheckout() {
       },
       error: (err) => {
         console.error('Error al crear sesión de Stripe', err);
-        alert('Error processing the payment');
+        alert(this.translate.instant('NAVBAR.PAYMENT_ERROR_ALERT'));
         this.loadingCheckout = false;
       }
     });
@@ -318,7 +320,7 @@ confirmarCompraGratis() {
 
   aplicarCodigo() {
     if (!this.codigoTarjeta.trim()) {
-      this.errorCodigo = 'Please, introduce a valid code';
+      this.errorCodigo = this.translate.instant('NAVBAR.GIFT_CODE_EMPTY');
       this.mensajeCodigo = '';
       return;
     }
@@ -330,12 +332,12 @@ confirmarCompraGratis() {
         const bruto = this.carritoService.obtenerTotal();
         const total = Math.max(0, bruto - this.descuentoAplicado);
         this.totalConDescuento = Number(total.toFixed(2));
-        this.mensajeCodigo = `Code applied: discount of ${this.descuentoAplicado}€`;
+        this.mensajeCodigo = this.translate.instant('NAVBAR.GIFT_CODE_APPLIED', { amount: this.descuentoAplicado });
         this.errorCodigo = '';
         this.actualizarAvisoPerdida(bruto);
       },
       error: () => {
-        this.errorCodigo = 'Invalid or already redeemed code';
+        this.errorCodigo = this.translate.instant('NAVBAR.GIFT_CODE_INVALID');
         this.mensajeCodigo = '';
         this.descuentoAplicado = 0;
         this.totalConDescuento = null;

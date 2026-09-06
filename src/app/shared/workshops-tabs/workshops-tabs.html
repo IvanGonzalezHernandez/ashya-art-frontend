@@ -7,7 +7,7 @@
            [routerLink]="['/workshops']"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
-          Workshops
+          {{ 'WORKSHOPS_TABS.WORKSHOPS' | translate }}
         </a>
       </li>
 
@@ -15,7 +15,7 @@
         <a class="nav-link"
            [routerLink]="['/workshops/firing-services']"
            routerLinkActive="active">
-          Firing Services
+          {{ 'WORKSHOPS_TABS.FIRING_SERVICES' | translate }}
         </a>
       </li>
 
@@ -23,7 +23,7 @@
         <a class="nav-link"
            [routerLink]="['/workshops/gift-cards']"
            routerLinkActive="active">
-          Gift Cards
+          {{ 'WORKSHOPS_TABS.GIFT_CARDS' | translate }}
         </a>
       </li>
     </ul>

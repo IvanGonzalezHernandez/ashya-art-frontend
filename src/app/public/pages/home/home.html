@@ -6,8 +6,8 @@
   <div class="position-absolute top-0 start-0 w-100 h-100"
        style="background-color: rgba(0, 0, 0, 0.3); z-index: 2;"></div>
   <div class="position-relative text-center text-white" style="z-index: 3;" appRevealAnimate="animate__zoomIn" [delay]="'0s'">
-    <h1 class="display-3">Welcome to Ashya Art</h1>
-    <p class="lead">Handcrafted ceramics with soul</p>
+    <h1 class="display-3">{{ 'HOME.HERO_TITLE' | translate }}</h1>
+    <p class="lead">{{ 'HOME.HERO_SUBTITLE' | translate }}</p>
   </div>
 </section>
 
@@ -18,21 +18,20 @@
 
       <!-- Texto con botón visible solo en escritorio -->
       <div class="col-lg-6 order-1 text-center text-lg-start mb-4 mb-lg-0" appRevealAnimate="animate__fadeInLeft" [delay]="'0.2s'">
-        <h2 class="fw-bold mb-4">About Ashya</h2>
+        <h2 class="fw-bold mb-4">{{ 'HOME.ABOUT_TITLE' | translate }}</h2>
         <p class="text-muted fs-5">
-          My name is Ashya, and I’m thrilled that you’ve found your way here.  
-          On this page, you will find out more about me and my studio, plus you will be able to purchase my ceramics, or book a course with me. 
+          {{ 'HOME.ABOUT_P1' | translate }}
         </p>
         <p class="text-muted fs-5">
-          Fancy getting creative? Make yourself at home here, and I hope to welcome you soon in my Atelier!  
+          {{ 'HOME.ABOUT_P2' | translate }}
         </p>
-        <a [routerLink]="['/about']" class="btn bg-azul text-white mt-3 d-none d-lg-inline-block">Learn More</a>
+        <a [routerLink]="['/about']" class="btn bg-azul text-white mt-3 d-none d-lg-inline-block">{{ 'COMMON.LEARN_MORE' | translate }}</a>
       </div>
 
       <!-- Imagen con botón visible solo en móvil debajo de la imagen -->
       <div class="col-lg-6 order-2 text-center" appRevealAnimate="animate__fadeInRight" [delay]="'0.3s'">
         <img src="assets/about/about.jpg" alt="About Ashya" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
-        <a [routerLink]="['/about']" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">Learn More</a>
+        <a [routerLink]="['/about']" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">{{ 'COMMON.LEARN_MORE' | translate }}</a>
       </div>
 
     </div>
@@ -46,11 +45,11 @@
     <!-- Título y subtítulo de cursos -->
     <h2 class="text-center mb-2 fw-bold" style="color: #3E3028;"
         appRevealAnimate="animate__fadeInUp" [delay]="'0s'">
-      Our Courses
+      {{ 'HOME.COURSES_TITLE' | translate }}
     </h2>
     <p class="text-center text-muted fs-5 mb-4" style="max-width: 700px; margin: 0 auto;"
        appRevealAnimate="animate__fadeInUp" [delay]="'0.1s'">
-      Learn pottery with hands-on workshops for beginners and enthusiasts.
+      {{ 'HOME.COURSES_SUBTITLE' | translate }}
     </p>
 
     <!-- Grid de cursos -->
@@ -78,7 +77,7 @@
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ curso.precio }}€</span>
               <a [routerLink]="['/workshops', curso.id]" class="btn bg-azul text-white px-3 py-2 rounded-3">
-                View Course
+                {{ 'COMMON.VIEW_COURSE' | translate }}
               </a>
             </div>
           </div>
@@ -104,24 +103,23 @@
       <div class="col-lg-6 mb-4 mb-lg-0 order-2 order-lg-1 text-center" appRevealAnimate="animate__fadeInLeft" [delay]="'0.1s'">
         <img src="assets/tarjeta-regalo/plantilla-tarjeta-regalo.webp" alt="Gift Cards" class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
         <!-- Botón solo visible en móvil, debajo de la imagen -->
-        <a [routerLink]="['/workshops', 'gift-cards']" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">Shop Gift Cards</a>
+        <a [routerLink]="['/workshops', 'gift-cards']" class="btn bg-azul text-white mt-3 d-lg-none d-inline-block">{{ 'HOME.SHOP_GIFT_CARDS' | translate }}</a>
       </div>
 
       <!-- Texto a la derecha -->
       <div class="col-lg-6 text-center text-lg-start order-1 order-lg-2" appRevealAnimate="animate__fadeInRight" [delay]="'0.2s'">
-        <h2 class="fw-bold mb-5">Gift Cards</h2>
+        <h2 class="fw-bold mb-5">{{ 'HOME.GIFT_CARDS_TITLE' | translate }}</h2>
         <p class="text-muted fs-5">
-          Give the gift of creativity with Ashya gift cards — personalized and perfect for any occasion.
+          {{ 'HOME.GIFT_CARDS_P1' | translate }}
         </p>
         <p class="text-muted fs-5">
-          Valid for 6 months from the date of purchase, our gift cards can be used for any products or workshops in our store.  
-          They’re ideal for gifting friends, family, or anyone who loves handcrafted ceramics and artistic experiences.
+          {{ 'HOME.GIFT_CARDS_P2' | translate }}
         </p>
         <p class="text-muted fs-5">
-          Customize your gift card with the recipient’s name to make it truly unique and memorable.
+          {{ 'HOME.GIFT_CARDS_P3' | translate }}
         </p>
         <!-- Botón solo visible en escritorio, junto al texto -->
-        <a [routerLink]="['/workshops', 'gift-cards']" class="btn bg-azul text-white mt-3 d-none d-lg-inline-block">Shop Gift Cards</a>
+        <a [routerLink]="['/workshops', 'gift-cards']" class="btn bg-azul text-white mt-3 d-none d-lg-inline-block">{{ 'HOME.SHOP_GIFT_CARDS' | translate }}</a>
       </div>
 
     </div>
@@ -133,11 +131,11 @@
   <div class="container">
     <h2 class="text-center mb-4 fw-bold" style="color: #3E3028;"
         appRevealAnimate="animate__fadeInUp" [delay]="'0s'">
-      Our Products
+      {{ 'HOME.PRODUCTS_TITLE' | translate }}
     </h2>
     <p class="text-center text-muted fs-5 mb-5" style="max-width: 700px; margin: 0 auto; color: #6b5e52;"
        appRevealAnimate="animate__fadeInUp" [delay]="'0.1s'">
-      Discover our handcrafted ceramics perfect for daily use or decoration.
+      {{ 'HOME.PRODUCTS_SUBTITLE' | translate }}
     </p>
 
     <div *ngIf="loading" class="text-center my-4">
@@ -148,7 +146,7 @@
       <div class="col" *ngFor="let producto of productos; index as i"
            appRevealAnimate="animate__zoomIn" [delay]="(i * 0.1) + 's'">
         <div class="card h-100 shadow-sm border-0 rounded-4" style="background-color: #fff;">
-          
+
           <div class="img-1x1 position-relative">
             <img [src]="producto.img1Url" [alt]="producto.nombre" class="img-1x1-content" loading="lazy" decoding="async">
           </div>
@@ -160,7 +158,7 @@
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ producto.precio }}€</span>
               <a [routerLink]="['/products', producto.id]" class="btn bg-azul text-white">
-                View Product
+                {{ 'COMMON.VIEW_PRODUCT' | translate }}
               </a>
             </div>
 
@@ -185,9 +183,9 @@
            style="width: 100px; height: 100px; object-fit: cover;">
       <div class="text-md-start">
         <h4 class="fw-bold mb-1" style="color: #3E3028;">&#64;ashya_art</h4>
-        <p class="text-muted fs-5 mb-2">Follow us for more behind the scenes and new pieces</p>
+        <p class="text-muted fs-5 mb-2">{{ 'HOME.INSTAGRAM_FOLLOW_TEXT' | translate }}</p>
         <a href="https://www.instagram.com/ashya_art" target="_blank" class="btn bg-azul text-white">
-          Follow us
+          {{ 'COMMON.FOLLOW_US' | translate }}
         </a>
       </div>
     </div>
@@ -212,7 +210,7 @@
           </a>
         </div>
       </ng-container>
-      
+
     </div>
 
   </div>

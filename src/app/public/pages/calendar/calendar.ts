@@ -11,6 +11,7 @@ import { CursoService } from '../../../services/curso/curso';
 import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 declare const bootstrap: any;
 
@@ -24,11 +25,13 @@ type DayCell = {
 @Component({
   selector: 'app-calendar-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, RevealAnimateDirective],
+  imports: [CommonModule, FormsModule, RouterModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './calendar.html',
   styleUrls: ['./calendar.scss']
 })
 export class Calendar implements OnInit {
+  readonly weekdayKeys = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
   // Estado general
   loading = false;
   error?: string;
@@ -54,7 +57,8 @@ export class Calendar implements OnInit {
   constructor(
     private cursoService: CursoService,
     private cursoFechaService: CursoFechaService,
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private translate: TranslateService
   ) {
     this.today.setHours(0, 0, 0, 0);
   }
@@ -66,7 +70,7 @@ export class Calendar implements OnInit {
       this.buildCalendar();
     } catch (e) {
       console.error(e);
-      this.error = 'Error loading calendar.';
+      this.error = this.translate.instant('CALENDAR.ERROR_LOADING');
     } finally {
       this.loading = false;
     }
@@ -308,7 +312,7 @@ private openModalFechasDisponibles(): void {
 
   getNombre(s: CursoFecha): string {
     const c = this.getCurso(s);
-    return c?.nombre ?? s.nombreCurso ?? 'Ceramics Workshop';
+    return c?.nombre ?? s.nombreCurso ?? this.translate.instant('CALENDAR.CEREMICS_WORKSHOP_FALLBACK');
   }
 
   getSubtitulo(s: CursoFecha): string {

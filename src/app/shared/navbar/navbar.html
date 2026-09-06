@@ -20,12 +20,12 @@
     <!-- Menú horizontal desktop -->
     <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
       <ul class="navbar-nav flex-row gap-4">
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">HOME</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/workshops" routerLinkActive="active">WORKSHOPS & SERVICES</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/calendar" routerLinkActive="active">CALENDAR</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/shop" routerLinkActive="active">SHOP</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/about" routerLinkActive="active">ABOUT ASHYA</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/studio" routerLinkActive="active">STUDIO & MEMBERSHIP</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAVBAR.HOME' | translate }}</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/workshops" routerLinkActive="active">{{ 'NAVBAR.WORKSHOPS_SERVICES' | translate }}</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/calendar" routerLinkActive="active">{{ 'NAVBAR.CALENDAR' | translate }}</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/shop" routerLinkActive="active">{{ 'NAVBAR.SHOP' | translate }}</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/about" routerLinkActive="active">{{ 'NAVBAR.ABOUT_ASHYA' | translate }}</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/studio" routerLinkActive="active">{{ 'NAVBAR.STUDIO_MEMBERSHIP' | translate }}</a></li>
       </ul>
     </div>
 
@@ -71,7 +71,7 @@
 <!-- Offcanvas menú lateral móvil -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+    <h5 class="offcanvas-title" id="offcanvasMenuLabel">{{ 'NAVBAR.MENU' | translate }}</h5>
     <a class="navbar-brand position-absolute start-50 translate-middle-x" routerLink="/">
       <img src="assets/logo/logo.png" alt="Logo" width="60" />
     </a>
@@ -79,12 +79,12 @@
   </div>
   <div class="offcanvas-body">
     <ul class="navbar-nav flex-column">
-      <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-bs-dismiss="offcanvas">HOME</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/workshops" routerLinkActive="active" data-bs-dismiss="offcanvas">WORKSHOPS & SERVICES</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/calendar" routerLinkActive="active" data-bs-dismiss="offcanvas">CALENDAR</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/shop" routerLinkActive="active" data-bs-dismiss="offcanvas">SHOP</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active" data-bs-dismiss="offcanvas">ABOUT ASHYA</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/studio" routerLinkActive="active" data-bs-dismiss="offcanvas">STUDIO & MEMBERSHIP</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-bs-dismiss="offcanvas">{{ 'NAVBAR.HOME' | translate }}</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/workshops" routerLinkActive="active" data-bs-dismiss="offcanvas">{{ 'NAVBAR.WORKSHOPS_SERVICES' | translate }}</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/calendar" routerLinkActive="active" data-bs-dismiss="offcanvas">{{ 'NAVBAR.CALENDAR' | translate }}</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/shop" routerLinkActive="active" data-bs-dismiss="offcanvas">{{ 'NAVBAR.SHOP' | translate }}</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active" data-bs-dismiss="offcanvas">{{ 'NAVBAR.ABOUT_ASHYA' | translate }}</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/studio" routerLinkActive="active" data-bs-dismiss="offcanvas">{{ 'NAVBAR.STUDIO_MEMBERSHIP' | translate }}</a></li>
     </ul>
 
     <!-- Selector de idioma (móvil) -->
@@ -106,7 +106,7 @@
 <!-- Offcanvas carrito -->
 <div class="offcanvas offcanvas-end bg-white" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasCarritoLabel">Your Cart</h5>
+    <h5 class="offcanvas-title" id="offcanvasCarritoLabel">{{ 'NAVBAR.YOUR_CART' | translate }}</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
@@ -126,7 +126,7 @@
         </div>
       </div>
       <ng-template #vacio>
-        <p>Your cart is empty.</p>
+        <p>{{ 'NAVBAR.CART_EMPTY' | translate }}</p>
       </ng-template>
     </div>
 
@@ -134,10 +134,10 @@
     <div class="mt-3 pt-3 border-top">
       <!-- Campo de tarjeta regalo -->
       <div class="mb-2">
-        <label for="codigoTarjeta" class="form-label">Gift card code</label>
+        <label for="codigoTarjeta" class="form-label">{{ 'NAVBAR.GIFT_CARD_CODE' | translate }}</label>
         <div class="input-group">
-          <input type="text" id="codigoTarjeta" class="form-control" [(ngModel)]="codigoTarjeta" placeholder="Introduce your code">
-          <button class="btn btn-outline-secondary" type="button" (click)="aplicarCodigo()">Apply</button>
+          <input type="text" id="codigoTarjeta" class="form-control" [(ngModel)]="codigoTarjeta" [placeholder]="'NAVBAR.GIFT_CARD_PLACEHOLDER' | translate">
+          <button class="btn btn-outline-secondary" type="button" (click)="aplicarCodigo()">{{ 'NAVBAR.APPLY' | translate }}</button>
         </div>
         <div *ngIf="mensajeCodigo" class="text-success d-flex align-items-center gap-2">
         <small class="flex-grow-1">{{ mensajeCodigo }}</small>
@@ -146,9 +146,9 @@
         <div *ngIf="avisoPerdidaTarjeta" class="gift-card-warning mt-2">
           <i class="bi bi-exclamation-triangle-fill"></i>
           <div>
-            <strong>You'll lose {{ avisoPerdidaTarjeta.perdido }}€ of this gift card</strong>
+            <strong>{{ 'NAVBAR.GIFT_CARD_LOSS_TITLE' | translate: { perdido: avisoPerdidaTarjeta.perdido } }}</strong>
             <p class="mb-0">
-              It's worth {{ avisoPerdidaTarjeta.valor }}€ but your order only comes to {{ avisoPerdidaTarjeta.total }}€ — any unused balance can't be saved for later. Add another course or a product to your cart to make the most of it.
+              {{ 'NAVBAR.GIFT_CARD_LOSS_BODY' | translate: { valor: avisoPerdidaTarjeta.valor, total: avisoPerdidaTarjeta.total } }}
             </p>
           </div>
         </div>
@@ -156,10 +156,10 @@
 
 <p class="mb-2">
   <strong *ngIf="totalConDescuento === null">
-    Total: {{ carritoService.obtenerTotal() }}€
+    {{ 'NAVBAR.TOTAL' | translate }}: {{ carritoService.obtenerTotal() }}€
   </strong>
   <strong *ngIf="totalConDescuento !== null">
-    Total:
+    {{ 'NAVBAR.TOTAL' | translate }}:
     <span class="text-decoration-line-through text-muted me-1">
       {{ carritoService.obtenerTotal() }}€
     </span>
@@ -169,28 +169,28 @@
 
 <div class="d-grid">
   <!-- Caso normal con Stripe -->
-  <button 
+  <button
     *ngIf="!esCompraGratis"
-    class="btn bg-azul text-white" 
-    (click)="abrirModalCliente()" 
+    class="btn bg-azul text-white"
+    (click)="abrirModalCliente()"
     [disabled]="itemsCarrito.length === 0">
-    Proceed to Checkout
+    {{ 'NAVBAR.PROCEED_TO_CHECKOUT' | translate }}
   </button>
 
   <!-- Caso especial: compra 100% cubierta -->
   <button *ngIf="esCompraGratis"
           class="btn bg-azul text-white"
           (click)="abrirModalCliente()">
-    Confirm Purchase
+    {{ 'NAVBAR.CONFIRM_PURCHASE' | translate }}
   </button>
 </div>
 
 <!-- Botón opcional del Atelier -->
 <div class="d-grid mt-2" *ngIf="soloCursos && !esCompraGratis">
-  <button class="btn btn-outline-secondary" (click)="pagarEnAtelier()" 
-  title="This option reserves your place. You can pay later directly at the Atelier."
+  <button class="btn btn-outline-secondary" (click)="pagarEnAtelier()"
+  [title]="'NAVBAR.PAY_AT_ATELIER_TITLE' | translate"
   >
-    Pay at the Atelier
+    {{ 'NAVBAR.PAY_AT_ATELIER' | translate }}
   </button>
 </div>
 
@@ -207,14 +207,13 @@
       <div class="processing-overlay" *ngIf="loadingCheckout">
         <div class="processing-box">
           <div class="spinner-border spinner-azul" role="status" aria-label="Processing"></div>
-          <div class="mt-2 fw-semibold">Processing…</div>
-          <div class="small text-muted">Please wait</div>
+          <div class="mt-2 fw-semibold">{{ 'COMMON.PROCESSING' | translate }}</div>
         </div>
       </div>
 
 
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title" id="modalClienteLabel">Your Information</h5>
+        <h5 class="modal-title" id="modalClienteLabel">{{ 'NAVBAR.YOUR_INFORMATION' | translate }}</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
@@ -222,31 +221,31 @@
         <form #clienteForm="ngForm" (ngSubmit)="confirmarDatos()" novalidate>
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">First Name *</label>
+              <label class="form-label">{{ 'NAVBAR.FIRST_NAME' | translate }} *</label>
               <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre" required #nombre="ngModel">
-              <div class="text-danger" *ngIf="nombre.invalid && nombre.touched">First name is required.</div>
+              <div class="text-danger" *ngIf="nombre.invalid && nombre.touched">{{ 'COMMON.VALIDATION.FIRST_NAME_REQUIRED' | translate }}</div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Last Name *</label>
+              <label class="form-label">{{ 'NAVBAR.LAST_NAME' | translate }} *</label>
               <input type="text" class="form-control" name="apellido" [(ngModel)]="cliente.apellido" required #apellido="ngModel">
-              <div class="text-danger" *ngIf="apellido.invalid && apellido.touched">Last name is required.</div>
+              <div class="text-danger" *ngIf="apellido.invalid && apellido.touched">{{ 'COMMON.VALIDATION.LAST_NAME_REQUIRED' | translate }}</div>
             </div>
           </div>
 
         <div class="mb-3">
-          <label class="form-label">Email *</label>
+          <label class="form-label">{{ 'NAVBAR.EMAIL' | translate }} *</label>
           <input type="email" class="form-control" name="email" [(ngModel)]="cliente.email" required email #email="ngModel">
           <!-- Error si está vacío -->
-          <div class="text-danger" *ngIf="email.errors?.['required'] && email.touched">Email is required.</div>
+          <div class="text-danger" *ngIf="email.errors?.['required'] && email.touched">{{ 'COMMON.VALIDATION.EMAIL_REQUIRED' | translate }}</div>
           <!-- Error si el formato es inválido -->
-          <div class="text-danger" *ngIf="email.errors?.['email'] && email.touched">Please enter a valid email address.</div>
+          <div class="text-danger" *ngIf="email.errors?.['email'] && email.touched">{{ 'COMMON.VALIDATION.EMAIL_INVALID' | translate }}</div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Phone *</label>
+          <label class="form-label">{{ 'NAVBAR.PHONE' | translate }} *</label>
 
           <div class="input-group">
-            
+
             <!-- SELECT DEL PREFIJO -->
             <select class="form-select" [(ngModel)]="prefijoSeleccionado" name="prefijo">
               <option *ngFor="let p of prefijos" [value]="p.codigo">
@@ -255,7 +254,7 @@
             </select>
 
             <!-- INPUT DEL NÚMERO -->
-            <input 
+            <input
               type="text"
               class="form-control"
               name="telefono"
@@ -268,37 +267,37 @@
           </div>
 
           <div class="text-danger" *ngIf="telefono.invalid && telefono.touched">
-            Enter your phone number (3–20 digits).
+            {{ 'COMMON.VALIDATION.PHONE_INVALID' | translate }}
           </div>
         </div>
 
 
           <div class="mb-3">
-            <label class="form-label">Street *</label>
+            <label class="form-label">{{ 'NAVBAR.STREET' | translate }} *</label>
             <input type="text" class="form-control" name="calle" [(ngModel)]="cliente.calle" required #calle="ngModel">
-            <div class="text-danger" *ngIf="calle.invalid && calle.touched">Street is required.</div>
+            <div class="text-danger" *ngIf="calle.invalid && calle.touched">{{ 'COMMON.VALIDATION.STREET_REQUIRED' | translate }}</div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Number *</label>
+              <label class="form-label">{{ 'NAVBAR.NUMBER' | translate }} *</label>
               <input type="text" class="form-control" name="numero" [(ngModel)]="cliente.numero" required pattern="^[0-9]+[A-Za-z]?$" #numero="ngModel">
-              <div class="text-danger" *ngIf="numero.invalid && numero.touched">Example: 12 or 12B.</div>
+              <div class="text-danger" *ngIf="numero.invalid && numero.touched">{{ 'COMMON.VALIDATION.NUMBER_EXAMPLE' | translate }}</div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Floor</label>
+              <label class="form-label">{{ 'NAVBAR.FLOOR' | translate }}</label>
               <input type="text" class="form-control" name="piso" [(ngModel)]="cliente.piso">
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">City *</label>
+              <label class="form-label">{{ 'NAVBAR.CITY' | translate }} *</label>
               <input type="text" class="form-control" name="ciudad" [(ngModel)]="cliente.ciudad" required #ciudad="ngModel">
-              <div class="text-danger" *ngIf="ciudad.invalid && ciudad.touched">City is required.</div>
+              <div class="text-danger" *ngIf="ciudad.invalid && ciudad.touched">{{ 'COMMON.VALIDATION.CITY_REQUIRED' | translate }}</div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Province</label>
+              <label class="form-label">{{ 'NAVBAR.PROVINCE' | translate }}</label>
               <input type="text"
                     class="form-control"
                     name="provincia"
@@ -309,16 +308,16 @@
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Country *</label>
+              <label class="form-label">{{ 'NAVBAR.COUNTRY' | translate }} *</label>
               <input type="text" class="form-control" name="pais" [(ngModel)]="cliente.pais" required #pais="ngModel">
-              <div class="text-danger" *ngIf="pais.invalid && pais.touched">Country is required.</div>
+              <div class="text-danger" *ngIf="pais.invalid && pais.touched">{{ 'COMMON.VALIDATION.COUNTRY_REQUIRED' | translate }}</div>
             </div>
 
 
             <div class="col-md-6 mb-3">
-              <label class="form-label">Postal Code *</label>
+              <label class="form-label">{{ 'NAVBAR.POSTAL_CODE' | translate }} *</label>
               <input type="text" class="form-control" name="codigoPostal" [(ngModel)]="cliente.codigoPostal" required pattern="^[0-9]{5}$" #codigoPostal="ngModel">
-              <div class="text-danger" *ngIf="codigoPostal.invalid && codigoPostal.touched">Must be exactly 5 digits.</div>
+              <div class="text-danger" *ngIf="codigoPostal.invalid && codigoPostal.touched">{{ 'COMMON.VALIDATION.POSTAL_CODE_INVALID' | translate }}</div>
             </div>
 
           </div>
@@ -326,7 +325,7 @@
                     <div class="form-check mb-2">
             <input class="form-check-input" type="checkbox" id="infoComercial" name="infoComercial" [(ngModel)]="cliente.infoComercial">
             <label class="form-check-label" for="infoComercial">
-              I want to receive commercial information and offers.
+              {{ 'NAVBAR.MARKETING_OPT_IN' | translate }}
             </label>
           </div>
 
@@ -342,25 +341,25 @@
             >
 
             <label class="form-check-label" for="privacidad">
-              I accept the
-              <a routerLink="/privacy-policy" target="_blank">privacy & cookies policy</a>
-              and the
-              <a routerLink="/conditions" target="_blank">terms & conditions</a>
+              {{ 'NAVBAR.PRIVACY_ACCEPT_PRE' | translate }}
+              <a routerLink="/privacy-policy" target="_blank">{{ 'NAVBAR.PRIVACY_POLICY_LINK' | translate }}</a>
+              {{ 'NAVBAR.AND' | translate }}
+              <a routerLink="/conditions" target="_blank">{{ 'NAVBAR.TERMS_LINK' | translate }}</a>
               *
             </label>
 
             <div class="text-danger" *ngIf="privacidad.invalid && privacidad.touched">
-              You must accept the privacy & cookies policy and the terms & conditions.
+              {{ 'COMMON.VALIDATION.PRIVACY_REQUIRED' | translate }}
             </div>
           </div>
 
 
           <div class="modal-footer px-0">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'COMMON.CANCEL' | translate }}</button>
             <button type="submit" class="btn bg-azul text-white"
             [disabled]="clienteForm.invalid || loadingCheckout">
-            <span *ngIf="!loadingCheckout">Continue</span>
-            <span *ngIf="loadingCheckout">Processing…</span>
+            <span *ngIf="!loadingCheckout">{{ 'COMMON.CONTINUE' | translate }}</span>
+            <span *ngIf="loadingCheckout">{{ 'COMMON.PROCESSING' | translate }}</span>
           </button>
 
           </div>
@@ -372,8 +371,8 @@
 </div>
 
 <!-- Spinner overlay -->
-<div *ngIf="loadingCheckout" 
-     class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50" 
+<div *ngIf="loadingCheckout"
+     class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50"
      style="z-index: 1055;">
   <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
 </div>

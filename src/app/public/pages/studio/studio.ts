@@ -4,12 +4,13 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { StudioService, OpenStudioSolicitudDto } from '../../../services/studio/studio';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-studio',
-  imports: [CommonModule, FormsModule, FeedbackModalComponent, RevealAnimateDirective],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, RevealAnimateDirective, TranslatePipe],
   templateUrl: './studio.html',
   styleUrl: './studio.scss'
 })
@@ -26,7 +27,7 @@ export class Studio {
 
   reserva: OpenStudioSolicitudDto = this.newReserva();
 
-  constructor(private studioService: StudioService) {}
+  constructor(private studioService: StudioService, private translate: TranslateService) {}
 
   // ================== Model helpers ==================
 
@@ -124,8 +125,8 @@ export class Studio {
           setTimeout(() => {
             this.mostrarModalFeedback(
               'success',
-              'Request sent',
-              'Thank you for your Open Studio reservation request. You will receive a confirmation email shortly, and we will contact you to coordinate the details.'
+              this.translate.instant('STUDIO.FEEDBACK.REQUEST_SENT_TITLE'),
+              this.translate.instant('STUDIO.FEEDBACK.REQUEST_SENT_MSG')
             );
           }, 0);
         });
@@ -139,8 +140,8 @@ export class Studio {
           setTimeout(() => {
             this.mostrarModalFeedback(
               'error',
-              'Request error',
-              'An error occurred while sending the Open Studio request. Please try again later.'
+              this.translate.instant('STUDIO.FEEDBACK.REQUEST_ERROR_TITLE'),
+              this.translate.instant('STUDIO.FEEDBACK.REQUEST_ERROR_MSG')
             );
           }, 0);
         });

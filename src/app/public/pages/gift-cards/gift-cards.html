@@ -8,16 +8,16 @@
         class="col-lg-6 order-2 order-lg-1 text-center"
         appRevealAnimate="animate__fadeInLeft"
         [delay]="'0.1s'">
-        <img 
-          src="assets/tarjeta-regalo/plantilla-tarjeta-regalo.webp" 
-          alt="Gift Cards" 
+        <img
+          src="assets/tarjeta-regalo/plantilla-tarjeta-regalo.webp"
+          alt="Gift Cards"
           class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
-        
+
         <!-- Botón móvil -->
-        <a 
+        <a
           [routerLink]="['/gift-cards']"
           class="btn bg-azul text-white mt-3 d-lg-none d-inline-block fs-5">
-          Shop Gift Cards
+          {{ 'GIFT_CARDS.SHOP_GIFT_CARDS' | translate }}
         </a>
       </div>
 
@@ -26,32 +26,28 @@
         class="col-lg-6 order-1 order-lg-2 text-center text-lg-start mb-4 mb-lg-0"
         appRevealAnimate="animate__fadeInRight"
         [delay]="'0s'">
-        
-        <h2 class="fw-bold mb-4" style="color:#3E3028;">Gift Cards</h2>
+
+        <h2 class="fw-bold mb-4" style="color:#3E3028;">{{ 'GIFT_CARDS.TITLE' | translate }}</h2>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-          Give the gift of creativity with Ashya gift cards — perfect for any occasion
-          and for anyone who loves handcrafted ceramics.
+          {{ 'GIFT_CARDS.P1' | translate }}
         </p>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-          You can personalize your gift card with the recipient’s name 
-          to make it truly unique and memorable.
+          {{ 'GIFT_CARDS.P2' | translate }}
         </p>
 
         <p class="text-muted fs-5" style="color:#6b5e52;">
-        Our gift cards are valid for 6 months from the date of purchase and can be used for any product or 
-        workshop in our store. Choose from different amounts and let your loved ones explore our world of 
-        handmade art.
+          {{ 'GIFT_CARDS.P3' | translate }}
         </p>
 
         <!-- Lista -->
-        <h5 class="fw-bold mt-4" style="color:#3E3028;">What’s Included</h5>
+        <h5 class="fw-bold mt-4" style="color:#3E3028;">{{ 'GIFT_CARDS.WHATS_INCLUDED' | translate }}</h5>
         <ul class="list-unstyled text-muted fs-5" style="color:#6b5e52;">
-          <li>•	Gift card personalized with the recipient’s name</li>
-          <li>•	Delivered instantly by email (ready to print out)</li>
-          <li>• Valid for workshops and ceramics</li>
-          <li>•	Valid for 6 months</li>
+          <li>•	{{ 'GIFT_CARDS.INCLUDED_1' | translate }}</li>
+          <li>•	{{ 'GIFT_CARDS.INCLUDED_2' | translate }}</li>
+          <li>• {{ 'GIFT_CARDS.INCLUDED_3' | translate }}</li>
+          <li>•	{{ 'GIFT_CARDS.INCLUDED_4' | translate }}</li>
         </ul>
       </div>
 
@@ -68,14 +64,14 @@
         style="color:#3E3028;"
         appRevealAnimate="animate__fadeInUp"
         [delay]="'0s'">
-      Choose Your Gift Card
+      {{ 'GIFT_CARDS.CHOOSE_TITLE' | translate }}
     </h2>
 
-    <p class="text-center text-muted mb-5 fs-5" 
+    <p class="text-center text-muted mb-5 fs-5"
        style="max-width: 700px; margin: 0 auto; color:#6b5e52;"
        appRevealAnimate="animate__fadeInUp"
        [delay]="'0.1s'">
-      Select the perfect gift card amount and surprise someone special.
+      {{ 'GIFT_CARDS.CHOOSE_SUBTITLE' | translate }}
     </p>
 
     <!-- Loading -->
@@ -90,7 +86,7 @@
         *ngFor="let card of tarjetas; index as i"
         appRevealAnimate="animate__fadeInUp"
         [delay]="(i * 0.1) + 's'">
-        
+
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
 
           <!-- Imagen -->
@@ -105,7 +101,7 @@
 
           <!-- Contenido -->
           <div class="card-body d-flex flex-column p-4">
-            <h5 class="card-title mb-1 fw-semibold text-dark text-truncate fs-5" 
+            <h5 class="card-title mb-1 fw-semibold text-dark text-truncate fs-5"
                 [title]="card.nombre">
               {{ card.nombre }}
             </h5>
@@ -119,7 +115,7 @@
                 [routerLink]="['/gift-cards', card.id]"
                 class="btn bg-azul text-white px-3 fs-6"
                 [attr.aria-label]="'View gift card ' + card.nombre">
-                View details
+                {{ 'COMMON.VIEW_DETAILS' | translate }}
               </a>
             </div>
           </div>
@@ -136,7 +132,7 @@
 <app-valorations
   appRevealAnimate="animate__fadeInUp"
   [delay]="'0.1s'"
-  [title]="'Reviews from our workshops'"
+  [title]="'VALORATIONS.WORKSHOPS_TITLE' | translate"
   [itemsPerSlide]="4"
   [interval]="12000">
 </app-valorations>

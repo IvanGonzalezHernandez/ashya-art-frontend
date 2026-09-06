@@ -2,73 +2,75 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MaintenanceService } from '../../../services/maintenance/maintenance';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   template: `
     <section class="wrap">
       <div class="card">
         <h1 class="title">Ashya Art</h1>
-        <p class="subtitle">We are currently updating the website.</p>
+        <p class="subtitle">{{ 'MAINTENANCE.SUBTITLE' | translate }}</p>
 
         <div class="box">
-          <label class="label">Access password</label>
+          <label class="label">{{ 'MAINTENANCE.ACCESS_PASSWORD' | translate }}</label>
           <input
             class="input"
             type="password"
             [(ngModel)]="pass"
             (keydown.enter)="enter()"
-            placeholder="Enter password" />
+            [placeholder]="'MAINTENANCE.PLACEHOLDER' | translate" />
 
-          <button class="btn" type="button" (click)="enter()">Enter</button>
+          <button class="btn" type="button" (click)="enter()">{{ 'MAINTENANCE.ENTER' | translate }}</button>
 
-          <p class="error" *ngIf="error">Incorrect password</p>
+          <p class="error" *ngIf="error">{{ 'MAINTENANCE.INCORRECT_PASSWORD' | translate }}</p>
         </div>
       </div>
     </section>
   `,
-  styles: [`
-    .wrap{
-      min-height: 100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 24px;
-      background: #EFE5DB;
-    }
-    .card{
-      width: min(460px, 100%);
-      background: #F9F3EC;
-      border-radius: 26px;
-      padding: 28px;
-      box-shadow: 0 25px 60px rgba(0,0,0,.12);
-      text-align:center;
-      border: 1px solid rgba(62,48,40,.12);
-    }
-    .title{ margin:0; color:#3E3028; font-weight:800; }
-    .subtitle{ margin:10px 0 18px; color:#6b5e52; font-size:15px; }
-    .box{ display:flex; flex-direction:column; gap:12px; }
-    .label{ text-align:left; font-weight:600; color:#3E3028; font-size:13px; }
-    .input{
-      border-radius: 14px;
-      padding: 12px 14px;
-      border: 1px solid rgba(62,48,40,.25);
-      outline: none;
-      font-size: 14px;
-    }
-    .btn{
-      border: none;
-      border-radius: 999px;
-      padding: 12px 18px;
-      background: #3A9097;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .error{ margin:0; color:#b42318; font-size:13px; }
-  `]
+styles: [`
+  /* Overlay suave, nada intrusivo */
+  .wrap{
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
+    background: #EFE5DB;
+  }
+  .card{
+    width: min(460px, 100%);
+    background: #F9F3EC;
+    border-radius: 26px;
+    padding: 28px;
+    box-shadow: 0 25px 60px rgba(0,0,0,.12);
+    text-align:center;
+    border: 1px solid rgba(62,48,40,.12);
+  }
+  .title{ margin:0; color:#3E3028; font-weight:800; }
+  .subtitle{ margin:10px 0 18px; color:#6b5e52; font-size:15px; }
+  .box{ display:flex; flex-direction:column; gap:12px; }
+  .label{ text-align:left; font-weight:600; color:#3E3028; font-size:13px; }
+  .input{
+    border-radius: 14px;
+    padding: 12px 14px;
+    border: 1px solid rgba(62,48,40,.25);
+    outline: none;
+    font-size: 14px;
+  }
+  .btn{
+    border: none;
+    border-radius: 999px;
+    padding: 12px 18px;
+    background: #3A9097;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .error{ margin:0; color:#b42318; font-size:13px; }
+`]
 })
 export class MaintenanceComponent {
   pass = '';

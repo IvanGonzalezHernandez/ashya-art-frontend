@@ -5,11 +5,12 @@ import { RouterModule } from '@angular/router';
 import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaRegalo';
 import { ValorationsComponent } from '../../../shared/valorations/valorations';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-gift-cards',
   standalone: true,
-  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective],
+  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe],
   templateUrl: './gift-cards.html',
   styleUrls: ['./gift-cards.scss']
 })

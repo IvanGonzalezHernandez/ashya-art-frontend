@@ -1,6 +1,6 @@
 <div *ngIf="loading" class="text-center my-4">
   <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
-</div> 
+</div>
 
 <section class="py-5 bg-beige" *ngIf="productoSeleccionado && !loading">
   <div class="container">
@@ -15,7 +15,7 @@
           <a routerLink="/shop"
              class="text-decoration-none"
              style="color: #3E3028;">
-            Shop
+            {{ 'CERAMICS_DETAIL.BREADCRUMB' | translate }}
           </a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
@@ -71,7 +71,7 @@
              appRevealAnimate="animate__fadeInLeft"
              [delay]="'0.2s'">
           <div class="img-1x1 rounded-4 shadow d-flex align-items-center justify-content-center bg-light">
-            <span class="text-muted">No images available</span>
+            <span class="text-muted">{{ 'COMMON.NO_IMAGES_AVAILABLE' | translate }}</span>
           </div>
         </div>
       </ng-template>
@@ -80,7 +80,7 @@
       <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start text-center text-lg-start"
            appRevealAnimate="animate__fadeInRight"
            [delay]="'0.3s'">
-        <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
+        <h3 class="fw-bold mb-3" style="color: #3E3028;">{{ 'COMMON.DESCRIPTION' | translate }}</h3>
 
         <div class="text-muted fs-5 flex-grow-1" style="overflow-wrap: break-word;">
           <p>{{ productoSeleccionado.descripcion }}</p>
@@ -88,16 +88,16 @@
 
         <ul class="list-unstyled mt-4 fs-5 text-muted" style="color:#6b5e52;">
           <li>
-            <strong>Price:</strong> {{ productoSeleccionado.precio }} €
+            <strong>{{ 'COMMON.PRICE' | translate }}:</strong> {{ productoSeleccionado.precio }} €
           </li>
           <li>
-            <strong>Stock:</strong> {{ productoSeleccionado.stock }}
+            <strong>{{ 'CERAMICS_DETAIL.STOCK' | translate }}</strong> {{ productoSeleccionado.stock }}
           </li>
           <li>
-            <strong>Material:</strong> {{ productoSeleccionado.material || 'Not specified' }}
+            <strong>{{ 'CERAMICS_DETAIL.MATERIAL' | translate }}</strong> {{ productoSeleccionado.material || ('COMMON.NOT_SPECIFIED' | translate) }}
           </li>
           <li>
-            <strong>Measurements:</strong> {{ productoSeleccionado.medidas || 'Not specified' }}
+            <strong>{{ 'CERAMICS_DETAIL.MEASUREMENTS' | translate }}</strong> {{ productoSeleccionado.medidas || ('COMMON.NOT_SPECIFIED' | translate) }}
           </li>
         </ul>
       </div>
@@ -110,7 +110,7 @@
          [delay]="'0.4s'">
       <button class="btn text-white bg-azul px-4 py-2"
               (click)="agregarProductoAlCarrito(productoSeleccionado)">
-        Add to the cart
+        {{ 'CERAMICS_DETAIL.ADD_TO_CART' | translate }}
       </button>
     </div>
 

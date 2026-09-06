@@ -15,7 +15,7 @@
           <a routerLink="/workshops/gift-cards"
              class="text-decoration-none"
              style="color: #3E3028;">
-            Gift Cards
+            {{ 'GIFT_CARDS_DETAIL.BREADCRUMB' | translate }}
           </a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
@@ -54,18 +54,16 @@
            appRevealAnimate="animate__fadeInRight"
            [delay]="'0.3s'">
 
-        <h3 class="fw-bold mb-3" style="color: #3E3028;">Description</h3>
+        <h3 class="fw-bold mb-3" style="color: #3E3028;">{{ 'COMMON.DESCRIPTION' | translate }}</h3>
 
         <p class="text-muted fs-5 mb-3 desc-gift">
-          This gift card can be redeemed through the Ashya Art online shop.  
-          It can be used during checkout to book any available workshop or to purchase
-          handmade ceramic pieces from our collection.
+          {{ 'GIFT_CARDS_DETAIL.DESC' | translate }}
         </p>
-        
+
 
         <ul class="list-unstyled mt-4 detalles-curso">
           <li>
-            <strong>Price:</strong> {{ tarjetaSeleccionada.precio }} €
+            <strong>{{ 'COMMON.PRICE' | translate }}:</strong> {{ tarjetaSeleccionada.precio }} €
           </li>
         </ul>
 
@@ -80,7 +78,7 @@
       <button class="btn text-white bg-azul px-4 py-2"
               data-bs-toggle="modal"
               data-bs-target="#modalDestinatario">
-        Add to cart
+        {{ 'GIFT_CARDS_DETAIL.ADD_TO_CART' | translate }}
       </button>
     </div>
 
@@ -95,10 +93,10 @@
      aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
-      
+
       <!-- Header -->
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title" id="modalDestinatarioLabel">Gift Card – Recipient</h5>
+        <h5 class="modal-title" id="modalDestinatarioLabel">{{ 'GIFT_CARDS_DETAIL.MODAL_TITLE' | translate }}</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
 
@@ -106,11 +104,11 @@
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label class="form-label fw-bold">Recipient name</label>
+            <label class="form-label fw-bold">{{ 'GIFT_CARDS_DETAIL.RECIPIENT_NAME' | translate }}</label>
             <small class="text-muted d-block mb-2">
-              Please enter the name of the person who will receive this gift card.
+              {{ 'GIFT_CARDS_DETAIL.RECIPIENT_HINT' | translate }}
             </small>
-            
+
             <input type="text"
                    class="form-control"
                    [(ngModel)]="destinatario"
@@ -123,13 +121,13 @@
 
       <!-- Footer -->
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        
+        <button class="btn btn-secondary" data-bs-dismiss="modal">{{ 'COMMON.CANCEL' | translate }}</button>
+
         <button class="btn bg-azul text-white"
                 [disabled]="!(destinatario && destinatario.trim().length >= 2)"
                 (click)="confirmarDestinatario()"
                 data-bs-dismiss="modal">
-          Add to cart
+          {{ 'GIFT_CARDS_DETAIL.ADD_TO_CART' | translate }}
         </button>
       </div>
 

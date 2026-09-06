@@ -12,13 +12,14 @@ import { RouterModule } from '@angular/router';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-workshops-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, FeedbackModalComponent, RouterModule, RevealAnimateDirective],
+  imports: [CommonModule, FormsModule, FeedbackModalComponent, RouterModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './workshops-detail.html',
   styleUrls: ['./workshops-detail.scss']
 })
@@ -66,7 +67,8 @@ export class WorkshopsDetail {
     private cursoService: CursoService,
     private cursoFechaService: CursoFechaService,
     private route: ActivatedRoute,
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private translate: TranslateService
   ) {
     this.today.setHours(0, 0, 0, 0);
   }
@@ -232,8 +234,8 @@ export class WorkshopsDetail {
         try {
           this.mostrarModalFeedback(
             'success',
-            'Request sent',
-            'Thank you for submitting your request. You will receive a confirmation email shortly, and one of our team members will contact you as soon as possible to coordinate the details.'
+            this.translate.instant('WORKSHOPS_DETAIL.FEEDBACK.REQUEST_SENT_TITLE'),
+            this.translate.instant('WORKSHOPS_DETAIL.FEEDBACK.REQUEST_SENT_MSG')
           );
           await this.closeAnyOverlay();
         } finally {
@@ -246,8 +248,8 @@ export class WorkshopsDetail {
           await this.closeAnyOverlay();
           this.mostrarModalFeedback(
             'error',
-            'Request error',
-            'An error occurred while sending the request. Please try again later.'
+            this.translate.instant('WORKSHOPS_DETAIL.FEEDBACK.REQUEST_ERROR_TITLE'),
+            this.translate.instant('WORKSHOPS_DETAIL.FEEDBACK.REQUEST_ERROR_MSG')
           );
         } finally {
           this.cursoLoading = false;
