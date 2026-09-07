@@ -40,6 +40,11 @@ export class Navbar implements OnInit {
   // Si más adelante diferencias métodos de pago
   metodoPago: 'stripe' | 'atelier' | null = null;
 
+  // Recogida en el taller en lugar de envío (solo relevante si hay algún producto en el
+  // carrito). El método de envío en sí (PICKUP/GERMANY/EU) se autocalcula: ver getter
+  // `metodoEnvio` más abajo, a partir de este flag y del país elegido por el cliente.
+  recogerEnTienda = false;
+
   // Datos cliente
   cliente: Cliente = {
     id: 0,
@@ -82,6 +87,16 @@ export class Navbar implements OnInit {
 
 prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
 
+// Países de la Unión Europea (incluye Alemania): lista fija del desplegable "Country",
+// siempre la misma haya o no producto en el carrito, ya que por ahora solo se opera en
+// Alemania y el resto de la UE.
+readonly paisesUE = [
+  'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic', 'Denmark',
+  'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Ireland', 'Italy',
+  'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Netherlands', 'Poland', 'Portugal',
+  'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden'
+];
+
 
   constructor(public carritoService: CarritoService,
     private newsletterService: NewsletterService,
@@ -121,9 +136,14 @@ prefijoSeleccionado = '+49'; // 🇩🇪 Alemania por defecto
         this.abrirCarrito();
       }
 
+      // Si ya no hay ningún producto, el método de entrega deja de aplicar
+      if (!this.hayProducto) {
+        this.recogerEnTienda = false;
+      }
+
       // Si hay un descuento aplicado, re-calcular el total con el nuevo total bruto
       if (this.descuentoAplicado > 0) {
-        const bruto = this.carritoService.obtenerTotal();
+        const bruto = this.carritoService.obtenerTotal() + this.costeEnvio;
         const nuevoTotal = Math.max(0, bruto - this.descuentoAplicado);
         this.totalConDescuento = Number(nuevoTotal.toFixed(2));
       } else {
@@ -193,6 +213,11 @@ confirmarDatos() {
     return;
   }
 
+  if (this.hayProducto && !this.metodoEnvio) {
+    alert(this.translate.instant('NAVBAR.DELIVERY_METHOD_REQUIRED'));
+    return;
+  }
+
   this.loadingCheckout = true;
 
   const tel = (this.cliente.telefono || '').trim();
@@ -231,7 +256,7 @@ private continuarCheckout() {
 
   // ======== Stripe ========
   pagarConStripe() {
-    const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
+    const total = this.totalConDescuento ?? (this.carritoService.obtenerTotal() + this.costeEnvio);
 
     // Cerrar offcanvas del carrito
     const offcanvasEl = document.getElementById('offcanvasCarrito');
@@ -240,8 +265,8 @@ private continuarCheckout() {
       bsOffcanvas?.hide();
     }
 
-    // Crear sesión de Stripe enviando carrito + cliente + total descontado + código
-    this.carritoService.crearSesionStripe(this.cliente, total, this.codigoTarjeta).subscribe({
+    // Crear sesión de Stripe enviando carrito + cliente + total descontado + código + método de entrega
+    this.carritoService.crearSesionStripe(this.cliente, total, this.codigoTarjeta, this.metodoEnvio).subscribe({
       next: (data: { url: string }) => {
         window.location.href = data.url;
       },
@@ -298,7 +323,7 @@ confirmarReservaAtelier() {
 // ======== Compra gratis (total 0€) ========
 confirmarCompraGratis() {
 
-  this.carritoService.crearCompraGratuita(this.cliente, this.codigoTarjeta).subscribe({
+  this.carritoService.crearCompraGratuita(this.cliente, this.codigoTarjeta, this.metodoEnvio).subscribe({
     next: () => {
       this.loadingCheckout = false;
       this._resetEstadoPostCompra();
@@ -326,7 +351,7 @@ confirmarCompraGratis() {
 
     // Si había descuento, re-evalúa el total con descuento
     if (this.descuentoAplicado > 0) {
-      const bruto = this.carritoService.obtenerTotal();
+      const bruto = this.carritoService.obtenerTotal() + this.costeEnvio;
       this.totalConDescuento = Math.max(0, bruto - this.descuentoAplicado);
       this.actualizarAvisoPerdida(bruto);
     }
@@ -343,7 +368,7 @@ confirmarCompraGratis() {
     this.carritoService.validarTarjeta(this.codigoTarjeta).subscribe({
       next: (descuento: number) => {
         this.descuentoAplicado = Number(descuento) || 0; // <— guarda descuento
-        const bruto = this.carritoService.obtenerTotal();
+        const bruto = this.carritoService.obtenerTotal() + this.costeEnvio;
         const total = Math.max(0, bruto - this.descuentoAplicado);
         this.totalConDescuento = Number(total.toFixed(2));
         this.mensajeCodigo = this.translate.instant('NAVBAR.GIFT_CODE_APPLIED', { amount: this.descuentoAplicado });
@@ -383,6 +408,25 @@ confirmarCompraGratis() {
     // this.metodoPago = null; // opcional
   }
 
+  // Al cambiar la opción de recogida/envío, el total puede variar: recalcula si hay descuento
+  onMetodoEnvioChange() {
+    if (this.descuentoAplicado > 0) {
+      const bruto = this.carritoService.obtenerTotal() + this.costeEnvio;
+      this.totalConDescuento = Number(Math.max(0, bruto - this.descuentoAplicado).toFixed(2));
+      this.actualizarAvisoPerdida(bruto);
+    }
+  }
+
+  // Método de envío autocalculado: PICKUP si el cliente ha elegido recoger en tienda,
+  // si no se deduce de su país (Alemania vs resto de la UE). null si aún no hay
+  // información suficiente para determinarlo (sin país elegido todavía).
+  get metodoEnvio(): 'PICKUP' | 'GERMANY' | 'EU' | null {
+    if (!this.hayProducto) return null;
+    if (this.recogerEnTienda) return 'PICKUP';
+    if (!this.cliente.pais) return null;
+    return this.cliente.pais === 'Germany' ? 'GERMANY' : 'EU';
+  }
+
   // ======== Getters de estado ========
   get soloCursos(): boolean {
     return (
@@ -391,8 +435,26 @@ confirmarCompraGratis() {
     );
   }
 
+  // ¿Hay algún producto físico en el carrito? (requiere elegir recogida o envío)
+  get hayProducto(): boolean {
+    return this.itemsCarrito.some(item => item.tipo === 'PRODUCTO');
+  }
+
+  // Coste de envío según el método elegido. Solo aplica si hay algún producto en el carrito.
+  // El precio real y definitivo SIEMPRE se recalcula en el servidor; esto es solo para mostrar
+  // el total al cliente antes de confirmar.
+  get costeEnvio(): number {
+    if (!this.hayProducto) return 0;
+    switch (this.metodoEnvio) {
+      case 'GERMANY': return 10;
+      case 'EU': return 20;
+      case 'PICKUP':
+      default: return 0;
+    }
+  }
+
   get esCompraGratis(): boolean {
-    const total = this.totalConDescuento ?? this.carritoService.obtenerTotal();
+    const total = this.totalConDescuento ?? (this.carritoService.obtenerTotal() + this.costeEnvio);
     // Redondeo a 2 decimales para evitar problemas de coma flotante
     return this.itemsCarrito.length > 0 && Number((total ?? 0).toFixed(2)) === 0;
   }
@@ -405,5 +467,6 @@ confirmarCompraGratis() {
     this.codigoTarjeta = '';
     this.mensajeCodigo = '';
     this.metodoPago = null;
+    this.recogerEnTienda = false;
   }
 }

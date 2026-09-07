@@ -98,7 +98,13 @@
     "PAYMENT_ERROR_ALERT": "Error al procesar el pago",
     "GIFT_CODE_EMPTY": "Introduce un código válido",
     "GIFT_CODE_APPLIED": "Código aplicado: descuento de {{amount}}€",
-    "GIFT_CODE_INVALID": "Código no válido o ya canjeado"
+    "GIFT_CODE_INVALID": "Código no válido o ya canjeado",
+    "DELIVERY_METHOD": "Método de entrega",
+    "DELIVERY_METHOD_REQUIRED": "Selecciona tu país o elige recoger en tienda.",
+    "SHIPPING_COST": "Envío",
+    "SHIP_TO_ADDRESS": "Enviar a mi dirección",
+    "PICKUP_AT_STUDIO": "Recoger en el taller",
+    "SELECT_COUNTRY_FIRST": "Selecciona tu país"
   },
   "FOOTER": {
     "LOCATION": "Ubicación",
@@ -482,8 +488,6 @@
     "OPT_PICKUP": "Recogida (en nuestra dirección)",
     "OPT_GERMANY": "Alemania",
     "OPT_EU": "Países de la UE",
-    "OPT_NON_EU": "Países no pertenecientes a la UE en Europa",
-    "OPT_WORLDWIDE": "Resto del mundo",
     "S3_TITLE": "3. Cancelaciones y devoluciones (productos físicos)",
     "S31_TITLE": "3.1. Devoluciones y reembolsos",
     "S31_TEXT1": "Los artículos se pueden devolver dentro de los 14 días posteriores a la entrega si no han sido usados. El cliente es responsable de los costes de envío de la devolución a la siguiente dirección:",

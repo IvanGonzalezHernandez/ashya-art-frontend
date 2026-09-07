@@ -310,7 +310,10 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">{{ 'NAVBAR.COUNTRY' | translate }} *</label>
-              <input type="text" class="form-control" name="pais" [(ngModel)]="cliente.pais" required #pais="ngModel">
+              <select class="form-select" name="pais" [(ngModel)]="cliente.pais" (ngModelChange)="onMetodoEnvioChange()" required #pais="ngModel">
+                <option value="" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
+                <option *ngFor="let p of paisesUE" [value]="p">{{ p }}</option>
+              </select>
               <div class="text-danger" *ngIf="pais.invalid && pais.touched">{{ 'COMMON.VALIDATION.COUNTRY_REQUIRED' | translate }}</div>
             </div>
 
@@ -321,6 +324,44 @@
               <div class="text-danger" *ngIf="codigoPostal.invalid && codigoPostal.touched">{{ 'COMMON.VALIDATION.POSTAL_CODE_INVALID' | translate }}</div>
             </div>
 
+          </div>
+
+          <!-- Recogida en el taller o envío (solo si hay algún producto en el carrito).
+               El envío en sí (Alemania/UE) se autocalcula a partir del país de arriba;
+               aquí solo se elige si se recoge en tienda en vez de enviarlo. -->
+          <div class="mb-3" *ngIf="hayProducto">
+            <label class="form-label d-block">{{ 'NAVBAR.DELIVERY_METHOD' | translate }} *</label>
+
+            <div class="row g-2">
+              <div class="col-6">
+                <input class="btn-check" type="radio" id="envioShip" name="recogerEnTienda"
+                       [value]="false" [(ngModel)]="recogerEnTienda" (ngModelChange)="onMetodoEnvioChange()">
+                <label class="delivery-option" for="envioShip">
+                  <span class="delivery-icon">📦</span>
+                  <span class="delivery-title">{{ 'NAVBAR.SHIP_TO_ADDRESS' | translate }}</span>
+                  <span class="delivery-price">
+                    <ng-container *ngIf="cliente.pais === 'Germany'">€10.00</ng-container>
+                    <ng-container *ngIf="cliente.pais && cliente.pais !== 'Germany'">€20.00</ng-container>
+                    <ng-container *ngIf="!cliente.pais">{{ 'NAVBAR.SELECT_COUNTRY_FIRST' | translate }}</ng-container>
+                  </span>
+                </label>
+              </div>
+
+              <div class="col-6">
+                <input class="btn-check" type="radio" id="envioPickup" name="recogerEnTienda"
+                       [value]="true" [(ngModel)]="recogerEnTienda" (ngModelChange)="onMetodoEnvioChange()">
+                <label class="delivery-option" for="envioPickup">
+                  <span class="delivery-icon">🏬</span>
+                  <span class="delivery-title">{{ 'NAVBAR.PICKUP_AT_STUDIO' | translate }}</span>
+                  <span class="delivery-price">€0.00</span>
+                </label>
+              </div>
+            </div>
+
+            <p class="mt-2 mb-0 fw-semibold">
+              {{ 'NAVBAR.TOTAL' | translate }}:
+              {{ (totalConDescuento ?? (carritoService.obtenerTotal() + costeEnvio)) }}€
+            </p>
           </div>
 
                     <div class="form-check mb-2">

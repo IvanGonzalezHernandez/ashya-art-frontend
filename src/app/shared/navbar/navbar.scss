@@ -2,6 +2,59 @@
     transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
+/* Tarjetas visuales para elegir método de entrega (envío vs recogida en tienda) */
+.delivery-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  padding: 14px 10px;
+  border: 2px solid #e0d8cd;
+  border-radius: 12px;
+  background-color: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.delivery-option:hover {
+  border-color: #8DDFD8;
+}
+
+.btn-check:checked + .delivery-option {
+  border-color: #3A9097;
+  background-color: #EFFAF9;
+  box-shadow: 0 0 0 1px #3A9097;
+}
+
+.btn-check:focus-visible + .delivery-option {
+  outline: 2px solid #3A9097;
+  outline-offset: 2px;
+}
+
+.delivery-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.delivery-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.delivery-price {
+  font-size: 0.8rem;
+  color: #6b5e52;
+}
+
+.btn-check:checked + .delivery-option .delivery-price {
+  color: #3A9097;
+  font-weight: 600;
+}
+
 .logo-hover:hover {
     transform: scale(1.06); /* +6% de tamaño, muy sutil */
 }

@@ -9,4 +9,5 @@ export interface ProductoCompra {
     fechaCompra: Date;
     precio?: number;
     numeroSeguimiento?: string | null;
+    metodoEnvio?: 'PICKUP' | 'GERMANY' | 'EU' | null;
 }

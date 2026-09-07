@@ -98,7 +98,13 @@
     "PAYMENT_ERROR_ALERT": "Error processing the payment",
     "GIFT_CODE_EMPTY": "Please, introduce a valid code",
     "GIFT_CODE_APPLIED": "Code applied: discount of {{amount}}€",
-    "GIFT_CODE_INVALID": "Invalid or already redeemed code"
+    "GIFT_CODE_INVALID": "Invalid or already redeemed code",
+    "DELIVERY_METHOD": "Delivery method",
+    "DELIVERY_METHOD_REQUIRED": "Please select your country or choose to pick up in store.",
+    "SHIPPING_COST": "Shipping",
+    "SHIP_TO_ADDRESS": "Ship to my address",
+    "PICKUP_AT_STUDIO": "Pick up at the studio",
+    "SELECT_COUNTRY_FIRST": "Select your country"
   },
   "FOOTER": {
     "LOCATION": "Location",
@@ -482,8 +488,6 @@
     "OPT_PICKUP": "Pickup (from our address)",
     "OPT_GERMANY": "Germany",
     "OPT_EU": "EU-Countries",
-    "OPT_NON_EU": "Non-EU Countries in Europe",
-    "OPT_WORLDWIDE": "Worldwide",
     "S3_TITLE": "3. Cancellations and Returns (Physical Products)",
     "S31_TITLE": "3.1. Returns & Refunds",
     "S31_TEXT1": "Items can be returned within 14 days after delivery if they are unused. The customer is responsible for return shipping costs to address:",

@@ -49,21 +49,28 @@ export class Home implements OnInit {
     this.route.queryParams.subscribe(params => {
       const payment = params['payment'];
       if (payment) {
+        // Se usa get() en vez de instant(): tras la redirección de Stripe la página se
+        // carga desde cero y las traducciones pueden no estar listas todavía, por lo que
+        // instant() devolvería la clave literal en vez de esperar a que carguen.
         if (payment === 'success') {
           // ✅ Vaciar carrito correctamente
           this.carritoService.vaciarCarrito();
 
-          this.mostrarModalFeedback(
-            'success',
-            this.translate.instant('HOME.FEEDBACK.PAYMENT_SUCCESS_TITLE'),
-            this.translate.instant('HOME.FEEDBACK.PAYMENT_SUCCESS_MSG')
-          );
+          this.translate.get(['HOME.FEEDBACK.PAYMENT_SUCCESS_TITLE', 'HOME.FEEDBACK.PAYMENT_SUCCESS_MSG']).subscribe(t => {
+            this.mostrarModalFeedback(
+              'success',
+              t['HOME.FEEDBACK.PAYMENT_SUCCESS_TITLE'],
+              t['HOME.FEEDBACK.PAYMENT_SUCCESS_MSG']
+            );
+          });
         } else {
-          this.mostrarModalFeedback(
-            'error',
-            this.translate.instant('HOME.FEEDBACK.PAYMENT_ERROR_TITLE'),
-            this.translate.instant('HOME.FEEDBACK.PAYMENT_ERROR_MSG')
-          );
+          this.translate.get(['HOME.FEEDBACK.PAYMENT_ERROR_TITLE', 'HOME.FEEDBACK.PAYMENT_ERROR_MSG']).subscribe(t => {
+            this.mostrarModalFeedback(
+              'error',
+              t['HOME.FEEDBACK.PAYMENT_ERROR_TITLE'],
+              t['HOME.FEEDBACK.PAYMENT_ERROR_MSG']
+            );
+          });
         }
         // Limpiar query params para que no vuelva a abrir el modal al refrescar
         this.router.navigate([], { queryParams: {} });

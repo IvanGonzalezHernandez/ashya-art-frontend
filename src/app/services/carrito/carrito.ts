@@ -55,6 +55,11 @@ export class CarritoService {
     return this.items.length > 0 && this.items.every(i => i.tipo === 'CURSO');
   }
 
+  // ¿Hay algún producto físico en el carrito? (requiere elegir recogida o envío)
+  contieneProducto(): boolean {
+    return this.items.some(i => i.tipo === 'PRODUCTO');
+  }
+
   // ---------------- Mutadores ----------------
   agregarItem(item: ItemCarrito) {
     const cantidad = Number(item.cantidad) || 1;
@@ -126,10 +131,11 @@ export class CarritoService {
   crearSesionStripe(
     cliente: Cliente,
     total: number,
-    codigoTarjeta?: string
+    codigoTarjeta?: string,
+    metodoEnvio?: string | null
   ): Observable<{ url: string }> {
-    return this.http.post<{ url: string }>(`${this.apiUrl}`, { 
-      carrito: { items: this.obtenerItems() },
+    return this.http.post<{ url: string }>(`${this.apiUrl}`, {
+      carrito: { items: this.obtenerItems(), metodoEnvio: metodoEnvio || null },
       cliente,
       totalConDescuento: Number((total ?? 0).toFixed(2)),
       codigoTarjeta: codigoTarjeta?.trim().toUpperCase() || null
@@ -139,12 +145,13 @@ export class CarritoService {
   // Compra 100% cubierta por tarjeta regalo (total = 0)
   crearCompraGratuita(
     cliente: Cliente,
-    codigoTarjeta?: string
+    codigoTarjeta?: string,
+    metodoEnvio?: string | null
   ): Observable<{ success: boolean; pedidoId?: number }> {
     return this.http.post<{ success: boolean; pedidoId?: number }>(
       `${this.apiUrl}/no-stripe`,
       {
-        carrito: { items: this.obtenerItems() },
+        carrito: { items: this.obtenerItems(), metodoEnvio: metodoEnvio || null },
         cliente,
         codigoTarjeta: codigoTarjeta?.trim().toUpperCase() || null
       }

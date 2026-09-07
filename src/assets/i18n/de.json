@@ -98,7 +98,13 @@
     "PAYMENT_ERROR_ALERT": "Fehler bei der Zahlungsabwicklung",
     "GIFT_CODE_EMPTY": "Bitte geben Sie einen gültigen Code ein",
     "GIFT_CODE_APPLIED": "Code angewendet: Rabatt von {{amount}}€",
-    "GIFT_CODE_INVALID": "Ungültiger oder bereits eingelöster Code"
+    "GIFT_CODE_INVALID": "Ungültiger oder bereits eingelöster Code",
+    "DELIVERY_METHOD": "Liefermethode",
+    "DELIVERY_METHOD_REQUIRED": "Bitte wählen Sie Ihr Land oder die Abholung im Studio.",
+    "SHIPPING_COST": "Versand",
+    "SHIP_TO_ADDRESS": "An meine Adresse liefern",
+    "PICKUP_AT_STUDIO": "Im Studio abholen",
+    "SELECT_COUNTRY_FIRST": "Wählen Sie Ihr Land"
   },
   "FOOTER": {
     "LOCATION": "Standort",
@@ -482,8 +488,6 @@
     "OPT_PICKUP": "Abholung (an unserer Adresse)",
     "OPT_GERMANY": "Deutschland",
     "OPT_EU": "EU-Länder",
-    "OPT_NON_EU": "Nicht-EU-Länder in Europa",
-    "OPT_WORLDWIDE": "Weltweit",
     "S3_TITLE": "3. Stornierungen und Rücksendungen (physische Produkte)",
     "S31_TITLE": "3.1. Rücksendungen & Rückerstattungen",
     "S31_TEXT1": "Artikel können innerhalb von 14 Tagen nach Lieferung zurückgesendet werden, sofern sie unbenutzt sind. Der Kunde trägt die Kosten für den Rückversand an folgende Adresse:",
