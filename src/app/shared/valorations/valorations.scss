@@ -5,3 +5,15 @@
   font-weight: 600;
   font-size: 0.9rem;  /* ajusta según el tamaño */
 }
+
+/* Recorta el texto de la reseña a 5 líneas y reserva siempre ese mismo alto,
+   para que la altura de la tarjeta (y por tanto la de la sección) no cambie
+   segun lo larga que sea cada reseña. */
+.clamp-5 {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5em;
+  min-height: 7.5em; /* 5 líneas * line-height */
+}
