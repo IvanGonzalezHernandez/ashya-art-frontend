@@ -1,0 +1,135 @@
+<div class="container-fluid mt-4">
+  <!-- ENCABEZADO -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Sent Emails</h1>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="alert alert-danger">
+    Could not load emails from Resend. Please try again later.
+  </div>
+
+  <!-- TABLA EMAILS EN UNA CARD -->
+  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading && !error">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
+          <thead class="table-azul">
+            <tr>
+              <th style="width: 22%;">Recipient</th>
+              <th style="width: 28%;">Subject</th>
+              <th class="d-none d-md-table-cell" style="width: 18%;">Sent</th>
+              <th style="width: 16%;">Status</th>
+              <th style="width: 16%;">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let email of emails | paginate: { id: 'emails', itemsPerPage: 10, currentPage: paginaActual }">
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="email.to.join(', ')">
+                  {{ email.to.join(', ') }}
+                </span>
+              </td>
+
+              <td>
+                <span class="d-inline-block w-100 text-truncate" [title]="email.subject">
+                  {{ email.subject }}
+                </span>
+              </td>
+
+              <td class="d-none d-md-table-cell text-nowrap">
+                {{ email.created_at | date:'yyyy-MM-dd HH:mm' }}
+              </td>
+
+              <td>
+                <span class="badge" [ngClass]="estadoBadgeClass(email.last_event)">
+                  {{ email.last_event || 'unknown' }}
+                </span>
+              </td>
+
+              <td>
+                <button class="btn btn-primary btn-sm" (click)="verEmail(email)">View</button>
+              </td>
+            </tr>
+
+            <tr *ngIf="(emails || []).length === 0">
+              <td colspan="5" class="text-center text-muted py-3">
+                No emails sent yet.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLES DE ABAJO -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5" *ngIf="!loading && !error">
+    <div class="d-flex gap-2 flex-wrap">
+      <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
+      <button
+        class="btn btn-outline-secondary"
+        *ngIf="hasMore"
+        [disabled]="loadingMas"
+        (click)="cargarMasAntiguos()">
+        {{ loadingMas ? 'Loading…' : 'Load older emails' }}
+      </button>
+    </div>
+
+    <pagination-controls
+      id="emails"
+      previousLabel="Previous"
+      nextLabel="Next"
+      (pageChange)="paginaActual = $event">
+    </pagination-controls>
+  </div>
+</div>
+
+<!-- MODAL PREVISUALIZACION EMAIL -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="emailSeleccionado">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-azul text-white">
+        <h5 class="modal-title text-truncate">{{ emailSeleccionado.subject }}</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row g-2 mb-3 small text-muted">
+          <div class="col-md-6"><strong>To:</strong> {{ emailSeleccionado.to.join(', ') }}</div>
+          <div class="col-md-6"><strong>Sent:</strong> {{ emailSeleccionado.created_at | date:'yyyy-MM-dd HH:mm' }}</div>
+          <div class="col-md-6"><strong>From:</strong> {{ emailSeleccionado.from }}</div>
+          <div class="col-md-6">
+            <strong>Status:</strong>
+            <span class="badge" [ngClass]="estadoBadgeClass(emailSeleccionado.last_event)">
+              {{ emailSeleccionado.last_event || 'unknown' }}
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="cargandoDetalle" class="text-center my-4">
+          <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
+        </div>
+
+        <div *ngIf="errorDetalle && !cargandoDetalle" class="alert alert-danger">
+          Could not load this email's content. Please try again later.
+        </div>
+
+        <iframe *ngIf="!cargandoDetalle && !errorDetalle && htmlSeguro"
+                class="border rounded"
+                style="width: 100%; height: 60vh;"
+                [srcdoc]="htmlSeguro">
+        </iframe>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="emailSeleccionado"></div>
