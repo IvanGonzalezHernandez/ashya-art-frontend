@@ -5,6 +5,7 @@ import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Reservas } from '../../../models/curso-compra.model';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-modal';
 
 
 @Component({
@@ -12,13 +13,16 @@ import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-
   standalone: true,
   templateUrl: './reservas-dashboard.html',
   styleUrls: ['./reservas-dashboard.scss'],
-  imports: [CommonModule, NgxPaginationModule, FeedbackModalComponent]
+  imports: [CommonModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent]
 })
 export class ReservasDashboard implements OnInit {
   loading = false;
 
   reservas: Reservas[] = [];
   paginaActual: number = 1;
+
+  // Modal de confirmación de cancelación
+  reservaACancelar: Reservas | null = null;
 
   // Modal de feedback
   mostrarFeedback = false;
@@ -50,10 +54,18 @@ export class ReservasDashboard implements OnInit {
     });
   }
 
-  cancelarReserva(reserva: Reservas) {
-    if (!confirm(`Are you sure you want to cancel the booking for ${reserva.email}? This will free up the reserved seats.`)) {
-      return;
-    }
+  pedirConfirmacionCancelar(reserva: Reservas) {
+    this.reservaACancelar = reserva;
+  }
+
+  cancelarCancelacion() {
+    this.reservaACancelar = null;
+  }
+
+  confirmarCancelacion() {
+    const reserva = this.reservaACancelar;
+    if (!reserva) return;
+    this.reservaACancelar = null;
 
     this.reservasService.eliminarReserva(reserva.id).subscribe({
       next: () => {

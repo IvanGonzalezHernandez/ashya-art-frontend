@@ -68,7 +68,7 @@
               </td>
 
               <td>
-                <button class="btn btn-danger btn-sm" (click)="cancelarReserva(reserva)">Cancel</button>
+                <button class="btn btn-danger btn-sm" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
               </td>
             </tr>
 
@@ -94,6 +94,16 @@
     </pagination-controls>
   </div>
 </div>
+
+<app-confirm-modal
+  *ngIf="reservaACancelar"
+  title="Cancel booking"
+  [message]="'Are you sure you want to cancel the booking for ' + reservaACancelar.email + '? This will free up the reserved seats.'"
+  confirmLabel="Cancel booking"
+  cancelLabel="Keep booking"
+  (confirmed)="confirmarCancelacion()"
+  (cancelled)="cancelarCancelacion()"
+></app-confirm-modal>
 
 <app-feedback-modal
   *ngIf="mostrarFeedback"
