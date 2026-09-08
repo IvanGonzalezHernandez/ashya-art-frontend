@@ -45,4 +45,12 @@ actualizarCanjeo(id: number, canjeada: boolean, fechaBaja: string | null): Obser
 
   return this.http.put<TarjetaRegaloCompra>(`${this.apiUrl}/${id}`, { canjeada, fechaBaja }, { headers });
 }
+
+obtenerPdf(id: number): Observable<Blob> {
+  const token = this.auth.obtenerToken();
+
+  const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+
+  return this.http.get(`${environment.apiUrl}/admin/tarjetas-regalo-compra/${id}/pdf`, { headers, responseType: 'blob' });
+}
 }

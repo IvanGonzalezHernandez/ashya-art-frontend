@@ -282,6 +282,21 @@ export class TarjetasRegaloDashboard implements OnInit {
     this.csvExportService.exportarCSV(encabezado, filas, 'gift-card-purchases.csv');
   }
 
+verPdf(compra: TarjetaRegaloCompra) {
+  if (!compra?.id) return;
+
+  this.tarjetaCompraService.obtenerPdf(compra.id).subscribe({
+    next: blob => {
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    },
+    error: err => {
+      console.error('Error loading gift card PDF', err);
+      this.mostrarModalFeedback('error', 'Error', 'Could not load the gift card PDF.');
+    }
+  });
+}
+
 marcarCanjeada(compra: TarjetaRegaloCompra) {
   if (!compra?.id || compra.canjeada) return;
 

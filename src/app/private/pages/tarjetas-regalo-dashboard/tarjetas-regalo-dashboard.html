@@ -268,7 +268,10 @@
               </td>
 
               <td>
-                <button class="btn btn-primary btn-sm" (click)="editarCanjeo(compra)">Edit</button>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="editarCanjeo(compra)">Edit</button>
+                  <button class="btn btn-outline-secondary btn-sm" (click)="verPdf(compra)">PDF</button>
+                </div>
               </td>
             </tr>
 
