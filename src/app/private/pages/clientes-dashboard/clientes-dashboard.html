@@ -214,6 +214,44 @@
             </div>
 
             <div class="col-12" *ngIf="modoDetalle">
+              <label class="form-label">Products Bought</label>
+
+              <div class="table-responsive border rounded">
+                <table class="table table-sm table-striped mb-0 align-middle">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Purchase Date</th>
+                      <th>Delivery</th>
+                      <th>Tracking Number</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let producto of (clienteEditando.productos || [])">
+                      <td>{{ producto.producto }}</td>
+                      <td>{{ producto.cantidad }}</td>
+                      <td class="text-nowrap">{{ producto.precio | currency:'EUR' }}</td>
+                      <td class="text-nowrap">{{ producto.fechaCompra | date:'yyyy-MM-dd' }}</td>
+                      <td class="text-nowrap">
+                        <span *ngIf="producto.metodoEnvio === 'PICKUP'" class="badge bg-secondary">Pickup</span>
+                        <span *ngIf="producto.metodoEnvio === 'GERMANY'" class="badge bg-info text-dark">Germany</span>
+                        <span *ngIf="producto.metodoEnvio === 'EU'" class="badge bg-info text-dark">EU</span>
+                        <span *ngIf="!producto.metodoEnvio">—</span>
+                      </td>
+                      <td class="text-nowrap">{{ producto.numeroSeguimiento || '—' }}</td>
+                    </tr>
+
+                    <tr *ngIf="(clienteEditando.productos || []).length === 0">
+                      <td colspan="6" class="text-center text-muted py-3">No products bought.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="col-12" *ngIf="modoDetalle">
               <label class="form-label">Gift Cards</label>
 
               <div class="table-responsive border rounded">

@@ -12,6 +12,15 @@ export interface ClienteTarjetaRegalo {
     fechaCaducidad: string;
 }
 
+export interface ClienteProducto {
+    producto: string;
+    cantidad: number;
+    precio: number;
+    fechaCompra: string;
+    metodoEnvio: 'PICKUP' | 'GERMANY' | 'EU' | null;
+    numeroSeguimiento: string | null;
+}
+
 export interface Cliente {
     id: number;
     telefono: string;
@@ -28,6 +37,7 @@ export interface Cliente {
     fechaAlta?: string;
     cursos?: ClienteCursoReserva[];
     tarjetas?: ClienteTarjetaRegalo[];
+    productos?: ClienteProducto[];
 
     // Nuevos campos
     tipoClase: '',
