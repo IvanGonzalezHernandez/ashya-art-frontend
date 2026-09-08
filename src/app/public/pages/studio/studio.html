@@ -20,126 +20,65 @@
           {{ 'STUDIO.P1' | translate }}
         </p>
 
-        <p class="text-muted fs-5"
+        <!-- Opening hours / Level / How to start -->
+        <p class="text-muted fs-5 mb-2"
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0s'">
-          {{ 'STUDIO.P2_PRE' | translate }}
-          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_DAYS' | translate }}</span>
-          {{ 'STUDIO.P2_FROM' | translate }}
-          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_HOURS1' | translate }}</span>
-          {{ 'STUDIO.P2_AND' | translate }}
-          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_SATURDAY' | translate }}</span>
-          {{ 'STUDIO.P2_FROM' | translate }}
-          <span class="fw-bold" style="color:#3E3028;">{{ 'STUDIO.P2_HOURS2' | translate }}</span>{{ 'STUDIO.P2_POST' | translate }}
+          <strong style="color:#3E3028;">{{ 'STUDIO.HOURS_LABEL' | translate }}:</strong>
+          {{ 'STUDIO.HOURS_TEXT' | translate }}
         </p>
 
-        <!-- Level -->
-        <div class="mb-3"
-             appRevealAnimate="animate__fadeInLeft"
-             [delay]="'0s'">
-          <div class="fw-bold mb-1" style="color:#3E3028;">{{ 'STUDIO.LEVEL_LABEL' | translate }}</div>
-          <div class="text-muted fs-5">
-            {{ 'STUDIO.LEVEL_TEXT' | translate }}
-          </div>
-        </div>
+        <p class="text-muted fs-5 mb-2"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0s'">
+          <strong style="color:#3E3028;">{{ 'STUDIO.LEVEL_LABEL' | translate }}:</strong>
+          {{ 'STUDIO.LEVEL_TEXT' | translate }}
+        </p>
 
-        <!-- Options accordion (solo 1 abierto) -->
-        <div class="accordion mb-4"
-             id="openStudioOptions"
+        <p class="text-muted fs-5 mb-4"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0s'">
+          <strong style="color:#3E3028;">{{ 'STUDIO.HOW_TO_START_LABEL' | translate }}:</strong>
+          {{ 'STUDIO.HOW_TO_START_TEXT' | translate }}
+        </p>
+
+        <!-- Open Studio & Membership plans -->
+        <div class="mb-4"
              appRevealAnimate="animate__fadeInLeft"
              [delay]="'0s'">
 
-          <!-- 1 time entry -->
-          <div class="accordion-item border-0 rounded-4 shadow-sm mb-2 overflow-hidden">
-            <h2 class="accordion-header" id="optOneHeader">
-              <button class="accordion-button"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#optOne"
-                      aria-expanded="true"
-                      aria-controls="optOne"
-                      style="background:#fff; color:#3E3028;">
-                {{ 'STUDIO.OPT1_TITLE' | translate }} — <span class="fw-bold ms-2">{{ 'STUDIO.OPT1_PRICE' | translate }}</span>
-              </button>
-            </h2>
-
-            <div id="optOne"
-                 class="accordion-collapse collapse show"
-                 aria-labelledby="optOneHeader"
-                 data-bs-parent="#openStudioOptions">
-              <div class="accordion-body bg-white">
-                <ul class="list-unstyled mb-0 text-muted fs-5">
-                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_INCLUDED' | translate }}</li>
-                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_NOT_INCLUDED' | translate }}</li>
-                  <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_CLAY_COST_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_CLAY_COST' | translate }}</li>
-                </ul>
-              </div>
+          <!-- OPEN STUDIO -->
+          <h5 class="fw-bold text-uppercase mb-2" style="color:#3E3028; letter-spacing:0.5px;">
+            {{ 'STUDIO.OPEN_STUDIO_TITLE' | translate }}
+          </h5>
+          <div class="rounded-4 shadow-sm mb-3 overflow-hidden bg-white p-3">
+            <div class="fs-5 mb-2" style="color:#3E3028;">
+              {{ 'STUDIO.OPT1_TITLE' | translate }} — <span class="fw-bold">{{ 'STUDIO.OPT1_PRICE' | translate }}</span>
             </div>
+            <ul class="list-unstyled mb-0 text-muted fs-6">
+              <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_INCLUDED' | translate }}</li>
+              <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_NOT_INCLUDED' | translate }}</li>
+              <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_CLAY_COST_LABEL' | translate }}</strong> {{ 'STUDIO.OPT1_CLAY_COST' | translate }}</li>
+            </ul>
           </div>
 
-          <!-- 10 times entry -->
-          <div class="accordion-item border-0 rounded-4 shadow-sm mb-2 overflow-hidden">
-            <h2 class="accordion-header" id="optTwoHeader">
-              <button class="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#optTwo"
-                      aria-expanded="false"
-                      aria-controls="optTwo"
-                      style="background:#fff; color:#3E3028;">
-                {{ 'STUDIO.OPT2_TITLE' | translate }} — <span class="fw-bold ms-2">{{ 'STUDIO.OPT2_PRICE' | translate }}</span>
-              </button>
-            </h2>
-
-            <div id="optTwo"
-                 class="accordion-collapse collapse"
-                 aria-labelledby="optTwoHeader"
-                 data-bs-parent="#openStudioOptions">
-              <div class="accordion-body bg-white">
-                <ul class="list-unstyled mb-0 text-muted fs-5">
-                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT2_INCLUDED' | translate }}</li>
-                  <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT2_NOT_INCLUDED' | translate }}</li>
-                </ul>
-              </div>
+          <!-- STUDIO MEMBERSHIP -->
+          <h5 class="fw-bold text-uppercase mb-2" style="color:#3E3028; letter-spacing:0.5px;">
+            {{ 'STUDIO.MEMBERSHIP_TITLE' | translate }}
+          </h5>
+          <div class="rounded-4 shadow-sm overflow-hidden bg-white p-3">
+            <div class="fs-5 mb-2" style="color:#3E3028;">
+              {{ 'STUDIO.OPT3_TITLE' | translate }} — <span class="fw-bold">{{ 'STUDIO.OPT3_PRICE' | translate }}</span>
+              <span class="text-muted fs-6">{{ 'STUDIO.OPT3_MIN_MONTHS' | translate }}</span>
             </div>
-          </div>
-
-          <!-- Unlimited entry -->
-          <div class="accordion-item border-0 rounded-4 shadow-sm overflow-hidden">
-            <h2 class="accordion-header" id="optThreeHeader">
-              <button class="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#optThree"
-                      aria-expanded="false"
-                      aria-controls="optThree"
-                      style="background:#fff; color:#3E3028;">
-                {{ 'STUDIO.OPT3_TITLE' | translate }} — <span class="fw-bold ms-2">{{ 'STUDIO.OPT3_PRICE' | translate }}</span>
-                <span class="text-muted ms-2">{{ 'STUDIO.OPT3_MIN_MONTHS' | translate }}</span>
-              </button>
-            </h2>
-
-            <div id="optThree"
-                 class="accordion-collapse collapse"
-                 aria-labelledby="optThreeHeader"
-                 data-bs-parent="#openStudioOptions">
-              <div class="accordion-body bg-white">
-                <ul class="list-unstyled mb-0 text-muted fs-5">
-                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT3_MIN_TOTAL_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_MIN_TOTAL' | translate }}</li>
-                  <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_INCLUDED' | translate }}</li>
-                  <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_NOT_INCLUDED' | translate }}</li>
-                </ul>
-              </div>
-            </div>
+            <ul class="list-unstyled mb-0 text-muted fs-6">
+              <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT3_MIN_TOTAL_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_MIN_TOTAL' | translate }}</li>
+              <li class="mb-2"><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_INCLUDED' | translate }}</li>
+              <li><strong style="color:#3E3028;">{{ 'STUDIO.OPT1_NOT_INCLUDED_LABEL' | translate }}</strong> {{ 'STUDIO.OPT3_NOT_INCLUDED' | translate }}</li>
+            </ul>
           </div>
 
         </div>
-
-        <p class="text-muted fs-5 mb-3"
-          appRevealAnimate="animate__fadeInLeft"
-          [delay]="'0s'">
-          {{ 'STUDIO.CTA_TEXT' | translate }}
-        </p>
 
         <!-- Botón desktop (igual que antes) -->
         <button
@@ -255,7 +194,6 @@
 
               <option value="" disabled>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
               <option value="1_time_entry">{{ 'STUDIO.OPTION_1' | translate }}</option>
-              <option value="10_times_entry">{{ 'STUDIO.OPTION_2' | translate }}</option>
               <option value="unlimited_entry">{{ 'STUDIO.OPTION_3' | translate }}</option>
             </select>
 
