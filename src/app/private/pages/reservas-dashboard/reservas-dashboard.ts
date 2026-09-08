@@ -5,6 +5,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Reservas } from '../../../models/curso-compra.model';
+import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
+import { CursoFecha } from '../../../models/cursoFecha.model';
+import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
 
 @Component({
@@ -12,20 +15,29 @@ import { Reservas } from '../../../models/curso-compra.model';
   standalone: true,
   templateUrl: './reservas-dashboard.html',
   styleUrls: ['./reservas-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class ReservasDashboard implements OnInit {
   loading = false;
-  
+
   reservas: Reservas[] = [];
   paginaActual: number = 1;
   reservaEditando: Reservas | null = null;
   esNuevo: boolean = false;
-  
+
+  // Fechas disponibles del curso de la reserva que se está editando (para reprogramar)
+  fechasDisponibles: CursoFecha[] = [];
+
+  // Modal de feedback
+  mostrarFeedback = false;
+  feedbackTitulo = '';
+  feedbackMensaje = '';
+  feedbackTipo: 'success' | 'error' | 'info' = 'info';
 
   constructor(
     private reservasService: ReservasService,
-    private csvExportService: CsvExportService
+    private csvExportService: CsvExportService,
+    private cursoFechaService: CursoFechaService
   ) {}
 
   ngOnInit(): void {
@@ -53,6 +65,7 @@ export class ReservasDashboard implements OnInit {
       id: 0,
       idCliente: '',
       idFecha: 0,
+      idCurso: 0,
       plazasReservadas: 0,
       fechaReserva: new Date(),
       nombreCurso: '',
@@ -67,11 +80,22 @@ export class ReservasDashboard implements OnInit {
   editarReserva(reserva: Reservas) {
     this.esNuevo = false;
     this.reservaEditando = { ...reserva };
+    this.fechasDisponibles = [];
+
+    this.cursoFechaService.getCursoFechaPorIdCurso(reserva.idCurso).subscribe({
+      next: fechas => {
+        this.fechasDisponibles = fechas;
+      },
+      error: err => {
+        console.error('Error al cargar las fechas disponibles del curso', err);
+      }
+    });
   }
 
   cancelarEdicion() {
     this.reservaEditando = null;
     this.esNuevo = false;
+    this.fechasDisponibles = [];
   }
 
   guardarCambios() {
@@ -84,20 +108,36 @@ export class ReservasDashboard implements OnInit {
         this.esNuevo = false;
       });
     } else {
-      this.reservasService.actualizarReserva(this.reservaEditando).subscribe(() => {
-        this.obtenerReservas();
-        this.reservaEditando = null;
-        this.esNuevo = false;
+      this.reservasService.actualizarReserva(this.reservaEditando).subscribe({
+        next: () => {
+          this.obtenerReservas();
+          this.reservaEditando = null;
+          this.mostrarModalFeedback('success', 'Saved', 'Booking updated successfully.');
+        },
+        error: err => {
+          console.error('Error updating booking', err);
+          const mensaje = typeof err?.error === 'string' ? err.error : 'Could not update the booking.';
+          this.mostrarModalFeedback('error', 'Error updating', mensaje);
+        }
       });
     }
   }
 
-  eliminarReserva(id: number) {
-    if (confirm('¿Estás seguro de eliminar esta reserva?')) {
-      this.reservasService.eliminarReserva(id).subscribe(() => {
-        this.obtenerReservas();
-      });
+  cancelarReserva(reserva: Reservas) {
+    if (!confirm(`Are you sure you want to cancel the booking for ${reserva.email}? This will free up the reserved seats.`)) {
+      return;
     }
+
+    this.reservasService.eliminarReserva(reserva.id).subscribe({
+      next: () => {
+        this.obtenerReservas();
+        this.mostrarModalFeedback('success', 'Cancelled', 'Booking cancelled and seats released.');
+      },
+      error: err => {
+        console.error('Error cancelling booking', err);
+        this.mostrarModalFeedback('error', 'Error', 'Could not cancel the booking.');
+      }
+    });
   }
 
   exportarCSV() {
@@ -115,5 +155,14 @@ export class ReservasDashboard implements OnInit {
     this.csvExportService.exportarCSV(encabezado, filas, 'books.csv');
   }
 
-}
+  mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {
+    this.feedbackTipo = tipo;
+    this.feedbackTitulo = titulo;
+    this.feedbackMensaje = mensaje;
+    this.mostrarFeedback = true;
+  }
 
+  cerrarFeedback() {
+    this.mostrarFeedback = false;
+  }
+}

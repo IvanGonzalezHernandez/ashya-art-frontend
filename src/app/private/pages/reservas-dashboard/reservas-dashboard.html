@@ -70,6 +70,7 @@
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarReserva(reserva)">Edit</button>
+                  <button class="btn btn-danger btn-sm" (click)="cancelarReserva(reserva)">Cancel</button>
                 </div>
               </td>
             </tr>
@@ -133,12 +134,26 @@
 
             <div class="col-md-6">
               <label class="form-label">Payment</label>
+              <div>
+                <span class="badge" [ngClass]="reservaEditando.pagado ? 'bg-success' : 'bg-warning text-dark'">
+                  {{ reservaEditando.pagado ? 'Paid' : 'Atelier' }}
+                </span>
+                <small class="d-block text-muted mt-1">Fixed at booking: paid online or at the atelier.</small>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Course Date</label>
               <select
                 class="form-select"
-                name="pagado"
-                [(ngModel)]="reservaEditando.pagado">
-                <option [ngValue]="true">Paid</option>
-                <option [ngValue]="false">Atelier</option>
+                name="idFecha"
+                [(ngModel)]="reservaEditando.idFecha"
+                required>
+                <option
+                  *ngFor="let fecha of fechasDisponibles"
+                  [ngValue]="fecha.id">
+                  {{ fecha.fecha | date:'yyyy-MM-dd' }} {{ fecha.horaInicio }} ({{ fecha.plazasDisponibles }} seats free)
+                </option>
               </select>
             </div>
           </div>
@@ -154,3 +169,11 @@
   </div>
 </div>
 <div class="modal-backdrop fade show" *ngIf="reservaEditando"></div>
+
+<app-feedback-modal
+  *ngIf="mostrarFeedback"
+  [title]="feedbackTitulo"
+  [message]="feedbackMensaje"
+  [status]="feedbackTipo"
+  (closed)="cerrarFeedback()"
+></app-feedback-modal>
