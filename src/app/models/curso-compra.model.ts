@@ -2,7 +2,6 @@ export interface Reservas {
     id: number;
     idCliente: string;
     idFecha: number;
-    idCurso: number;
     plazasReservadas: number;
     fechaReserva: Date;
     nombreCurso: string;

@@ -1,12 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Reservas } from '../../../models/curso-compra.model';
-import { CursoFechaService } from '../../../services/curso-fecha/curso-fecha';
-import { CursoFecha } from '../../../models/cursoFecha.model';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
 
@@ -15,18 +12,13 @@ import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-
   standalone: true,
   templateUrl: './reservas-dashboard.html',
   styleUrls: ['./reservas-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
+  imports: [CommonModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class ReservasDashboard implements OnInit {
   loading = false;
 
   reservas: Reservas[] = [];
   paginaActual: number = 1;
-  reservaEditando: Reservas | null = null;
-  esNuevo: boolean = false;
-
-  // Fechas disponibles del curso de la reserva que se está editando (para reprogramar)
-  fechasDisponibles: CursoFecha[] = [];
 
   // Modal de feedback
   mostrarFeedback = false;
@@ -36,8 +28,7 @@ export class ReservasDashboard implements OnInit {
 
   constructor(
     private reservasService: ReservasService,
-    private csvExportService: CsvExportService,
-    private cursoFechaService: CursoFechaService
+    private csvExportService: CsvExportService
   ) {}
 
   ngOnInit(): void {
@@ -57,70 +48,6 @@ export class ReservasDashboard implements OnInit {
         this.loading = false;
       }
     });
-  }
-
-  crearReserva() {
-    this.esNuevo = true;
-    this.reservaEditando = {
-      id: 0,
-      idCliente: '',
-      idFecha: 0,
-      idCurso: 0,
-      plazasReservadas: 0,
-      fechaReserva: new Date(),
-      nombreCurso: '',
-      fechaCurso: '',
-      nombreCliente: '',
-      telefono: '',
-      email: '',
-      pagado: true
-    };
-  }
-
-  editarReserva(reserva: Reservas) {
-    this.esNuevo = false;
-    this.reservaEditando = { ...reserva };
-    this.fechasDisponibles = [];
-
-    this.cursoFechaService.getCursoFechaPorIdCurso(reserva.idCurso).subscribe({
-      next: fechas => {
-        this.fechasDisponibles = fechas;
-      },
-      error: err => {
-        console.error('Error al cargar las fechas disponibles del curso', err);
-      }
-    });
-  }
-
-  cancelarEdicion() {
-    this.reservaEditando = null;
-    this.esNuevo = false;
-    this.fechasDisponibles = [];
-  }
-
-  guardarCambios() {
-    if (!this.reservaEditando) return;
-
-    if (this.esNuevo) {
-      this.reservasService.crearReserva(this.reservaEditando).subscribe(() => {
-        this.obtenerReservas();
-        this.reservaEditando = null;
-        this.esNuevo = false;
-      });
-    } else {
-      this.reservasService.actualizarReserva(this.reservaEditando).subscribe({
-        next: () => {
-          this.obtenerReservas();
-          this.reservaEditando = null;
-          this.mostrarModalFeedback('success', 'Saved', 'Booking updated successfully.');
-        },
-        error: err => {
-          console.error('Error updating booking', err);
-          const mensaje = typeof err?.error === 'string' ? err.error : 'Could not update the booking.';
-          this.mostrarModalFeedback('error', 'Error updating', mensaje);
-        }
-      });
-    }
   }
 
   cancelarReserva(reserva: Reservas) {

@@ -32,18 +32,6 @@ crearReserva(reserva: Reservas): Observable<Reservas> {
   return this.http.post<Reservas>(this.apiUrl, reserva, { headers });
 }
 
-actualizarReserva(reserva: Reservas): Observable<Reservas> {
-  const token = this.auth.obtenerToken();
-
-  const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
-
-  return this.http.put<Reservas>(
-    `${this.apiUrl}/${reserva.id}`,
-    reserva,
-    { headers }
-  );
-}
-
 eliminarReserva(id: number): Observable<void> {
   const token = this.auth.obtenerToken();
 

@@ -68,10 +68,7 @@
               </td>
 
               <td>
-                <div class="d-flex flex-column flex-md-row gap-2">
-                  <button class="btn btn-primary btn-sm" (click)="editarReserva(reserva)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="cancelarReserva(reserva)">Cancel</button>
-                </div>
+                <button class="btn btn-danger btn-sm" (click)="cancelarReserva(reserva)">Cancel</button>
               </td>
             </tr>
 
@@ -97,68 +94,6 @@
     </pagination-controls>
   </div>
 </div>
-
-<!-- MODAL -->
-<div class="modal fade show d-block" tabindex="-1" *ngIf="reservaEditando">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content shadow-lg">
-      <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title">Edit Booking</h5>
-        <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
-      </div>
-
-      <div class="modal-body">
-        <form (ngSubmit)="guardarCambios()" #reservaForm="ngForm" novalidate>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Client</label>
-              <input type="text" class="form-control" [value]="reservaEditando.email" disabled readonly />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Course</label>
-              <input type="text" class="form-control" [value]="reservaEditando.nombreCurso" disabled readonly />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Reserved Seats</label>
-              <input
-                type="number"
-                class="form-control"
-                name="plazasReservadas"
-                [(ngModel)]="reservaEditando.plazasReservadas"
-                min="1"
-                required
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Course Date</label>
-              <select
-                class="form-select"
-                name="idFecha"
-                [(ngModel)]="reservaEditando.idFecha"
-                required>
-                <option
-                  *ngFor="let fecha of fechasDisponibles"
-                  [ngValue]="fecha.id">
-                  {{ fecha.fecha | date:'yyyy-MM-dd' }} {{ fecha.horaInicio }} ({{ fecha.plazasDisponibles }} seats free)
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-end gap-2 mt-3">
-            <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancel</button>
-            <button type="submit" class="btn btn-success" [disabled]="reservaForm.invalid">Save</button>
-          </div>
-        </form>
-      </div>
-
-    </div>
-  </div>
-</div>
-<div class="modal-backdrop fade show" *ngIf="reservaEditando"></div>
 
 <app-feedback-modal
   *ngIf="mostrarFeedback"
