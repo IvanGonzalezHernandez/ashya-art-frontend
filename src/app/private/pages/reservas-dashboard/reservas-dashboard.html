@@ -26,7 +26,7 @@
               <th class="d-none d-md-table-cell" style="width: 10%;">Unit Price</th>
               <th class="d-none d-md-table-cell" style="width: 12%;">Payment</th>
               <th class="d-none d-lg-table-cell" style="width: 16%;">Book date</th>
-              <!-- <th style="width: 10%;">Actions</th> -->
+              <th style="width: 10%;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -67,18 +67,15 @@
                 {{ reserva.fechaReserva | date:'yyyy-MM-dd' }}
               </td>
 
-              <!--
               <td>
                 <div class="d-flex flex-column flex-md-row gap-2">
                   <button class="btn btn-primary btn-sm" (click)="editarReserva(reserva)">Edit</button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarReserva(reserva.id)">Delete</button>
                 </div>
               </td>
-              -->
             </tr>
 
             <tr *ngIf="(reservas || []).length === 0">
-              <td colspan="7" class="text-center text-muted py-3">
+              <td colspan="8" class="text-center text-muted py-3">
                 No bookings yet.
               </td>
             </tr>
@@ -105,7 +102,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
-        <h5 class="modal-title">{{ esNuevo ? 'Create Reserva' : 'Edit Reserva' }}</h5>
+        <h5 class="modal-title">Edit Booking</h5>
         <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
       </div>
 
@@ -113,25 +110,13 @@
         <form (ngSubmit)="guardarCambios()" #reservaForm="ngForm" novalidate>
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label">ID Cliente</label>
-              <input
-                type="number"
-                class="form-control"
-                name="idCliente"
-                [(ngModel)]="reservaEditando.idCliente"
-                required
-              />
+              <label class="form-label">Client</label>
+              <input type="text" class="form-control" [value]="reservaEditando.email" disabled readonly />
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">ID Fecha</label>
-              <input
-                type="number"
-                class="form-control"
-                name="idFecha"
-                [(ngModel)]="reservaEditando.idFecha"
-                required
-              />
+              <label class="form-label">Course</label>
+              <input type="text" class="form-control" [value]="reservaEditando.nombreCurso" disabled readonly />
             </div>
 
             <div class="col-md-6">
@@ -147,15 +132,14 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">Book date</label>
-              <input
-                type="date"
-                class="form-control"
-                name="fechaReserva"
-                [ngModel]="reservaEditando.fechaReserva | date:'yyyy-MM-dd'"
-                (ngModelChange)="reservaEditando.fechaReserva = $event"
-                required
-              />
+              <label class="form-label">Payment</label>
+              <select
+                class="form-select"
+                name="pagado"
+                [(ngModel)]="reservaEditando.pagado">
+                <option [ngValue]="true">Paid</option>
+                <option [ngValue]="false">Atelier</option>
+              </select>
             </div>
           </div>
 
