@@ -1,16 +1,18 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
 import { DashboardService, DashboardTotals } from '../../../services/dashboard/dashboard';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
 export class Dashboard implements OnInit, AfterViewInit {
 
+  loading: boolean = true;
   totalClientes: number = 0;
   totalProductos: number = 0;
   totalReservas: number = 0;
@@ -53,9 +55,13 @@ export class Dashboard implements OnInit, AfterViewInit {
         this.pagosOtros = data.pagosOtros ?? 0;
         this.resumenLabels = data.resumenLabels ?? [];
         this.resumenDatos = data.resumenDatos ?? [];
+        this.loading = false;
         this.updateChart();
       },
-      error: err => console.error('Error loading dashboard totals', err)
+      error: err => {
+        console.error('Error loading dashboard totals', err);
+        this.loading = false;
+      }
     });
   }
 
