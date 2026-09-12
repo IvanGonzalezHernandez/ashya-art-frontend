@@ -20,6 +20,10 @@ export class Dashboard implements OnInit, AfterViewInit {
   totalIngresosNetos: number = 0;
   totalTarjetasRegalo: number = 0;
   totalNewsletter: number = 0;
+  reservasOnline: number = 0;
+  reservasAtelier: number = 0;
+  tarjetasRegaloCanjeadas: number = 0;
+  tarjetasRegaloNoCanjeadas: number = 0;
   pagosTarjeta: number = 0;
   pagosPaypal: number = 0;
   pagosOtros: number = 0;
@@ -50,6 +54,10 @@ export class Dashboard implements OnInit, AfterViewInit {
         this.totalIngresosNetos = data.totalIngresosNetos ?? 0;
         this.totalTarjetasRegalo = data.totalTarjetasRegalo ?? 0;
         this.totalNewsletter = data.totalNewsletter;
+        this.reservasOnline = data.reservasOnline ?? 0;
+        this.reservasAtelier = data.reservasAtelier ?? 0;
+        this.tarjetasRegaloCanjeadas = data.tarjetasRegaloCanjeadas ?? 0;
+        this.tarjetasRegaloNoCanjeadas = data.tarjetasRegaloNoCanjeadas ?? 0;
         this.pagosTarjeta = data.pagosTarjeta ?? 0;
         this.pagosPaypal = data.pagosPaypal ?? 0;
         this.pagosOtros = data.pagosOtros ?? 0;
