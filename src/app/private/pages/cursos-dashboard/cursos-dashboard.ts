@@ -58,6 +58,25 @@ export class CursosDashboard implements OnInit {
   cursoEditando: Curso | null = null;
   esNuevo: boolean = false;
 
+  // FILTROS CURSOS
+  filtroTextoCurso: string = '';
+  filtroVisibilidadCurso: string = '';
+
+  get cursosFiltrados(): Curso[] {
+    const texto = this.filtroTextoCurso.trim().toLowerCase();
+    return (this.cursos || []).filter(c => {
+      const coincideTexto = !texto || (c.nombre ?? '').toLowerCase().includes(texto);
+      const coincideVisibilidad = !this.filtroVisibilidadCurso ||
+        (this.filtroVisibilidadCurso === 'visible' && c.estado !== false) ||
+        (this.filtroVisibilidadCurso === 'hidden' && c.estado === false);
+      return coincideTexto && coincideVisibilidad;
+    });
+  }
+
+  onFiltroCursoChange(): void {
+    this.paginaActual = 1;
+  }
+
   // UI de imágenes por slots
   slots: SlotImagen[] = [];
 
@@ -68,6 +87,26 @@ export class CursosDashboard implements OnInit {
   cursoFechaEditando: CursoFecha | null = null;
   esNuevaCursoFecha: boolean = false;
   cursoFechaSaving = false;
+
+  // FILTROS CURSOFECHA
+  filtroCursoFecha: string = '';
+  filtroSoloDisponibles: boolean = false;
+
+  get cursosParaFiltro(): string[] {
+    return Array.from(new Set((this.cursoFechas || []).map(cf => cf.nombreCurso).filter((n): n is string => !!n))).sort();
+  }
+
+  get cursoFechasFiltradas(): CursoFecha[] {
+    return (this.cursoFechas || []).filter(cf => {
+      const coincideCurso = !this.filtroCursoFecha || cf.nombreCurso === this.filtroCursoFecha;
+      const coincideDisponibilidad = !this.filtroSoloDisponibles || (cf.plazasDisponibles ?? 0) > 0;
+      return coincideCurso && coincideDisponibilidad;
+    });
+  }
+
+  onFiltroCursoFechaChange(): void {
+    this.paginaActualCursoFecha = 1;
+  }
   cursoSaving = false;
 
   constructor(
@@ -484,7 +523,7 @@ confirmarEliminarFecha() {
 
   exportarCursosCSV() {
     const headers = ['ID', 'Name', 'Subtitle', 'Description', 'Price', 'Visibility'];
-    const rows = (this.cursos || []).map(curso => [
+    const rows = this.cursosFiltrados.map(curso => [
       curso.id,
       curso.nombre,
       curso.subtitulo,
@@ -497,7 +536,7 @@ confirmarEliminarFecha() {
 
   exportarCursoFechasCSV() {
     const encabezadoCursoFechas = ['ID', 'Course', 'Date', 'Start Time', 'End Time', 'Available Seats'];
-    const filasCursoFechas = (this.cursoFechas || []).map(cf => [
+    const filasCursoFechas = this.cursoFechasFiltradas.map(cf => [
       cf.id,
       cf.nombreCurso,
       cf.fecha,

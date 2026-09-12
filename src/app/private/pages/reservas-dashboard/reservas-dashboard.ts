@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
@@ -13,13 +14,34 @@ import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-mod
   standalone: true,
   templateUrl: './reservas-dashboard.html',
   styleUrls: ['./reservas-dashboard.scss'],
-  imports: [CommonModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent]
 })
 export class ReservasDashboard implements OnInit {
   loading = false;
 
   reservas: Reservas[] = [];
   paginaActual: number = 1;
+
+  // FILTROS
+  filtroTexto: string = '';
+  filtroPago: string = '';
+
+  get reservasFiltradas(): Reservas[] {
+    const texto = this.filtroTexto.trim().toLowerCase();
+    return (this.reservas || []).filter(r => {
+      const coincideTexto = !texto ||
+        (r.email ?? '').toLowerCase().includes(texto) ||
+        (r.nombreCurso ?? '').toLowerCase().includes(texto);
+      const coincidePago = !this.filtroPago ||
+        (this.filtroPago === 'paid' && r.pagado) ||
+        (this.filtroPago === 'atelier' && !r.pagado);
+      return coincideTexto && coincidePago;
+    });
+  }
+
+  onFiltroChange(): void {
+    this.paginaActual = 1;
+  }
 
   // Modal de confirmación de cancelación
   reservaACancelar: Reservas | null = null;
@@ -81,7 +103,7 @@ export class ReservasDashboard implements OnInit {
 
   exportarCSV() {
     const encabezado = ['Client', 'Course', 'Date', 'Reserved Seats', 'Unit Price', 'Payment', 'Book Date'];
-    const filas = (this.reservas || []).map(reserva => [
+    const filas = this.reservasFiltradas.map(reserva => [
       reserva.email ?? '',
       reserva.nombreCurso ?? '',
       reserva.fechaCurso ?? '',

@@ -11,6 +11,20 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS -->
+  <div class="row g-2 mb-3" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by name, surname or email"
+             [(ngModel)]="filtroTexto" (ngModelChange)="onFiltroChange()">
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroPais" (ngModelChange)="onFiltroChange()">
+        <option value="">All countries</option>
+        <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA CLIENTES EN UNA CARD -->
   <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
     <div class="card-body p-0">
@@ -31,7 +45,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let cliente of clientes | paginate: { id: 'clientes', itemsPerPage: 10, currentPage: paginaActual }">
+            <tr *ngFor="let cliente of clientesFiltrados | paginate: { id: 'clientes', itemsPerPage: 10, currentPage: paginaActual }">
               <!--td class="text-muted">{{ cliente.id }}</td>-->
 
               <td>
@@ -83,9 +97,9 @@
               </td>
             </tr>
             
-            <tr *ngIf="(clientes || []).length === 0">
+            <tr *ngIf="clientesFiltrados.length === 0">
               <td colspan="8" class="text-center text-muted py-3">
-                No clients yet.
+                No clients match your search.
               </td>
             </tr>
           </tbody>

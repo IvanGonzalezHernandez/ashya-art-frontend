@@ -29,6 +29,25 @@ export class NewsletterDashboard implements OnInit {
   newsletterEditando: Newsletter | null = null;
   esNuevo: boolean = false;
 
+  // FILTROS
+  filtroTexto: string = '';
+  filtroEstado: string = '';
+
+  get newslettersFiltrados(): Newsletter[] {
+    const texto = this.filtroTexto.trim().toLowerCase();
+    return (this.newsletters || []).filter(n => {
+      const coincideTexto = !texto || (n.email ?? '').toLowerCase().includes(texto);
+      const coincideEstado = !this.filtroEstado ||
+        (this.filtroEstado === 'active' && n.estado) ||
+        (this.filtroEstado === 'inactive' && !n.estado);
+      return coincideTexto && coincideEstado;
+    });
+  }
+
+  onFiltroChange(): void {
+    this.paginaActual = 1;
+  }
+
   constructor(
     private newsletterService: NewsletterService,
     private csvExportService: CsvExportService
@@ -140,7 +159,7 @@ eliminarNewsletter(id: number) {
 
   exportarCSV() {
     const encabezado = ['Email', 'Registration Date', 'Status'];
-    const filas = this.newsletters.map(newsletter => [
+    const filas = this.newslettersFiltrados.map(newsletter => [
       newsletter.email,
       newsletter.fechaRegistro.toString(),
       newsletter.estado ? 'Active' : 'Inactive'

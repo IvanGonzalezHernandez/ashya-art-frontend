@@ -47,12 +47,52 @@ export class TarjetasRegaloDashboard implements OnInit {
   tarjetaEditando: TarjetaRegalo | null = null;
   esNueva: boolean = false;
 
+  // FILTROS TARJETAS
+  filtroTextoTarjeta: string = '';
+  filtroVisibilidad: string = '';
+
+  get tarjetasFiltradas(): TarjetaRegalo[] {
+    const texto = this.filtroTextoTarjeta.trim().toLowerCase();
+    return (this.tarjetas || []).filter(t => {
+      const coincideTexto = !texto || (t.nombre ?? '').toLowerCase().includes(texto);
+      const coincideVisibilidad = !this.filtroVisibilidad ||
+        (this.filtroVisibilidad === 'visible' && t.estado !== false) ||
+        (this.filtroVisibilidad === 'hidden' && t.estado === false);
+      return coincideTexto && coincideVisibilidad;
+    });
+  }
+
+  onFiltroTarjetaChange(): void {
+    this.paginaActual = 1;
+  }
+
   // Slot único de imagen
   imgSlot: SlotImagen = { previewUrl: null, markedForDelete: false };
 
   // Compras de tarjetas
   tarjetasCompra: TarjetaRegaloCompra[] = [];
   paginaActualCompras: number = 1;
+
+  // FILTROS COMPRAS TARJETAS
+  filtroTextoCompraTarjeta: string = '';
+  filtroCanjeada: string = '';
+
+  get tarjetasCompraFiltradas(): TarjetaRegaloCompra[] {
+    const texto = this.filtroTextoCompraTarjeta.trim().toLowerCase();
+    return (this.tarjetasCompra || []).filter(c => {
+      const coincideTexto = !texto ||
+        (c.codigo ?? '').toLowerCase().includes(texto) ||
+        (c.email ?? '').toLowerCase().includes(texto);
+      const coincideCanjeada = !this.filtroCanjeada ||
+        (this.filtroCanjeada === 'yes' && c.canjeada) ||
+        (this.filtroCanjeada === 'no' && !c.canjeada);
+      return coincideTexto && coincideCanjeada;
+    });
+  }
+
+  onFiltroCompraTarjetaChange(): void {
+    this.paginaActualCompras = 1;
+  }
 
   // Edición manual de canjeo (Redeemed / Redeemed On)
   compraEditando: TarjetaRegaloCompra | null = null;
@@ -202,7 +242,7 @@ export class TarjetasRegaloDashboard implements OnInit {
 
   exportarCSV() {
     const encabezado = ['Name', 'Price', 'Visibility'];
-    const filas = this.tarjetas.map(t => [
+    const filas = this.tarjetasFiltradas.map(t => [
       t.nombre ?? '',
       (t.precio ?? 0).toString(),
       t.estado !== false ? 'Visible' : 'Hidden'
@@ -269,7 +309,7 @@ export class TarjetasRegaloDashboard implements OnInit {
 
   exportarCSVCompras() {
     const encabezado = ['Code', 'Client', 'Price', 'Purchase Date', 'Expiration', 'Redeemed', 'Redeemed On', 'Amount Spent'];
-    const filas = (this.tarjetasCompra || []).map(c => [
+    const filas = this.tarjetasCompraFiltradas.map(c => [
       c.codigo ?? '',
       c.email ?? '',
       (c.precio ?? 0).toString(),

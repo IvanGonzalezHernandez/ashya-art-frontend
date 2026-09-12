@@ -11,6 +11,27 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS PRODUCTOS -->
+  <div class="row g-2 mb-3" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by name"
+             [(ngModel)]="filtroTextoProducto" (ngModelChange)="onFiltroProductoChange()">
+    </div>
+    <div class="col-6 col-md-3 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroCategoria" (ngModelChange)="onFiltroProductoChange()">
+        <option value="">All categories</option>
+        <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-3 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroVisibilidad" (ngModelChange)="onFiltroProductoChange()">
+        <option value="">All visibility</option>
+        <option value="visible">Visible</option>
+        <option value="hidden">Hidden</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA PRODUCTOS EN UNA CARD -->
   <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
     <div class="card-body p-0">
@@ -31,7 +52,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let producto of productos | paginate: { id: 'productos', itemsPerPage: 5, currentPage: paginaActualProducto }">
+          <tr *ngFor="let producto of productosFiltrados | paginate: { id: 'productos', itemsPerPage: 5, currentPage: paginaActualProducto }">
             <!-- <td class="text-muted">{{ producto.id }}</td> -->
 
             <td>
@@ -77,8 +98,8 @@
               </div>
             </td>
           </tr>
-          <tr *ngIf="(productos || []).length === 0">
-            <td colspan="10" class="text-center text-muted py-3">No products yet.</td>
+          <tr *ngIf="productosFiltrados.length === 0">
+            <td colspan="10" class="text-center text-muted py-3">No products match your search.</td>
           </tr>
         </tbody>
       </table>
@@ -244,6 +265,22 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS COMPRAS -->
+  <div class="row g-2 mb-3" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by customer or product"
+             [(ngModel)]="filtroTextoCompra" (ngModelChange)="onFiltroCompraChange()">
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroEntrega" (ngModelChange)="onFiltroCompraChange()">
+        <option value="">All delivery methods</option>
+        <option value="PICKUP">Pickup</option>
+        <option value="GERMANY">Germany</option>
+        <option value="EU">EU</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA COMPRAS EN UNA CARD -->
   <div class="card shadow-sm rounded-3" *ngIf="!loading">
     <div class="card-body p-0">
@@ -263,7 +300,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let compra of compras | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompra }">
+            <tr *ngFor="let compra of comprasFiltradas | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompra }">
               <!-- <td class="text-muted">{{ compra.id }}</td> -->
 
               <td>
@@ -315,8 +352,8 @@
                 </div>
               </td>
             </tr>
-          <tr *ngIf="(compras || []).length === 0">
-            <td colspan="8" class="text-center text-muted py-3">No products purchases yet.</td>
+          <tr *ngIf="comprasFiltradas.length === 0">
+            <td colspan="8" class="text-center text-muted py-3">No product purchases match your search.</td>
           </tr>
           </tbody>
         </table>

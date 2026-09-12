@@ -11,6 +11,21 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS -->
+  <div class="row g-2 mb-3" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by client or course"
+             [(ngModel)]="filtroTexto" (ngModelChange)="onFiltroChange()">
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroPago" (ngModelChange)="onFiltroChange()">
+        <option value="">All payments</option>
+        <option value="paid">Paid</option>
+        <option value="atelier">Atelier</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA EN UNA CARD -->
   <div class="card shadow-sm rounded-3 mb-4" *ngIf="!loading">
     <div class="card-body p-0">
@@ -30,7 +45,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let reserva of reservas | paginate: { id: 'reservas', itemsPerPage: 10, currentPage: paginaActual }">
+            <tr *ngFor="let reserva of reservasFiltradas | paginate: { id: 'reservas', itemsPerPage: 10, currentPage: paginaActual }">
               <!--<td class="text-muted">{{ reserva.id }}</td>-->
 
               <td>
@@ -72,9 +87,9 @@
               </td>
             </tr>
 
-            <tr *ngIf="(reservas || []).length === 0">
+            <tr *ngIf="reservasFiltradas.length === 0">
               <td colspan="8" class="text-center text-muted py-3">
-                No bookings yet.
+                No bookings match your search.
               </td>
             </tr>
           </tbody>

@@ -12,6 +12,20 @@
     Could not load emails from Resend. Please try again later.
   </div>
 
+  <!-- FILTROS -->
+  <div class="row g-2 mb-3" *ngIf="!loading && !error">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by recipient or subject"
+             [(ngModel)]="filtroTexto" (ngModelChange)="onFiltroChange()">
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroEstado" (ngModelChange)="onFiltroChange()">
+        <option value="">All statuses</option>
+        <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA EMAILS EN UNA CARD -->
   <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading && !error">
     <div class="card-body p-0">
@@ -28,7 +42,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let email of emails | paginate: { id: 'emails', itemsPerPage: 10, currentPage: paginaActual }">
+            <tr *ngFor="let email of emailsFiltrados | paginate: { id: 'emails', itemsPerPage: 10, currentPage: paginaActual }">
               <td>
                 <span class="d-inline-block w-100 text-truncate" [title]="email.to.join(', ')">
                   {{ email.to.join(', ') }}
@@ -56,7 +70,7 @@
               </td>
             </tr>
 
-            <tr *ngIf="(emails || []).length === 0">
+            <tr *ngIf="emailsFiltrados.length === 0">
               <td colspan="5" class="text-center text-muted py-3">
                 No emails sent yet.
               </td>

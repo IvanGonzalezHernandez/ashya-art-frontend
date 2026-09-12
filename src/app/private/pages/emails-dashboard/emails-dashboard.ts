@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -12,7 +13,7 @@ import { EmailEnviado, EmailEnviadoDetalle } from '../../../models/email-enviado
   standalone: true,
   templateUrl: './emails-dashboard.html',
   styleUrls: ['./emails-dashboard.scss'],
-  imports: [CommonModule, NgxPaginationModule]
+  imports: [CommonModule, FormsModule, NgxPaginationModule]
 })
 export class EmailsDashboard implements OnInit {
   loading = false;
@@ -22,6 +23,29 @@ export class EmailsDashboard implements OnInit {
   emails: EmailEnviado[] = [];
   hasMore = false;
   paginaActual: number = 1;
+
+  // FILTROS
+  filtroTexto: string = '';
+  filtroEstado: string = '';
+
+  get estados(): string[] {
+    return Array.from(new Set((this.emails || []).map(e => e.last_event || 'unknown'))).sort();
+  }
+
+  get emailsFiltrados(): EmailEnviado[] {
+    const texto = this.filtroTexto.trim().toLowerCase();
+    return (this.emails || []).filter(e => {
+      const coincideTexto = !texto ||
+        e.to.join(', ').toLowerCase().includes(texto) ||
+        (e.subject ?? '').toLowerCase().includes(texto);
+      const coincideEstado = !this.filtroEstado || (e.last_event || 'unknown') === this.filtroEstado;
+      return coincideTexto && coincideEstado;
+    });
+  }
+
+  onFiltroChange(): void {
+    this.paginaActual = 1;
+  }
 
   // Modal de previsualización
   emailSeleccionado: EmailEnviadoDetalle | null = null;
@@ -101,7 +125,7 @@ export class EmailsDashboard implements OnInit {
 
   exportarCSV() {
     const encabezado = ['Recipient', 'Subject', 'Sent', 'Status'];
-    const filas = this.emails.map(email => [
+    const filas = this.emailsFiltrados.map(email => [
       email.to.join(', '),
       email.subject,
       email.created_at,

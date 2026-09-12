@@ -11,6 +11,21 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS -->
+  <div class="row g-2 mb-3" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by name"
+             [(ngModel)]="filtroTextoTarjeta" (ngModelChange)="onFiltroTarjetaChange()">
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroVisibilidad" (ngModelChange)="onFiltroTarjetaChange()">
+        <option value="">All visibility</option>
+        <option value="visible">Visible</option>
+        <option value="hidden">Hidden</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA EN UNA CARD -->
   <div class="card shadow-sm rounded-3" *ngIf="!loading">
     <div class="card-body p-0">
@@ -25,7 +40,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let tarjeta of tarjetas | paginate: { id: 'tarjetas', itemsPerPage: 5, currentPage: paginaActual }">
+            <tr *ngFor="let tarjeta of tarjetasFiltradas | paginate: { id: 'tarjetas', itemsPerPage: 5, currentPage: paginaActual }">
               <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="tarjeta.nombre">
                   {{ tarjeta.nombre }}
@@ -50,7 +65,7 @@
               </td>
             </tr>
             
-            <tr *ngIf="(tarjetas || []).length === 0">
+            <tr *ngIf="tarjetasFiltradas.length === 0">
               <td colspan="4" class="text-center text-muted py-3">
                 No gift cards yet.
               </td>
@@ -207,6 +222,21 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS COMPRAS -->
+  <div class="row g-2 mb-3" *ngIf="!loadingCompras">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by code or client email"
+             [(ngModel)]="filtroTextoCompraTarjeta" (ngModelChange)="onFiltroCompraTarjetaChange()">
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroCanjeada" (ngModelChange)="onFiltroCompraTarjetaChange()">
+        <option value="">All</option>
+        <option value="yes">Redeemed</option>
+        <option value="no">Not redeemed</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA COMPRAS -->
   <div class="card shadow-sm rounded-3" *ngIf="!loadingCompras">
     <div class="card-body p-0">
@@ -227,7 +257,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let compra of tarjetasCompra | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompras }">
+            <tr *ngFor="let compra of tarjetasCompraFiltradas | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompras }">
               <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="compra.codigo">
                   {{ compra.codigo }}
@@ -275,7 +305,7 @@
               </td>
             </tr>
 
-            <tr *ngIf="(tarjetasCompra || []).length === 0">
+            <tr *ngIf="tarjetasCompraFiltradas.length === 0">
               <td colspan="9" class="text-center text-muted py-3">
                 No gift card purchases yet.
               </td>

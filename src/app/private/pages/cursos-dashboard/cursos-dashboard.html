@@ -11,6 +11,21 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS CURSOS -->
+  <div class="row g-2 mb-3" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Search by name"
+             [(ngModel)]="filtroTextoCurso" (ngModelChange)="onFiltroCursoChange()">
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroVisibilidadCurso" (ngModelChange)="onFiltroCursoChange()">
+        <option value="">All visibility</option>
+        <option value="visible">Visible</option>
+        <option value="hidden">Hidden</option>
+      </select>
+    </div>
+  </div>
+
   <!-- TABLA CURSOS EN UNA CARD -->
   <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
     <div class="card-body p-0">
@@ -27,7 +42,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let curso of cursos | paginate: { id: 'cursos', itemsPerPage: 5, currentPage: paginaActual }">
+            <tr *ngFor="let curso of cursosFiltrados | paginate: { id: 'cursos', itemsPerPage: 5, currentPage: paginaActual }">
               <td>
                 <span class="d-inline-block w-100 text-truncate" [title]="curso.nombre">
                   {{ curso.nombre | truncate:20 }}
@@ -246,6 +261,23 @@
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
 
+  <!-- FILTROS FECHAS -->
+  <div class="row g-2 mb-3" *ngIf="!loading">
+    <div class="col-6 col-md-4 col-lg-3">
+      <select class="form-select" [(ngModel)]="filtroCursoFecha" (ngModelChange)="onFiltroCursoFechaChange()">
+        <option value="">All courses</option>
+        <option *ngFor="let curso of cursosParaFiltro" [value]="curso">{{ curso }}</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 d-flex align-items-center">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="soloDisponibles"
+               [(ngModel)]="filtroSoloDisponibles" (ngModelChange)="onFiltroCursoFechaChange()">
+        <label class="form-check-label" for="soloDisponibles">Only with available seats</label>
+      </div>
+    </div>
+  </div>
+
   <!-- TABLA CURSOFECHA EN UNA CARD -->
   <div class="card shadow-sm rounded-3" *ngIf="!loading">
     <div class="card-body p-0">
@@ -270,7 +302,7 @@
 
         <tbody>
           <tr
-            *ngFor="let cursoFecha of cursoFechas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }"
+            *ngFor="let cursoFecha of cursoFechasFiltradas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }"
             [class.tr-proxima-clase]="cursoFecha.id === proximaCursoFechaId">
 
             <td>

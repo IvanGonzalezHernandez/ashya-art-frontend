@@ -29,6 +29,30 @@ export class ClientesDashboard implements OnInit {
   esNuevo: boolean = false;
   modoDetalle: boolean = false;
 
+  // FILTROS
+  filtroTexto: string = '';
+  filtroPais: string = '';
+
+  get paises(): string[] {
+    return Array.from(new Set((this.clientes || []).map(c => c.pais).filter((p): p is string => !!p))).sort();
+  }
+
+  get clientesFiltrados(): Cliente[] {
+    const texto = this.filtroTexto.trim().toLowerCase();
+    return (this.clientes || []).filter(c => {
+      const coincideTexto = !texto ||
+        (c.nombre ?? '').toLowerCase().includes(texto) ||
+        (c.apellido ?? '').toLowerCase().includes(texto) ||
+        (c.email ?? '').toLowerCase().includes(texto);
+      const coincidePais = !this.filtroPais || c.pais === this.filtroPais;
+      return coincideTexto && coincidePais;
+    });
+  }
+
+  onFiltroChange(): void {
+    this.paginaActual = 1;
+  }
+
   constructor(
     private clienteService: ClienteService,
     private csvExportService: CsvExportService
@@ -159,7 +183,7 @@ eliminarCliente(id: number) {
 
   exportarCSV() {
     const encabezado = ['Name', 'Surname', 'Tlf', 'Email', 'Street', 'Number', 'Floor', 'Province', 'City', 'Country', 'Postal Code', 'Registration'];
-    const filas = this.clientes.map(cliente => [
+    const filas = this.clientesFiltrados.map(cliente => [
       cliente.nombre,
       cliente.apellido,
       cliente.telefono,

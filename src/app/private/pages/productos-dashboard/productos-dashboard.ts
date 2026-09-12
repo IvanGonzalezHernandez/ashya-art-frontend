@@ -52,11 +52,55 @@ export class ProductosDashboard implements OnInit {
   productoEditando: Producto | null = null;
   esNuevoProducto: boolean = false;
 
+  // FILTROS PRODUCTOS
+  filtroTextoProducto: string = '';
+  filtroCategoria: string = '';
+  filtroVisibilidad: string = '';
+
+  get categorias(): string[] {
+    return Array.from(new Set((this.productos || []).map(p => p.categoria).filter((c): c is string => !!c))).sort();
+  }
+
+  get productosFiltrados(): Producto[] {
+    const texto = this.filtroTextoProducto.trim().toLowerCase();
+    return (this.productos || []).filter(p => {
+      const coincideTexto = !texto || (p.nombre ?? '').toLowerCase().includes(texto);
+      const coincideCategoria = !this.filtroCategoria || p.categoria === this.filtroCategoria;
+      const coincideVisibilidad = !this.filtroVisibilidad ||
+        (this.filtroVisibilidad === 'visible' && p.estado !== false) ||
+        (this.filtroVisibilidad === 'hidden' && p.estado === false);
+      return coincideTexto && coincideCategoria && coincideVisibilidad;
+    });
+  }
+
+  onFiltroProductoChange(): void {
+    this.paginaActualProducto = 1;
+  }
+
   // Compras
   compras: ProductoCompra[] = [];
   paginaActualCompra: number = 1;
   compraEditando: ProductoCompra | null = null;
   esNuevoCompra: boolean = false;
+
+  // FILTROS COMPRAS
+  filtroTextoCompra: string = '';
+  filtroEntrega: string = '';
+
+  get comprasFiltradas(): ProductoCompra[] {
+    const texto = this.filtroTextoCompra.trim().toLowerCase();
+    return (this.compras || []).filter(c => {
+      const coincideTexto = !texto ||
+        (c.nombreCliente ?? '').toLowerCase().includes(texto) ||
+        (c.nombreProducto ?? '').toLowerCase().includes(texto);
+      const coincideEntrega = !this.filtroEntrega || c.metodoEnvio === this.filtroEntrega;
+      return coincideTexto && coincideEntrega;
+    });
+  }
+
+  onFiltroCompraChange(): void {
+    this.paginaActualCompra = 1;
+  }
 
   // Numero de seguimiento (input en curso por fila, antes de enviar el email)
   seguimientoInputs: Record<number, string | undefined> = {};
@@ -273,7 +317,7 @@ eliminarProducto(id: number) {
 
   exportarCSVProductos() {
     const encabezado = ['ID', 'Name', 'Subtitle', 'Description', 'Stock', 'Price'];
-    const filas = this.productos.map(producto => [
+    const filas = this.productosFiltrados.map(producto => [
       producto.id,
       producto.nombre,
       producto.subtitulo,
@@ -383,7 +427,7 @@ cerrarFeedback() {
 
   exportarCSVCompras() {
     const encabezado = ['ID', 'Client ID', 'Client Name', 'Product ID', 'Product Name', 'Quantity', 'Unit Price', 'Purchase Date'];
-    const filas = this.compras.map(compra => [
+    const filas = this.comprasFiltradas.map(compra => [
       compra.id,
       compra.idCliente,
       compra.nombreCliente,
