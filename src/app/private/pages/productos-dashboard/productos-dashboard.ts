@@ -281,7 +281,7 @@ eliminarProducto(id: number) {
       producto.stock,
       producto.precio,
     ]);
-    this.csvExportService.exportarCSV(encabezado, filas, 'products.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Products');
   }
 
   // --- MÉTODOS PRODUCTO COMPRA ---
@@ -382,7 +382,7 @@ cerrarFeedback() {
 }
 
   exportarCSVCompras() {
-    const encabezado = ['ID', 'ID Cliente', 'Nombre Cliente', 'ID Producto', 'Nombre Producto', 'Cantidad', 'Precio Unitario', 'Fecha Compra'];
+    const encabezado = ['ID', 'Client ID', 'Client Name', 'Product ID', 'Product Name', 'Quantity', 'Unit Price', 'Purchase Date'];
     const filas = this.compras.map(compra => [
       compra.id,
       compra.idCliente,
@@ -393,6 +393,6 @@ cerrarFeedback() {
       compra.precio ?? '',
       compra.fechaCompra.toString()
     ]);
-    this.csvExportService.exportarCSV(encabezado, filas, 'producto_compras.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Product_Purchases');
   }
 }

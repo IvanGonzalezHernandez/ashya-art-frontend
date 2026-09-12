@@ -173,6 +173,6 @@ eliminarCliente(id: number) {
       cliente.codigoPostal,
       cliente.fechaAlta ?? ''
     ]);
-    this.csvExportService.exportarCSV(encabezado, filas, 'clients.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Clients');
   }
 }

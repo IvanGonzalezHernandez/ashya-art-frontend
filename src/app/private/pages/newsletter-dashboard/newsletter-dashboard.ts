@@ -145,6 +145,6 @@ eliminarNewsletter(id: number) {
       newsletter.fechaRegistro.toString(),
       newsletter.estado ? 'Active' : 'Inactive'
     ]);
-    this.csvExportService.exportarCSV(encabezado, filas, 'newsletter.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Newsletter');
   }
 }

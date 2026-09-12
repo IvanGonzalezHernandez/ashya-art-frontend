@@ -207,7 +207,7 @@ export class TarjetasRegaloDashboard implements OnInit {
       (t.precio ?? 0).toString(),
       t.estado !== false ? 'Visible' : 'Hidden'
     ]);
-    this.csvExportService.exportarCSV(encabezado, filas, 'gift-cards.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Gift_Cards');
   }
 
   // ===== COMPRAS TARJETAS =====
@@ -279,7 +279,7 @@ export class TarjetasRegaloDashboard implements OnInit {
       c.fechaBaja ?? '',
       c.canjeada ? (c.montoUtilizado != null ? c.montoUtilizado.toString() : 'Unknown') : ''
     ]);
-    this.csvExportService.exportarCSV(encabezado, filas, 'gift-card-purchases.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Gift_Card_Purchases');
   }
 
 verPdf(compra: TarjetaRegaloCompra) {

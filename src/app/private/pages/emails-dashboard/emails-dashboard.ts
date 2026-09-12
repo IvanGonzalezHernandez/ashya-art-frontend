@@ -107,7 +107,7 @@ export class EmailsDashboard implements OnInit {
       email.created_at,
       email.last_event || 'unknown'
     ]);
-    this.csvExportService.exportarCSV(encabezado, filas, 'sent-emails.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Sent_Emails');
   }
 
   estadoBadgeClass(estado: string): string {

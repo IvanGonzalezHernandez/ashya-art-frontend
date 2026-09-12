@@ -9,13 +9,14 @@ export class CsvExportService {
    * Exporta un CSV con encabezado y filas.
    * @param encabezado Array con los nombres de columnas.
    * @param filas Array de arrays con datos.
-   * @param nombreArchivo Nombre del archivo a descargar.
+   * @param nombreBase Nombre del archivo sin extension ni fecha, en ingles (p.ej. 'Clients').
+   *                    Se le a\u00F1ade automaticamente la fecha de hoy y la extension .csv.
    * @param separador Separador de columnas (por defecto ';').
    */
   exportarCSV(
     encabezado: string[],
     filas: (string | number | null)[][],
-    nombreArchivo: string = 'export.csv',
+    nombreBase: string = 'Export',
     separador: string = ';'
   ): void {
     const csvContent = [encabezado, ...filas]
@@ -28,8 +29,16 @@ export class CsvExportService {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = nombreArchivo;
+    a.download = `${nombreBase}_${this.sufijoFecha()}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  /** Fecha de hoy en formato DDMMYYYY, para usar como sufijo del nombre de archivo. */
+  private sufijoFecha(): string {
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, '0');
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    return `${dia}${mes}${hoy.getFullYear()}`;
   }
 }

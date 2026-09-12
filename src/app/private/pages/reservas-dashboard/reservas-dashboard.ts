@@ -88,10 +88,23 @@ export class ReservasDashboard implements OnInit {
       reserva.plazasReservadas ?? 0,
       reserva.precio ?? '',
       reserva.pagado ? 'Paid' : 'Atelier',
-      reserva.fechaReserva ? new Date(reserva.fechaReserva).toISOString().slice(0, 10) : ''
+      reserva.fechaReserva ? this.formatearFechaLocal(reserva.fechaReserva) : ''
     ]);
 
-    this.csvExportService.exportarCSV(encabezado, filas, 'books.csv');
+    this.csvExportService.exportarCSV(encabezado, filas, 'Bookings');
+  }
+
+  /**
+   * Formatea una fecha como yyyy-MM-dd en la zona horaria local, igual que el pipe
+   * `date:'yyyy-MM-dd'` de la tabla. new Date(...).toISOString() convierte a UTC y
+   * puede mostrar un día distinto al de la tabla para horas cercanas a medianoche.
+   */
+  private formatearFechaLocal(fecha: string | Date): string {
+    const d = new Date(fecha);
+    const anio = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    return `${anio}-${mes}-${dia}`;
   }
 
   mostrarModalFeedback(tipo: 'success' | 'error' | 'info', titulo: string, mensaje: string) {

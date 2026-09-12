@@ -492,11 +492,11 @@ confirmarEliminarFecha() {
       curso.precio,
       curso.estado !== false ? 'Visible' : 'Hidden'
     ]);
-    this.csvExportService.exportarCSV(headers, rows, 'courses.csv');
+    this.csvExportService.exportarCSV(headers, rows, 'Courses');
   }
 
   exportarCursoFechasCSV() {
-    const encabezadoCursoFechas = ['ID', 'Curso', 'Fecha', 'Hora Inicio', 'Hora Fin', 'Plazas Disponibles'];
+    const encabezadoCursoFechas = ['ID', 'Course', 'Date', 'Start Time', 'End Time', 'Available Seats'];
     const filasCursoFechas = (this.cursoFechas || []).map(cf => [
       cf.id,
       cf.nombreCurso,
@@ -505,7 +505,7 @@ confirmarEliminarFecha() {
       cf.horaFin,
       cf.plazasDisponibles
     ]);
-    this.csvExportService.exportarCSV(encabezadoCursoFechas, filasCursoFechas, 'course-dates.csv');
+    this.csvExportService.exportarCSV(encabezadoCursoFechas, filasCursoFechas, 'Course_Dates');
   }
 }
 
