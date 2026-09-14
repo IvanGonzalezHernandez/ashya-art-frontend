@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgxPaginationModule } from 'ngx-pagination';
 
-import { EmailEnviadoService } from '../../../services/email-enviado/email-enviado';
+import { EmailEnviadoService, UsoResend } from '../../../services/email-enviado/email-enviado';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { EmailEnviado, EmailEnviadoDetalle } from '../../../models/email-enviado.model';
 
@@ -23,6 +23,10 @@ export class EmailsDashboard implements OnInit {
   emails: EmailEnviado[] = [];
   hasMore = false;
   paginaActual: number = 1;
+
+  // USO DE RESEND (plan gratuito: cuota diaria y mensual)
+  uso: UsoResend | null = null;
+  loadingUso = false;
 
   // FILTROS
   filtroTexto: string = '';
@@ -63,6 +67,8 @@ export class EmailsDashboard implements OnInit {
     this.loading = true;
     this.error = false;
 
+    this.cargarUso();
+
     this.emailEnviadoService.listarEmails(100).subscribe({
       next: res => {
         this.emails = res.data;
@@ -92,6 +98,32 @@ export class EmailsDashboard implements OnInit {
       error: err => {
         console.error('Error al cargar más emails de Resend', err);
         this.loadingMas = false;
+      }
+    });
+  }
+
+  porcentajeUso(usado: number, limite: number): number {
+    if (!limite) return 0;
+    return Math.min(100, Math.round((usado / limite) * 100));
+  }
+
+  colorBarraUso(usado: number, limite: number): string {
+    const pct = this.porcentajeUso(usado, limite);
+    if (pct >= 90) return 'bg-danger';
+    if (pct >= 70) return 'bg-warning';
+    return 'bg-azul';
+  }
+
+  cargarUso(): void {
+    this.loadingUso = true;
+    this.emailEnviadoService.obtenerUso().subscribe({
+      next: uso => {
+        this.uso = uso;
+        this.loadingUso = false;
+      },
+      error: err => {
+        console.error('Error al cargar la cuota de Resend', err);
+        this.loadingUso = false;
       }
     });
   }

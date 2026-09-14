@@ -37,4 +37,22 @@ export class EmailEnviadoService {
 
     return this.http.get<EmailEnviadoDetalle>(`${this.apiUrl}/${id}`, { headers });
   }
+
+  obtenerUso(): Observable<UsoResend> {
+    const token = this.auth.obtenerToken();
+    const headers = token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : new HttpHeaders();
+
+    return this.http.get<UsoResend>(`${this.apiUrl}/usage`, { headers });
+  }
+}
+
+export interface UsoResend {
+  dailyLimit: number;
+  dailyUsed: number;
+  dailyRemaining: number;
+  monthlyLimit: number;
+  monthlyUsed: number;
+  monthlyRemaining: number;
 }
