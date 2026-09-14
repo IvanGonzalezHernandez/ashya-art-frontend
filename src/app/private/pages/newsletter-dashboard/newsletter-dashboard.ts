@@ -39,9 +39,7 @@ export class NewsletterDashboard implements OnInit {
   // ENVIO DE CAMPAÑA
   campanaAsunto: string = '';
   campanaMensaje: string = '';
-  campanaTestEmail: string = '';
   enviandoCampana: boolean = false;
-  enviandoPrueba: boolean = false;
   mostrarConfirmacionEnvio: boolean = false;
 
   // Destinatarios: todos los activos, o una seleccion manual de la tabla.
@@ -241,27 +239,6 @@ eliminarNewsletter(id: number) {
 
   cerrarFeedback() {
     this.mostrarFeedback = false;
-  }
-
-  enviarPrueba(): void {
-    if (!this.campanaValida || !this.campanaTestEmail.trim()) return;
-
-    this.enviandoPrueba = true;
-    this.newsletterService.enviarCampana({
-      asunto: this.campanaAsunto.trim(),
-      mensaje: this.campanaMensaje,
-      testEmail: this.campanaTestEmail.trim()
-    }).subscribe({
-      next: () => {
-        this.enviandoPrueba = false;
-        this.mostrarModalFeedback('success', 'Test sent', `Test email sent to ${this.campanaTestEmail.trim()}.`);
-      },
-      error: (e) => {
-        this.enviandoPrueba = false;
-        console.error(e);
-        this.mostrarModalFeedback('error', 'Error', this.mensajeError(e, 'Could not send the test email.'));
-      }
-    });
   }
 
   pedirConfirmacionEnvio(): void {

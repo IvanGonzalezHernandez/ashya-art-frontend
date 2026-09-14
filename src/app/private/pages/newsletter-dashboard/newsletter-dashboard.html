@@ -60,7 +60,7 @@
           <div class="form-text mb-3">Sent with the Ashya Art branding and an unsubscribe link.</div>
 
           <!-- MODO DE ENVIO: toggle segmentado -->
-          <div class="d-flex p-1 rounded-pill mb-2" style="background:#F3ECE3;">
+          <div class="d-flex p-1 rounded-pill mb-3" style="background:#F3ECE3;">
             <button type="button" class="flex-fill btn btn-sm border-0 rounded-pill"
                     [ngClass]="modoEnvio === 'all' ? 'bg-white shadow-sm' : ''"
                     [style.color]="modoEnvio === 'all' ? '#2f7a80' : '#8a7d6c'"
@@ -82,15 +82,6 @@
             <span class="text-muted">&middot;</span>
             <button type="button" class="btn btn-link btn-sm px-0" (click)="limpiarSeleccion()">Clear</button>
             <span class="text-muted small">Use the checkboxes in the table below.</span>
-          </div>
-
-          <div class="d-flex gap-2 mb-3">
-            <input type="email" class="form-control form-control-sm" [(ngModel)]="campanaTestEmail" placeholder="Send a test to...">
-            <button class="btn btn-outline-secondary btn-sm text-nowrap" [disabled]="!campanaValida || !campanaTestEmail.trim() || enviandoPrueba"
-                    (click)="enviarPrueba()">
-              <span *ngIf="enviandoPrueba" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-              Test
-            </button>
           </div>
 
           <button class="btn bg-azul text-white mt-auto d-flex align-items-center justify-content-center gap-2 rounded-3 py-2"
