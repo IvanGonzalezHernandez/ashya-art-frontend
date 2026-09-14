@@ -1,104 +1,99 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
-  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <h1 class="display-6 fw-semibold">Newsletter</h1>
-    <!--
-    <div class="d-flex gap-2 flex-wrap">
-      <button class="btn btn-success" (click)="crearNewsletter()">+ New Newsletter</button>
-    </div>
-    -->
-  </div>
-
-  <!-- CUOTA DE RESEND -->
-  <div class="card shadow-sm rounded-3 mb-4">
-    <div class="card-body">
-      <h6 class="card-title mb-3">Resend free plan usage</h6>
-
-      <div *ngIf="loadingUso" class="text-center my-2">
-        <div class="spinner-border spinner-border-sm spinner-azul" role="status" aria-hidden="true"></div>
-      </div>
-
-      <div class="row g-4" *ngIf="uso && !loadingUso">
-        <div class="col-12 col-md-6">
-          <div class="d-flex justify-content-between mb-1">
-            <span class="fw-semibold">Today</span>
-            <span class="text-muted">{{ uso.dailyUsed }} / {{ uso.dailyLimit }} &middot; {{ uso.dailyRemaining }} left</span>
-          </div>
-          <div class="progress" style="height: 10px;">
-            <div class="progress-bar" [ngClass]="colorBarraUso(uso.dailyUsed, uso.dailyLimit)"
-                 [style.width.%]="porcentajeUso(uso.dailyUsed, uso.dailyLimit)"></div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6">
-          <div class="d-flex justify-content-between mb-1">
-            <span class="fw-semibold">This month</span>
-            <span class="text-muted">{{ uso.monthlyUsed }} / {{ uso.monthlyLimit }} &middot; {{ uso.monthlyRemaining }} left</span>
-          </div>
-          <div class="progress" style="height: 10px;">
-            <div class="progress-bar" [ngClass]="colorBarraUso(uso.monthlyUsed, uso.monthlyLimit)"
-                 [style.width.%]="porcentajeUso(uso.monthlyUsed, uso.monthlyLimit)"></div>
-          </div>
-        </div>
-      </div>
+    <div class="d-flex align-items-center gap-2">
+      <div *ngIf="loadingUso" class="spinner-border spinner-border-sm spinner-azul" role="status" aria-hidden="true"></div>
+      <ng-container *ngIf="uso && !loadingUso">
+        <span class="badge rounded-pill fw-semibold" style="background:#EAF4F3; color:#2f7a80; padding:.5rem .9rem;">
+          Today: {{ uso.dailyRemaining }} left
+        </span>
+        <span class="badge rounded-pill fw-semibold" style="background:#F3ECE3; color:#8a7d6c; padding:.5rem .9rem;">
+          This month: {{ uso.monthlyRemaining }} left
+        </span>
+      </ng-container>
     </div>
   </div>
 
-  <!-- ENVIAR CAMPAÑA -->
-  <div class="card shadow-sm rounded-3 mb-4">
-    <div class="card-body">
-      <h6 class="card-title mb-3">Send email to subscribers</h6>
+  <div *ngIf="cuotaInsuficiente" class="alert alert-warning py-2 mb-3">
+    Resend quota is too low to send a campaign right now &mdash; at least 30 daily and monthly emails must stay free for other emails (order confirmations, etc.).
+  </div>
 
-      <div *ngIf="cuotaInsuficiente" class="alert alert-warning py-2 mb-3">
-        Resend quota is too low to send a campaign right now &mdash; at least 30 daily and monthly emails must stay free for other emails (order confirmations, etc.).
-      </div>
+  <!-- ENVIAR CAMPAÑA: COMPOSE + LIVE PREVIEW -->
+  <div class="row g-4 mb-4">
 
-      <div class="row g-3">
-        <div class="col-12">
-          <label class="form-label">Subject</label>
-          <input type="text" class="form-control" [(ngModel)]="campanaAsunto" placeholder="e.g. New autumn collection is here!">
+    <!-- COMPOSE -->
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm rounded-4 h-100">
+        <div class="card-body d-flex flex-column p-4">
+          <h6 class="fw-semibold mb-3" style="color:#3E3028;">Compose</h6>
+
+          <label class="form-label small text-muted fw-semibold">SUBJECT</label>
+          <input type="text" class="form-control mb-3" [(ngModel)]="campanaAsunto" placeholder="e.g. New autumn collection is here!">
+
+          <label class="form-label small text-muted fw-semibold">MESSAGE</label>
+          <textarea class="form-control mb-2" rows="6" style="resize:none;" [(ngModel)]="campanaMensaje" placeholder="Write your message..."></textarea>
+          <div class="form-text mb-3">Sent with the Ashya Art branding and an unsubscribe link.</div>
+
+          <!-- MODO DE ENVIO: toggle segmentado -->
+          <div class="d-flex p-1 rounded-pill mb-2" style="background:#F3ECE3;">
+            <button type="button" class="flex-fill btn btn-sm border-0 rounded-pill"
+                    [ngClass]="modoEnvio === 'all' ? 'bg-white shadow-sm' : ''"
+                    [style.color]="modoEnvio === 'all' ? '#2f7a80' : '#8a7d6c'"
+                    [style.fontWeight]="modoEnvio === 'all' ? 600 : 500"
+                    (click)="modoEnvio = 'all'">
+              All ({{ suscriptoresActivos }})
+            </button>
+            <button type="button" class="flex-fill btn btn-sm border-0 rounded-pill"
+                    [ngClass]="modoEnvio === 'selected' ? 'bg-white shadow-sm' : ''"
+                    [style.color]="modoEnvio === 'selected' ? '#2f7a80' : '#8a7d6c'"
+                    [style.fontWeight]="modoEnvio === 'selected' ? 600 : 500"
+                    (click)="modoEnvio = 'selected'">
+              Choose ({{ seleccionados.size }})
+            </button>
+          </div>
+
+          <div class="d-flex flex-wrap align-items-center gap-2 mb-3" *ngIf="modoEnvio === 'selected'">
+            <button type="button" class="btn btn-link btn-sm px-0" (click)="seleccionarVisiblesActivos()">Select all visible</button>
+            <span class="text-muted">&middot;</span>
+            <button type="button" class="btn btn-link btn-sm px-0" (click)="limpiarSeleccion()">Clear</button>
+            <span class="text-muted small">Use the checkboxes in the table below.</span>
+          </div>
+
+          <div class="d-flex gap-2 mb-3">
+            <input type="email" class="form-control form-control-sm" [(ngModel)]="campanaTestEmail" placeholder="Send a test to...">
+            <button class="btn btn-outline-secondary btn-sm text-nowrap" [disabled]="!campanaValida || !campanaTestEmail.trim() || enviandoPrueba"
+                    (click)="enviarPrueba()">
+              <span *ngIf="enviandoPrueba" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+              Test
+            </button>
+          </div>
+
+          <button class="btn bg-azul text-white mt-auto d-flex align-items-center justify-content-center gap-2 rounded-3 py-2"
+                  [disabled]="!campanaValida || cuotaInsuficiente || destinatariosCampana === 0 || enviandoCampana"
+                  (click)="pedirConfirmacionEnvio()">
+            <span *ngIf="enviandoCampana" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <i class="bi bi-send" *ngIf="!enviandoCampana"></i>
+            {{ enviandoCampana ? 'Sending…' : 'Send to ' + destinatariosCampana + ' subscriber' + (destinatariosCampana === 1 ? '' : 's') }}
+          </button>
         </div>
-        <div class="col-12">
-          <label class="form-label">Message</label>
-          <textarea class="form-control" rows="5" [(ngModel)]="campanaMensaje" placeholder="Write your message..."></textarea>
-          <div class="form-text">Sent with the Ashya Art branding and an unsubscribe link.</div>
-        </div>
       </div>
+    </div>
 
-      <!-- MODO DE ENVIO -->
-      <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="modoEnvioAll" name="modoEnvio"
-                 [value]="'all'" [(ngModel)]="modoEnvio">
-          <label class="form-check-label" for="modoEnvioAll">All active subscribers ({{ suscriptoresActivos }})</label>
+    <!-- LIVE PREVIEW -->
+    <div class="col-12 col-lg-7">
+      <div class="small text-muted fw-semibold mb-2" style="letter-spacing:.03em;">LIVE PREVIEW &mdash; WHAT SUBSCRIBERS WILL SEE</div>
+      <div class="rounded-4 h-100 d-flex align-items-start justify-content-center p-4" style="background:#EFE5DB; min-height: 320px;">
+        <div class="bg-white rounded-4 p-4 shadow-sm" style="max-width:420px; width:100%;">
+          <div class="d-flex justify-content-center mb-3">
+            <img src="assets/logo/logo.png" alt="Ashya Art" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">
+          </div>
+          <div class="fw-bold mb-2" style="color:#3E3028;">{{ campanaAsunto || 'Your subject line' }}</div>
+          <div class="mb-3" style="white-space: pre-line; color:#4a423b;">{{ campanaMensaje || 'Your message will appear here as you type.' }}</div>
+          <hr>
+          <div class="small text-muted mb-3">If you no longer want to receive our newsletters, you can <span class="text-decoration-underline" style="color:#3A9097;">unsubscribe here</span>.</div>
+          <div class="small" style="color:#3E3028;">Best regards,<br><b>Ashya Art Team</b></div>
         </div>
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="modoEnvioSelected" name="modoEnvio"
-                 [value]="'selected'" [(ngModel)]="modoEnvio">
-          <label class="form-check-label" for="modoEnvioSelected">Choose from the list below ({{ seleccionados.size }} selected)</label>
-        </div>
-      </div>
-
-      <div class="d-flex flex-wrap align-items-center gap-2 mt-2" *ngIf="modoEnvio === 'selected'">
-        <button type="button" class="btn btn-link btn-sm px-0" (click)="seleccionarVisiblesActivos()">Select all visible</button>
-        <span class="text-muted">&middot;</span>
-        <button type="button" class="btn btn-link btn-sm px-0" (click)="limpiarSeleccion()">Clear selection</button>
-        <span class="text-muted small">Use the checkboxes in the table below to pick recipients.</span>
-      </div>
-
-      <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
-        <input type="email" class="form-control" style="max-width: 260px;" [(ngModel)]="campanaTestEmail" placeholder="Send a test to...">
-        <button class="btn btn-outline-secondary" [disabled]="!campanaValida || !campanaTestEmail.trim() || enviandoPrueba"
-                (click)="enviarPrueba()">
-          <span *ngIf="enviandoPrueba" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-          Send test
-        </button>
-
-        <button class="btn text-white bg-azul ms-auto" [disabled]="!campanaValida || cuotaInsuficiente || destinatariosCampana === 0 || enviandoCampana"
-                (click)="pedirConfirmacionEnvio()">
-          <span *ngIf="enviandoCampana" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-          {{ enviandoCampana ? 'Sending…' : 'Send to ' + destinatariosCampana + ' subscriber' + (destinatariosCampana === 1 ? '' : 's') }}
-        </button>
       </div>
     </div>
   </div>

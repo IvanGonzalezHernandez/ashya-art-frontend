@@ -146,18 +146,6 @@ export class NewsletterDashboard implements OnInit {
     });
   }
 
-  porcentajeUso(usado: number, limite: number): number {
-    if (!limite) return 0;
-    return Math.min(100, Math.round((usado / limite) * 100));
-  }
-
-  colorBarraUso(usado: number, limite: number): string {
-    const pct = this.porcentajeUso(usado, limite);
-    if (pct >= 90) return 'bg-danger';
-    if (pct >= 70) return 'bg-warning';
-    return 'bg-azul';
-  }
-
   crearNewsletter() {
     this.esNuevo = true;
     this.newsletterEditando = {
