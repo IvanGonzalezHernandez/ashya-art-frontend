@@ -1,17 +1,41 @@
 <div class="container-fluid mt-4">
   <!-- ENCABEZADO -->
-  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h1 class="display-6 fw-semibold">Newsletter</h1>
-    <div class="d-flex align-items-center gap-2">
-      <div *ngIf="loadingUso" class="spinner-border spinner-border-sm spinner-azul" role="status" aria-hidden="true"></div>
-      <ng-container *ngIf="uso && !loadingUso">
-        <span class="badge rounded-pill fw-semibold" style="background:#EAF4F3; color:#2f7a80; padding:.5rem .9rem;">
-          Today: {{ uso.dailyRemaining }} left
-        </span>
-        <span class="badge rounded-pill fw-semibold" style="background:#F3ECE3; color:#8a7d6c; padding:.5rem .9rem;">
-          This month: {{ uso.monthlyRemaining }} left
-        </span>
-      </ng-container>
+  </div>
+
+  <!-- CUOTA DE RESEND -->
+  <div class="card shadow-sm rounded-3 mb-4">
+    <div class="card-body">
+      <h6 class="card-title mb-3">Resend free plan usage</h6>
+
+      <div *ngIf="loadingUso" class="text-center my-2">
+        <div class="spinner-border spinner-border-sm spinner-azul" role="status" aria-hidden="true"></div>
+      </div>
+
+      <div class="row g-4" *ngIf="uso && !loadingUso">
+        <div class="col-12 col-md-6">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="fw-semibold">Today</span>
+            <span class="text-muted">{{ uso.dailyUsed }} / {{ uso.dailyLimit }} &middot; {{ uso.dailyRemaining }} left</span>
+          </div>
+          <div class="progress" style="height: 10px;">
+            <div class="progress-bar" [ngClass]="colorBarraUso(uso.dailyUsed, uso.dailyLimit)"
+                 [style.width.%]="porcentajeUso(uso.dailyUsed, uso.dailyLimit)"></div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="fw-semibold">This month</span>
+            <span class="text-muted">{{ uso.monthlyUsed }} / {{ uso.monthlyLimit }} &middot; {{ uso.monthlyRemaining }} left</span>
+          </div>
+          <div class="progress" style="height: 10px;">
+            <div class="progress-bar" [ngClass]="colorBarraUso(uso.monthlyUsed, uso.monthlyLimit)"
+                 [style.width.%]="porcentajeUso(uso.monthlyUsed, uso.monthlyLimit)"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
