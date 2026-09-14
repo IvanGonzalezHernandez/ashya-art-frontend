@@ -44,6 +44,44 @@
     </div>
   </div>
 
+  <!-- ENVIAR CAMPAÑA -->
+  <div class="card shadow-sm rounded-3 mb-4">
+    <div class="card-body">
+      <h6 class="card-title mb-3">Send email to subscribers</h6>
+
+      <div *ngIf="cuotaInsuficiente" class="alert alert-warning py-2 mb-3">
+        Resend quota is too low to send a campaign right now &mdash; at least 30 daily and monthly emails must stay free for other emails (order confirmations, etc.).
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label">Subject</label>
+          <input type="text" class="form-control" [(ngModel)]="campanaAsunto" placeholder="e.g. New autumn collection is here!">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Message</label>
+          <textarea class="form-control" rows="5" [(ngModel)]="campanaMensaje" placeholder="Write your message..."></textarea>
+          <div class="form-text">Sent to all {{ suscriptoresActivos }} active subscriber(s), with the Ashya Art branding and an unsubscribe link.</div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+        <input type="email" class="form-control" style="max-width: 260px;" [(ngModel)]="campanaTestEmail" placeholder="Send a test to...">
+        <button class="btn btn-outline-secondary" [disabled]="!campanaValida || !campanaTestEmail.trim() || enviandoPrueba"
+                (click)="enviarPrueba()">
+          <span *ngIf="enviandoPrueba" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Send test
+        </button>
+
+        <button class="btn text-white bg-azul ms-auto" [disabled]="!campanaValida || cuotaInsuficiente || suscriptoresActivos === 0 || enviandoCampana"
+                (click)="pedirConfirmacionEnvio()">
+          <span *ngIf="enviandoCampana" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          {{ enviandoCampana ? 'Sending…' : 'Send to ' + suscriptoresActivos + ' subscriber' + (suscriptoresActivos === 1 ? '' : 's') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div *ngIf="loading" class="text-center my-4">
     <div class="spinner-border spinner-azul" role="status" aria-hidden="true"></div>
   </div>
@@ -187,6 +225,16 @@
   </div>
 </div>
 <div class="modal-backdrop fade show" *ngIf="newsletterEditando"></div>
+
+<app-confirm-modal
+  *ngIf="mostrarConfirmacionEnvio"
+  title="Send newsletter campaign"
+  [message]="'Send this email to all ' + suscriptoresActivos + ' active subscriber(s)? This cannot be undone.'"
+  confirmLabel="Send campaign"
+  cancelLabel="Cancel"
+  (confirmed)="confirmarEnvioCampana()"
+  (cancelled)="cancelarEnvioCampana()"
+></app-confirm-modal>
 
 <app-feedback-modal
   *ngIf="mostrarFeedback"

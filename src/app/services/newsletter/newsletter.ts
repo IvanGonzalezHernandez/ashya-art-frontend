@@ -66,4 +66,21 @@ eliminarNewsletter(id: number): Observable<void> {
   suscribirseCheckout(email: string): Observable<Newsletter> {
     return this.http.post<Newsletter>(`${this.apiUrl}/suscribirse-checkout`, { email });
   }
+
+  enviarCampana(payload: { asunto: string; mensaje: string; testEmail?: string }): Observable<CampanaResultado> {
+    const token = this.auth.obtenerToken();
+
+    const headers = token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : new HttpHeaders();
+
+    return this.http.post<CampanaResultado>(`${this.apiUrl}/send-campaign`, payload, { headers });
+  }
+}
+
+export interface CampanaResultado {
+  recipients: number;
+  sent: number;
+  failed: number;
+  test: boolean;
 }

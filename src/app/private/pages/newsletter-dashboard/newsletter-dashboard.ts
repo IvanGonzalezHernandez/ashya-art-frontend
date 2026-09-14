@@ -8,13 +8,14 @@ import { CsvExportService } from '../../../services/csv/csv-export';
 import { EmailEnviadoService, UsoResend } from '../../../services/email-enviado/email-enviado';
 import { Newsletter } from '../../../models/newsletter.model';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-modal';
 
 @Component({
   selector: 'app-newsletter-dashboard',
   standalone: true,
   templateUrl: './newsletter-dashboard.html',
   styleUrls: ['./newsletter-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent]
 })
 export class NewsletterDashboard implements OnInit {
   loading = false;
@@ -33,6 +34,28 @@ export class NewsletterDashboard implements OnInit {
   // USO DE RESEND (plan gratuito: cuota diaria y mensual)
   uso: UsoResend | null = null;
   loadingUso = false;
+  private readonly COLCHON_MINIMO = 30;
+
+  // ENVIO DE CAMPAÑA
+  campanaAsunto: string = '';
+  campanaMensaje: string = '';
+  campanaTestEmail: string = '';
+  enviandoCampana: boolean = false;
+  enviandoPrueba: boolean = false;
+  mostrarConfirmacionEnvio: boolean = false;
+
+  get suscriptoresActivos(): number {
+    return (this.newsletters || []).filter(n => n.estado).length;
+  }
+
+  get cuotaInsuficiente(): boolean {
+    if (!this.uso) return false;
+    return this.uso.dailyRemaining < this.COLCHON_MINIMO || this.uso.monthlyRemaining < this.COLCHON_MINIMO;
+  }
+
+  get campanaValida(): boolean {
+    return this.campanaAsunto.trim().length > 0 && this.campanaMensaje.trim().length > 0;
+  }
 
   // FILTROS
   filtroTexto: string = '';
@@ -188,6 +211,68 @@ eliminarNewsletter(id: number) {
 
   cerrarFeedback() {
     this.mostrarFeedback = false;
+  }
+
+  enviarPrueba(): void {
+    if (!this.campanaValida || !this.campanaTestEmail.trim()) return;
+
+    this.enviandoPrueba = true;
+    this.newsletterService.enviarCampana({
+      asunto: this.campanaAsunto.trim(),
+      mensaje: this.campanaMensaje,
+      testEmail: this.campanaTestEmail.trim()
+    }).subscribe({
+      next: () => {
+        this.enviandoPrueba = false;
+        this.mostrarModalFeedback('success', 'Test sent', `Test email sent to ${this.campanaTestEmail.trim()}.`);
+      },
+      error: (e) => {
+        this.enviandoPrueba = false;
+        console.error(e);
+        this.mostrarModalFeedback('error', 'Error', this.mensajeError(e, 'Could not send the test email.'));
+      }
+    });
+  }
+
+  pedirConfirmacionEnvio(): void {
+    if (!this.campanaValida || this.cuotaInsuficiente || this.suscriptoresActivos === 0) return;
+    this.mostrarConfirmacionEnvio = true;
+  }
+
+  cancelarEnvioCampana(): void {
+    this.mostrarConfirmacionEnvio = false;
+  }
+
+  confirmarEnvioCampana(): void {
+    this.mostrarConfirmacionEnvio = false;
+    this.enviandoCampana = true;
+
+    this.newsletterService.enviarCampana({
+      asunto: this.campanaAsunto.trim(),
+      mensaje: this.campanaMensaje
+    }).subscribe({
+      next: resultado => {
+        this.enviandoCampana = false;
+        this.campanaAsunto = '';
+        this.campanaMensaje = '';
+        this.cargarUso();
+        this.mostrarModalFeedback(
+          'success',
+          'Campaign sent',
+          `Sent to ${resultado.sent} of ${resultado.recipients} subscriber(s).` +
+            (resultado.failed > 0 ? ` ${resultado.failed} failed.` : '')
+        );
+      },
+      error: (e) => {
+        this.enviandoCampana = false;
+        console.error(e);
+        this.mostrarModalFeedback('error', 'Error', this.mensajeError(e, 'Could not send the campaign.'));
+      }
+    });
+  }
+
+  private mensajeError(e: any, fallback: string): string {
+    return typeof e?.error === 'string' && e.error.trim() ? e.error : fallback;
   }
 
   exportarCSV() {
