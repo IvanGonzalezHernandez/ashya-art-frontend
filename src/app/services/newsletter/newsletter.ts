@@ -67,7 +67,7 @@ eliminarNewsletter(id: number): Observable<void> {
     return this.http.post<Newsletter>(`${this.apiUrl}/suscribirse-checkout`, { email });
   }
 
-  enviarCampana(payload: { asunto: string; mensaje: string; testEmail?: string }): Observable<CampanaResultado> {
+  enviarCampana(payload: { asunto: string; mensaje: string; testEmail?: string; destinatarios?: string[] }): Observable<CampanaResultado> {
     const token = this.auth.obtenerToken();
 
     const headers = token

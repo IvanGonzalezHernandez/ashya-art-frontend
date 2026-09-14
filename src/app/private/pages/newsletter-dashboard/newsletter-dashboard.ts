@@ -44,8 +44,16 @@ export class NewsletterDashboard implements OnInit {
   enviandoPrueba: boolean = false;
   mostrarConfirmacionEnvio: boolean = false;
 
+  // Destinatarios: todos los activos, o una seleccion manual de la tabla.
+  modoEnvio: 'all' | 'selected' = 'all';
+  seleccionados: Set<string> = new Set<string>();
+
   get suscriptoresActivos(): number {
     return (this.newsletters || []).filter(n => n.estado).length;
+  }
+
+  get destinatariosCampana(): number {
+    return this.modoEnvio === 'selected' ? this.seleccionados.size : this.suscriptoresActivos;
   }
 
   get cuotaInsuficiente(): boolean {
@@ -55,6 +63,28 @@ export class NewsletterDashboard implements OnInit {
 
   get campanaValida(): boolean {
     return this.campanaAsunto.trim().length > 0 && this.campanaMensaje.trim().length > 0;
+  }
+
+  estaSeleccionado(email: string): boolean {
+    return this.seleccionados.has(email);
+  }
+
+  toggleSeleccion(email: string): void {
+    if (this.seleccionados.has(email)) {
+      this.seleccionados.delete(email);
+    } else {
+      this.seleccionados.add(email);
+    }
+  }
+
+  seleccionarVisiblesActivos(): void {
+    this.newslettersFiltrados
+      .filter(n => n.estado)
+      .forEach(n => this.seleccionados.add(n.email));
+  }
+
+  limpiarSeleccion(): void {
+    this.seleccionados.clear();
   }
 
   // FILTROS
@@ -235,7 +265,7 @@ eliminarNewsletter(id: number) {
   }
 
   pedirConfirmacionEnvio(): void {
-    if (!this.campanaValida || this.cuotaInsuficiente || this.suscriptoresActivos === 0) return;
+    if (!this.campanaValida || this.cuotaInsuficiente || this.destinatariosCampana === 0) return;
     this.mostrarConfirmacionEnvio = true;
   }
 
@@ -249,12 +279,14 @@ eliminarNewsletter(id: number) {
 
     this.newsletterService.enviarCampana({
       asunto: this.campanaAsunto.trim(),
-      mensaje: this.campanaMensaje
+      mensaje: this.campanaMensaje,
+      destinatarios: this.modoEnvio === 'selected' ? Array.from(this.seleccionados) : undefined
     }).subscribe({
       next: resultado => {
         this.enviandoCampana = false;
         this.campanaAsunto = '';
         this.campanaMensaje = '';
+        this.seleccionados.clear();
         this.cargarUso();
         this.mostrarModalFeedback(
           'success',

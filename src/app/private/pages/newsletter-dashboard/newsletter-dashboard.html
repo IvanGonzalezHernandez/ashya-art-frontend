@@ -61,8 +61,29 @@
         <div class="col-12">
           <label class="form-label">Message</label>
           <textarea class="form-control" rows="5" [(ngModel)]="campanaMensaje" placeholder="Write your message..."></textarea>
-          <div class="form-text">Sent to all {{ suscriptoresActivos }} active subscriber(s), with the Ashya Art branding and an unsubscribe link.</div>
+          <div class="form-text">Sent with the Ashya Art branding and an unsubscribe link.</div>
         </div>
+      </div>
+
+      <!-- MODO DE ENVIO -->
+      <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+        <div class="form-check">
+          <input type="radio" class="form-check-input" id="modoEnvioAll" name="modoEnvio"
+                 [value]="'all'" [(ngModel)]="modoEnvio">
+          <label class="form-check-label" for="modoEnvioAll">All active subscribers ({{ suscriptoresActivos }})</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" class="form-check-input" id="modoEnvioSelected" name="modoEnvio"
+                 [value]="'selected'" [(ngModel)]="modoEnvio">
+          <label class="form-check-label" for="modoEnvioSelected">Choose from the list below ({{ seleccionados.size }} selected)</label>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap align-items-center gap-2 mt-2" *ngIf="modoEnvio === 'selected'">
+        <button type="button" class="btn btn-link btn-sm px-0" (click)="seleccionarVisiblesActivos()">Select all visible</button>
+        <span class="text-muted">&middot;</span>
+        <button type="button" class="btn btn-link btn-sm px-0" (click)="limpiarSeleccion()">Clear selection</button>
+        <span class="text-muted small">Use the checkboxes in the table below to pick recipients.</span>
       </div>
 
       <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
@@ -73,10 +94,10 @@
           Send test
         </button>
 
-        <button class="btn text-white bg-azul ms-auto" [disabled]="!campanaValida || cuotaInsuficiente || suscriptoresActivos === 0 || enviandoCampana"
+        <button class="btn text-white bg-azul ms-auto" [disabled]="!campanaValida || cuotaInsuficiente || destinatariosCampana === 0 || enviandoCampana"
                 (click)="pedirConfirmacionEnvio()">
           <span *ngIf="enviandoCampana" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-          {{ enviandoCampana ? 'Sending…' : 'Send to ' + suscriptoresActivos + ' subscriber' + (suscriptoresActivos === 1 ? '' : 's') }}
+          {{ enviandoCampana ? 'Sending…' : 'Send to ' + destinatariosCampana + ' subscriber' + (destinatariosCampana === 1 ? '' : 's') }}
         </button>
       </div>
     </div>
@@ -109,6 +130,7 @@
           <thead class="table-azul">
             <tr>
               <!--<th style="width: 8%;">ID</th>-->
+              <th *ngIf="modoEnvio === 'selected'" style="width: 6%;">Send</th>
               <th style="width: 32%;">Email</th>
               <th class="d-none d-md-table-cell" style="width: 24%;">Registration Date</th>
               <th class="d-none d-md-table-cell" style="width: 20%;">Status</th>
@@ -119,6 +141,14 @@
           <tbody>
             <tr *ngFor="let newsletter of newslettersFiltrados | paginate: { id: 'newsletters', itemsPerPage: 10, currentPage: paginaActual }">
               <!--<td class="text-muted">{{ newsletter.id }}</td>-->
+
+              <td *ngIf="modoEnvio === 'selected'">
+                <input type="checkbox" class="form-check-input"
+                       [checked]="estaSeleccionado(newsletter.email)"
+                       [disabled]="!newsletter.estado"
+                       [title]="!newsletter.estado ? 'Inactive subscribers cannot receive emails' : ''"
+                       (change)="toggleSeleccion(newsletter.email)">
+              </td>
 
               <td>
                 <span class="d-inline-block w-100 text-truncate" [title]="newsletter.email">
@@ -143,9 +173,9 @@
                 </div>
               </td>
             </tr>
-            
+
             <tr *ngIf="newslettersFiltrados.length === 0">
-              <td colspan="4" class="text-center text-muted py-3">
+              <td [attr.colspan]="modoEnvio === 'selected' ? 5 : 4" class="text-center text-muted py-3">
                 No clients yet.
               </td>
             </tr>
@@ -229,7 +259,7 @@
 <app-confirm-modal
   *ngIf="mostrarConfirmacionEnvio"
   title="Send newsletter campaign"
-  [message]="'Send this email to all ' + suscriptoresActivos + ' active subscriber(s)? This cannot be undone.'"
+  [message]="'Send this email to ' + destinatariosCampana + (modoEnvio === 'all' ? ' active subscriber(s)' : ' selected subscriber(s)') + '? This cannot be undone.'"
   confirmLabel="Send campaign"
   cancelLabel="Cancel"
   (confirmed)="confirmarEnvioCampana()"
