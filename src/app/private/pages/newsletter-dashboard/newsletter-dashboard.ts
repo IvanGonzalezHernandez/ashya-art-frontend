@@ -5,6 +5,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 import { NewsletterService } from '../../../services/newsletter/newsletter';
 import { CsvExportService } from '../../../services/csv/csv-export';
+import { EmailEnviadoService, UsoResend } from '../../../services/email-enviado/email-enviado';
 import { Newsletter } from '../../../models/newsletter.model';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
@@ -29,6 +30,10 @@ export class NewsletterDashboard implements OnInit {
   newsletterEditando: Newsletter | null = null;
   esNuevo: boolean = false;
 
+  // USO DE RESEND (plan gratuito: cuota diaria y mensual)
+  uso: UsoResend | null = null;
+  loadingUso = false;
+
   // FILTROS
   filtroTexto: string = '';
   filtroEstado: string = '';
@@ -50,12 +55,14 @@ export class NewsletterDashboard implements OnInit {
 
   constructor(
     private newsletterService: NewsletterService,
-    private csvExportService: CsvExportService
+    private csvExportService: CsvExportService,
+    private emailEnviadoService: EmailEnviadoService
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
     this.obtenerNewsletters();
+    this.cargarUso();
   }
 
   obtenerNewsletters() {
@@ -70,6 +77,32 @@ export class NewsletterDashboard implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  cargarUso(): void {
+    this.loadingUso = true;
+    this.emailEnviadoService.obtenerUso().subscribe({
+      next: uso => {
+        this.uso = uso;
+        this.loadingUso = false;
+      },
+      error: err => {
+        console.error('Error al cargar la cuota de Resend', err);
+        this.loadingUso = false;
+      }
+    });
+  }
+
+  porcentajeUso(usado: number, limite: number): number {
+    if (!limite) return 0;
+    return Math.min(100, Math.round((usado / limite) * 100));
+  }
+
+  colorBarraUso(usado: number, limite: number): string {
+    const pct = this.porcentajeUso(usado, limite);
+    if (pct >= 90) return 'bg-danger';
+    if (pct >= 70) return 'bg-warning';
+    return 'bg-azul';
   }
 
   crearNewsletter() {
