@@ -34,17 +34,29 @@ export class ClientesDashboard implements OnInit {
   filtroPais: string = '';
 
   get paises(): string[] {
-    return Array.from(new Set((this.clientes || []).map(c => c.pais).filter((p): p is string => !!p))).sort();
+    const vistos = new Set<string>();
+    const resultado: string[] = [];
+    for (const c of this.clientes || []) {
+      const pais = (c.pais ?? '').trim();
+      if (!pais) continue;
+      const clave = pais.toLowerCase();
+      if (!vistos.has(clave)) {
+        vistos.add(clave);
+        resultado.push(pais);
+      }
+    }
+    return resultado.sort((a, b) => a.localeCompare(b));
   }
 
   get clientesFiltrados(): Cliente[] {
     const texto = this.filtroTexto.trim().toLowerCase();
+    const paisFiltro = this.filtroPais.trim().toLowerCase();
     return (this.clientes || []).filter(c => {
       const coincideTexto = !texto ||
         (c.nombre ?? '').toLowerCase().includes(texto) ||
         (c.apellido ?? '').toLowerCase().includes(texto) ||
         (c.email ?? '').toLowerCase().includes(texto);
-      const coincidePais = !this.filtroPais || c.pais === this.filtroPais;
+      const coincidePais = !paisFiltro || (c.pais ?? '').trim().toLowerCase() === paisFiltro;
       return coincideTexto && coincidePais;
     });
   }
