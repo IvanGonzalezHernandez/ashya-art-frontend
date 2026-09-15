@@ -548,6 +548,11 @@
         </div>
 
         <div class="modal-body">
+          <div class="alert alert-warning py-2 small" *ngIf="plazasReservadasDeFechaEditando > 0">
+            <strong>{{ plazasReservadasDeFechaEditando }}</strong> seat(s) are already booked for this date.
+            Changing the date, time or course won't notify those clients automatically.
+          </div>
+
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Course</label>
@@ -573,7 +578,11 @@
 
             <div class="col-md-6">
               <label class="form-label">Available Seats</label>
-              <input type="number" class="form-control" [(ngModel)]="cursoFechaEditando.plazasDisponibles" />
+              <input type="number" class="form-control" min="0" [max]="plazasDisponiblesMaximoPermitido"
+                     [(ngModel)]="cursoFechaEditando.plazasDisponibles" />
+              <div class="form-text" *ngIf="plazasDisponiblesMaximoPermitido != null">
+                Max {{ plazasDisponiblesMaximoPermitido }} (course capacity minus seats already booked).
+              </div>
             </div>
           </div>
         </div>

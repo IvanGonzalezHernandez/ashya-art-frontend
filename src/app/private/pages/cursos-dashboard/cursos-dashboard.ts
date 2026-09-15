@@ -405,8 +405,47 @@ eliminarCurso(id: number) {
     this.esNuevaCursoFecha = false;
   }
 
+  /** Plazas ya reservadas para la fecha que se está editando (0 si es una fecha nueva). */
+  get plazasReservadasDeFechaEditando(): number {
+    if (!this.cursoFechaEditando || this.esNuevaCursoFecha) return 0;
+    const idFecha = this.cursoFechaEditando.id;
+    return this.reservas
+      .filter(r => r.idFecha === idFecha)
+      .reduce((sum, r) => sum + (Number(r.plazasReservadas) || 0), 0);
+  }
+
+  /** Aforo máximo del curso seleccionado en el formulario de fecha, o null si no se encuentra. */
+  get plazasMaximasDelCursoEditando(): number | null {
+    if (!this.cursoFechaEditando) return null;
+    const curso = this.cursos.find(c => c.id === Number(this.cursoFechaEditando!.idCurso));
+    return curso?.plazasMaximas ?? null;
+  }
+
+  /** Máximo de "Available Seats" que se puede introducir sin arriesgar sobreventa. */
+  get plazasDisponiblesMaximoPermitido(): number | null {
+    const maximas = this.plazasMaximasDelCursoEditando;
+    if (maximas == null) return null;
+    return Math.max(0, maximas - this.plazasReservadasDeFechaEditando);
+  }
+
 guardarCursoFecha() {
   if (!this.cursoFechaEditando || this.cursoFechaSaving) return;
+
+  const disponibles = Number(this.cursoFechaEditando.plazasDisponibles);
+  const maximoPermitido = this.plazasDisponiblesMaximoPermitido;
+
+  if (disponibles < 0) {
+    this.mostrarModalFeedback('error', 'Invalid seats', 'Available seats cannot be negative.');
+    return;
+  }
+  if (maximoPermitido != null && disponibles > maximoPermitido) {
+    this.mostrarModalFeedback(
+      'error',
+      'Invalid seats',
+      `Available seats can't exceed ${maximoPermitido} — the course's max capacity minus the ${this.plazasReservadasDeFechaEditando} seat(s) already booked for this date.`
+    );
+    return;
+  }
 
   const creating = this.esNuevaCursoFecha;
 
