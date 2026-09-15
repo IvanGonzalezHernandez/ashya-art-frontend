@@ -371,25 +371,37 @@ eliminarProducto(id: number) {
   guardarCambiosCompra() {
     if (!this.compraEditando) return;
 
-    if (this.esNuevoCompra) {
-      this.productoCompraService.crearProductoCompra(this.compraEditando).subscribe(() => {
+    const req$ = this.esNuevoCompra
+      ? this.productoCompraService.crearProductoCompra(this.compraEditando)
+      : this.productoCompraService.actualizarProductoCompra(this.compraEditando);
+
+    req$.subscribe({
+      next: () => {
         this.obtenerCompras();
         this.compraEditando = null;
         this.esNuevoCompra = false;
-      });
-    } else {
-      this.productoCompraService.actualizarProductoCompra(this.compraEditando).subscribe(() => {
-        this.obtenerCompras();
-        this.compraEditando = null;
-        this.esNuevoCompra = false;
-      });
-    }
+        this.mostrarModalFeedback('success', 'Purchase saved', 'The purchase has been saved successfully.');
+      },
+      error: err => {
+        console.error('Error guardando compra', err);
+        const mensaje = typeof err?.error === 'string' ? err.error : 'Please review the fields or try again.';
+        this.mostrarModalFeedback('error', 'Error saving purchase', mensaje);
+      }
+    });
   }
 
   eliminarCompra(id: number) {
-    if (confirm('¿Estás seguro de eliminar esta compra?')) {
-      this.productoCompraService.eliminarProductoCompra(id).subscribe(() => {
-        this.obtenerCompras();
+    if (confirm('Delete this purchase? Its stock will be returned to the product, but the sale record itself cannot be recovered afterwards.')) {
+      this.productoCompraService.eliminarProductoCompra(id).subscribe({
+        next: () => {
+          this.obtenerCompras();
+          this.mostrarModalFeedback('success', 'Purchase deleted', 'The purchase was deleted and its stock was returned to the product.');
+        },
+        error: err => {
+          console.error('Error eliminando compra', err);
+          const mensaje = typeof err?.error === 'string' ? err.error : 'Could not delete the purchase. Please try again.';
+          this.mostrarModalFeedback('error', 'Error deleting purchase', mensaje);
+        }
       });
     }
   }
