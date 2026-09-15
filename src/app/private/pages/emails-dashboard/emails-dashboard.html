@@ -61,8 +61,8 @@
     </div>
   </div>
 
-  <!-- TABLA EMAILS EN UNA CARD -->
-  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading && !error">
+  <!-- TABLA EMAILS (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 mb-5 d-none d-md-block" *ngIf="!loading && !error">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
@@ -116,6 +116,30 @@
     </div>
   </div>
 
+  <!-- TARJETAS EMAILS (móvil) -->
+  <div class="d-md-none mb-5" *ngIf="!loading && !error">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let email of emailsFiltrados | paginate: { id: 'emails', itemsPerPage: 10, currentPage: paginaActual }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <div class="fw-semibold">{{ email.subject }}</div>
+            <div class="small text-muted">{{ email.to.join(', ') }}</div>
+          </div>
+          <span class="badge flex-shrink-0" [ngClass]="estadoBadgeClass(email.last_event)">
+            {{ email.last_event || 'unknown' }}
+          </span>
+        </div>
+
+        <div class="small text-muted mb-3">Sent {{ email.created_at | date:'yyyy-MM-dd HH:mm' }}</div>
+
+        <button class="btn btn-primary btn-sm w-100" (click)="verEmail(email)">View</button>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="emailsFiltrados.length === 0">No emails sent yet.</div>
+  </div>
+
   <!-- CONTROLES DE ABAJO -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5" *ngIf="!loading && !error">
     <div class="d-flex gap-2 flex-wrap">
@@ -140,7 +164,7 @@
 
 <!-- MODAL PREVISUALIZACION EMAIL -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="emailSeleccionado">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-sm-down">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title text-truncate">{{ emailSeleccionado.subject }}</h5>

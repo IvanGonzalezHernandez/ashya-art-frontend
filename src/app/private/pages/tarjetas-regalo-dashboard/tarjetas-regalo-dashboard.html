@@ -26,8 +26,8 @@
     </div>
   </div>
 
-  <!-- TABLA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+  <!-- TABLA (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 d-none d-md-block" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
@@ -64,7 +64,7 @@
                 </div>
               </td>
             </tr>
-            
+
             <tr *ngIf="tarjetasFiltradas.length === 0">
               <td colspan="4" class="text-center text-muted py-3">
                 No gift cards yet.
@@ -74,6 +74,25 @@
         </table>
       </div>
     </div>
+  </div>
+
+  <!-- TARJETAS (móvil) -->
+  <div class="d-md-none" *ngIf="!loading">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let tarjeta of tarjetasFiltradas | paginate: { id: 'tarjetas', itemsPerPage: 5, currentPage: paginaActual }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div class="fw-semibold">{{ tarjeta.nombre }}</div>
+          <span class="badge flex-shrink-0" [ngClass]="tarjeta.estado !== false ? 'bg-success' : 'bg-secondary'">
+            {{ tarjeta.estado !== false ? 'Visible' : 'Hidden' }}
+          </span>
+        </div>
+        <div class="small text-muted mb-3">{{ tarjeta.precio | currency:'EUR' }}</div>
+        <button class="btn btn-primary btn-sm w-100" (click)="editarTarjeta(tarjeta)">Edit</button>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="tarjetasFiltradas.length === 0">No gift cards yet.</div>
   </div>
 
   <!-- CONTROLES DE ABAJO -->
@@ -91,7 +110,7 @@
 
 <!-- MODAL -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="tarjetaEditando">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-sm-down">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">{{ esNueva ? 'Create Gift Card' : 'Edit Gift Card' }}</h5>
@@ -238,8 +257,8 @@
     </div>
   </div>
 
-  <!-- TABLA COMPRAS -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loadingCompras">
+  <!-- TABLA COMPRAS (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 d-none d-md-block" *ngIf="!loadingCompras">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
@@ -315,6 +334,45 @@
         </table>
       </div>
     </div>
+  </div>
+
+  <!-- TARJETAS COMPRAS (móvil) -->
+  <div class="d-md-none" *ngIf="!loadingCompras">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let compra of tarjetasCompraFiltradas | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompras }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <div class="fw-semibold">{{ compra.email || '—' }}</div>
+            <div class="small text-muted">{{ compra.codigo }}</div>
+          </div>
+          <span class="badge flex-shrink-0" [ngClass]="compra.canjeada ? 'bg-success' : 'bg-secondary'">
+            {{ compra.canjeada ? 'Redeemed' : 'Not redeemed' }}
+          </span>
+        </div>
+
+        <div class="row row-cols-2 g-2 small mb-3">
+          <div class="col"><span class="text-muted">Price</span><div class="fw-semibold">{{ compra.precio | currency:'EUR' }}</div></div>
+          <div class="col"><span class="text-muted">Purchase Date</span><div class="fw-semibold">{{ compra.fechaCompra | date:'yyyy-MM-dd' }}</div></div>
+          <div class="col"><span class="text-muted">Expiration</span><div class="fw-semibold">{{ compra.fechaCaducidad | date:'yyyy-MM-dd' }}</div></div>
+          <div class="col" *ngIf="compra.canjeada"><span class="text-muted">Redeemed On</span><div class="fw-semibold">{{ compra.fechaBaja | date:'yyyy-MM-dd' }}</div></div>
+          <div class="col" *ngIf="compra.canjeada">
+            <span class="text-muted">Amount Spent</span>
+            <div class="fw-semibold">
+              <span *ngIf="compra.montoUtilizado != null; else unknownSpentMobile">{{ compra.montoUtilizado | currency:'EUR' }}</span>
+              <ng-template #unknownSpentMobile><span class="text-muted fw-normal">Unknown</span></ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary btn-sm flex-fill" (click)="editarCanjeo(compra)">Edit</button>
+          <button class="btn btn-outline-secondary btn-sm flex-fill" (click)="verPdf(compra)">PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="tarjetasCompraFiltradas.length === 0">No gift card purchases yet.</div>
   </div>
 
   <!-- CONTROLES DE ABAJO -->
@@ -478,7 +536,7 @@
 
 <!-- MODAL EDICIÓN CANJEO (COMPRA) -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">Edit Gift Card Purchase</h5>

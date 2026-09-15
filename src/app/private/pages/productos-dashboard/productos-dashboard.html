@@ -32,8 +32,8 @@
     </div>
   </div>
 
-  <!-- TABLA PRODUCTOS EN UNA CARD -->
-  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
+  <!-- TABLA PRODUCTOS (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 mb-5 d-none d-md-block" *ngIf="!loading">
     <div class="card-body p-0">
       <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
         <thead class="table-azul">
@@ -106,6 +106,38 @@
     </div>
   </div>
 
+  <!-- TARJETAS PRODUCTOS (móvil) -->
+  <div class="d-md-none mb-5" *ngIf="!loading">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let producto of productosFiltrados | paginate: { id: 'productos', itemsPerPage: 5, currentPage: paginaActualProducto }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <div class="fw-semibold">{{ producto.nombre }}</div>
+            <div class="small text-muted">{{ producto.subtitulo }}</div>
+          </div>
+          <span class="badge flex-shrink-0" [ngClass]="producto.estado !== false ? 'bg-success' : 'bg-secondary'">
+            {{ producto.estado !== false ? 'Visible' : 'Hidden' }}
+          </span>
+        </div>
+
+        <p class="small text-muted mb-2">{{ producto.descripcion }}</p>
+
+        <div class="row row-cols-2 g-2 small mb-3">
+          <div class="col"><span class="text-muted">Category</span><div class="fw-semibold">{{ producto.categoria }}</div></div>
+          <div class="col"><span class="text-muted">Stock</span><div class="fw-semibold">{{ producto.stock }}</div></div>
+          <div class="col"><span class="text-muted">Price</span><div class="fw-semibold">{{ producto.precio | currency:'EUR' }}</div></div>
+          <div class="col" *ngIf="producto.medidas"><span class="text-muted">Measures</span><div class="fw-semibold">{{ producto.medidas }}</div></div>
+          <div class="col" *ngIf="producto.material"><span class="text-muted">Materials</span><div class="fw-semibold">{{ producto.material }}</div></div>
+        </div>
+
+        <button class="btn btn-primary btn-sm w-100" (click)="editarProducto(producto)">Edit</button>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="productosFiltrados.length === 0">No products match your search.</div>
+  </div>
+
   <!-- CONTROLES PRODUCTOS -->
   <div class="d-flex justify-content-between align-items-center mt-3 mb-5 flex-wrap">
     <button class="btn btn-outline-secondary" (click)="exportarCSVProductos()">Export Products CSV</button>
@@ -119,7 +151,7 @@
 
   <!-- MODAL PRODUCTO -->
   <div class="modal fade show d-block" tabindex="-1" *ngIf="productoEditando">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-sm-down">
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevoProducto ? 'Create Product' : 'Edit Product' }}</h5>
@@ -281,8 +313,8 @@
     </div>
   </div>
 
-  <!-- TABLA COMPRAS EN UNA CARD -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+  <!-- TABLA COMPRAS (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 d-none d-md-block" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
@@ -361,6 +393,59 @@
     </div>
   </div>
 
+  <!-- TARJETAS COMPRAS (móvil) -->
+  <div class="d-md-none" *ngIf="!loading">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let compra of comprasFiltradas | paginate: { id: 'compras', itemsPerPage: 5, currentPage: paginaActualCompra }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <div class="fw-semibold">{{ compra.nombreCliente }}</div>
+            <div class="small text-muted">{{ compra.emailCliente }}</div>
+          </div>
+          <div class="flex-shrink-0 text-nowrap">
+            <span *ngIf="compra.metodoEnvio === 'PICKUP'" class="badge bg-secondary">Pickup</span>
+            <span *ngIf="compra.metodoEnvio === 'GERMANY'" class="badge bg-info text-dark">Germany</span>
+            <span *ngIf="compra.metodoEnvio === 'EU'" class="badge bg-info text-dark">EU</span>
+            <span *ngIf="!compra.metodoEnvio" class="text-muted small">—</span>
+          </div>
+        </div>
+
+        <div class="row row-cols-2 g-2 small mb-3">
+          <div class="col"><span class="text-muted">Product</span><div class="fw-semibold">{{ compra.nombreProducto }}</div></div>
+          <div class="col"><span class="text-muted">Quantity</span><div class="fw-semibold">{{ compra.cantidad }}</div></div>
+          <div class="col"><span class="text-muted">Unit Price</span><div class="fw-semibold">{{ compra.precio | currency:'EUR' }}</div></div>
+          <div class="col"><span class="text-muted">Date</span><div class="fw-semibold">{{ compra.fechaCompra | date:'short' }}</div></div>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center mb-2">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            placeholder="Tracking #"
+            [ngModel]="seguimientoInputs[compra.id] ?? compra.numeroSeguimiento ?? ''"
+            (ngModelChange)="seguimientoInputs[compra.id] = $event" />
+          <button
+            class="btn btn-sm text-nowrap"
+            [class.btn-success]="!compra.numeroSeguimiento"
+            [class.btn-outline-secondary]="!!compra.numeroSeguimiento"
+            [disabled]="enviandoSeguimiento[compra.id] || !((seguimientoInputs[compra.id] ?? compra.numeroSeguimiento ?? '').trim())"
+            (click)="enviarSeguimiento(compra)">
+            {{ enviandoSeguimiento[compra.id] ? 'Sending…' : (compra.numeroSeguimiento ? 'Resend' : 'Send') }}
+          </button>
+        </div>
+        <div *ngIf="compra.numeroSeguimiento" class="text-success small mb-2">✓ Email sent</div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary btn-sm flex-fill" (click)="editarCompra(compra)">Edit</button>
+          <button class="btn btn-danger btn-sm flex-fill" (click)="eliminarCompra(compra.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="comprasFiltradas.length === 0">No product purchases match your search.</div>
+  </div>
+
   <!-- CONTROLES COMPRAS -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
     <button class="btn btn-outline-secondary" (click)="exportarCSVCompras()">Export Purchases CSV</button>
@@ -374,7 +459,7 @@
 
   <!-- MODAL COMPRA -->
   <div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-sm-down">
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevoCompra ? 'Create Purchase' : 'Edit Purchase' }}</h5>

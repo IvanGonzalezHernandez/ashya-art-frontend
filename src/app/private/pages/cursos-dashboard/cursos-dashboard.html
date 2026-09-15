@@ -26,8 +26,8 @@
     </div>
   </div>
 
-  <!-- TABLA CURSOS EN UNA CARD -->
-  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
+  <!-- TABLA CURSOS (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 mb-5 d-none d-md-block" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
@@ -87,6 +87,29 @@
     </div>
   </div>
 
+  <!-- TARJETAS CURSOS (móvil) -->
+  <div class="d-md-none mb-5" *ngIf="!loading">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let curso of cursosFiltrados | paginate: { id: 'cursos', itemsPerPage: 5, currentPage: paginaActual }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <div class="fw-semibold">{{ curso.nombre }}</div>
+            <div class="small text-muted">{{ curso.subtitulo }}</div>
+          </div>
+          <span class="badge flex-shrink-0" [ngClass]="curso.estado !== false ? 'bg-success' : 'bg-secondary'">
+            {{ curso.estado !== false ? 'Visible' : 'Hidden' }}
+          </span>
+        </div>
+        <p class="small text-muted mb-2">{{ curso.descripcion | truncate:120 }}</p>
+        <div class="small mb-3"><span class="text-muted">Price</span> <span class="fw-semibold">{{ curso.precio | currency:'EUR' }}</span></div>
+        <button class="btn btn-primary btn-sm w-100" (click)="editarCurso(curso)">Edit</button>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="(cursos || []).length === 0">No courses yet.</div>
+  </div>
+
   <!-- CONTROLES CURSOS -->
   <div class="d-flex justify-content-between align-items-center mt-3 mb-5 flex-wrap">
     <button class="btn btn-outline-secondary" (click)="exportarCursosCSV()">Export CSV</button>
@@ -100,7 +123,7 @@
 
   <!-- MODAL CURSOS -->
   <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoEditando">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-sm-down">
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevo ? 'Create Course' : 'Edit Course' }}</h5>
@@ -278,24 +301,18 @@
     </div>
   </div>
 
-  <!-- TABLA CURSOFECHA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3" *ngIf="!loading">
+  <!-- TABLA CURSOFECHA (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 d-none d-md-block" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
         <thead class="table-azul">
           <tr>
             <th style="width: 42%;">Course</th>
-
-            <!-- Solo móvil -->
-            <th class="d-table-cell d-md-none" style="width: 38%;">When</th>
-
-            <!-- md+ -->
             <th class="d-none d-md-table-cell" style="width: 18%;">Date</th>
             <th class="d-none d-lg-table-cell" style="width: 12%;">Start</th>
             <th class="d-none d-lg-table-cell" style="width: 12%;">End</th>
             <th class="d-none d-md-table-cell" style="width: 16%;">Available</th>
-
             <th style="width: 25%;">Actions</th>
           </tr>
         </thead>
@@ -314,24 +331,6 @@
               </div>
             </td>
 
-            <!-- Solo móvil: metes fecha + horas + plazas en 2 líneas -->
-            <td class="d-table-cell d-md-none align-middle">
-              <div class="small fw-semibold text-truncate" [title]="cursoFecha.fecha">
-                {{ cursoFecha.fecha }}
-              </div>
-
-              <div class="small text-muted">
-                <span class="d-block">
-                  {{ cursoFecha.horaInicio }} – {{ cursoFecha.horaFin }}
-                </span>
-                <span class="d-block">
-                  {{ cursoFecha.plazasDisponibles }} seats
-                </span>
-              </div>
-            </td>
-
-
-            <!-- md+ -->
             <td class="d-none d-md-table-cell text-nowrap">{{ cursoFecha.fecha }}</td>
             <td class="d-none d-lg-table-cell text-nowrap">{{ cursoFecha.horaInicio }}</td>
             <td class="d-none d-lg-table-cell text-nowrap">{{ cursoFecha.horaFin }}</td>
@@ -352,6 +351,35 @@
     </div>
   </div>
 
+  <!-- TARJETAS CURSOFECHA (móvil) -->
+  <div class="d-md-none" *ngIf="!loading">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let cursoFecha of cursoFechasFiltradas | paginate: { id: 'fechas', itemsPerPage: 5, currentPage: paginaActualCursoFecha }"
+         [class.tr-proxima-clase]="cursoFecha.id === proximaCursoFechaId">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <div class="fw-semibold">{{ cursoFecha.nombreCurso }}</div>
+          <span *ngIf="cursoFecha.id === proximaCursoFechaId" class="badge bg-azul">Next</span>
+        </div>
+
+        <div class="row row-cols-2 g-2 small mb-3">
+          <div class="col"><span class="text-muted">Date</span><div class="fw-semibold">{{ cursoFecha.fecha }}</div></div>
+          <div class="col"><span class="text-muted">Available</span><div class="fw-semibold">{{ cursoFecha.plazasDisponibles }}</div></div>
+          <div class="col"><span class="text-muted">Start</span><div class="fw-semibold">{{ cursoFecha.horaInicio }}</div></div>
+          <div class="col"><span class="text-muted">End</span><div class="fw-semibold">{{ cursoFecha.horaFin }}</div></div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-secondary btn-sm flex-fill" (click)="verDetalleCursoFecha(cursoFecha)">Detail</button>
+          <button class="btn btn-primary btn-sm flex-fill" (click)="editarCursoFecha(cursoFecha)">Edit</button>
+          <button class="btn btn-danger btn-sm flex-fill" (click)="pedirConfirmacionEliminarFecha(cursoFecha)">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="cursoFechasFiltradas.length === 0">No dates yet.</div>
+  </div>
+
   <!-- CONTROLES FECHAS -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
     <button class="btn btn-outline-secondary" (click)="exportarCursoFechasCSV()">Export CSV</button>
@@ -365,7 +393,7 @@
 
  <!-- MODAL DETALLE CURSO/FECHA -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoFechaSeleccionada">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable modal-fullscreen-sm-down">
     <div class="modal-content shadow-lg">
 
       <div class="modal-header bg-azul text-white d-flex justify-content-between align-items-center">
@@ -540,7 +568,7 @@
 
   <!-- MODAL CURSOFECHA -->
   <div class="modal fade show d-block" tabindex="-1" *ngIf="cursoFechaEditando">
-    <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
       <div class="modal-content shadow-lg">
         <div class="modal-header bg-azul text-white">
           <h5 class="modal-title">{{ esNuevaCursoFecha ? 'New Course Date' : 'Edit Course Date' }}</h5>

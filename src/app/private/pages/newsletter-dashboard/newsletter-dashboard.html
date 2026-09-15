@@ -136,8 +136,8 @@
     </div>
   </div>
 
-  <!-- TABLA NEWSLETTERS EN UNA CARD -->
-  <div class="card shadow-sm rounded-3 mb-5" *ngIf="!loading">
+  <!-- TABLA NEWSLETTERS (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 mb-5 d-none d-md-block" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
@@ -200,6 +200,34 @@
     </div>
   </div>
 
+  <!-- TARJETAS NEWSLETTERS (móvil) -->
+  <div class="d-md-none mb-5" *ngIf="!loading">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let newsletter of newslettersFiltrados | paginate: { id: 'newsletters', itemsPerPage: 10, currentPage: paginaActual }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <input *ngIf="modoEnvio === 'selected'" type="checkbox" class="form-check-input mt-0"
+                   [checked]="estaSeleccionado(newsletter.email)"
+                   [disabled]="!newsletter.estado"
+                   [title]="!newsletter.estado ? 'Inactive subscribers cannot receive emails' : ''"
+                   (change)="toggleSeleccion(newsletter.email)">
+            <div class="fw-semibold text-break">{{ newsletter.email }}</div>
+          </div>
+          <span class="badge flex-shrink-0" [ngClass]="newsletter.estado ? 'bg-success' : 'bg-danger'">
+            {{ newsletter.estado ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+
+        <div class="small text-muted mb-3">Registered {{ newsletter.fechaRegistro | date:'yyyy-MM-dd' }}</div>
+
+        <button class="btn btn-primary btn-sm w-100" (click)="editarNewsletter(newsletter)">Edit</button>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="newslettersFiltrados.length === 0">No clients yet.</div>
+  </div>
+
   <!-- CONTROLES DE ABAJO -->
   <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap mb-5">
     <button class="btn btn-outline-secondary" (click)="exportarCSV()">Export CSV</button>
@@ -214,7 +242,7 @@
 
 <!-- MODAL NEWSLETTER -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="newsletterEditando">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-fullscreen-sm-down">
     <div class="modal-content shadow-lg">
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">{{ esNuevo ? 'Create Newsletter' : 'Edit Newsletter' }}</h5>

@@ -26,8 +26,8 @@
     </div>
   </div>
 
-  <!-- TABLA EN UNA CARD -->
-  <div class="card shadow-sm rounded-3 mb-4" *ngIf="!loading">
+  <!-- TABLA (desktop/tablet) -->
+  <div class="card shadow-sm rounded-3 mb-4 d-none d-md-block" *ngIf="!loading">
     <div class="card-body p-0">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle" style="table-layout: fixed; width: 100%;">
@@ -96,6 +96,35 @@
         </table>
       </div>
     </div>
+  </div>
+
+  <!-- TARJETAS (móvil) -->
+  <div class="d-md-none mb-4" *ngIf="!loading">
+    <div class="card shadow-sm rounded-3 mb-2"
+         *ngFor="let reserva of reservasFiltradas | paginate: { id: 'reservas', itemsPerPage: 10, currentPage: paginaActual }">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <div>
+            <div class="fw-semibold">{{ reserva.email }}</div>
+            <div class="small text-muted">{{ reserva.nombreCurso }}</div>
+          </div>
+          <span class="badge flex-shrink-0" [ngClass]="reserva.pagado ? 'bg-success' : 'bg-warning text-dark'">
+            {{ reserva.pagado ? 'Paid' : 'Atelier' }}
+          </span>
+        </div>
+
+        <div class="row row-cols-2 g-2 small mb-3">
+          <div class="col"><span class="text-muted">Date</span><div class="fw-semibold">{{ reserva.fechaCurso }}</div></div>
+          <div class="col"><span class="text-muted">Reserved Seats</span><div class="fw-semibold">{{ reserva.plazasReservadas }}</div></div>
+          <div class="col"><span class="text-muted">Unit Price</span><div class="fw-semibold">{{ reserva.precio | currency:'EUR' }}</div></div>
+          <div class="col"><span class="text-muted">Book date</span><div class="fw-semibold">{{ reserva.fechaReserva | date:'yyyy-MM-dd' }}</div></div>
+        </div>
+
+        <button class="btn btn-danger btn-sm w-100" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
+      </div>
+    </div>
+
+    <div class="text-center text-muted py-3" *ngIf="reservasFiltradas.length === 0">No bookings match your search.</div>
   </div>
 
   <!-- CONTROLES DE ABAJO -->
