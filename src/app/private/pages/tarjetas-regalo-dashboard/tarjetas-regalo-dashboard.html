@@ -86,6 +86,7 @@
       (pageChange)="paginaActual = $event">
     </pagination-controls>
   </div>
+
 </div>
 
 <!-- MODAL -->
@@ -328,6 +329,152 @@
     </pagination-controls>
   </div>
 </div>
+
+<!-- ============================== -->
+<!-- CREAR TARJETA REGALO MANUAL -->
+<!-- ============================== -->
+<div class="container-fluid mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h1 class="display-6 fw-semibold">Create a Gift Card</h1>
+  </div>
+
+  <div class="card shadow-sm rounded-3 mb-5">
+    <div class="card-body p-4">
+      <p class="text-muted mb-4">
+        Create a gift card by hand as a courtesy from the shop (e.g. given in person). It won't be counted as a Stripe sale.
+      </p>
+
+      <div class="row g-4">
+        <div class="col-12 col-lg-6">
+          <label class="form-label small text-muted fw-semibold">GIFT CARD</label>
+          <select class="form-select mb-3" [(ngModel)]="idTarjetaSeleccionadaManual" name="idTarjetaSeleccionadaManual">
+            <option [ngValue]="null">Select a gift card…</option>
+            <option *ngFor="let t of tarjetasCatalogo" [ngValue]="t.id">{{ t.nombre }} &mdash; {{ t.precio | currency:'EUR' }}</option>
+          </select>
+
+          <label class="form-label small text-muted fw-semibold">CLIENT</label>
+          <div class="d-flex p-1 rounded-pill mb-3" style="background:#F3ECE3;">
+            <button type="button" class="flex-fill btn btn-sm border-0 rounded-pill"
+                    [ngClass]="modoCliente === 'existente' ? 'bg-white shadow-sm' : ''"
+                    [style.color]="modoCliente === 'existente' ? '#2f7a80' : '#8a7d6c'"
+                    [style.fontWeight]="modoCliente === 'existente' ? 600 : 500"
+                    (click)="modoCliente = 'existente'; onModoClienteChange()">
+              Existing client
+            </button>
+            <button type="button" class="flex-fill btn btn-sm border-0 rounded-pill"
+                    [ngClass]="modoCliente === 'nuevo' ? 'bg-white shadow-sm' : ''"
+                    [style.color]="modoCliente === 'nuevo' ? '#2f7a80' : '#8a7d6c'"
+                    [style.fontWeight]="modoCliente === 'nuevo' ? 600 : 500"
+                    (click)="modoCliente = 'nuevo'; onModoClienteChange()">
+              New client
+            </button>
+          </div>
+
+          <div *ngIf="modoCliente === 'existente'" class="mb-3">
+            <input type="text" class="form-control mb-2" placeholder="Search by name, surname or email"
+                   [(ngModel)]="busquedaCliente" name="busquedaCliente">
+
+            <div class="border rounded-3" style="max-height: 220px; overflow-y: auto;">
+              <div *ngFor="let c of clientesFiltrados"
+                   class="d-flex align-items-center gap-2 px-2 py-2"
+                   style="cursor: pointer; border-bottom: 1px solid #eee;"
+                   [style.background]="idClienteSeleccionado === c.id ? '#DCEEEF' : 'transparent'"
+                   [style.borderLeft]="(idClienteSeleccionado === c.id ? '#2f7a80' : 'transparent') + ' solid 3px'"
+                   (click)="idClienteSeleccionado = c.id">
+                <span class="d-inline-flex align-items-center justify-content-center rounded-circle text-white flex-shrink-0"
+                      style="width: 32px; height: 32px; font-size: 11px; font-weight: 600;"
+                      [style.background]="colorAvatarCliente(c)">
+                  {{ inicialesCliente(c) }}
+                </span>
+                <div class="flex-grow-1" style="overflow: hidden;">
+                  <div class="text-truncate" style="font-size: 14px; font-weight: 600; color: #3E3028;">{{ c.nombre }} {{ c.apellido }}</div>
+                  <div class="text-truncate small text-muted">{{ c.email }}</div>
+                </div>
+                <i class="bi bi-check-lg flex-shrink-0" style="color: #2f7a80;" *ngIf="idClienteSeleccionado === c.id"></i>
+              </div>
+
+              <div *ngIf="clientesFiltrados.length === 0" class="text-center text-muted small py-3">
+                No clients match your search.
+              </div>
+            </div>
+            <div class="small text-muted mt-1">{{ clientesFiltrados.length }} of {{ clientes.length }} clients</div>
+          </div>
+
+          <div *ngIf="modoCliente === 'nuevo'" class="mb-3">
+            <div class="row g-2">
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Name" [(ngModel)]="clienteNuevo.nombre" name="nuevoNombre">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Surname" [(ngModel)]="clienteNuevo.apellido" name="nuevoApellido">
+              </div>
+              <div class="col-6">
+                <input type="email" class="form-control" placeholder="Email" [(ngModel)]="clienteNuevo.email" name="nuevoEmail">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Phone" [(ngModel)]="clienteNuevo.telefono" name="nuevoTelefono">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Street" [(ngModel)]="clienteNuevo.calle" name="nuevoCalle">
+              </div>
+              <div class="col-3">
+                <input type="text" class="form-control" placeholder="Number" [(ngModel)]="clienteNuevo.numero" name="nuevoNumero">
+              </div>
+              <div class="col-3">
+                <input type="text" class="form-control" placeholder="Floor" [(ngModel)]="clienteNuevo.piso" name="nuevoPiso">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="City" [(ngModel)]="clienteNuevo.ciudad" name="nuevoCiudad">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Province" [(ngModel)]="clienteNuevo.provincia" name="nuevoProvincia">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Country" [(ngModel)]="clienteNuevo.pais" name="nuevoPais">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Postal code" [(ngModel)]="clienteNuevo.codigoPostal" name="nuevoCodigoPostal">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <label class="form-label small text-muted fw-semibold">RECIPIENT (OPTIONAL)</label>
+          <input type="text" class="form-control mb-3" placeholder="e.g. Grandma"
+                 [(ngModel)]="destinatarioTarjeta" name="destinatarioTarjeta">
+
+          <button class="btn bg-azul text-white d-flex align-items-center justify-content-center gap-2 rounded-3 py-2 px-4"
+                  [disabled]="!formularioTarjetaValido || creandoTarjeta"
+                  (click)="pedirConfirmacionCrearTarjeta()">
+            <span *ngIf="creandoTarjeta" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            {{ creandoTarjeta ? 'Creating…' : 'Create gift card' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-confirm-modal
+  *ngIf="mostrarConfirmacionTarjeta"
+  title="Send gift card email"
+  [message]="'This will immediately email the gift card code to ' + (emailDestinoTarjeta || 'the client') + '. This cannot be undone. Continue?'"
+  confirmLabel="Create & send email"
+  cancelLabel="Cancel"
+  (confirmed)="confirmarCrearTarjeta()"
+  (cancelled)="cancelarCrearTarjeta()"
+></app-confirm-modal>
+
+<app-confirm-modal
+  *ngIf="mostrarConfirmacionDesCanjeo"
+  title="Undo redemption?"
+  [message]="'This gift card was already spent (' + (compraEditando?.montoUtilizado | currency:'EUR') + ' of ' + (compraEditando?.precio | currency:'EUR') + '). Marking it as not redeemed will reactivate it with its FULL value and permanently lose the record of what was already spent. This cannot be undone. Continue?'"
+  confirmLabel="Yes, reactivate full value"
+  cancelLabel="Cancel"
+  (confirmed)="confirmarDesCanjeo()"
+  (cancelled)="cancelarDesCanjeo()"
+></app-confirm-modal>
 
 <!-- MODAL EDICIÓN CANJEO (COMPRA) -->
 <div class="modal fade show d-block" tabindex="-1" *ngIf="compraEditando">

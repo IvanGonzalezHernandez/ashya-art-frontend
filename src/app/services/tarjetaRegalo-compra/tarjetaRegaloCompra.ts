@@ -3,7 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { TarjetaRegaloCompra } from '../../models/tarjetaRegalo-compra.model';
+import { Cliente } from '../../models/cliente.model';
 import { AuthService } from '../login/auth';
+
+export interface TarjetaRegaloAdminCreacion {
+  idCliente?: number | null;
+  clienteNuevo?: Partial<Cliente> | null;
+  idTarjetaRegalo: number;
+  destinatario?: string | null;
+}
 
 @Injectable({ providedIn: 'root' })
 export class TarjetaRegaloCompraService {
@@ -52,5 +60,13 @@ obtenerPdf(id: number): Observable<Blob> {
   const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
 
   return this.http.get(`${environment.apiUrl}/admin/tarjetas-regalo-compra/${id}/pdf`, { headers, responseType: 'blob' });
+}
+
+crearManual(dto: TarjetaRegaloAdminCreacion): Observable<TarjetaRegaloCompra> {
+  const token = this.auth.obtenerToken();
+
+  const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+
+  return this.http.post<TarjetaRegaloCompra>(`${environment.apiUrl}/admin/tarjetas-regalo-compra`, dto, { headers });
 }
 }

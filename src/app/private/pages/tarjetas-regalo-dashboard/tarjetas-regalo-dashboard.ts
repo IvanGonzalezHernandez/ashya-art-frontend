@@ -4,13 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
 import { TarjetaRegaloCompra } from '../../../models/tarjetaRegalo-compra.model';
+import { Cliente } from '../../../models/cliente.model';
 
 import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaRegalo';
 import { TarjetaRegaloCompraService } from '../../../services/tarjetaRegalo-compra/tarjetaRegaloCompra';
+import { ClienteService } from '../../../services/cliente/cliente';
 import { CsvExportService } from '../../../services/csv/csv-export';
 
 import { isWebpFile, isTooLarge, fileToDataUrl } from '../../../utils/image-optimizer.util';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
+import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-modal';
 
 type SlotImagen = {
   previewUrl: string | null;
@@ -18,12 +21,17 @@ type SlotImagen = {
   markedForDelete: boolean;
 };
 
+const CLIENTE_NUEVO_VACIO: Partial<Cliente> = {
+  nombre: '', apellido: '', email: '', telefono: '',
+  calle: '', numero: '', piso: '', provincia: '', ciudad: '', pais: '', codigoPostal: ''
+};
+
 @Component({
   selector: 'app-tarjetas-regalo-dashboard',
   standalone: true,
   templateUrl: './tarjetas-regalo-dashboard.html',
   styleUrls: ['./tarjetas-regalo-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent]
 })
 export class TarjetasRegaloDashboard implements OnInit {
   // Loading
@@ -98,10 +106,27 @@ export class TarjetasRegaloDashboard implements OnInit {
   compraEditando: TarjetaRegaloCompra | null = null;
   edicionCanjeo: { canjeada: boolean; fechaBaja: string } = { canjeada: false, fechaBaja: '' };
 
+  // ===== CREAR TARJETA REGALO MANUAL =====
+  tarjetasCatalogo: TarjetaRegalo[] = [];
+  clientes: Cliente[] = [];
+
+  modoCliente: 'existente' | 'nuevo' = 'existente';
+  busquedaCliente = '';
+  idClienteSeleccionado: number | null = null;
+  clienteNuevo: Partial<Cliente> = { ...CLIENTE_NUEVO_VACIO };
+
+  idTarjetaSeleccionadaManual: number | null = null;
+  destinatarioTarjeta = '';
+  creandoTarjeta = false;
+  mostrarConfirmacionTarjeta = false;
+
+  private readonly avatarColores = ['#2F7A80', '#B4623E', '#7C6A9E', '#4E7A4A', '#A9762F'];
+
   constructor(
     private tarjetaService: TarjetaRegaloService,
     private csvExportService: CsvExportService,
-    private tarjetaCompraService: TarjetaRegaloCompraService
+    private tarjetaCompraService: TarjetaRegaloCompraService,
+    private clienteService: ClienteService
   ) {}
 
   ngOnInit(): void {
@@ -109,6 +134,111 @@ export class TarjetasRegaloDashboard implements OnInit {
     this.loadingCompras = true;
     this.obtenerTarjetas();
     this.obtenerTarjetasCompra();
+
+    this.tarjetaService.getTarjetasHabilitadas().subscribe({
+      next: tarjetas => this.tarjetasCatalogo = tarjetas,
+      error: () => this.tarjetasCatalogo = []
+    });
+
+    this.clienteService.getClientes().subscribe({
+      next: clientes => this.clientes = clientes,
+      error: () => this.clientes = []
+    });
+  }
+
+  get clientesFiltrados(): Cliente[] {
+    const texto = this.busquedaCliente.trim().toLowerCase();
+    if (!texto) return this.clientes;
+    return this.clientes.filter(c =>
+      `${c.nombre} ${c.apellido} ${c.email}`.toLowerCase().includes(texto)
+    );
+  }
+
+  inicialesCliente(c: Cliente): string {
+    return `${c.nombre?.[0] ?? ''}${c.apellido?.[0] ?? ''}`.toUpperCase();
+  }
+
+  colorAvatarCliente(c: Cliente): string {
+    const clave = `${c.nombre}${c.apellido}`;
+    let hash = 0;
+    for (let i = 0; i < clave.length; i++) hash = (hash * 31 + clave.charCodeAt(i)) >>> 0;
+    return this.avatarColores[hash % this.avatarColores.length];
+  }
+
+  onModoClienteChange(): void {
+    this.idClienteSeleccionado = null;
+    this.busquedaCliente = '';
+    this.clienteNuevo = { ...CLIENTE_NUEVO_VACIO };
+  }
+
+  get formularioTarjetaValido(): boolean {
+    if (!this.idTarjetaSeleccionadaManual) return false;
+
+    if (this.modoCliente === 'existente') {
+      return !!this.idClienteSeleccionado;
+    }
+
+    const c = this.clienteNuevo;
+    return !!(c.nombre && c.apellido && c.email && c.calle && c.numero && c.ciudad && c.pais && c.codigoPostal);
+  }
+
+  get emailDestinoTarjeta(): string {
+    if (this.modoCliente === 'existente') {
+      return this.clientes.find(c => c.id === this.idClienteSeleccionado)?.email || '';
+    }
+    return this.clienteNuevo.email || '';
+  }
+
+  pedirConfirmacionCrearTarjeta(): void {
+    if (!this.formularioTarjetaValido || this.creandoTarjeta) return;
+    this.mostrarConfirmacionTarjeta = true;
+  }
+
+  cancelarCrearTarjeta(): void {
+    this.mostrarConfirmacionTarjeta = false;
+  }
+
+  confirmarCrearTarjeta(): void {
+    this.mostrarConfirmacionTarjeta = false;
+    this.creandoTarjeta = true;
+
+    this.tarjetaCompraService.crearManual({
+      idCliente: this.modoCliente === 'existente' ? this.idClienteSeleccionado : null,
+      clienteNuevo: this.modoCliente === 'nuevo' ? this.clienteNuevo : null,
+      idTarjetaRegalo: this.idTarjetaSeleccionadaManual!,
+      destinatario: this.destinatarioTarjeta || null
+    }).subscribe({
+      next: creada => {
+        this.creandoTarjeta = false;
+        this.resetearFormularioTarjeta();
+        this.obtenerTarjetasCompra();
+        this.mostrarModalFeedback(
+          'success',
+          'Gift card created',
+          `The gift card was created and emailed successfully. Code: ${creada.codigo}`
+        );
+      },
+      error: (e) => {
+        console.error(e);
+        this.creandoTarjeta = false;
+        const mensaje = e?.error?.message || e?.error || 'Could not create the gift card. Please try again.';
+        this.mostrarModalFeedback('error', 'Error', mensaje);
+      }
+    });
+  }
+
+  private resetearFormularioTarjeta(): void {
+    this.modoCliente = 'existente';
+    this.busquedaCliente = '';
+    this.idClienteSeleccionado = null;
+    this.clienteNuevo = { ...CLIENTE_NUEVO_VACIO };
+    this.idTarjetaSeleccionadaManual = null;
+    this.destinatarioTarjeta = '';
+
+    this.clienteService.getClientes().subscribe({
+      next: clientes => this.clientes = clientes,
+      error: () => {}
+    });
   }
 
   // ===== TARJETAS =====
@@ -277,6 +407,8 @@ export class TarjetasRegaloDashboard implements OnInit {
     this.compraEditando = null;
   }
 
+  mostrarConfirmacionDesCanjeo = false;
+
   guardarCanjeo() {
     if (!this.compraEditando?.id) return;
 
@@ -289,6 +421,33 @@ export class TarjetasRegaloDashboard implements OnInit {
       return;
     }
 
+    // Si ya estaba canjeada con un gasto real registrado y se está desmarcando, la tarjeta
+    // recupera su valor completo y se pierde el registro de lo ya gastado: pedimos confirmación
+    // explícita para evitar un doble gasto por un clic accidental.
+    const seDesmarcaGastoReal = this.compraEditando.canjeada
+      && !this.edicionCanjeo.canjeada
+      && this.compraEditando.montoUtilizado != null;
+
+    if (seDesmarcaGastoReal) {
+      this.mostrarConfirmacionDesCanjeo = true;
+      return;
+    }
+
+    this.aplicarGuardadoCanjeo();
+  }
+
+  cancelarDesCanjeo() {
+    this.mostrarConfirmacionDesCanjeo = false;
+  }
+
+  confirmarDesCanjeo() {
+    this.mostrarConfirmacionDesCanjeo = false;
+    this.aplicarGuardadoCanjeo();
+  }
+
+  private aplicarGuardadoCanjeo() {
+    if (!this.compraEditando?.id) return;
+
     const fechaBaja = this.edicionCanjeo.canjeada ? this.edicionCanjeo.fechaBaja : null;
     const compra = this.compraEditando;
 
@@ -296,6 +455,7 @@ export class TarjetasRegaloDashboard implements OnInit {
       next: actualizado => {
         compra.canjeada = actualizado.canjeada;
         compra.fechaBaja = actualizado.fechaBaja;
+        compra.montoUtilizado = actualizado.montoUtilizado;
         this.cancelarEdicionCanjeo();
         this.mostrarModalFeedback('success', 'Purchase updated', `Code ${compra.codigo} updated successfully.`);
       },
