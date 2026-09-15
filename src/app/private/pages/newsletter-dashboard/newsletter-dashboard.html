@@ -97,17 +97,21 @@
 
     <!-- LIVE PREVIEW -->
     <div class="col-12 col-lg-7">
-      <div class="small text-muted fw-semibold mb-2" style="letter-spacing:.03em;">LIVE PREVIEW &mdash; WHAT SUBSCRIBERS WILL SEE</div>
-      <div class="rounded-4 h-100 d-flex align-items-start justify-content-center p-4" style="background:#EFE5DB; min-height: 320px;">
-        <div class="bg-white rounded-4 p-4 shadow-sm" style="max-width:420px; width:100%;">
-          <div class="d-flex justify-content-center mb-3">
-            <img src="assets/logo/logo.png" alt="Ashya Art" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">
+      <div class="card shadow-sm rounded-4 h-100">
+        <div class="card-body d-flex flex-column p-4">
+          <div class="small text-muted fw-semibold mb-3" style="letter-spacing:.03em;">LIVE PREVIEW &mdash; WHAT SUBSCRIBERS WILL SEE</div>
+          <div class="rounded-4 flex-grow-1 d-flex align-items-start justify-content-center p-4" style="background:#EFE5DB; min-height: 320px;">
+            <div class="bg-white rounded-4 p-4 shadow-sm" style="max-width:420px; width:100%;">
+              <div class="d-flex justify-content-center mb-3">
+                <img src="assets/logo/logo.png" alt="Ashya Art" style="width:56px; height:56px; border-radius:50%; object-fit:cover;">
+              </div>
+              <div class="fw-bold mb-2" style="color:#3E3028;">{{ campanaAsunto || 'Your subject line' }}</div>
+              <div class="mb-3" style="white-space: pre-line; color:#4a423b;">{{ campanaMensaje || 'Your message will appear here as you type.' }}</div>
+              <hr>
+              <div class="small text-muted mb-3">If you no longer want to receive our newsletters, you can <span class="text-decoration-underline" style="color:#3A9097;">unsubscribe here</span>.</div>
+              <div class="small" style="color:#3E3028;">Best regards,<br><b>Ashya Art Team</b></div>
+            </div>
           </div>
-          <div class="fw-bold mb-2" style="color:#3E3028;">{{ campanaAsunto || 'Your subject line' }}</div>
-          <div class="mb-3" style="white-space: pre-line; color:#4a423b;">{{ campanaMensaje || 'Your message will appear here as you type.' }}</div>
-          <hr>
-          <div class="small text-muted mb-3">If you no longer want to receive our newsletters, you can <span class="text-decoration-underline" style="color:#3A9097;">unsubscribe here</span>.</div>
-          <div class="small" style="color:#3E3028;">Best regards,<br><b>Ashya Art Team</b></div>
         </div>
       </div>
     </div>
@@ -118,7 +122,7 @@
   </div>
 
   <!-- FILTROS -->
-  <div class="row g-2 mb-3" *ngIf="!loading">
+  <div class="row g-2 mb-3 mt-3" *ngIf="!loading">
     <div class="col-12 col-md-6 col-lg-4">
       <input type="text" class="form-control" placeholder="Search by email"
              [(ngModel)]="filtroTexto" (ngModelChange)="onFiltroChange()">
