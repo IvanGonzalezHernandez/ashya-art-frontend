@@ -169,7 +169,9 @@
       "PAYMENT_SUCCESS_TITLE": "Pago realizado con éxito",
       "PAYMENT_SUCCESS_MSG": "¡Gracias! Tu pago se ha completado. Recibirás en breve un correo electrónico con tu factura y tu número de pedido.",
       "PAYMENT_ERROR_TITLE": "El pago ha fallado",
-      "PAYMENT_ERROR_MSG": "¡Vaya! No se ha podido completar tu pago. Por favor, inténtalo de nuevo. Si el problema persiste, contáctanos directamente al +49 163 86 81 397."
+      "PAYMENT_ERROR_MSG": "¡Vaya! No se ha podido completar tu pago. Por favor, inténtalo de nuevo. Si el problema persiste, contáctanos directamente al +49 163 86 81 397.",
+      "ATELIER_SUCCESS_TITLE": "Reserva confirmada",
+      "ATELIER_SUCCESS_MSG": "¡Gracias! Tu plaza ha quedado reservada. Recuerda que el pago se realiza en el Atelier — recibirás en breve un correo de confirmación con los detalles de tu reserva."
     }
   },
   "ABOUT": {

@@ -169,7 +169,9 @@
       "PAYMENT_SUCCESS_TITLE": "Payment successful",
       "PAYMENT_SUCCESS_MSG": "Thank you! Your payment was completed. You will receive an email shortly with your invoice and your order number.",
       "PAYMENT_ERROR_TITLE": "Payment failed",
-      "PAYMENT_ERROR_MSG": "Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +49 163 86 81 397."
+      "PAYMENT_ERROR_MSG": "Oops! Your payment could not be completed. Please try again. If the problem persists, contact us directly at +49 163 86 81 397.",
+      "ATELIER_SUCCESS_TITLE": "Reservation confirmed",
+      "ATELIER_SUCCESS_MSG": "Thank you! Your place has been reserved. Remember payment is due at the Atelier — you'll receive a confirmation email shortly with your booking details."
     }
   },
   "ABOUT": {

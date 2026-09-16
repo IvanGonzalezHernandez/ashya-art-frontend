@@ -287,7 +287,8 @@ async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
     },
     error: (e) => {
       console.error('Error guardando producto', e);
-      this.mostrarModalFeedback('error', 'Error saving product', 'Please review fields or try again.');
+      const mensaje = typeof e?.error === 'string' ? e.error : 'Please review fields or try again.';
+      this.mostrarModalFeedback('error', 'Error saving product', mensaje);
     }
   });
 }

@@ -304,7 +304,7 @@ confirmarReservaAtelier() {
       const modalEl = document.getElementById('modalCliente');
       (window as any).bootstrap?.Modal.getInstance(modalEl)?.hide();
 
-      this.router.navigate(['/'], { queryParams: { payment: 'success' } });
+      this.router.navigate(['/'], { queryParams: { payment: 'atelier' } });
     },
     error: (err) => {
       console.error('Error al confirmar reserva Atelier', err);

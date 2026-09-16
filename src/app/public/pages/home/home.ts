@@ -63,6 +63,17 @@ export class Home implements OnInit {
               t['HOME.FEEDBACK.PAYMENT_SUCCESS_MSG']
             );
           });
+        } else if (payment === 'atelier') {
+          // Reserva confirmada, pero el pago se hace en persona en el Atelier: no se ha cobrado nada todavía.
+          this.carritoService.vaciarCarrito();
+
+          this.translate.get(['HOME.FEEDBACK.ATELIER_SUCCESS_TITLE', 'HOME.FEEDBACK.ATELIER_SUCCESS_MSG']).subscribe(t => {
+            this.mostrarModalFeedback(
+              'success',
+              t['HOME.FEEDBACK.ATELIER_SUCCESS_TITLE'],
+              t['HOME.FEEDBACK.ATELIER_SUCCESS_MSG']
+            );
+          });
         } else {
           this.translate.get(['HOME.FEEDBACK.PAYMENT_ERROR_TITLE', 'HOME.FEEDBACK.PAYMENT_ERROR_MSG']).subscribe(t => {
             this.mostrarModalFeedback(

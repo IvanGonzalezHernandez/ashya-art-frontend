@@ -43,4 +43,12 @@
       Enter
     </button>
   </form>
+
+  <app-feedback-modal
+    *ngIf="mostrarFeedback"
+    [title]="feedbackTitulo"
+    [message]="feedbackMensaje"
+    [status]="feedbackTipo"
+    (closed)="cerrarFeedback()"
+  ></app-feedback-modal>
 </div>

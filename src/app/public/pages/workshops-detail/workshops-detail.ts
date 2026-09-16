@@ -187,7 +187,6 @@ export class WorkshopsDetail {
 
   /** Abrir Reserva desde Fechas garantizando cierre previo */
   async abrirModalReservaDesdeModalFechas(): Promise<void> {
-    await this.closeAnyOverlay();
     await this.openModal('modalReserva');
   }
 
