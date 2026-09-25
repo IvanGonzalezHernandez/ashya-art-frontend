@@ -4,8 +4,9 @@ import { ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { LanguageService } from '../language/language';
+import { SITE_URL, negocio, sitioWeb } from './structured-data';
 
-export const SITE_URL = 'https://ashya-art.com';
+export { SITE_URL };
 const SITE_NAME = 'Ashya Art';
 const DEFAULT_IMAGE = `${SITE_URL}/assets/banner/banner.webp`;
 
@@ -16,12 +17,14 @@ const OG_LOCALES: Record<string, string> = { en: 'en_US', de: 'de_DE', es: 'es_E
  * - `titleKey` / `descriptionKey`: claves i18n.
  * - `dynamic`: la página fija su propio SEO cuando carga los datos (fichas de producto, curso, tarjeta).
  * - `noindex`: la página no debe aparecer en buscadores.
+ * - `structuredData: 'business'`: incluye los datos estructurados del estudio (home).
  */
 export interface RouteSeo {
   titleKey?: string;
   descriptionKey?: string;
   dynamic?: boolean;
   noindex?: boolean;
+  structuredData?: 'business';
 }
 
 /** SEO ya resuelto (textos finales) para aplicar a la página actual. */
@@ -32,6 +35,8 @@ export interface PageSeo {
   noindex?: boolean;
   /** Si el título ya incluye la marca no se le añade " | Ashya Art". */
   fullTitle?: boolean;
+  /** Objetos JSON-LD (schema.org) de la página. */
+  structuredData?: object[];
 }
 
 /** Une los textos no vacíos, quita HTML y recorta a ~160 caracteres (lo que muestra Google). */
@@ -93,6 +98,7 @@ export class SeoService {
       // Mientras carga una ficha dinámica, al menos canónica y robots correctos.
       this.updateCanonical(!!seo?.noindex);
       this.updateRobots(!!seo?.noindex);
+      this.updateStructuredData(undefined);
       return;
     }
 
@@ -102,7 +108,8 @@ export class SeoService {
         title: seo.titleKey ? t[seo.titleKey] : SITE_NAME,
         description: seo.descriptionKey ? t[seo.descriptionKey] : undefined,
         noindex: seo.noindex,
-        fullTitle: seo.titleKey === 'SEO.HOME_TITLE'
+        fullTitle: seo.titleKey === 'SEO.HOME_TITLE',
+        structuredData: seo.structuredData === 'business' ? [negocio(), sitioWeb()] : undefined
       });
     });
   }
@@ -125,6 +132,25 @@ export class SeoService {
 
     this.updateRobots(!!seo.noindex);
     this.updateCanonical(!!seo.noindex);
+    this.updateStructuredData(seo.noindex ? undefined : seo.structuredData);
+  }
+
+  /** Un único <script type="application/ld+json"> en el head con los datos de la página actual. */
+  private updateStructuredData(data: object[] | undefined): void {
+    let script = this.document.head.querySelector<HTMLScriptElement>('script#seo-jsonld');
+    if (!data?.length) {
+      script?.remove();
+      return;
+    }
+    if (!script) {
+      script = this.document.createElement('script');
+      script.id = 'seo-jsonld';
+      script.type = 'application/ld+json';
+      this.document.head.appendChild(script);
+    }
+    // '<' escapado para que ningún texto pueda cerrar el <script>
+    const json = JSON.stringify(data.length === 1 ? data[0] : data).replace(/</g, '\\u003c');
+    script.textContent = json;
   }
 
   private updateRobots(noindex: boolean): void {

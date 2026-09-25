@@ -14,6 +14,7 @@ import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SeoService, seoDescription } from '../../../services/seo/seo';
+import { curso as cursoJsonLd, migas } from '../../../services/seo/structured-data';
 
 declare var bootstrap: any;
 
@@ -166,10 +167,15 @@ export class WorkshopsDetail {
         this.cursoSeleccionado = curso;
         this.cursosCargados = true;
         this.comprobarCargaCompleta();
+        const descripcion = seoDescription(curso.subtitulo, curso.descripcion);
         this.seo.setPage({
           title: curso.nombre,
-          description: seoDescription(curso.subtitulo, curso.descripcion),
-          image: curso.img1Url
+          description: descripcion,
+          image: curso.img1Url,
+          structuredData: [
+            cursoJsonLd(curso, descripcion),
+            migas([['Home', '/'], ['Workshops', '/workshops'], [curso.nombre, `/workshops/${curso.id}`]])
+          ]
         });
       },
       error: (err) => {

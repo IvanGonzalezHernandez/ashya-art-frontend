@@ -9,6 +9,7 @@ import { ItemCarrito } from '../../../models/item-carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SeoService } from '../../../services/seo/seo';
+import { migas, tarjetaRegalo as tarjetaJsonLd } from '../../../services/seo/structured-data';
 
 @Component({
   selector: 'app-gift-cards-detail',
@@ -53,10 +54,15 @@ export class GiftCardsDetail implements OnInit {
         this.tarjetaSeleccionada = tarjeta;
         this.tarjetaCargada = true;
         this.loading = false;
+        const descripcion = this.translate.instant('SEO.GIFT_CARDS_DESC');
         this.seo.setPage({
           title: tarjeta.nombre,
-          description: this.translate.instant('SEO.GIFT_CARDS_DESC'),
-          image: tarjeta.imgUrl
+          description: descripcion,
+          image: tarjeta.imgUrl,
+          structuredData: [
+            tarjetaJsonLd(tarjeta, descripcion),
+            migas([['Home', '/'], ['Gift cards', '/workshops/gift-cards'], [tarjeta.nombre, `/gift-cards/${tarjeta.id}`]])
+          ]
         });
       },
       error: (err) => {

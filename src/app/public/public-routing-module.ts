@@ -25,7 +25,7 @@ const routes: Routes = [
     path: '',
     component: Layout,
     children: [
-      { path: '', component: Home, data: seo('HOME') },
+      { path: '', component: Home, data: { seo: { ...seo('HOME').seo, structuredData: 'business' } } },
       {
         path: 'workshops',
         component: WorkshopsTabs,

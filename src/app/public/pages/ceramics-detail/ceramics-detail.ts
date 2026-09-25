@@ -9,6 +9,7 @@ import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SeoService, seoDescription } from '../../../services/seo/seo';
+import { migas, producto as productoJsonLd } from '../../../services/seo/structured-data';
 
 @Component({
   selector: 'app-ceramics-detail',
@@ -51,10 +52,15 @@ export class CeramicsDetail implements OnInit {
         this.productoSeleccionado = producto;
         this.productoCargado = true;
         this.loading = false;
+        const descripcion = seoDescription(producto.subtitulo, producto.descripcion);
         this.seo.setPage({
           title: producto.nombre,
-          description: seoDescription(producto.subtitulo, producto.descripcion),
-          image: producto.img1Url
+          description: descripcion,
+          image: producto.img1Url,
+          structuredData: [
+            productoJsonLd(producto, descripcion),
+            migas([['Home', '/'], ['Shop', '/shop'], [producto.nombre, `/products/${producto.id}`]])
+          ]
         });
       },
       error: (err) => {
