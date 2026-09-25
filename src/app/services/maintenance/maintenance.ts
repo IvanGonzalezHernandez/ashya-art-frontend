@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environments';
 
 @Injectable({ providedIn: 'root' })
@@ -32,12 +32,15 @@ export class MaintenanceService {
     return sessionStorage.getItem(this.KEY) === 'true';
   }
 
-  unlock(pass: string): boolean {
-    if (pass === environment.maintenancePassword) {
-      sessionStorage.setItem(this.KEY, 'true');
-      return true;
-    }
-    return false;
+  // La contraseña se valida en el backend (MAINTENANCE_PASSWORD) para que no viaje en el bundle.
+  unlock(pass: string): Observable<boolean> {
+    return this.http.post<{ valida: boolean }>(`${this.apiUrl}/desbloquear`, { password: pass }).pipe(
+      map(res => !!res.valida),
+      catchError(() => of(false)),
+      tap(valida => {
+        if (valida) sessionStorage.setItem(this.KEY, 'true');
+      })
+    );
   }
 
   lock(): void {

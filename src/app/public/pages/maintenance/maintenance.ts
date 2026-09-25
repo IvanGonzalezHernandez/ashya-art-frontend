@@ -85,11 +85,13 @@ export class MaintenanceComponent {
   enter(): void {
     this.error = false;
 
-    if (this.maintenance.unlock(this.pass)) {
-      const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/';
-      this.router.navigateByUrl(redirect);
-    } else {
-      this.error = true;
-    }
+    this.maintenance.unlock(this.pass).subscribe(valida => {
+      if (valida) {
+        const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/';
+        this.router.navigateByUrl(redirect);
+      } else {
+        this.error = true;
+      }
+    });
   }
 }
