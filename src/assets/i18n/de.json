@@ -498,5 +498,37 @@
     "S4_B": "B) Bei Stornierungen innerhalb von 14 Tagen vor der Veranstaltung ist keine Rückerstattung möglich.",
     "S4_CONTACT": "Für weitere Informationen kontaktieren Sie uns bitte unter {{email}}.",
     "LAST_UPDATED": "Zuletzt aktualisiert: November 2025"
+  },
+  "SEO": {
+    "HOME_TITLE": "Ashya Art – Handgemachte Keramik & Töpferkurse in Hamburg",
+    "HOME_DESC": "Handgemachte Keramik, Töpferkurse, Open Studio und Gutscheine bei Ashya Art, einem Keramikatelier in Hamburg.",
+    "WORKSHOPS_TITLE": "Töpferkurse & Workshops in Hamburg",
+    "WORKSHOPS_DESC": "Praxisnahe Töpferkurse und Keramik-Workshops in Hamburg. Kleine Gruppen mit persönlicher Betreuung, für Anfänger und Fortgeschrittene.",
+    "FIRING_TITLE": "Brennofen mieten & Brennservice in Hamburg",
+    "FIRING_DESC": "Du brauchst einen Brennofen? Miete unseren 80-l- oder 90-l-Ofen für Schrüh- oder Glasurbrand oder lass einzelne Stücke bei Ashya Art in Hamburg brennen.",
+    "GIFT_CARDS_TITLE": "Gutscheine für Keramik & Workshops",
+    "GIFT_CARDS_DESC": "Personalisierte Ashya-Art-Gutscheine, per E-Mail zugestellt und 6 Monate gültig für alle Workshops und handgemachte Keramik im Shop.",
+    "SHOP_TITLE": "Handgemachte Keramik kaufen",
+    "SHOP_DESC": "Handgefertigte Keramik für den Alltag oder zur Dekoration, jedes Stück sorgfältig in unserem Atelier in Hamburg gemacht.",
+    "CALENDAR_TITLE": "Kurskalender & freie Termine",
+    "CALENDAR_DESC": "Freie Termine für Töpferkurse und Workshops bei Ashya Art in Hamburg ansehen und deinen Platz buchen.",
+    "ABOUT_TITLE": "Über Ashya – Keramikkünstlerin in Hamburg",
+    "ABOUT_DESC": "Lerne Ashya kennen, Keramikkünstlerin aus Breslau, die in Hamburg lebt und 2022 ihr Atelier eröffnet hat, um die Freude an Keramik zu teilen.",
+    "STUDIO_TITLE": "Open Studio & Mitgliedschaft in Hamburg",
+    "STUDIO_DESC": "Open-Studio-Zeiten und Studio-Mitgliedschaft bei Ashya Art in Hamburg: ein einladender Ort für Kursabsolventen und erfahrene Töpfer.",
+    "CONDITIONS_TITLE": "Allgemeine Geschäftsbedingungen",
+    "CONDITIONS_DESC": "AGB von Ashya Art: Bestellungen, Zahlungen, Versand und Abholung.",
+    "IMPRINT_TITLE": "Impressum",
+    "IMPRINT_DESC": "Impressum von Ashya Art & Keramik, Hamburg.",
+    "PRIVACY_TITLE": "Datenschutz & Cookies",
+    "PRIVACY_DESC": "Wie Ashya Art personenbezogene Daten erhebt und verarbeitet und wie Cookies auf dieser Website verwendet werden.",
+    "MAINTENANCE_TITLE": "Wartungsarbeiten",
+    "NOT_FOUND_TITLE": "Seite nicht gefunden",
+    "PRIVATE_TITLE": "Verwaltung"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Seite nicht gefunden",
+    "TEXT": "Die gesuchte Seite existiert leider nicht oder wurde verschoben.",
+    "BACK_HOME": "Zur Startseite"
   }
 }

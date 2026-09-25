@@ -13,6 +13,7 @@ import { ItemCarrito } from '../../../models/item-carrito';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { SeoService, seoDescription } from '../../../services/seo/seo';
 
 declare var bootstrap: any;
 
@@ -68,7 +69,8 @@ export class WorkshopsDetail {
     private cursoFechaService: CursoFechaService,
     private route: ActivatedRoute,
     private carritoService: CarritoService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private seo: SeoService
   ) {
     this.today.setHours(0, 0, 0, 0);
   }
@@ -164,8 +166,16 @@ export class WorkshopsDetail {
         this.cursoSeleccionado = curso;
         this.cursosCargados = true;
         this.comprobarCargaCompleta();
+        this.seo.setPage({
+          title: curso.nombre,
+          description: seoDescription(curso.subtitulo, curso.descripcion),
+          image: curso.img1Url
+        });
       },
-      error: (err) => console.error(`Error cargando curso con ID ${id}`, err),
+      error: (err) => {
+        console.error(`Error cargando curso con ID ${id}`, err);
+        this.seo.setPage({ title: this.translate.instant('SEO.NOT_FOUND_TITLE'), noindex: true });
+      },
     });
   }
 

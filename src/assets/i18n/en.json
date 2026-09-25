@@ -498,5 +498,37 @@
     "S4_B": "B) Cancellations within 14 days of the event are non-refundable.",
     "S4_CONTACT": "For additional information contact us at {{email}}.",
     "LAST_UPDATED": "Last updated: November 2025"
+  },
+  "SEO": {
+    "HOME_TITLE": "Ashya Art – Handmade Ceramics & Pottery Workshops in Hamburg",
+    "HOME_DESC": "Handcrafted ceramics, pottery workshops, open studio and gift cards at Ashya Art, a ceramics atelier in Hamburg, Germany.",
+    "WORKSHOPS_TITLE": "Pottery Courses & Workshops in Hamburg",
+    "WORKSHOPS_DESC": "Hands-on pottery courses and ceramics workshops in Hamburg. Small groups with personalized guidance, for beginners and intermediate makers.",
+    "FIRING_TITLE": "Kiln Rental & Firing Services in Hamburg",
+    "FIRING_DESC": "Need a kiln? Rent our 80 l or 90 l kiln for bisque or glaze firing, or bring just a few pieces to be fired at Ashya Art in Hamburg.",
+    "GIFT_CARDS_TITLE": "Ceramics & Workshop Gift Cards",
+    "GIFT_CARDS_DESC": "Personalized Ashya Art gift cards, delivered by email and valid for 6 months for any workshop or handmade ceramics in our store.",
+    "SHOP_TITLE": "Shop Handmade Ceramics",
+    "SHOP_DESC": "Handcrafted ceramics for daily use or decoration, each piece carefully handmade in our atelier in Hamburg.",
+    "CALENDAR_TITLE": "Workshop Calendar & Available Dates",
+    "CALENDAR_DESC": "Check the available dates for pottery courses and workshops at Ashya Art in Hamburg and book your place.",
+    "ABOUT_TITLE": "About Ashya – Ceramics Artist in Hamburg",
+    "ABOUT_DESC": "Meet Ashya, a ceramics artist from Wroclaw living in Hamburg, who opened her atelier in 2022 to share the joy of ceramics.",
+    "STUDIO_TITLE": "Open Studio & Membership in Hamburg",
+    "STUDIO_DESC": "Open Studio hours and Studio Membership at Ashya Art in Hamburg: a welcoming space for course graduates and experienced potters.",
+    "CONDITIONS_TITLE": "Terms and Conditions",
+    "CONDITIONS_DESC": "Terms and conditions of Ashya Art: orders, payments, shipping and pick-up.",
+    "IMPRINT_TITLE": "Imprint",
+    "IMPRINT_DESC": "Legal disclosure (Impressum) of Ashya Art & Keramik, Hamburg.",
+    "PRIVACY_TITLE": "Privacy & Cookies Policy",
+    "PRIVACY_DESC": "How Ashya Art collects and processes personal data, and how cookies are used on this website.",
+    "MAINTENANCE_TITLE": "Under maintenance",
+    "NOT_FOUND_TITLE": "Page not found",
+    "PRIVATE_TITLE": "Admin"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Page not found",
+    "TEXT": "Sorry, the page you're looking for doesn't exist or has been moved.",
+    "BACK_HOME": "Back to home"
   }
 }

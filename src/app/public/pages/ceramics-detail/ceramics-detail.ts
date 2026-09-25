@@ -7,7 +7,8 @@ import { RouterModule } from '@angular/router';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { SeoService, seoDescription } from '../../../services/seo/seo';
 
 @Component({
   selector: 'app-ceramics-detail',
@@ -25,7 +26,9 @@ export class CeramicsDetail implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private shopService: ShopService,
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private seo: SeoService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -48,9 +51,15 @@ export class CeramicsDetail implements OnInit {
         this.productoSeleccionado = producto;
         this.productoCargado = true;
         this.loading = false;
+        this.seo.setPage({
+          title: producto.nombre,
+          description: seoDescription(producto.subtitulo, producto.descripcion),
+          image: producto.img1Url
+        });
       },
       error: (err) => {
         console.error(`Error cargando producto con ID ${id}`, err);
+        this.seo.setPage({ title: this.translate.instant('SEO.NOT_FOUND_TITLE'), noindex: true });
         this.loading = false;
       }
     });

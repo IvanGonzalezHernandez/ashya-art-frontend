@@ -10,48 +10,66 @@ import { About } from './pages/about/about';
 import { Studio } from './pages/studio/studio';
 import { WorkshopsTabs } from '../shared/workshops-tabs/workshops-tabs';
 import { ShopTabs } from '../shared/shop-tabs/shop-tabs';
+import { RouteSeo } from '../services/seo/seo';
+
+/** SEO de una página estática: claves i18n SEO.<KEY>_TITLE y SEO.<KEY>_DESC */
+const seo = (key: string): { seo: RouteSeo } => ({
+  seo: { titleKey: `SEO.${key}_TITLE`, descriptionKey: `SEO.${key}_DESC` }
+});
+
+/** Fichas que fijan su propio SEO al cargar los datos de la API */
+const dynamicSeo: { seo: RouteSeo } = { seo: { dynamic: true } };
 
 const routes: Routes = [
   {
     path: '',
     component: Layout,
     children: [
-      { path: '', component: Home },
+      { path: '', component: Home, data: seo('HOME') },
       {
         path: 'workshops',
         component: WorkshopsTabs,
         children: [
-          { path: '', component: Workshops },
-          { path: 'firing-services', loadComponent: () => import('./pages/firing-services/firing-services').then(m => m.FiringServices) },
-          { path: 'gift-cards', loadComponent: () => import('./pages/gift-cards/gift-cards').then(m => m.GiftCards) },
+          { path: '', component: Workshops, data: seo('WORKSHOPS') },
+          { path: 'firing-services', loadComponent: () => import('./pages/firing-services/firing-services').then(m => m.FiringServices), data: seo('FIRING') },
+          { path: 'gift-cards', loadComponent: () => import('./pages/gift-cards/gift-cards').then(m => m.GiftCards), data: seo('GIFT_CARDS') },
         ]
       },
       {
         path: 'gift-cards/:id',
-        loadComponent: () => import('./pages/gift-cards-detail/gift-cards-detail').then(m => m.GiftCardsDetail)
+        loadComponent: () => import('./pages/gift-cards-detail/gift-cards-detail').then(m => m.GiftCardsDetail),
+        data: dynamicSeo
       },
       {
         path: 'workshops/:id',
-        loadComponent: () => import('./pages/workshops-detail/workshops-detail').then(m => m.WorkshopsDetail)
+        loadComponent: () => import('./pages/workshops-detail/workshops-detail').then(m => m.WorkshopsDetail),
+        data: dynamicSeo
       },
       {
         path: 'products/:id',
-        loadComponent: () => import('./pages/ceramics-detail/ceramics-detail').then(m => m.CeramicsDetail)
+        loadComponent: () => import('./pages/ceramics-detail/ceramics-detail').then(m => m.CeramicsDetail),
+        data: dynamicSeo
       },
       {
         path: 'shop',
         component: ShopTabs,
         children: [
-          { path: '', component: Shop },
+          { path: '', component: Shop, data: seo('SHOP') },
         ]
       },
-      { path: 'calendar', component: Calendar },
-      { path: 'about', component: About },
-      { path: 'studio', component: Studio },
-      { path: 'conditions', loadComponent: () => import('./pages/shipping/shipping').then(m => m.Shipping) },
-      { path: 'imprint', loadComponent: () => import('./pages/imprint/imprint').then(m => m.Imprint) },
-      { path: 'privacy-policy', loadComponent: () => import('./pages/privacy-policy/privacy-policy').then(m => m.PrivacyPolicy) },
+      { path: 'calendar', component: Calendar, data: seo('CALENDAR') },
+      { path: 'about', component: About, data: seo('ABOUT') },
+      { path: 'studio', component: Studio, data: seo('STUDIO') },
+      { path: 'conditions', loadComponent: () => import('./pages/shipping/shipping').then(m => m.Shipping), data: seo('CONDITIONS') },
+      { path: 'imprint', loadComponent: () => import('./pages/imprint/imprint').then(m => m.Imprint), data: seo('IMPRINT') },
+      { path: 'privacy-policy', loadComponent: () => import('./pages/privacy-policy/privacy-policy').then(m => m.PrivacyPolicy), data: seo('PRIVACY') },
 
+      // Cualquier otra ruta: página 404 con noindex (antes redirigía a la home, que Google trata como contenido duplicado)
+      {
+        path: '**',
+        loadComponent: () => import('./pages/not-found/not-found').then(m => m.NotFound),
+        data: { seo: { titleKey: 'SEO.NOT_FOUND_TITLE', noindex: true } }
+      },
     ]
   }
 ];

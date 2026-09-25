@@ -7,7 +7,8 @@ import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaReg
 import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { SeoService } from '../../../services/seo/seo';
 
 @Component({
   selector: 'app-gift-cards-detail',
@@ -27,7 +28,9 @@ export class GiftCardsDetail implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private carritoService: CarritoService,
-    private tarjetaRegaloService: TarjetaRegaloService
+    private tarjetaRegaloService: TarjetaRegaloService,
+    private seo: SeoService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -50,9 +53,15 @@ export class GiftCardsDetail implements OnInit {
         this.tarjetaSeleccionada = tarjeta;
         this.tarjetaCargada = true;
         this.loading = false;
+        this.seo.setPage({
+          title: tarjeta.nombre,
+          description: this.translate.instant('SEO.GIFT_CARDS_DESC'),
+          image: tarjeta.imgUrl
+        });
       },
       error: (err) => {
         console.error(`Error cargando tarjeta con ID ${id}`, err);
+        this.seo.setPage({ title: this.translate.instant('SEO.NOT_FOUND_TITLE'), noindex: true });
         this.loading = false;
       }
     });

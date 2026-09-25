@@ -57,12 +57,13 @@
       <!-- Carrito -->
       <div class="position-relative">
         <!-- SIN data-bs-toggle/href -->
-        <a class="nav-link position-relative cart-hover" role="button" (click)="abrirCarrito()">
+        <button type="button" class="nav-link position-relative cart-hover" (click)="abrirCarrito()"
+                [attr.aria-label]="'NAVBAR.YOUR_CART' | translate">
           <i class="bi bi-cart" style="font-size: 1.5rem;"></i>
           <span class="badge bg-azul position-absolute top-0 start-100 translate-middle">
             {{ contadorCarrito }}
           </span>
-        </a>
+        </button>
       </div>
     </div>
 

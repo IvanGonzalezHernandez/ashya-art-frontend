@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /private/
+Disallow: /maintenance
+
+Sitemap: https://ashya-art.com/sitemap.xml

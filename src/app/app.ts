@@ -3,6 +3,7 @@ import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AnalyticsConsentService } from './services/analytics-consent/analytics-consent';
 import { CookieBannerComponent } from './shared/cookie-banner/cookie-banner';
+import { SeoService } from './services/seo/seo';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +16,14 @@ export class App implements OnInit {
 
   constructor(
     private router: Router,
-    private analyticsConsent: AnalyticsConsentService
+    private analyticsConsent: AnalyticsConsentService,
+    private seo: SeoService
   ) {}
 
   ngOnInit() {
+    // Título, descripción, canónica y Open Graph por ruta
+    this.seo.init();
+
     // Si ya aceptó cookies anteriormente, carga GA al arrancar
     this.analyticsConsent.initOnAppStart();
 

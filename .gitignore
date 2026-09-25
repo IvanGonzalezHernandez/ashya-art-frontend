@@ -40,3 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Generado en cada build por scripts/generate-sitemap.mjs
+/src/static/sitemap.xml
