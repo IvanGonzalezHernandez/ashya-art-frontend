@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsConsentService } from '../../services/analytics-consent/analytics-consent';
@@ -139,10 +140,13 @@ styles: [`
 })
 export class CookieBannerComponent {
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor(private analyticsConsent: AnalyticsConsentService) {}
 
+  // No se incluye en el HTML prerenderizado: solo el navegador sabe si ya se aceptó o rechazó
   get show(): boolean {
-    return this.analyticsConsent.getConsent() === 'unknown';
+    return this.isBrowser && this.analyticsConsent.getConsent() === 'unknown';
   }
 
   accept(): void {

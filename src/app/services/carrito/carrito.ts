@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ItemCarrito } from '../../models/item-carrito';
@@ -13,8 +14,11 @@ export class CarritoService {
 
   private apiUrl = `${environment.apiUrl}/carrito`;
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor(private http: HttpClient) {
-    const itemsGuardados = localStorage.getItem('carrito');
+    // En el prerenderizado el carrito siempre está vacío
+    const itemsGuardados = this.isBrowser ? localStorage.getItem('carrito') : null;
     if (itemsGuardados) {
       try {
         this.items = JSON.parse(itemsGuardados) || [];

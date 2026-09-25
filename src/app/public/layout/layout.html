@@ -1,5 +1,6 @@
 <div class="layout-container">
-  <app-navbar></app-navbar>
+  <!-- El carrito se lee del localStorage: se pinta solo en el cliente -->
+  <app-navbar ngSkipHydration></app-navbar>
   <router-outlet></router-outlet>
   <app-footer></app-footer>
 </div>

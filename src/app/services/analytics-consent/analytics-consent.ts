@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environments';
 
 type Consent = 'accepted' | 'rejected' | 'unknown';
@@ -13,8 +14,11 @@ declare global {
 @Injectable({ providedIn: 'root' })
 export class AnalyticsConsentService {
   private readonly STORAGE_KEY = 'cookie_consent_analytics';
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   getConsent(): Consent {
+    // En el prerenderizado no hay consentimiento que leer (ni se carga Analytics)
+    if (!this.isBrowser) return 'unknown';
     const v = localStorage.getItem(this.STORAGE_KEY);
     if (v === 'accepted' || v === 'rejected') return v;
     return 'unknown';

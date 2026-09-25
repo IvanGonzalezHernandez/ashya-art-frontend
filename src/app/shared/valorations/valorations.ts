@@ -1,7 +1,9 @@
 // src/app/shared/valorations/valorations.component.ts
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
-import { Carousel } from 'bootstrap';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Input, OnChanges, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, SimpleChanges, PLATFORM_ID, inject } from '@angular/core';
+// Solo el tipo: en ejecución se usa el Bootstrap global (angular.json "scripts"). Importar el
+// paquete 'bootstrap' lo duplicaba en el bundle y rompía el prerenderizado (usa document al cargarse).
+import type { Carousel } from 'bootstrap';
 import { TranslatePipe } from '@ngx-translate/core';
 
 /** Modelo de la reseña */
@@ -78,6 +80,7 @@ export class ValorationsComponent implements OnInit, OnChanges, AfterViewInit, O
 
   private bsCarousel?: Carousel;
   private viewReady = false;
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   /** Redondeo para pintar estrellas del rating global sin usar Math en el template */
   get roundedRating(): number {
@@ -119,12 +122,14 @@ export class ValorationsComponent implements OnInit, OnChanges, AfterViewInit, O
   }
 
   private initOrRefreshCarousel(): void {
-    if (!this.carouselEl?.nativeElement) return;
+    if (!this.isBrowser || !this.carouselEl?.nativeElement) return;
+    const bootstrap = (window as any).bootstrap;
+    if (!bootstrap?.Carousel) return;
 
     // Si ya existía, lo reciclamos para evitar fugas/duplicados
     this.disposeCarousel();
 
-    this.bsCarousel = new Carousel(this.carouselEl.nativeElement, {
+    this.bsCarousel = new bootstrap.Carousel(this.carouselEl.nativeElement, {
       interval: this.interval,
       ride: 'carousel',
       pause: false,
@@ -134,7 +139,7 @@ export class ValorationsComponent implements OnInit, OnChanges, AfterViewInit, O
     });
 
     // Asegura que inicia el ciclo (por si bootstrap no auto-arranca en SPA)
-    this.bsCarousel.cycle();
+    this.bsCarousel?.cycle();
   }
 
   private disposeCarousel(): void {

@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -8,6 +9,8 @@ import { environment } from '../../../environments/environments';
 export class MaintenanceService {
   private readonly KEY = 'maintenance_unlocked';
   private apiUrl = `${environment.apiUrl}/config/mantenimiento`;
+
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +32,7 @@ export class MaintenanceService {
   }
 
   isUnlocked(): boolean {
+    if (!this.isBrowser) return false;
     return sessionStorage.getItem(this.KEY) === 'true';
   }
 

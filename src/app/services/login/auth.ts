@@ -1,5 +1,6 @@
 // src/app/services/login/auth.ts
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environments';
 import { Observable } from 'rxjs';
@@ -20,6 +21,8 @@ export class AuthService {
 
   private apiUrl = `${environment.apiUrl}/auth`;
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
@@ -32,6 +35,7 @@ export class AuthService {
   }
 
   obtenerToken(): string | null {
+    if (!this.isBrowser) return null;
     return localStorage.getItem('token');
   }
 

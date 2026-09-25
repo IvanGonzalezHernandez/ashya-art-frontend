@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AnalyticsConsentService } from './services/analytics-consent/analytics-consent';
@@ -13,6 +14,7 @@ import { SeoService } from './services/seo/seo';
 })
 export class App implements OnInit {
   protected title = 'ashya-art-frontend';
+  private readonly platformId = inject(PLATFORM_ID);
 
   constructor(
     private router: Router,
@@ -32,7 +34,7 @@ export class App implements OnInit {
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(event => {
         // Scroll al inicio en cada cambio de ruta
-        window.scrollTo({
+        if (isPlatformBrowser(this.platformId)) window.scrollTo({
           top: 0,
           left: 0,
           behavior: 'smooth'
