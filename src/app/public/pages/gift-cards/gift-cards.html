@@ -14,11 +14,13 @@
           class="img-fluid rounded-4 shadow mb-3 mb-lg-0">
 
         <!-- Botón móvil -->
-        <a
-          [routerLink]="['/gift-cards']"
+        <!-- Baja al listado de tarjetas de esta misma página -->
+        <button
+          type="button"
+          (click)="elegirTarjeta.scrollIntoView({ behavior: 'smooth' })"
           class="btn bg-azul text-white mt-3 d-lg-none d-inline-block fs-5">
           {{ 'GIFT_CARDS.SHOP_GIFT_CARDS' | translate }}
-        </a>
+        </button>
       </div>
 
       <!-- Texto -->
@@ -57,7 +59,7 @@
 
 
 <!-- Gift Cards Listing -->
-<section class="py-4 bg-beige-claro">
+<section #elegirTarjeta class="py-4 bg-beige-claro">
   <div class="container">
 
     <h2 class="text-center mb-4 fw-bold"
@@ -112,7 +114,7 @@
               </span>
 
               <a
-                [routerLink]="['/gift-cards', card.id]"
+                [routerLink]="['/gift-cards', card | segmentoFicha]"
                 class="btn bg-azul text-white px-3 fs-6"
                 [attr.aria-label]="'View gift card ' + card.nombre">
                 {{ 'COMMON.VIEW_DETAILS' | translate }}

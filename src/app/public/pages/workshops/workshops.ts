@@ -6,13 +6,14 @@ import { CursoService } from '../../../services/curso/curso';
 import { ValorationsComponent } from '../../../shared/valorations/valorations';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe } from '@ngx-translate/core';
+import { SegmentoFichaPipe } from '../../../utils/slug.util';
 
 @Component({
   selector: 'app-workshops',
   standalone: true,
   templateUrl: './workshops.html',
   styleUrls: ['./workshops.scss'],
-  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe]
+  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe]
 })
 export class Workshops implements OnInit {
   loading = false;

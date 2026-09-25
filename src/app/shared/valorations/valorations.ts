@@ -1,6 +1,6 @@
 // src/app/shared/valorations/valorations.component.ts
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, SimpleChanges, PLATFORM_ID, inject } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, SimpleChanges, PLATFORM_ID, inject, NgZone } from '@angular/core';
 // Solo el tipo: en ejecución se usa el Bootstrap global (angular.json "scripts"). Importar el
 // paquete 'bootstrap' lo duplicaba en el bundle y rompía el prerenderizado (usa document al cargarse).
 import type { Carousel } from 'bootstrap';
@@ -81,6 +81,7 @@ export class ValorationsComponent implements OnInit, OnChanges, AfterViewInit, O
   private bsCarousel?: Carousel;
   private viewReady = false;
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly zone = inject(NgZone);
 
   /** Redondeo para pintar estrellas del rating global sin usar Math en el template */
   get roundedRating(): number {
@@ -129,17 +130,21 @@ export class ValorationsComponent implements OnInit, OnChanges, AfterViewInit, O
     // Si ya existía, lo reciclamos para evitar fugas/duplicados
     this.disposeCarousel();
 
-    this.bsCarousel = new bootstrap.Carousel(this.carouselEl.nativeElement, {
-      interval: this.interval,
-      ride: 'carousel',
-      pause: false,
-      touch: true,
-      wrap: true,
-      keyboard: false
-    });
+    // Fuera de la zona de Angular: el setInterval del autoplay impedía que la app quedara
+    // estable, y la hidratación (y whenStable) no terminaban nunca (NG0506).
+    this.zone.runOutsideAngular(() => {
+      this.bsCarousel = new bootstrap.Carousel(this.carouselEl.nativeElement, {
+        interval: this.interval,
+        ride: 'carousel',
+        pause: false,
+        touch: true,
+        wrap: true,
+        keyboard: false
+      });
 
-    // Asegura que inicia el ciclo (por si bootstrap no auto-arranca en SPA)
-    this.bsCarousel?.cycle();
+      // Asegura que inicia el ciclo (por si bootstrap no auto-arranca en SPA)
+      this.bsCarousel?.cycle();
+    });
   }
 
   private disposeCarousel(): void {

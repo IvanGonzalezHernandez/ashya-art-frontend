@@ -37,6 +37,8 @@ export interface PageSeo {
   fullTitle?: boolean;
   /** Objetos JSON-LD (schema.org) de la página. */
   structuredData?: object[];
+  /** Ruta canónica si no coincide con la URL actual (p.ej. fichas con nombre en la URL). */
+  path?: string;
 }
 
 /** Une los textos no vacíos, quita HTML y recorta a ~160 caracteres (lo que muestra Google). */
@@ -116,7 +118,7 @@ export class SeoService {
 
   private apply(seo: PageSeo): void {
     const fullTitle = seo.fullTitle ? seo.title : `${seo.title} | ${SITE_NAME}`;
-    const url = this.currentUrl();
+    const url = seo.path ? SITE_URL + seo.path : this.currentUrl();
     const image = seo.image || DEFAULT_IMAGE;
 
     this.title.setTitle(fullTitle);
@@ -131,7 +133,7 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
 
     this.updateRobots(!!seo.noindex);
-    this.updateCanonical(!!seo.noindex);
+    this.updateCanonical(!!seo.noindex, url);
     this.updateStructuredData(seo.noindex ? undefined : seo.structuredData);
   }
 
@@ -162,7 +164,7 @@ export class SeoService {
   }
 
   /** Canónica = URL actual sin query ni fragmento. Las páginas noindex no llevan canónica. */
-  private updateCanonical(noindex: boolean): void {
+  private updateCanonical(noindex: boolean, url = this.currentUrl()): void {
     let link = this.document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (noindex) {
       link?.remove();
@@ -173,7 +175,7 @@ export class SeoService {
       link.setAttribute('rel', 'canonical');
       this.document.head.appendChild(link);
     }
-    link.setAttribute('href', this.currentUrl());
+    link.setAttribute('href', url);
   }
 
   private updateLangAttributes(): void {

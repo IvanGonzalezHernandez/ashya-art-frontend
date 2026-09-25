@@ -10,6 +10,8 @@ import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SeoService, seoDescription } from '../../../services/seo/seo';
 import { migas, producto as productoJsonLd } from '../../../services/seo/structured-data';
+import { idDeSegmento, segmentoFicha } from '../../../utils/slug.util';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-ceramics-detail',
@@ -29,7 +31,8 @@ export class CeramicsDetail implements OnInit {
     private shopService: ShopService,
     private carritoService: CarritoService,
     private seo: SeoService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +41,7 @@ export class CeramicsDetail implements OnInit {
     this.route.paramMap.subscribe(params => {
       const idStr = params.get('id');
       if (idStr) {
-        const id = Number(idStr);
+        const id = idDeSegmento(idStr);
         if (!isNaN(id)) {
           this.cargarProductoPorId(id);
         }
@@ -52,14 +55,18 @@ export class CeramicsDetail implements OnInit {
         this.productoSeleccionado = producto;
         this.productoCargado = true;
         this.loading = false;
+        const path = `/products/${segmentoFicha(producto)}`;
+        // URLs antiguas (/products/12) o con otro nombre: se muestra la canónica sin recargar
+        if (this.location.path() !== path) this.location.replaceState(path);
         const descripcion = seoDescription(producto.subtitulo, producto.descripcion);
         this.seo.setPage({
           title: producto.nombre,
           description: descripcion,
           image: producto.img1Url,
+          path,
           structuredData: [
             productoJsonLd(producto, descripcion),
-            migas([['Home', '/'], ['Shop', '/shop'], [producto.nombre, `/products/${producto.id}`]])
+            migas([['Home', '/'], ['Shop', '/shop'], [producto.nombre, path]])
           ]
         });
       },

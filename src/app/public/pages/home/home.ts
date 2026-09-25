@@ -10,13 +10,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CarritoService } from '../../../services/carrito/carrito';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { SegmentoFichaPipe } from '../../../utils/slug.util';
 
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe],
+  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
 })

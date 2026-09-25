@@ -4,6 +4,7 @@
 import { Producto } from '../../models/producto.model';
 import { Curso } from '../../models/curso.model';
 import { TarjetaRegalo } from '../../models/tarjetaRegalo.model';
+import { segmentoFicha } from '../../utils/slug.util';
 
 export const SITE_URL = 'https://ashya-art.com';
 
@@ -77,7 +78,7 @@ function oferta(precio: number | null | undefined, path: string, disponible = tr
 }
 
 export function producto(p: Producto, descripcion: string): JsonLd {
-  const path = `/products/${p.id}`;
+  const path = `/products/${segmentoFicha(p)}`;
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -92,7 +93,7 @@ export function producto(p: Producto, descripcion: string): JsonLd {
 }
 
 export function tarjetaRegalo(t: TarjetaRegalo, descripcion: string): JsonLd {
-  const path = `/gift-cards/${t.id}`;
+  const path = `/gift-cards/${segmentoFicha(t)}`;
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -105,7 +106,7 @@ export function tarjetaRegalo(t: TarjetaRegalo, descripcion: string): JsonLd {
 }
 
 export function curso(c: Curso, descripcion: string): JsonLd {
-  const path = `/workshops/${c.id}`;
+  const path = `/workshops/${segmentoFicha(c)}`;
   return {
     '@context': 'https://schema.org',
     '@type': 'Course',

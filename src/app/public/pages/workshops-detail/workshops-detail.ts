@@ -15,6 +15,8 @@ import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SeoService, seoDescription } from '../../../services/seo/seo';
 import { curso as cursoJsonLd, migas } from '../../../services/seo/structured-data';
+import { idDeSegmento, segmentoFicha } from '../../../utils/slug.util';
+import { Location } from '@angular/common';
 
 declare var bootstrap: any;
 
@@ -71,7 +73,8 @@ export class WorkshopsDetail {
     private route: ActivatedRoute,
     private carritoService: CarritoService,
     private translate: TranslateService,
-    private seo: SeoService
+    private seo: SeoService,
+    private location: Location
   ) {
     this.today.setHours(0, 0, 0, 0);
   }
@@ -143,7 +146,7 @@ export class WorkshopsDetail {
     this.route.paramMap.subscribe(params => {
       const idStr = params.get('id');
       if (idStr) {
-        const id = Number(idStr);
+        const id = idDeSegmento(idStr);
         if (!isNaN(id)) {
           this.cargarCursoPorId(id);
           this.cargarCursoFechaPorIdCurso(id);
@@ -167,14 +170,18 @@ export class WorkshopsDetail {
         this.cursoSeleccionado = curso;
         this.cursosCargados = true;
         this.comprobarCargaCompleta();
+        const path = `/workshops/${segmentoFicha(curso)}`;
+        // URLs antiguas (/workshops/12) o con otro nombre: se muestra la canónica sin recargar
+        if (this.location.path() !== path) this.location.replaceState(path);
         const descripcion = seoDescription(curso.subtitulo, curso.descripcion);
         this.seo.setPage({
           title: curso.nombre,
           description: descripcion,
           image: curso.img1Url,
+          path,
           structuredData: [
             cursoJsonLd(curso, descripcion),
-            migas([['Home', '/'], ['Workshops', '/workshops'], [curso.nombre, `/workshops/${curso.id}`]])
+            migas([['Home', '/'], ['Workshops', '/workshops'], [curso.nombre, path]])
           ]
         });
       },

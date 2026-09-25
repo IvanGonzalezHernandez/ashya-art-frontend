@@ -4,15 +4,16 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { ShopService } from './services/shop/shop';
 import { CursoService } from './services/curso/curso';
 import { TarjetaRegaloService } from './services/tarjetaRegalo/tarjetaRegalo';
+import { segmentoFicha } from './utils/slug.util';
 
 /**
  * Ids a prerenderizar para una ficha. Si la API falla, se omiten esas fichas en vez de
  * romper el build: se siguen sirviendo renderizadas en el navegador (fallback Client).
  */
-async function idsDe(nombre: string, lista: Observable<{ id: number }[]>): Promise<Record<string, string>[]> {
+async function idsDe(nombre: string, lista: Observable<{ id: number; nombre?: string | null }[]>): Promise<Record<string, string>[]> {
   try {
     const items = await firstValueFrom(lista);
-    return items.map(item => ({ id: String(item.id) }));
+    return items.map(item => ({ id: segmentoFicha(item) }));
   } catch (err) {
     const motivo = (err as { message?: string })?.message ?? err;
     console.warn(`[prerender] No se pudieron obtener ${nombre} (${motivo}); se renderizarán en el navegador.`);

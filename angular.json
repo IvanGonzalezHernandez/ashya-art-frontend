@@ -28,7 +28,7 @@
             "assets": [
               "src/assets",
               {
-                "glob": "{_redirects,robots.txt,sitemap.xml}",
+                "glob": "{_redirects,robots.txt}",
                 "input": "src/static",
                 "output": ""
               }

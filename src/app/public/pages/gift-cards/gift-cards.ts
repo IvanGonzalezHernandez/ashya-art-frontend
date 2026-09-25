@@ -6,11 +6,12 @@ import { TarjetaRegaloService } from '../../../services/tarjetaRegalo/tarjetaReg
 import { ValorationsComponent } from '../../../shared/valorations/valorations';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe } from '@ngx-translate/core';
+import { SegmentoFichaPipe } from '../../../utils/slug.util';
 
 @Component({
   selector: 'app-gift-cards',
   standalone: true,
-  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe],
+  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
   templateUrl: './gift-cards.html',
   styleUrls: ['./gift-cards.scss']
 })

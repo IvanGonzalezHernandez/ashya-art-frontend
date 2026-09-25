@@ -1,63 +1,44 @@
-// Genera src/static/sitemap.xml antes del build (npm run build -> prebuild).
-// Incluye las páginas públicas estáticas y las fichas habilitadas de productos, cursos y tarjetas regalo.
-// Si la API no responde, genera el sitemap solo con las páginas estáticas: nunca rompe el build.
+// Genera sitemap.xml después del build (npm run build -> postbuild) a partir de las páginas
+// prerenderizadas: cada <ruta>/index.html del build es una URL indexable. Así el sitemap
+// coincide siempre con lo que se ha generado (incluidas las URLs con nombre de las fichas).
 
-import { readFileSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join, relative, resolve, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITE_URL = 'https://ashya-art.com';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const browserDir = resolve(root, 'dist/ashya-art-frontend/browser');
 
-// Misma API que usa el build de producción (se puede sobrescribir con SITEMAP_API_URL)
-const envProd = readFileSync(resolve(root, 'src/environments/environments.prod.ts'), 'utf8');
-const API_URL = process.env.SITEMAP_API_URL || envProd.match(/apiUrl:\s*'([^']+)'/)?.[1];
-
-const STATIC_PAGES = [
-  '/',
-  '/workshops',
-  '/workshops/firing-services',
-  '/workshops/gift-cards',
-  '/shop',
-  '/calendar',
-  '/about',
-  '/studio',
-  '/conditions',
-  '/imprint',
-  '/privacy-policy'
-];
-
-const DYNAMIC_PAGES = [
-  { endpoint: '/productos/habilitados', path: id => `/products/${id}` },
-  { endpoint: '/cursos/habilitados', path: id => `/workshops/${id}` },
-  { endpoint: '/tarjetas-regalo/habilitadas', path: id => `/gift-cards/${id}` }
-];
-
-async function fetchIds(endpoint) {
-  try {
-    const res = await fetch(`${API_URL}${endpoint}`, { signal: AbortSignal.timeout(60_000) });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const items = await res.json();
-    return items.map(item => item.id).filter(id => id != null);
-  } catch (err) {
-    console.warn(`[sitemap] No se pudo leer ${endpoint} (${err.message}); se omiten esas fichas.`);
-    return [];
-  }
+if (!existsSync(browserDir)) {
+  console.warn(`[sitemap] No existe ${browserDir}; no se genera el sitemap.`);
+  process.exit(0);
 }
 
-const paths = [...STATIC_PAGES];
-for (const { endpoint, path } of DYNAMIC_PAGES) {
-  const ids = await fetchIds(endpoint);
-  paths.push(...ids.map(path));
+function paginas(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    const ruta = join(dir, entry.name);
+    if (entry.isDirectory()) return paginas(ruta);
+    return entry.name === 'index.html' ? [ruta] : [];
+  });
 }
+
+const urls = paginas(browserDir)
+  // Páginas con noindex (no deberían prerenderizarse, pero por si acaso)
+  .filter(file => !/<meta name="robots" content="noindex/.test(readFileSync(file, 'utf8')))
+  .map(file => {
+    const ruta = relative(browserDir, dirname(file)).split(sep).join('/');
+    return ruta ? `/${ruta}` : '/';
+  })
+  .sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)));
 
 const xml = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-  ...paths.map(p => `  <url><loc>${SITE_URL}${p}</loc></url>`),
+  ...urls.map(p => `  <url><loc>${SITE_URL}${encodeURI(p)}</loc></url>`),
   '</urlset>',
   ''
 ].join('\n');
 
-writeFileSync(resolve(root, 'src/static/sitemap.xml'), xml);
-console.log(`[sitemap] ${paths.length} URLs escritas en src/static/sitemap.xml`);
+writeFileSync(join(browserDir, 'sitemap.xml'), xml);
+console.log(`[sitemap] ${urls.length} URLs escritas en dist/ashya-art-frontend/browser/sitemap.xml`);

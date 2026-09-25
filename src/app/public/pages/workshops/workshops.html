@@ -66,7 +66,7 @@
               </span>
 
               <a
-                [routerLink]="['/workshops', curso.id]"
+                [routerLink]="['/workshops', curso | segmentoFicha]"
                 class="btn bg-azul text-white px-3 fs-6"
                 [attr.aria-label]="'View workshop ' + curso.nombre">
                 {{ 'COMMON.VIEW_WORKSHOP' | translate }}

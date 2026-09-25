@@ -5,11 +5,12 @@ import { Producto } from '../../../models/producto.model';
 import { RouterModule } from '@angular/router';
 import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive';
 import { TranslatePipe } from '@ngx-translate/core';
+import { SegmentoFichaPipe } from '../../../utils/slug.util';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe],
+  imports: [CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
   templateUrl: './shop.html',
   styleUrls: ['./shop.scss']
 })

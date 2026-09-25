@@ -76,7 +76,7 @@
 
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ curso.precio }}€</span>
-              <a [routerLink]="['/workshops', curso.id]" class="btn bg-azul text-white px-3 py-2 rounded-3">
+              <a [routerLink]="['/workshops', curso | segmentoFicha]" class="btn bg-azul text-white px-3 py-2 rounded-3">
                 {{ 'COMMON.VIEW_COURSE' | translate }}
               </a>
             </div>
@@ -157,7 +157,7 @@
 
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ producto.precio }}€</span>
-              <a [routerLink]="['/products', producto.id]" class="btn bg-azul text-white px-3 py-2 rounded-3">
+              <a [routerLink]="['/products', producto | segmentoFicha]" class="btn bg-azul text-white px-3 py-2 rounded-3">
                 {{ 'COMMON.VIEW_PRODUCT' | translate }}
               </a>
             </div>

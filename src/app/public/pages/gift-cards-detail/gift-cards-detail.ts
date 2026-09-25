@@ -10,6 +10,8 @@ import { RevealAnimateDirective } from '../../../utils/Reveal- animate-directive
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SeoService } from '../../../services/seo/seo';
 import { migas, tarjetaRegalo as tarjetaJsonLd } from '../../../services/seo/structured-data';
+import { idDeSegmento, segmentoFicha } from '../../../utils/slug.util';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-gift-cards-detail',
@@ -31,7 +33,8 @@ export class GiftCardsDetail implements OnInit {
     private carritoService: CarritoService,
     private tarjetaRegaloService: TarjetaRegaloService,
     private seo: SeoService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +43,7 @@ export class GiftCardsDetail implements OnInit {
     this.route.paramMap.subscribe(params => {
       const idStr = params.get('id');
       if (idStr) {
-        const id = Number(idStr);
+        const id = idDeSegmento(idStr);
         if (!isNaN(id)) {
           this.cargarTarjetaPorId(id);
         }
@@ -54,14 +57,18 @@ export class GiftCardsDetail implements OnInit {
         this.tarjetaSeleccionada = tarjeta;
         this.tarjetaCargada = true;
         this.loading = false;
+        const path = `/gift-cards/${segmentoFicha(tarjeta)}`;
+        // URLs antiguas (/gift-cards/12) o con otro nombre: se muestra la canónica sin recargar
+        if (this.location.path() !== path) this.location.replaceState(path);
         const descripcion = this.translate.instant('SEO.GIFT_CARDS_DESC');
         this.seo.setPage({
           title: tarjeta.nombre,
           description: descripcion,
           image: tarjeta.imgUrl,
+          path,
           structuredData: [
             tarjetaJsonLd(tarjeta, descripcion),
-            migas([['Home', '/'], ['Gift cards', '/workshops/gift-cards'], [tarjeta.nombre, `/gift-cards/${tarjeta.id}`]])
+            migas([['Home', '/'], ['Gift cards', '/workshops/gift-cards'], [tarjeta.nombre, path]])
           ]
         });
       },
