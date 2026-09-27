@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { LanguageService } from '../language/language';
-import { SITE_URL, negocio, sitioWeb } from './structured-data';
+import { SITE_URL, negocio, sitioWeb, urlDePagina } from './structured-data';
 
 export { SITE_URL };
 const SITE_NAME = 'Ashya Art';
@@ -118,7 +118,7 @@ export class SeoService {
 
   private apply(seo: PageSeo): void {
     const fullTitle = seo.fullTitle ? seo.title : `${seo.title} | ${SITE_NAME}`;
-    const url = seo.path ? SITE_URL + seo.path : this.currentUrl();
+    const url = seo.path ? urlDePagina(seo.path) : this.currentUrl();
     const image = seo.image || DEFAULT_IMAGE;
 
     this.title.setTitle(fullTitle);
@@ -163,7 +163,7 @@ export class SeoService {
     }
   }
 
-  /** Canónica = URL actual sin query ni fragmento. Las páginas noindex no llevan canónica. */
+  /** Canónica = URL actual sin query ni fragmento, con barra final. Las páginas noindex no llevan canónica. */
   private updateCanonical(noindex: boolean, url = this.currentUrl()): void {
     let link = this.document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (noindex) {
@@ -193,8 +193,7 @@ export class SeoService {
   }
 
   private currentUrl(): string {
-    const path = this.router.url.split(/[?#]/)[0];
-    return SITE_URL + (path === '/' ? '/' : path.replace(/\/+$/, ''));
+    return urlDePagina(this.router.url);
   }
 
   /** La ruta más profunda con `data.seo` gana (las hijas heredan de las padres si no definen el suyo). */

@@ -28,7 +28,8 @@ const urls = paginas(browserDir)
   .filter(file => !/<meta name="robots" content="noindex/.test(readFileSync(file, 'utf8')))
   .map(file => {
     const ruta = relative(browserDir, dirname(file)).split(sep).join('/');
-    return ruta ? `/${ruta}` : '/';
+    // Con barra final: Render solo sirve <ruta>/index.html (la página prerenderizada) así.
+    return ruta ? `/${ruta}/` : '/';
   })
   .sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)));
 

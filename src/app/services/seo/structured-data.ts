@@ -8,6 +8,17 @@ import { segmentoFicha } from '../../utils/slug.util';
 
 export const SITE_URL = 'https://ashya-art.com';
 
+/**
+ * URL pública de una página, siempre con barra final (salvo query/fragmento).
+ * El hosting (Render) solo sirve la página prerenderizada <ruta>/index.html cuando la URL
+ * acaba en "/"; sin barra aplica la reescritura a index.csr.html (página vacía). Por eso
+ * canónica, og:url, JSON-LD y sitemap apuntan a la versión con barra.
+ */
+export function urlDePagina(path: string): string {
+  const limpio = path.split(/[?#]/)[0].replace(/\/+$/, '');
+  return `${SITE_URL}${limpio}/`;
+}
+
 type JsonLd = Record<string, unknown>;
 
 const BUSINESS_ID = `${SITE_URL}/#business`;
@@ -56,7 +67,7 @@ export function migas(items: Array<[string, string]>): JsonLd {
       '@type': 'ListItem',
       position: i + 1,
       name,
-      item: SITE_URL + path
+      item: urlDePagina(path)
     }))
   };
 }
@@ -72,7 +83,7 @@ function oferta(precio: number | null | undefined, path: string, disponible = tr
     price: precio.toFixed(2),
     priceCurrency: 'EUR',
     availability: disponible ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-    url: SITE_URL + path,
+    url: urlDePagina(path),
     seller: { '@id': BUSINESS_ID }
   };
 }
