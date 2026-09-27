@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CampoTraducible, TraduccionesEditorComponent } from '../../../shared/traducciones-editor/traducciones-editor';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -29,9 +30,20 @@ type SlotImagen = {
   standalone: true,
   templateUrl: './cursos-dashboard.html',
   styleUrls: ['./cursos-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, TruncatePipe,  FeedbackModalComponent, ConfirmModalComponent]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, TruncatePipe,  FeedbackModalComponent, ConfirmModalComponent, TraduccionesEditorComponent]
 })
 export class CursosDashboard implements OnInit {
+  readonly camposTraducibles: CampoTraducible[] = [
+    { clave: 'nombre', etiqueta: 'Name' },
+    { clave: 'subtitulo', etiqueta: 'Subtitle' },
+    { clave: 'descripcion', etiqueta: 'Description', multilinea: true },
+    { clave: 'nivel', etiqueta: 'Level' },
+    { clave: 'duracion', etiqueta: 'Duration' },
+    { clave: 'piezas', etiqueta: 'Pieces' },
+    { clave: 'materiales', etiqueta: 'Materials' },
+    { clave: 'localizacion', etiqueta: 'Location' }
+  ];
+
   loading = false;
   cursosCargados = false;
   fechasCargados = false;
@@ -287,7 +299,8 @@ guardarCambios() {
     plazasMaximas: this.cursoEditando.plazasMaximas,
     informacionExtra: this.cursoEditando.informacionExtra,
     localizacion: this.cursoEditando.localizacion,
-    orden: this.cursoEditando.orden
+    orden: this.cursoEditando.orden,
+    traducciones: this.cursoEditando.traducciones ?? {}
   };
 
   const fd = new FormData();

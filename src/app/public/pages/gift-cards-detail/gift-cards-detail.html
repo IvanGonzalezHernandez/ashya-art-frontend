@@ -19,7 +19,7 @@
           </a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-          {{ tarjetaSeleccionada.nombre }}
+          {{ tarjetaSeleccionada | traducir:'nombre' }}
         </li>
       </ol>
     </nav>
@@ -30,7 +30,7 @@
          [delay]="'0.1s'">
       <div class="col-12 text-center">
         <h1 class="fw-bold" style="color: #3E3028;">
-          {{ tarjetaSeleccionada.nombre }}
+          {{ tarjetaSeleccionada | traducir:'nombre' }}
         </h1>
       </div>
     </div>
@@ -43,7 +43,7 @@
            [delay]="'0.2s'">
         <div class="img-1x1 rounded-4 shadow mx-auto">
           <img [src]="imgTarjetaUrl"
-               alt="{{ tarjetaSeleccionada.nombre }}"
+               alt="{{ tarjetaSeleccionada | traducir:'nombre' }}"
                class="img-1x1-content"
                loading="lazy">
         </div>

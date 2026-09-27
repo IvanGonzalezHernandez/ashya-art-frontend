@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TraducirPipe } from '../../../utils/traducciones.util';
 import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -11,7 +12,7 @@ import { SegmentoFichaPipe } from '../../../utils/slug.util';
 @Component({
   selector: 'app-gift-cards',
   standalone: true,
-  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
+  imports: [TraducirPipe, CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
   templateUrl: './gift-cards.html',
   styleUrls: ['./gift-cards.scss']
 })

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { TraducirPipe } from '../../../utils/traducciones.util';
 import { RouterModule } from '@angular/router';
 import { Curso } from '../../../models/curso.model';
 import { CursoService } from '../../../services/curso/curso';
@@ -13,7 +14,7 @@ import { SegmentoFichaPipe } from '../../../utils/slug.util';
   standalone: true,
   templateUrl: './workshops.html',
   styleUrls: ['./workshops.scss'],
-  imports: [CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe]
+  imports: [TraducirPipe, CommonModule, RouterModule, ValorationsComponent, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe]
 })
 export class Workshops implements OnInit {
   loading = false;

@@ -19,7 +19,7 @@
           </a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-          {{ productoSeleccionado.nombre }}
+          {{ productoSeleccionado | traducir:'nombre' }}
         </li>
       </ol>
     </nav>
@@ -30,10 +30,10 @@
          [delay]="'0.1s'">
       <div class="col-12 text-center">
         <h1 class="fw-bold" style="color: #3E3028;">
-          {{ productoSeleccionado.nombre }}
+          {{ productoSeleccionado | traducir:'nombre' }}
         </h1>
         <p class="fs-5 text-muted">
-          {{ productoSeleccionado.subtitulo }}
+          {{ productoSeleccionado | traducir:'subtitulo' }}
         </p>
       </div>
     </div>
@@ -82,7 +82,7 @@
            [delay]="'0.3s'">
         <h3 class="fw-bold mb-3" style="color: #3E3028;">{{ 'COMMON.DESCRIPTION' | translate }}</h3>
 
-        <div class="text-muted fs-5 flex-grow-1 desc-text">{{ productoSeleccionado.descripcion }}</div>
+        <div class="text-muted fs-5 flex-grow-1 desc-text">{{ productoSeleccionado | traducir:'descripcion' }}</div>
 
         <ul class="list-unstyled mt-4 detalles-curso">
           <li>
@@ -92,10 +92,10 @@
             <strong>{{ 'CERAMICS_DETAIL.STOCK' | translate }}</strong> {{ productoSeleccionado.stock }}
           </li>
           <li>
-            <strong>{{ 'CERAMICS_DETAIL.MATERIAL' | translate }}</strong> {{ productoSeleccionado.material || ('COMMON.NOT_SPECIFIED' | translate) }}
+            <strong>{{ 'CERAMICS_DETAIL.MATERIAL' | translate }}</strong> {{ (productoSeleccionado | traducir:'material') || ('COMMON.NOT_SPECIFIED' | translate) }}
           </li>
           <li>
-            <strong>{{ 'CERAMICS_DETAIL.MEASUREMENTS' | translate }}</strong> {{ productoSeleccionado.medidas || ('COMMON.NOT_SPECIFIED' | translate) }}
+            <strong>{{ 'CERAMICS_DETAIL.MEASUREMENTS' | translate }}</strong> {{ (productoSeleccionado | traducir:'medidas') || ('COMMON.NOT_SPECIFIED' | translate) }}
           </li>
         </ul>
       </div>

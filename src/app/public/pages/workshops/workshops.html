@@ -43,7 +43,7 @@
           <div class="img-1x1 position-relative">
             <img
               [src]="curso.img1Url"
-              [alt]="curso.nombre"
+              [alt]="curso | traducir:'nombre'"
               class="img-1x1-content"
               loading="lazy"
               decoding="async">
@@ -52,12 +52,12 @@
           <!-- Contenido -->
           <div class="card-body d-flex flex-column p-4">
             <h5 class="card-title mb-1 fw-semibold text-dark text-truncate fs-5"
-                [title]="curso.nombre">
-              {{ curso.nombre }}
+                [title]="curso | traducir:'nombre'">
+              {{ curso | traducir:'nombre' }}
             </h5>
 
             <p class="card-text text-muted mb-3 flex-grow-1 clamp-2 fs-5" style="color:#6b5e52;">
-              {{ curso.subtitulo }}
+              {{ curso | traducir:'subtitulo' }}
             </p>
 
             <div class="d-flex justify-content-between align-items-center mt-auto">
@@ -68,7 +68,7 @@
               <a
                 [routerLink]="['/workshops', curso | segmentoFicha]"
                 class="btn bg-azul text-white px-3 fs-6"
-                [attr.aria-label]="'View workshop ' + curso.nombre">
+                [attr.aria-label]="'View workshop ' + (curso | traducir:'nombre')">
                 {{ 'COMMON.VIEW_WORKSHOP' | translate }}
               </a>
             </div>

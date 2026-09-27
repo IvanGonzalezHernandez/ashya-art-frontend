@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TraducirPipe } from '../../../utils/traducciones.util';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // 👈 importar
@@ -16,7 +17,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-gift-cards-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, RevealAnimateDirective, TranslatePipe],
+  imports: [TraducirPipe, CommonModule, RouterModule, FormsModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './gift-cards-detail.html',
   styleUrls: ['./gift-cards-detail.scss']
 })

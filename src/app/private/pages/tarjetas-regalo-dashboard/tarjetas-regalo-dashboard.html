@@ -146,6 +146,11 @@
               />
             </div>
 
+            <div class="col-12">
+              <app-traducciones-editor [campos]="camposTraducibles" [original]="tarjetaEditando"
+                                       [(traducciones)]="tarjetaEditando.traducciones"></app-traducciones-editor>
+            </div>
+
             <!-- SLOT ÚNICO DE IMAGEN -->
             <div class="col-md-6">
               <label class="form-label">Visibility</label>

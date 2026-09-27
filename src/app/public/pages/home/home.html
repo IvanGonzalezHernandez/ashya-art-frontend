@@ -63,7 +63,7 @@
           <div class="img-1x1 position-relative">
             <img
               [src]="curso.img1Url"
-              [alt]="curso.nombre"
+              [alt]="curso | traducir:'nombre'"
               class="img-1x1-content"
               loading="lazy"
               decoding="async">
@@ -71,8 +71,8 @@
 
           <!-- Cuerpo de la tarjeta -->
           <div class="card-body d-flex flex-column p-3">
-            <h5 class="card-title mb-2 fw-bold" style="color: #3E3028;">{{ curso.nombre }}</h5>
-            <p class="card-text flex-grow-1" style="color: #6b5e52;">{{ curso.subtitulo }}</p>
+            <h5 class="card-title mb-2 fw-bold" style="color: #3E3028;">{{ curso | traducir:'nombre' }}</h5>
+            <p class="card-text flex-grow-1" style="color: #6b5e52;">{{ curso | traducir:'subtitulo' }}</p>
 
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ curso.precio }}€</span>
@@ -148,12 +148,12 @@
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden shadow-sm">
 
           <div class="img-1x1 position-relative">
-            <img [src]="producto.img1Url" [alt]="producto.nombre" class="img-1x1-content" loading="lazy" decoding="async">
+            <img [src]="producto.img1Url" [alt]="producto | traducir:'nombre'" class="img-1x1-content" loading="lazy" decoding="async">
           </div>
 
           <div class="card-body d-flex flex-column p-3">
-            <h5 class="card-title mb-2 fw-bold" style="color: #3E3028;">{{ producto.nombre }}</h5>
-            <p class="card-text flex-grow-1" style="color: #6b5e52;">{{ producto.subtitulo }}</p>
+            <h5 class="card-title mb-2 fw-bold" style="color: #3E3028;">{{ producto | traducir:'nombre' }}</h5>
+            <p class="card-text flex-grow-1" style="color: #6b5e52;">{{ producto | traducir:'subtitulo' }}</p>
 
             <div class="mt-auto d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5" style="color: #3E3028;">{{ producto.precio }}€</span>

@@ -197,6 +197,11 @@
                 <input type="text" class="form-control" [(ngModel)]="productoEditando.material" name="material" />
               </div>
 
+              <div class="col-12">
+                <app-traducciones-editor [campos]="camposTraducibles" [original]="productoEditando"
+                                         [(traducciones)]="productoEditando.traducciones"></app-traducciones-editor>
+              </div>
+
               <!-- Stock -->
               <div class="col-md-3">
                 <label class="form-label">Stock</label>

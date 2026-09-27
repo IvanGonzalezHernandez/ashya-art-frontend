@@ -86,6 +86,7 @@ eliminarTarjeta(id: number): Observable<void> {
       stock: (tarjeta as any).stock ?? null,
       fechaAlta: this.toLocalDateString((tarjeta as any).fechaAlta ?? null),
       fechaBaja: this.toLocalDateString((tarjeta as any).fechaBaja ?? null),
+      traducciones: tarjeta.traducciones ?? {},
     };
 
     const fd = new FormData();

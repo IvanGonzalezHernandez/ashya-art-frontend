@@ -13,7 +13,7 @@
         <li class="breadcrumb-item">
           <a routerLink="/workshops" class="text-decoration-none" style="color: #3E3028;">{{ 'WORKSHOPS_DETAIL.BREADCRUMB' | translate }}</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">{{ cursoSeleccionado.nombre }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ cursoSeleccionado | traducir:'nombre' }}</li>
       </ol>
     </nav>
 
@@ -22,8 +22,8 @@
          appRevealAnimate="animate__fadeInUp"
          [delay]="'0.1s'">
       <div class="col-12 text-center">
-        <h1 class="fw-bold" style="color: #3E3028;">{{ cursoSeleccionado.nombre }}</h1>
-        <p class="fs-5 text-muted">{{ cursoSeleccionado.subtitulo }}</p>
+        <h1 class="fw-bold" style="color: #3E3028;">{{ cursoSeleccionado | traducir:'nombre' }}</h1>
+        <p class="fs-5 text-muted">{{ cursoSeleccionado | traducir:'subtitulo' }}</p>
       </div>
     </div>
 
@@ -71,23 +71,23 @@
 
         <h3 class="fw-bold mb-3" style="color: #3E3028;">{{ 'COMMON.DESCRIPTION' | translate }}</h3>
 
-        <div class="text-muted fs-5 flex-grow-1 desc-text">{{ cursoSeleccionado.descripcion }}</div>
+        <div class="text-muted fs-5 flex-grow-1 desc-text">{{ cursoSeleccionado | traducir:'descripcion' }}</div>
 
         <ul class="list-unstyled mt-4 detalles-curso">
           <li *ngIf="esValido(cursoSeleccionado.nivel)">
-            <strong>{{ 'WORKSHOPS_DETAIL.LEVEL' | translate }}</strong> {{ cursoSeleccionado.nivel }}
+            <strong>{{ 'WORKSHOPS_DETAIL.LEVEL' | translate }}</strong> {{ cursoSeleccionado | traducir:'nivel' }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.duracion)">
-            <strong>{{ 'WORKSHOPS_DETAIL.DURATION' | translate }}</strong> {{ cursoSeleccionado.duracion }}
+            <strong>{{ 'WORKSHOPS_DETAIL.DURATION' | translate }}</strong> {{ cursoSeleccionado | traducir:'duracion' }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.localizacion)">
-            <strong>{{ 'WORKSHOPS_DETAIL.LOCATION' | translate }}</strong> {{ cursoSeleccionado.localizacion }}
+            <strong>{{ 'WORKSHOPS_DETAIL.LOCATION' | translate }}</strong> {{ cursoSeleccionado | traducir:'localizacion' }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.piezas)">
-            <strong>{{ 'WORKSHOPS_DETAIL.PIECES_CREATED' | translate }}</strong> {{ cursoSeleccionado.piezas }}
+            <strong>{{ 'WORKSHOPS_DETAIL.PIECES_CREATED' | translate }}</strong> {{ cursoSeleccionado | traducir:'piezas' }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.materiales)">
-            <strong>{{ 'WORKSHOPS_DETAIL.MATERIALS' | translate }}</strong> {{ cursoSeleccionado.materiales }}
+            <strong>{{ 'WORKSHOPS_DETAIL.MATERIALS' | translate }}</strong> {{ cursoSeleccionado | traducir:'materiales' }}
           </li>
           <li *ngIf="esValido(cursoSeleccionado.plazasMaximas)">
             <strong>{{ 'WORKSHOPS_DETAIL.MAX_SEATS' | translate }}</strong> {{ cursoSeleccionado.plazasMaximas }}
@@ -131,7 +131,7 @@
                 <label class="form-label fw-bold">{{ 'WORKSHOPS_DETAIL.CLASS_TYPE' | translate }}</label>
                 <select class="form-select" [(ngModel)]="cliente.tipoClase" name="tipoClase">
                 <option value="" disabled selected>{{ 'COMMON.SELECT_OPTION' | translate }}</option>
-                <option *ngFor="let curso of cursos" [value]="curso.nombre">{{ curso.nombre }}</option>
+                <option *ngFor="let curso of cursos" [value]="curso.nombre">{{ curso | traducir:'nombre' }}</option>
                 </select>
             </div>
 

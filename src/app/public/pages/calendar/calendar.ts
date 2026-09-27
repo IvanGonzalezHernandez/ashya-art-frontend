@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { LanguageService } from '../../../services/language/language';
+import { textoTraducido } from '../../../utils/traducciones.util';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -58,7 +60,8 @@ export class Calendar implements OnInit {
     private cursoService: CursoService,
     private cursoFechaService: CursoFechaService,
     private carritoService: CarritoService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private language: LanguageService
   ) {
     this.today.setHours(0, 0, 0, 0);
   }
@@ -298,12 +301,12 @@ private openModalFechasDisponibles(): void {
 
   getNombre(s: CursoFecha): string {
     const c = this.getCurso(s);
-    return c?.nombre ?? s.nombreCurso ?? this.translate.instant('CALENDAR.CEREMICS_WORKSHOP_FALLBACK');
+    return (c ? textoTraducido(c, 'nombre', this.language.current) : null) || s.nombreCurso || this.translate.instant('CALENDAR.CEREMICS_WORKSHOP_FALLBACK');
   }
 
   getSubtitulo(s: CursoFecha): string {
     const c = this.getCurso(s);
-    return c?.subtitulo ?? '';
+    return c ? textoTraducido(c, 'subtitulo', this.language.current) : '';
   }
 
   getPrecio(s: CursoFecha): number | null {

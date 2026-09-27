@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TraducirPipe } from '../../../utils/traducciones.util';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ShopService } from '../../../services/shop/shop';
@@ -16,7 +17,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-ceramics-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe],
+  imports: [TraducirPipe, CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './ceramics-detail.html',
   styleUrls: ['./ceramics-detail.scss']
 })

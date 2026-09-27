@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TraducirPipe } from '../../../utils/traducciones.util';
 import { Curso } from '../../../models/curso.model';
 import { Cliente } from '../../../models/cliente.model';
 import { CursoFecha } from '../../../models/cursoFecha.model';
@@ -23,7 +24,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-workshops-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, FeedbackModalComponent, RouterModule, RevealAnimateDirective, TranslatePipe],
+  imports: [TraducirPipe, CommonModule, FormsModule, FeedbackModalComponent, RouterModule, RevealAnimateDirective, TranslatePipe],
   templateUrl: './workshops-detail.html',
   styleUrls: ['./workshops-detail.scss']
 })

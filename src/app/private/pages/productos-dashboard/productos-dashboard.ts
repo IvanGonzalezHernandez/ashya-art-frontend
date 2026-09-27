@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CampoTraducible, TraduccionesEditorComponent } from '../../../shared/traducciones-editor/traducciones-editor';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -25,9 +26,18 @@ type SlotImagen = {
   standalone: true,
   templateUrl: './productos-dashboard.html',
   styleUrls: ['./productos-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent, TraduccionesEditorComponent]
 })
 export class ProductosDashboard implements OnInit {
+  readonly camposTraducibles: CampoTraducible[] = [
+    { clave: 'nombre', etiqueta: 'Name' },
+    { clave: 'subtitulo', etiqueta: 'Subtitle' },
+    { clave: 'categoria', etiqueta: 'Category' },
+    { clave: 'descripcion', etiqueta: 'Description', multilinea: true },
+    { clave: 'medidas', etiqueta: 'Measurements' },
+    { clave: 'material', etiqueta: 'Materials' }
+  ];
+
   loading = false;
   productosCargados = false;
   comprasCargadas = false;
@@ -258,7 +268,8 @@ async onSeleccionarArchivo(event: Event, slot: SlotImagen) {
     precio: this.productoEditando.precio,
     medidas: this.productoEditando.medidas,
     material: this.productoEditando.material,
-    estado: this.productoEditando.estado ?? true
+    estado: this.productoEditando.estado ?? true,
+    traducciones: this.productoEditando.traducciones ?? {}
   };
   formData.append('producto', new Blob([JSON.stringify(productoDto)], { type: 'application/json' }));
 

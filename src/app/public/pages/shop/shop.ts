@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TraducirPipe } from '../../../utils/traducciones.util';
 import { CommonModule } from '@angular/common';
 import { ShopService } from '../../../services/shop/shop';
 import { Producto } from '../../../models/producto.model';
@@ -10,7 +11,7 @@ import { SegmentoFichaPipe } from '../../../utils/slug.util';
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
+  imports: [TraducirPipe, CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
   templateUrl: './shop.html',
   styleUrls: ['./shop.scss']
 })

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TraducirPipe } from '../../../utils/traducciones.util';
 import { HomeService } from '../../../services/home/home';
 import { Curso } from '../../../models/curso.model';
 import { Producto } from '../../../models/producto.model';
@@ -17,7 +18,7 @@ import { SegmentoFichaPipe } from '../../../utils/slug.util';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, FeedbackModalComponent, CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
+  imports: [TraducirPipe, FormsModule, FeedbackModalComponent, CommonModule, RouterModule, RevealAnimateDirective, TranslatePipe, SegmentoFichaPipe],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
 })

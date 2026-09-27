@@ -181,6 +181,11 @@
                 <div class="text-danger" *ngIf="localizacion.invalid && localizacion.touched">Location is required.</div>
               </div>
 
+              <div class="col-12">
+                <app-traducciones-editor [campos]="camposTraducibles" [original]="cursoEditando"
+                                         [(traducciones)]="cursoEditando.traducciones"></app-traducciones-editor>
+              </div>
+
               <div class="col-md-6">
                 <label class="form-label">Max Seats</label>
                 <input type="number" class="form-control" [(ngModel)]="cursoEditando.plazasMaximas" name="plazasMaximas" min="1" required #plazasMaximas="ngModel" />

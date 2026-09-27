@@ -1,3 +1,5 @@
+import { Traducciones } from '../utils/traducciones.util';
+
 export interface Curso {
   id: number;
   nombre: string;
@@ -20,4 +22,7 @@ export interface Curso {
   img3Url?: string | null;
   img4Url?: string | null;
   img5Url?: string | null;
+
+  /** Textos en alemán y español; lo que falte se muestra en inglés. */
+  traducciones?: Traducciones | null;
 }

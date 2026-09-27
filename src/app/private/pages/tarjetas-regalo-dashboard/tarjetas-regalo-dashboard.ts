@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CampoTraducible, TraduccionesEditorComponent } from '../../../shared/traducciones-editor/traducciones-editor';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TarjetaRegalo } from '../../../models/tarjetaRegalo.model';
@@ -31,9 +32,11 @@ const CLIENTE_NUEVO_VACIO: Partial<Cliente> = {
   standalone: true,
   templateUrl: './tarjetas-regalo-dashboard.html',
   styleUrls: ['./tarjetas-regalo-dashboard.scss'],
-  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent]
+  imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent, TraduccionesEditorComponent]
 })
 export class TarjetasRegaloDashboard implements OnInit {
+  readonly camposTraducibles: CampoTraducible[] = [{ clave: 'nombre', etiqueta: 'Name' }];
+
   // Loading
   loading = false;           // tarjetas
   loadingCompras = false;    // compras
