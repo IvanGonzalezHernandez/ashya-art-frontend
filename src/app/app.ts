@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { AnalyticsConsentService } from './services/analytics-consent/analytics-consent';
 import { CookieBannerComponent } from './shared/cookie-banner/cookie-banner';
 import { SeoService } from './services/seo/seo';
+import { VisitasService } from './services/visitas/visitas';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,8 @@ export class App implements OnInit {
   constructor(
     private router: Router,
     private analyticsConsent: AnalyticsConsentService,
-    private seo: SeoService
+    private seo: SeoService,
+    private visitas: VisitasService
   ) {}
 
   ngOnInit() {
@@ -42,6 +44,9 @@ export class App implements OnInit {
 
         // Google Analytics SOLO si hay consentimiento
         this.analyticsConsent.trackPageView(event.urlAfterRedirects);
+
+        // Estadísticas propias del panel (sin cookies)
+        this.visitas.registrar(event.urlAfterRedirects);
       });
   }
 }

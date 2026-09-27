@@ -1,0 +1,192 @@
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h1 class="display-6 fw-semibold mb-0">Statistics</h1>
+    <div class="btn-group" role="group" aria-label="Period">
+      <button *ngFor="let p of periodos" type="button" class="btn btn-sm"
+              [class.btn-periodo-activo]="periodo === p.valor" [class.btn-outline-secondary]="periodo !== p.valor"
+              [attr.aria-pressed]="periodo === p.valor" (click)="cambiarPeriodo(p.valor)">
+        {{ p.texto }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger d-flex justify-content-between align-items-center">
+    <span>The statistics could not be loaded. Check your connection and try again.</span>
+    <button type="button" class="btn btn-sm btn-outline-danger" (click)="cargar()">Try again</button>
+  </div>
+
+  <div *ngIf="loading && !datos" class="text-center py-5">
+    <div class="spinner-border spinner-azul" role="status"><span class="visually-hidden">Loading…</span></div>
+  </div>
+
+  <ng-container *ngIf="datos as d">
+    <p *ngIf="d.visitas === 0" class="alert alert-light border small">
+      No visits recorded in this period yet. Visits are counted from the day this section went live, without cookies.
+      Your own visits while logged in as admin are not counted.
+    </p>
+
+    <!-- Tarjetas -->
+    <div class="row g-4" [class.opacity-50]="loading">
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm rounded-3 text-white bg-azul">
+          <div class="card-body d-flex align-items-center justify-content-between">
+            <div class="me-3">
+              <h6 class="card-title mb-1">Visits</h6>
+              <p class="fs-4 fw-bold mb-0">{{ d.visitas | number }}</p>
+              <small class="d-block mt-1 opacity-75">{{ textoCambio(d.visitas, d.visitasAnterior) }}</small>
+            </div>
+            <i class="bi bi-eye fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm rounded-3 text-white bg-warning">
+          <div class="card-body d-flex align-items-center justify-content-between">
+            <div class="me-3">
+              <h6 class="card-title mb-1">Bookings</h6>
+              <p class="fs-4 fw-bold mb-0">{{ d.reservas | number }}</p>
+              <small class="d-block mt-1 opacity-75">{{ textoCambio(d.reservas, d.reservasAnterior) }}</small>
+            </div>
+            <i class="bi bi-calendar-check fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm rounded-3 text-white" style="background-color: #6f42c1;">
+          <div class="card-body d-flex align-items-center justify-content-between">
+            <div class="me-3">
+              <h6 class="card-title mb-1">Conversion</h6>
+              <p class="fs-4 fw-bold mb-0">{{ conversion | number:'1.1-1' }}%</p>
+              <small class="d-block mt-1 opacity-75">workshop views that end in a booking</small>
+            </div>
+            <i class="bi bi-arrow-right-circle fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm rounded-3 text-white bg-success">
+          <div class="card-body d-flex align-items-center justify-content-between">
+            <div class="me-3">
+              <h6 class="card-title mb-1">From Google</h6>
+              <p class="fs-4 fw-bold mb-0">{{ d.desdeGoogle | number }}</p>
+              <small class="d-block mt-1 opacity-75">{{ porcentaje(d.desdeGoogle, d.visitas) | number:'1.0-0' }}% of all visits</small>
+            </div>
+            <i class="bi bi-google fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico -->
+    <div class="card mt-4 shadow-sm rounded-3">
+      <div class="card-body">
+        <h5 class="card-title mb-3">{{ tituloGrafico }}</h5>
+        <div class="grafico">
+          <canvas #visitasChart aria-label="Visits over time compared with the previous period"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tablas -->
+    <div class="row g-4 mt-0 mb-5">
+      <div class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm rounded-3">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Workshops</h5>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>Workshop</th><th class="text-end">Views</th><th class="text-end">Bookings</th><th class="text-end">Conversion</th></tr></thead>
+                <tbody>
+                  <tr *ngFor="let t of d.talleres">
+                    <td>{{ t.nombre }}</td>
+                    <td class="text-end">{{ t.vistas | number }}</td>
+                    <td class="text-end">{{ t.reservas | number }}</td>
+                    <td class="text-end" [class.text-muted]="!t.vistas">{{ textoConversion(t.vistas, t.reservas) }}</td>
+                  </tr>
+                  <tr *ngIf="!d.talleres.length"><td colspan="4" class="text-muted">No workshop views or bookings in this period.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm rounded-3">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Most viewed pages</h5>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>Page</th><th class="text-end">Views</th><th class="text-end">Share</th></tr></thead>
+                <tbody>
+                  <tr *ngFor="let p of d.paginas">
+                    <td>{{ p.clave }}</td>
+                    <td class="text-end">{{ p.visitas | number }}</td>
+                    <td class="text-end">{{ porcentaje(p.visitas, d.paginasVistas) | number:'1.0-0' }}%</td>
+                  </tr>
+                  <tr *ngIf="!d.paginas.length"><td colspan="3" class="text-muted">No page views in this period.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm rounded-3">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Where visitors come from</h5>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>Source</th><th class="text-end">Visits</th><th class="text-end">Share</th></tr></thead>
+                <tbody>
+                  <tr *ngFor="let o of d.origenes">
+                    <td>{{ nombreOrigen(o.clave) }}</td>
+                    <td class="text-end">{{ o.visitas | number }}</td>
+                    <td class="text-end">{{ porcentaje(o.visitas, d.visitas) | number:'1.0-0' }}%</td>
+                  </tr>
+                  <tr *ngIf="!d.origenes.length"><td colspan="3" class="text-muted">No visits in this period.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="card h-100 shadow-sm rounded-3">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Devices and language</h5>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-4">
+                <thead><tr><th>Device</th><th class="text-end">Visits</th><th class="text-end">Share</th></tr></thead>
+                <tbody>
+                  <tr *ngFor="let x of d.dispositivos">
+                    <td>{{ nombreDispositivo(x.clave) }}</td>
+                    <td class="text-end">{{ x.visitas | number }}</td>
+                    <td class="text-end">{{ porcentaje(x.visitas, d.visitas) | number:'1.0-0' }}%</td>
+                  </tr>
+                  <tr *ngIf="!d.dispositivos.length"><td colspan="3" class="text-muted">No visits in this period.</td></tr>
+                </tbody>
+              </table>
+              <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>Language chosen on the site</th><th class="text-end">Visits</th><th class="text-end">Share</th></tr></thead>
+                <tbody>
+                  <tr *ngFor="let x of d.idiomas">
+                    <td>{{ nombreIdioma(x.clave) }}</td>
+                    <td class="text-end">{{ x.visitas | number }}</td>
+                    <td class="text-end">{{ porcentaje(x.visitas, d.visitas) | number:'1.0-0' }}%</td>
+                  </tr>
+                  <tr *ngIf="!d.idiomas.length"><td colspan="3" class="text-muted">No visits in this period.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

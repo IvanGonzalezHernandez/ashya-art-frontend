@@ -12,6 +12,7 @@ import { TarjetasRegaloDashboard } from './pages/tarjetas-regalo-dashboard/tarje
 import { ClientesDashboard } from './pages/clientes-dashboard/clientes-dashboard';
 import { NewsletterDashboard } from './pages/newsletter-dashboard/newsletter-dashboard';
 import { EmailsDashboard } from './pages/emails-dashboard/emails-dashboard';
+import { EstadisticasDashboard } from './pages/estadisticas-dashboard/estadisticas-dashboard';
 import { UtilsDashboard } from './pages/utils-dashboard/utils-dashboard';
 
 import { AuthGuard } from './guards/auth.guard';
@@ -27,6 +28,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       { path: 'inicio', component: Dashboard },
+      { path: 'estadisticas', component: EstadisticasDashboard },
       { path: 'cursos', component: CursosDashboard },              
       { path: 'reservas', component: ReservasDashboard },         
       { path: 'productos', component: ProductosDashboard },       

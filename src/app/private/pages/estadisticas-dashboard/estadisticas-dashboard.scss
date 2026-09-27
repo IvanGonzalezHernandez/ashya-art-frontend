@@ -1,0 +1,21 @@
+.grafico {
+  position: relative;
+  height: 300px;
+}
+
+@media (max-width: 576px) {
+  .grafico {
+    height: 220px;
+  }
+}
+
+.btn-periodo-activo {
+  background-color: #3A9097;
+  border-color: #3A9097;
+  color: #fff;
+}
+
+.table td,
+.table th {
+  font-variant-numeric: tabular-nums;
+}
