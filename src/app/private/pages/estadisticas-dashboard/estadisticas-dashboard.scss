@@ -19,3 +19,25 @@
 .table th {
   font-variant-numeric: tabular-nums;
 }
+
+/* Las dos tablas de "Devices and language" comparten anchos para que Visits y Share queden alineadas */
+.tabla-alineada {
+  table-layout: fixed;
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 90px;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 70px;
+  }
+
+  th:first-child,
+  td:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

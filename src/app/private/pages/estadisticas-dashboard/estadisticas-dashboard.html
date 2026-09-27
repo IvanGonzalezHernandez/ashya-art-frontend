@@ -161,7 +161,7 @@
           <div class="card-body">
             <h5 class="card-title mb-3">Devices and language</h5>
             <div class="table-responsive">
-              <table class="table table-sm align-middle mb-4">
+              <table class="table table-sm align-middle mb-4 tabla-alineada">
                 <thead><tr><th>Device</th><th class="text-end">Visits</th><th class="text-end">Share</th></tr></thead>
                 <tbody>
                   <tr *ngFor="let x of d.dispositivos">
@@ -172,7 +172,7 @@
                   <tr *ngIf="!d.dispositivos.length"><td colspan="3" class="text-muted">No visits in this period.</td></tr>
                 </tbody>
               </table>
-              <table class="table table-sm align-middle mb-0">
+              <table class="table table-sm align-middle mb-0 tabla-alineada">
                 <thead><tr><th>Language chosen on the site</th><th class="text-end">Visits</th><th class="text-end">Share</th></tr></thead>
                 <tbody>
                   <tr *ngFor="let x of d.idiomas">
