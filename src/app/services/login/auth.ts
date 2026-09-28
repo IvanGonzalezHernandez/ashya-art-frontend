@@ -40,10 +40,32 @@ export class AuthService {
   }
 
   logout(): void {
+    if (!this.isBrowser) return;
     localStorage.removeItem('token');
   }
 
+  /** Hay token y no ha caducado. Si ha caducado o está mal formado, se borra. */
   estaAutenticado(): boolean {
-    return !!this.obtenerToken();
+    const token = this.obtenerToken();
+    if (!token) return false;
+
+    const expiraEn = this.obtenerExpiracion(token);
+    if (expiraEn === null || Date.now() >= expiraEn) {
+      this.logout();
+      return false;
+    }
+    return true;
+  }
+
+  /** El token del backend es base64url de "email:expiraEnMillis:firma". */
+  private obtenerExpiracion(token: string): number | null {
+    try {
+      const base64 = token.replace(/-/g, '+').replace(/_/g, '/');
+      const partes = atob(base64).split(':');
+      const expiraEn = Number(partes[1]);
+      return partes.length === 3 && Number.isFinite(expiraEn) ? expiraEn : null;
+    } catch {
+      return null;
+    }
   }
 }

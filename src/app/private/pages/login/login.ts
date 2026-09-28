@@ -1,6 +1,6 @@
 // src/app/components/login/login.ts
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService, AuthResponse } from '../../../services/login/auth';
@@ -24,14 +24,18 @@ export class Login {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   login() {
     this.authService.login(this.email, this.password).subscribe({
       next: (res: AuthResponse) => {
         this.authService.guardarToken(res.token);
-        this.router.navigate(['/private/dashboard/inicio']);
+        // Vuelve a la página del panel desde la que se le mandó al login (solo rutas del panel)
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        const destino = returnUrl?.startsWith('/private/dashboard') ? returnUrl : '/private/dashboard/inicio';
+        this.router.navigateByUrl(destino);
       },
       error: () => {
         this.mostrarModalFeedback('error', 'Login failed', 'Invalid email or password.');
