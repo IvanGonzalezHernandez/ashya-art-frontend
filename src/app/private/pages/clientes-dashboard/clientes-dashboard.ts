@@ -5,6 +5,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ClienteService } from '../../../services/cliente/cliente';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Cliente } from '../../../models/cliente.model';
+import { telHref } from '../../../utils/telefono.util';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 
 @Component({
@@ -15,6 +16,8 @@ import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-
   imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent]
 })
 export class ClientesDashboard implements OnInit {
+  readonly telHref = telHref;
+
   loading = false;
 
   // Modal de feedback

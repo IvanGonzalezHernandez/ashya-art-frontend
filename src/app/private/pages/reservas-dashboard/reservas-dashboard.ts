@@ -5,6 +5,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { CsvExportService } from '../../../services/csv/csv-export';
 import { Reservas } from '../../../models/curso-compra.model';
+import { telHref } from '../../../utils/telefono.util';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-modal';
 
@@ -17,6 +18,8 @@ import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-mod
   imports: [CommonModule, FormsModule, NgxPaginationModule, FeedbackModalComponent, ConfirmModalComponent]
 })
 export class ReservasDashboard implements OnInit {
+  readonly telHref = telHref;
+
   loading = false;
 
   reservas: Reservas[] = [];

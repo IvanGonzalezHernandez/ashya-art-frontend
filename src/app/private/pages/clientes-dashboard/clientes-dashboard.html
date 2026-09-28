@@ -62,7 +62,8 @@
 
               <td class="d-none d-md-table-cell">
                 <span class="d-inline-block w-100 text-truncate" [title]="cliente.telefono">
-                  {{ cliente.telefono }}
+                  <a *ngIf="telHref(cliente.telefono) as tel; else sinTel" [href]="tel" class="text-decoration-none">{{ cliente.telefono }}</a>
+                  <ng-template #sinTel>{{ cliente.telefono }}</ng-template>
                 </span>
               </td>
 
@@ -118,7 +119,7 @@
         <div class="small text-muted mb-2">{{ cliente.email }}</div>
 
         <div class="row row-cols-2 g-2 small mb-3">
-          <div class="col"><span class="text-muted">Phone</span><div class="fw-semibold">{{ cliente.telefono || '-' }}</div></div>
+          <div class="col"><span class="text-muted">Phone</span><div class="fw-semibold"><a *ngIf="telHref(cliente.telefono) as tel; else sinTelMovil" [href]="tel" class="text-decoration-none">{{ cliente.telefono }}</a><ng-template #sinTelMovil>{{ cliente.telefono || '-' }}</ng-template></div></div>
           <div class="col"><span class="text-muted">City</span><div class="fw-semibold">{{ cliente.ciudad || '-' }}</div></div>
           <div class="col"><span class="text-muted">Country</span><div class="fw-semibold">{{ cliente.pais || '-' }}</div></div>
           <div class="col"><span class="text-muted">Registration</span><div class="fw-semibold">{{ cliente.fechaAlta ? (cliente.fechaAlta | date:'yyyy-MM-dd') : '-' }}</div></div>
