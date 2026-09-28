@@ -17,6 +17,7 @@ import { ReservasService } from '../../../services/curso-compra/curso-compra';
 import { FeedbackModalComponent } from '../../../shared/feedback-modal/feedback-modal';
 import { ConfirmModalComponent } from '../../../shared/confirm-modal/confirm-modal';
 import { convertToWebPUnderLimit,fileToDataUrl,isTooLarge,isWebpFile } from '../../../utils/image-optimizer.util';
+import { telHref } from '../../../utils/telefono.util';
 
 type SlotImagen = {
   slot: number;
@@ -553,6 +554,8 @@ confirmarEliminarFecha() {
     const idFechaSel = this.cursoFechaSeleccionada.id;
     return this.reservas.filter(r => r.idFecha === idFechaSel);
   }
+
+  readonly telHref = telHref;
 
   get totalPlazasReservadas(): number {
     return this.reservasDeFecha.reduce((sum, r) => sum + (Number(r.plazasReservadas) || 0), 0);
