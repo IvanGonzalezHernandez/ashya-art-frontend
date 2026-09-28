@@ -190,3 +190,147 @@
 
 
 
+
+/* ---- Desplegable "Workshops & Services" (escritorio) ---- */
+.menu-ashya {
+  position: relative;
+}
+
+.menu-ashya-chevron {
+  font-size: 0.75rem;
+  transition: transform 0.25s ease;
+}
+
+.menu-ashya-chevron.girado {
+  transform: rotate(180deg);
+}
+
+.menu-ashya-panel {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 1030;
+  width: 380px;
+  margin-top: 14px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #fff;
+  border: 1px solid #eeeae4;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(20, 20, 20, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+
+  /* Puente invisible para no perder el hover al bajar el ratón hasta el panel */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -16px;
+    height: 16px;
+  }
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+}
+
+.menu-ashya-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  color: #000;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible,
+  &.active {
+    background: #EFFAF9;
+  }
+
+  &:hover .menu-ashya-icon,
+  &:focus-visible .menu-ashya-icon,
+  &.active .menu-ashya-icon {
+    background: #3A9097;
+    color: #fff;
+  }
+
+  &:hover .menu-ashya-title,
+  &:focus-visible .menu-ashya-title,
+  &.active .menu-ashya-title {
+    color: #2d767c;
+  }
+}
+
+.menu-ashya-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background: #EFFAF9;
+  color: #3A9097;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.menu-ashya-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.menu-ashya-desc {
+  font-size: 13px;
+  font-weight: 500;
+  color: #5f5348;
+}
+
+.menu-ashya-footer {
+  margin-top: 6px;
+  padding: 14px 12px 8px;
+  border-top: 1px solid #eeeae4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2d767c;
+  text-decoration: none;
+
+  &:hover {
+    color: #3A9097;
+  }
+}
+
+/* ---- Acordeón "Workshops & Services" (menú móvil) ---- */
+.acordeon-ashya-toggle {
+  border: 0;
+  background: transparent;
+  text-align: left;
+
+  &.active {
+    color: #3A9097;
+  }
+}
+
+.acordeon-ashya {
+  margin: 0 0 8px 4px;
+  padding-left: 14px;
+  border-left: 2px solid #8DDFD8;
+
+  .nav-link.active {
+    color: #3A9097;
+  }
+}

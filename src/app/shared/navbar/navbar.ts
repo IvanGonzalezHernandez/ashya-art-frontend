@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarritoService } from '../../services/carrito/carrito';
@@ -24,6 +24,12 @@ export class Navbar implements OnInit {
   readonly flagIcons = LANGUAGE_FLAG_ICONS;
 
   @ViewChild('langDropdownBtn') langDropdownBtn?: ElementRef<HTMLElement>;
+  @ViewChild('menuWorkshops') menuWorkshops?: ElementRef<HTMLElement>;
+
+  // Desplegable "Workshops & Services": panel en escritorio, acordeón en el menú móvil
+  menuWorkshopsAbierto = false;
+  acordeonWorkshopsAbierto = false;
+  private ultimoPuntero = 'mouse';
 
   loadingCheckout = false;
   contadorCarrito: number = 0;
@@ -119,6 +125,45 @@ readonly paisesUE = [
     this.cambiarIdioma(lang);
     const el = this.langDropdownBtn?.nativeElement;
     if (el) bootstrap.Dropdown.getOrCreateInstance(el).hide();
+  }
+
+  get enWorkshops(): boolean {
+    return this.router.url.startsWith('/workshops');
+  }
+
+  abrirMenuWorkshops(): void {
+    this.menuWorkshopsAbierto = true;
+  }
+
+  cerrarMenuWorkshops(): void {
+    this.menuWorkshopsAbierto = false;
+  }
+
+  recordarPuntero(evento: PointerEvent): void {
+    this.ultimoPuntero = evento.pointerType;
+  }
+
+  /** En pantallas táctiles no hay hover: el primer toque abre el panel y el segundo navega. */
+  clickTituloWorkshops(evento: MouseEvent): void {
+    if (this.ultimoPuntero === 'mouse' || this.menuWorkshopsAbierto) return;
+    evento.preventDefault();
+    this.abrirMenuWorkshops();
+  }
+
+  /** Con el teclado, el panel sigue abierto mientras el foco esté dentro. */
+  focoFueraMenuWorkshops(evento: FocusEvent): void {
+    const destino = evento.relatedTarget as Node | null;
+    if (!destino || !this.menuWorkshops?.nativeElement.contains(destino)) this.cerrarMenuWorkshops();
+  }
+
+  @HostListener('document:keydown.escape')
+  alPulsarEscape(): void {
+    this.cerrarMenuWorkshops();
+  }
+
+  @HostListener('document:click', ['$event'])
+  alHacerClicFuera(evento: MouseEvent): void {
+    if (!this.menuWorkshops?.nativeElement.contains(evento.target as Node)) this.cerrarMenuWorkshops();
   }
 
   ngOnInit(): void {
