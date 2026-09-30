@@ -91,8 +91,8 @@
               </td>
 
               <td>
-                <div class="d-flex flex-wrap gap-1">
-                  <button class="btn btn-outline-primary btn-sm" (click)="abrirCambioFecha(reserva)">Change date</button>
+                <div class="d-flex flex-column flex-md-row flex-wrap gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="abrirCambioFecha(reserva)">Change date</button>
                   <button class="btn btn-danger btn-sm" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
                 </div>
               </td>
@@ -133,8 +133,8 @@
         </div>
 
         <div class="d-flex gap-2">
-          <button class="btn btn-outline-primary btn-sm w-50" (click)="abrirCambioFecha(reserva)">Change date</button>
-          <button class="btn btn-danger btn-sm w-50" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
+          <button class="btn btn-primary btn-sm flex-fill" (click)="abrirCambioFecha(reserva)">Change date</button>
+          <button class="btn btn-danger btn-sm flex-fill" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
         </div>
       </div>
     </div>
@@ -165,9 +165,9 @@
 ></app-confirm-modal>
 
 <!-- MODAL CAMBIO DE FECHA -->
-<div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" *ngIf="reservaAMover" style="background-color: rgba(0,0,0,0.5);">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content border-0 shadow rounded">
+<div class="modal fade show d-block" tabindex="-1" *ngIf="reservaAMover">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
+    <div class="modal-content shadow-lg">
 
       <div class="modal-header bg-azul text-white">
         <h5 class="modal-title">Change booking date</h5>
@@ -198,15 +198,15 @@
             <div class="form-text">The seats are released on the current date and the client receives an email with the new date.</div>
           </div>
         </ng-container>
-      </div>
 
-      <div class="modal-footer border-0">
-        <button type="button" class="btn btn-outline-secondary" (click)="cerrarCambioFecha()">Close</button>
-        <button type="button" class="btn btn-primary"
-                [disabled]="idFechaSeleccionada == null || guardandoCambioFecha"
-                (click)="confirmarCambioFecha()">
-          {{ guardandoCambioFecha ? 'Saving...' : 'Change date' }}
-        </button>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button type="button" class="btn btn-secondary" (click)="cerrarCambioFecha()">Cancel</button>
+          <button type="button" class="btn bg-azul text-white"
+                  [disabled]="idFechaSeleccionada == null || guardandoCambioFecha"
+                  (click)="confirmarCambioFecha()">
+            {{ guardandoCambioFecha ? 'Saving...' : 'Save' }}
+          </button>
+        </div>
       </div>
 
     </div>
