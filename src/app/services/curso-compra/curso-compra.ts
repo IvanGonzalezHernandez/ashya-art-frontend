@@ -32,6 +32,14 @@ crearReserva(reserva: Reservas): Observable<Reservas> {
   return this.http.post<Reservas>(this.apiUrl, reserva, { headers });
 }
 
+cambiarFecha(id: number, idFecha: number): Observable<Reservas> {
+  const token = this.auth.obtenerToken();
+
+  const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+
+  return this.http.put<Reservas>(`${this.apiUrl}/${id}/fecha`, { idFecha }, { headers });
+}
+
 eliminarReserva(id: number): Observable<void> {
   const token = this.auth.obtenerToken();
 

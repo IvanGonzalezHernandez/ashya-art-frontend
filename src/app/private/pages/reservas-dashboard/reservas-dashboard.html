@@ -42,7 +42,7 @@
               <th class="d-none d-md-table-cell" style="width: 10%;">Unit Price</th>
               <th class="d-none d-md-table-cell" style="width: 12%;">Payment</th>
               <th class="d-none d-lg-table-cell" style="width: 16%;">Book date</th>
-              <th style="width: 10%;">Actions</th>
+              <th style="width: 16%;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -91,7 +91,10 @@
               </td>
 
               <td>
-                <button class="btn btn-danger btn-sm" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
+                <div class="d-flex flex-wrap gap-1">
+                  <button class="btn btn-outline-primary btn-sm" (click)="abrirCambioFecha(reserva)">Change date</button>
+                  <button class="btn btn-danger btn-sm" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
+                </div>
               </td>
             </tr>
 
@@ -129,7 +132,10 @@
           <div class="col"><span class="text-muted">Book date</span><div class="fw-semibold">{{ reserva.fechaReserva | date:'yyyy-MM-dd' }}</div></div>
         </div>
 
-        <button class="btn btn-danger btn-sm w-100" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary btn-sm w-50" (click)="abrirCambioFecha(reserva)">Change date</button>
+          <button class="btn btn-danger btn-sm w-50" (click)="pedirConfirmacionCancelar(reserva)">Cancel</button>
+        </div>
       </div>
     </div>
 
@@ -157,6 +163,55 @@
   (confirmed)="confirmarCancelacion()"
   (cancelled)="cancelarCancelacion()"
 ></app-confirm-modal>
+
+<!-- MODAL CAMBIO DE FECHA -->
+<div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" *ngIf="reservaAMover" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow rounded">
+
+      <div class="modal-header bg-azul text-white">
+        <h5 class="modal-title">Change booking date</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarCambioFecha()"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="mb-3">
+          <b>{{ reservaAMover.nombreCurso }}</b> &middot; {{ reservaAMover.email }}<br>
+          <span class="text-muted">Current date: {{ reservaAMover.fechaCurso }} &middot; {{ reservaAMover.plazasReservadas }} seat(s)</span>
+        </p>
+
+        <div *ngIf="cargandoFechas" class="text-muted">Loading dates...</div>
+
+        <ng-container *ngIf="!cargandoFechas">
+          <div *ngIf="fechasDisponibles.length === 0" class="alert alert-warning mb-0">
+            There are no other upcoming dates for this course.
+          </div>
+
+          <div *ngIf="fechasDisponibles.length > 0">
+            <label class="form-label" for="nuevaFecha">New date</label>
+            <select id="nuevaFecha" class="form-select" [(ngModel)]="idFechaSeleccionada">
+              <option [ngValue]="null" disabled>Select a date</option>
+              <option *ngFor="let fecha of fechasDisponibles" [ngValue]="fecha.id" [disabled]="!tieneSitio(fecha)">
+                {{ fecha.fecha }} &middot; {{ fecha.horaInicio | slice:0:5 }} &middot; {{ fecha.plazasDisponibles }} free seat(s){{ tieneSitio(fecha) ? '' : ' (not enough)' }}
+              </option>
+            </select>
+            <div class="form-text">The seats are released on the current date and the client receives an email with the new date.</div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-outline-secondary" (click)="cerrarCambioFecha()">Close</button>
+        <button type="button" class="btn btn-primary"
+                [disabled]="idFechaSeleccionada == null || guardandoCambioFecha"
+                (click)="confirmarCambioFecha()">
+          {{ guardandoCambioFecha ? 'Saving...' : 'Change date' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <app-feedback-modal
   *ngIf="mostrarFeedback"
