@@ -105,7 +105,7 @@ export class ReservasDashboard implements OnInit {
     this.reservasService.eliminarReserva(reserva.id).subscribe({
       next: () => {
         this.obtenerReservas();
-        this.mostrarModalFeedback('success', 'Cancelled', 'Booking cancelled and seats released.');
+        this.mostrarModalFeedback('success', 'Cancelled', `Booking cancelled and seats released. An email has been sent to ${reserva.email}.`);
       },
       error: err => {
         console.error('Error cancelling booking', err);

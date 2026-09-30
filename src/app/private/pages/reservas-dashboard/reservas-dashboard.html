@@ -157,7 +157,7 @@
 <app-confirm-modal
   *ngIf="reservaACancelar"
   title="Cancel booking"
-  [message]="'Are you sure you want to cancel the booking for ' + reservaACancelar.email + '? This will free up the reserved seats.'"
+  [message]="'Are you sure you want to cancel the booking for ' + reservaACancelar.email + '? This will free up the reserved seats and email the client. Refunds are not automatic.'"
   confirmLabel="Cancel booking"
   cancelLabel="Keep booking"
   (confirmed)="confirmarCancelacion()"
