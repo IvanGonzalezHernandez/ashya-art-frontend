@@ -65,10 +65,6 @@
     "ABOUT_ASHYA": "ABOUT ASHYA",
     "STUDIO_MEMBERSHIP": "STUDIO & MEMBERSHIP",
     "WORKSHOPS_MENU": {
-      "WORKSHOPS_DESC": "Hand-building, glazing, kintsugi and glass classes",
-      "FIRING_SERVICES_DESC": "Rent the kiln or fire just a few pieces",
-      "GIFT_CARDS_DESC": "Give a ceramics class as a present",
-      "SEE_CALENDAR": "See the calendar",
       "TOGGLE": "Show Workshops & Services options"
     },
     "MENU": "Menu",
@@ -147,9 +143,6 @@
   "VALORATIONS": {
     "NO_REVIEWS": "No reviews yet.",
     "WORKSHOPS_TITLE": "Reviews from our workshops"
-  },
-  "SHOP_TABS": {
-    "CERAMICS": "Ceramics"
   },
   "WORKSHOPS_TABS": {
     "WORKSHOPS": "Workshops",

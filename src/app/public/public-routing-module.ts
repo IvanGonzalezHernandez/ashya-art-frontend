@@ -8,8 +8,6 @@ import { Calendar } from './pages/calendar/calendar';
 import { Shop } from './pages/shop/shop';
 import { About } from './pages/about/about';
 import { Studio } from './pages/studio/studio';
-import { WorkshopsTabs } from '../shared/workshops-tabs/workshops-tabs';
-import { ShopTabs } from '../shared/shop-tabs/shop-tabs';
 import { RouteSeo } from '../services/seo/seo';
 
 /** SEO de una página estática: claves i18n SEO.<KEY>_TITLE y SEO.<KEY>_DESC */
@@ -28,7 +26,6 @@ const routes: Routes = [
       { path: '', component: Home, data: { seo: { ...seo('HOME').seo, structuredData: 'business' } } },
       {
         path: 'workshops',
-        component: WorkshopsTabs,
         children: [
           { path: '', component: Workshops, data: seo('WORKSHOPS') },
           { path: 'firing-services', loadComponent: () => import('./pages/firing-services/firing-services').then(m => m.FiringServices), data: seo('FIRING') },
@@ -50,13 +47,7 @@ const routes: Routes = [
         loadComponent: () => import('./pages/ceramics-detail/ceramics-detail').then(m => m.CeramicsDetail),
         data: dynamicSeo
       },
-      {
-        path: 'shop',
-        component: ShopTabs,
-        children: [
-          { path: '', component: Shop, data: seo('SHOP') },
-        ]
-      },
+      { path: 'shop', component: Shop, data: seo('SHOP') },
       { path: 'calendar', component: Calendar, data: seo('CALENDAR') },
       { path: 'about', component: About, data: seo('ABOUT') },
       { path: 'studio', component: Studio, data: seo('STUDIO') },

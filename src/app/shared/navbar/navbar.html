@@ -18,50 +18,29 @@
     </a>
 
     <!-- Menú horizontal desktop -->
-    <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
+    <div class="d-none d-lg-flex flex-grow-1 justify-content-center align-self-stretch">
       <ul class="navbar-nav flex-row gap-4">
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAVBAR.HOME' | translate }}</a></li>
+        <li class="nav-item d-flex align-items-center"><a class="nav-link nav-link-ashya" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAVBAR.HOME' | translate }}</a></li>
         <li class="nav-item menu-ashya" #menuWorkshops
             (mouseenter)="abrirMenuWorkshops()" (mouseleave)="cerrarMenuWorkshops()"
             (focusin)="abrirMenuWorkshops()" (focusout)="focoFueraMenuWorkshops($event)">
           <a class="nav-link nav-link-ashya d-flex align-items-center gap-1" routerLink="/workshops" routerLinkActive="active"
+             [class.abierto]="menuWorkshopsAbierto"
              aria-haspopup="true" [attr.aria-expanded]="menuWorkshopsAbierto"
              (pointerdown)="recordarPuntero($event)" (click)="clickTituloWorkshops($event)">
             {{ 'NAVBAR.WORKSHOPS_SERVICES' | translate }}
             <i class="bi bi-chevron-down menu-ashya-chevron" [class.girado]="menuWorkshopsAbierto" aria-hidden="true"></i>
           </a>
           <div class="menu-ashya-panel" [class.show]="menuWorkshopsAbierto">
-            <a class="menu-ashya-item" routerLink="/workshops" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="cerrarMenuWorkshops()">
-              <span class="menu-ashya-icon"><i class="bi bi-palette" aria-hidden="true"></i></span>
-              <span class="d-flex flex-column">
-                <span class="menu-ashya-title">{{ 'WORKSHOPS_TABS.WORKSHOPS' | translate }}</span>
-                <span class="menu-ashya-desc">{{ 'NAVBAR.WORKSHOPS_MENU.WORKSHOPS_DESC' | translate }}</span>
-              </span>
-            </a>
-            <a class="menu-ashya-item" routerLink="/workshops/firing-services" routerLinkActive="active" (click)="cerrarMenuWorkshops()">
-              <span class="menu-ashya-icon"><i class="bi bi-fire" aria-hidden="true"></i></span>
-              <span class="d-flex flex-column">
-                <span class="menu-ashya-title">{{ 'WORKSHOPS_TABS.FIRING_SERVICES' | translate }}</span>
-                <span class="menu-ashya-desc">{{ 'NAVBAR.WORKSHOPS_MENU.FIRING_SERVICES_DESC' | translate }}</span>
-              </span>
-            </a>
-            <a class="menu-ashya-item" routerLink="/workshops/gift-cards" routerLinkActive="active" (click)="cerrarMenuWorkshops()">
-              <span class="menu-ashya-icon"><i class="bi bi-gift" aria-hidden="true"></i></span>
-              <span class="d-flex flex-column">
-                <span class="menu-ashya-title">{{ 'WORKSHOPS_TABS.GIFT_CARDS' | translate }}</span>
-                <span class="menu-ashya-desc">{{ 'NAVBAR.WORKSHOPS_MENU.GIFT_CARDS_DESC' | translate }}</span>
-              </span>
-            </a>
-            <a class="menu-ashya-footer" routerLink="/calendar" (click)="cerrarMenuWorkshops()">
-              {{ 'NAVBAR.WORKSHOPS_MENU.SEE_CALENDAR' | translate }}
-              <i class="bi bi-arrow-right" aria-hidden="true"></i>
-            </a>
+            <a class="menu-ashya-item" routerLink="/workshops" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="cerrarMenuWorkshops()">{{ 'WORKSHOPS_TABS.WORKSHOPS' | translate }}</a>
+            <a class="menu-ashya-item" routerLink="/workshops/firing-services" routerLinkActive="active" (click)="cerrarMenuWorkshops()">{{ 'WORKSHOPS_TABS.FIRING_SERVICES' | translate }}</a>
+            <a class="menu-ashya-item" routerLink="/workshops/gift-cards" routerLinkActive="active" (click)="cerrarMenuWorkshops()">{{ 'WORKSHOPS_TABS.GIFT_CARDS' | translate }}</a>
           </div>
         </li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/calendar" routerLinkActive="active">{{ 'NAVBAR.CALENDAR' | translate }}</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/shop" routerLinkActive="active">{{ 'NAVBAR.SHOP' | translate }}</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/about" routerLinkActive="active">{{ 'NAVBAR.ABOUT_ASHYA' | translate }}</a></li>
-        <li class="nav-item"><a class="nav-link nav-link-ashya" routerLink="/studio" routerLinkActive="active">{{ 'NAVBAR.STUDIO_MEMBERSHIP' | translate }}</a></li>
+        <li class="nav-item d-flex align-items-center"><a class="nav-link nav-link-ashya" routerLink="/calendar" routerLinkActive="active">{{ 'NAVBAR.CALENDAR' | translate }}</a></li>
+        <li class="nav-item d-flex align-items-center"><a class="nav-link nav-link-ashya" routerLink="/shop" routerLinkActive="active">{{ 'NAVBAR.SHOP' | translate }}</a></li>
+        <li class="nav-item d-flex align-items-center"><a class="nav-link nav-link-ashya" routerLink="/about" routerLinkActive="active">{{ 'NAVBAR.ABOUT_ASHYA' | translate }}</a></li>
+        <li class="nav-item d-flex align-items-center"><a class="nav-link nav-link-ashya" routerLink="/studio" routerLinkActive="active">{{ 'NAVBAR.STUDIO_MEMBERSHIP' | translate }}</a></li>
       </ul>
     </div>
 

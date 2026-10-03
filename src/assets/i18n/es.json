@@ -65,10 +65,6 @@
     "ABOUT_ASHYA": "SOBRE ASHYA",
     "STUDIO_MEMBERSHIP": "ESTUDIO Y MEMBRESÍA",
     "WORKSHOPS_MENU": {
-      "WORKSHOPS_DESC": "Clases de modelado a mano, esmaltado, kintsugi y vidrio",
-      "FIRING_SERVICES_DESC": "Alquila el horno o cuece solo algunas piezas",
-      "GIFT_CARDS_DESC": "Regala una clase de cerámica",
-      "SEE_CALENDAR": "Ver el calendario",
       "TOGGLE": "Mostrar opciones de talleres y servicios"
     },
     "MENU": "Menú",
@@ -147,9 +143,6 @@
   "VALORATIONS": {
     "NO_REVIEWS": "Todavía no hay reseñas.",
     "WORKSHOPS_TITLE": "Reseñas de nuestros talleres"
-  },
-  "SHOP_TABS": {
-    "CERAMICS": "Cerámica"
   },
   "WORKSHOPS_TABS": {
     "WORKSHOPS": "Talleres",

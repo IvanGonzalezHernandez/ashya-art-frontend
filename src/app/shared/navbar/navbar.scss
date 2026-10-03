@@ -191,9 +191,13 @@
 
 
 
-/* ---- Desplegable "Workshops & Services" (escritorio) ---- */
+/* ---- Desplegable "Workshops & Services" (escritorio) ----
+   El panel cuelga del borde inferior del nav, con su mismo fondo y sin sombra,
+   para que se lea como una prolongación de la barra y no como una tarjeta aparte. */
 .menu-ashya {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .menu-ashya-chevron {
@@ -205,112 +209,61 @@
   transform: rotate(180deg);
 }
 
+/* Título con el panel abierto: mismo aspecto que un enlace activo */
+.nav-link-ashya.abierto {
+  color: #3A9097 !important;
+
+  &::after {
+    transform: scaleX(1);
+  }
+}
+
 .menu-ashya-panel {
   position: absolute;
-  top: 100%;
-  left: 50%;
+  /* El li ocupa todo el alto del contenedor; sumamos el padding del nav para llegar a su borde */
+  top: calc(100% + var(--bs-navbar-padding-y, 0.5rem));
+  left: -24px;
   z-index: 1030;
-  width: 380px;
-  margin-top: 14px;
-  padding: 10px;
+  min-width: 240px;
+  padding: 12px 24px 18px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
   background: #fff;
   border: 1px solid #eeeae4;
-  border-radius: 16px;
-  box-shadow: 0 16px 40px rgba(20, 20, 20, 0.16);
+  border-top: 0;
   opacity: 0;
   visibility: hidden;
-  transform: translate(-50%, 6px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  transition: opacity 0.2s ease, visibility 0.2s;
 
   /* Puente invisible para no perder el hover al bajar el ratón hasta el panel */
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
-    top: -16px;
-    height: 16px;
+    top: calc(-1 * var(--bs-navbar-padding-y, 0.5rem));
+    height: var(--bs-navbar-padding-y, 0.5rem);
   }
 
   &.show {
     opacity: 1;
     visibility: visible;
-    transform: translate(-50%, 0);
   }
 }
 
 .menu-ashya-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 9px 0;
+  font-size: 15px;
+  font-weight: 500;
   color: #000;
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  white-space: nowrap;
+  transition: color 0.15s ease;
 
   &:hover,
   &:focus-visible,
   &.active {
-    background: #EFFAF9;
-  }
-
-  &:hover .menu-ashya-icon,
-  &:focus-visible .menu-ashya-icon,
-  &.active .menu-ashya-icon {
-    background: #3A9097;
-    color: #fff;
-  }
-
-  &:hover .menu-ashya-title,
-  &:focus-visible .menu-ashya-title,
-  &.active .menu-ashya-title {
     color: #2d767c;
-  }
-}
-
-.menu-ashya-icon {
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  background: #EFFAF9;
-  color: #3A9097;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.menu-ashya-title {
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.menu-ashya-desc {
-  font-size: 13px;
-  font-weight: 500;
-  color: #5f5348;
-}
-
-.menu-ashya-footer {
-  margin-top: 6px;
-  padding: 14px 12px 8px;
-  border-top: 1px solid #eeeae4;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  font-weight: 700;
-  color: #2d767c;
-  text-decoration: none;
-
-  &:hover {
-    color: #3A9097;
   }
 }
 

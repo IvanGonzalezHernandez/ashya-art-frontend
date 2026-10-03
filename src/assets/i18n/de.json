@@ -65,10 +65,6 @@
     "ABOUT_ASHYA": "ÜBER ASHYA",
     "STUDIO_MEMBERSHIP": "STUDIO & MITGLIEDSCHAFT",
     "WORKSHOPS_MENU": {
-      "WORKSHOPS_DESC": "Kurse für Aufbaukeramik, Glasieren, Kintsugi und Glas",
-      "FIRING_SERVICES_DESC": "Miete den Brennofen oder lass einzelne Stücke brennen",
-      "GIFT_CARDS_DESC": "Verschenke einen Keramikkurs",
-      "SEE_CALENDAR": "Zum Kalender",
       "TOGGLE": "Optionen für Workshops & Services anzeigen"
     },
     "MENU": "Menü",
@@ -147,9 +143,6 @@
   "VALORATIONS": {
     "NO_REVIEWS": "Noch keine Bewertungen.",
     "WORKSHOPS_TITLE": "Bewertungen zu unseren Workshops"
-  },
-  "SHOP_TABS": {
-    "CERAMICS": "Keramik"
   },
   "WORKSHOPS_TABS": {
     "WORKSHOPS": "Workshops",
