@@ -14,6 +14,34 @@
           {{ 'STUDIO.TITLE' | translate }}
         </h1>
 
+        <p class="text-muted fs-5 mb-4"
+           appRevealAnimate="animate__fadeInLeft"
+           [delay]="'0s'">
+          {{ 'STUDIO.SUBTITLE' | translate }}
+        </p>
+
+        <!-- Visits and Purchases -->
+        <div class="mb-4"
+             appRevealAnimate="animate__fadeInLeft"
+             [delay]="'0s'">
+          <h5 class="fw-bold text-uppercase mb-2" style="color:#3E3028; letter-spacing:0.5px;">
+            {{ 'STUDIO.VISITS_TITLE' | translate }}
+          </h5>
+          <p class="text-muted fs-5 mb-2">
+            {{ 'STUDIO.VISITS_TEXT' | translate }}
+            <a href="mailto:ashyaxart@gmail.com" style="color:#3E3028;">ashyaxart&#64;gmail.com</a>.
+          </p>
+          <p class="text-muted fs-5 mb-0">{{ 'STUDIO.VISITS_NOTE' | translate }}</p>
+        </div>
+
+        <!-- Membership -->
+        <h5 class="fw-bold text-uppercase mb-2"
+            style="color:#3E3028; letter-spacing:0.5px;"
+            appRevealAnimate="animate__fadeInLeft"
+            [delay]="'0s'">
+          {{ 'STUDIO.MEMBERSHIP_SECTION_TITLE' | translate }}
+        </h5>
+
         <p class="text-muted fs-5"
            appRevealAnimate="animate__fadeInLeft"
            [delay]="'0s'">
