@@ -40,15 +40,14 @@
         <article class="card card-course h-100 border-0 rounded-4 overflow-hidden">
 
           <!-- Imagen 1x1 -->
-          <div class="img-1x1 position-relative">
+          <div class="img-1x1 position-relative" [class.agotado]="producto.stock <= 0">
             <img
               [src]="producto.img1Url"
               [alt]="producto | traducir:'nombre'"
               class="img-1x1-content"
               loading="lazy"
               decoding="async">
-            <span *ngIf="producto.stock <= 0"
-                  class="badge bg-dark position-absolute top-0 start-0 m-3 px-3 py-2 fs-6">
+            <span *ngIf="producto.stock <= 0" class="banda-agotado">
               {{ 'CERAMICS_DETAIL.SOLD_OUT' | translate }}
             </span>
           </div>

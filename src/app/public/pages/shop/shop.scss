@@ -1,0 +1,21 @@
+
+/* Producto sin stock: foto apagada y banda "Agotado" cruzando la imagen */
+.agotado img {
+  filter: grayscale(0.55) brightness(1.05);
+  opacity: 0.8;
+}
+
+.banda-agotado {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem 0;
+  background: rgba(62, 48, 40, 0.78);
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}

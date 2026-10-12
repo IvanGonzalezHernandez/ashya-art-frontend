@@ -32,3 +32,18 @@
     border-radius: 10px;
   }
 }
+
+/* Aviso de producto sin stock, encima del botón de añadir al carrito */
+.aviso-agotado {
+  max-width: 420px;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid #e3d7c9;
+  border-radius: 10px;
+  color: #3E3028;
+
+  strong {
+    display: block;
+    color: #3A9097;
+  }
+}
