@@ -79,10 +79,16 @@ export class CeramicsDetail implements OnInit {
     });
   }
 
+  // Unidades que aún se pueden añadir: stock menos lo que ya hay en el carrito
+  unidadesDisponibles(producto: Producto): number {
+    return producto.stock - this.carritoService.cantidadEnCarrito('PRODUCTO', producto.id);
+  }
+
   agregarProductoAlCarrito(producto: any) {
   if (!producto) return;
 
-  const cantidad = producto.cantidadSeleccionada || 1;
+  const cantidad = Math.min(producto.cantidadSeleccionada || 1, this.unidadesDisponibles(producto));
+  if (cantidad <= 0) return;
 
   const item: ItemCarrito = {
     id: producto.id,

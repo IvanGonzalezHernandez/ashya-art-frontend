@@ -107,9 +107,14 @@
          appRevealAnimate="animate__fadeInUp"
          [delay]="'0.4s'">
       <button class="btn text-white bg-azul px-4 py-2"
+              [disabled]="unidadesDisponibles(productoSeleccionado) <= 0"
               (click)="agregarProductoAlCarrito(productoSeleccionado)">
-        {{ 'CERAMICS_DETAIL.ADD_TO_CART' | translate }}
+        {{ (productoSeleccionado.stock <= 0 ? 'CERAMICS_DETAIL.SOLD_OUT' : 'CERAMICS_DETAIL.ADD_TO_CART') | translate }}
       </button>
+      <p *ngIf="productoSeleccionado.stock > 0 && unidadesDisponibles(productoSeleccionado) <= 0"
+         class="text-muted small mt-2 mb-0">
+        {{ 'CERAMICS_DETAIL.ALL_IN_CART' | translate }}
+      </p>
     </div>
 
   </div>

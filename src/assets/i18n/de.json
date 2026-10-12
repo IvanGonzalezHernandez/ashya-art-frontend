@@ -278,7 +278,9 @@
     "STOCK": "Bestand:",
     "MATERIAL": "Material:",
     "MEASUREMENTS": "Maße:",
-    "ADD_TO_CART": "In den Warenkorb"
+    "ADD_TO_CART": "In den Warenkorb",
+    "SOLD_OUT": "Ausverkauft",
+    "ALL_IN_CART": "Alle verfügbaren Stücke sind bereits in deinem Warenkorb."
   },
   "GIFT_CARDS": {
     "TITLE": "Geschenkkarten",

@@ -64,6 +64,13 @@ export class CarritoService {
     return this.items.some(i => i.tipo === 'PRODUCTO');
   }
 
+  // Unidades de un producto/curso que ya están en el carrito (para no superar el stock)
+  cantidadEnCarrito(tipo: ItemCarrito['tipo'], id: number): number {
+    return this.items
+      .filter(i => i.tipo === tipo && i.id === id)
+      .reduce((sum, i) => sum + (Number(i.cantidad) || 0), 0);
+  }
+
   // ---------------- Mutadores ----------------
   agregarItem(item: ItemCarrito) {
     const cantidad = Number(item.cantidad) || 1;

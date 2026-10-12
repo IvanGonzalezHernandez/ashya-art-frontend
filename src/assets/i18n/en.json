@@ -278,7 +278,9 @@
     "STOCK": "Stock:",
     "MATERIAL": "Material:",
     "MEASUREMENTS": "Measurements:",
-    "ADD_TO_CART": "Add to the cart"
+    "ADD_TO_CART": "Add to the cart",
+    "SOLD_OUT": "Sold out",
+    "ALL_IN_CART": "All available units are already in your cart."
   },
   "GIFT_CARDS": {
     "TITLE": "Gift Cards",

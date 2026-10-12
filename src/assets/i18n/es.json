@@ -278,7 +278,9 @@
     "STOCK": "Stock:",
     "MATERIAL": "Material:",
     "MEASUREMENTS": "Medidas:",
-    "ADD_TO_CART": "Añadir al carrito"
+    "ADD_TO_CART": "Añadir al carrito",
+    "SOLD_OUT": "Agotado",
+    "ALL_IN_CART": "Ya tienes en el carrito todas las unidades disponibles."
   },
   "GIFT_CARDS": {
     "TITLE": "Tarjetas regalo",
