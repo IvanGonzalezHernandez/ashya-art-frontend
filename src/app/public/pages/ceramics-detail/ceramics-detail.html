@@ -111,6 +111,9 @@
               (click)="agregarProductoAlCarrito(productoSeleccionado)">
         {{ (productoSeleccionado.stock <= 0 ? 'CERAMICS_DETAIL.SOLD_OUT' : 'CERAMICS_DETAIL.ADD_TO_CART') | translate }}
       </button>
+      <p *ngIf="productoSeleccionado.stock <= 0" class="text-muted small mt-2 mb-0" role="status">
+        {{ 'CERAMICS_DETAIL.OUT_OF_STOCK_MSG' | translate }}
+      </p>
       <p *ngIf="productoSeleccionado.stock > 0 && unidadesDisponibles(productoSeleccionado) <= 0"
          class="text-muted small mt-2 mb-0">
         {{ 'CERAMICS_DETAIL.ALL_IN_CART' | translate }}

@@ -47,6 +47,10 @@
               class="img-1x1-content"
               loading="lazy"
               decoding="async">
+            <span *ngIf="producto.stock <= 0"
+                  class="badge bg-dark position-absolute top-0 start-0 m-3 px-3 py-2 fs-6">
+              {{ 'CERAMICS_DETAIL.SOLD_OUT' | translate }}
+            </span>
           </div>
 
           <!-- Contenido card -->
