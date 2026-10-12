@@ -280,7 +280,7 @@
     "MEASUREMENTS": "Medidas:",
     "ADD_TO_CART": "Añadir al carrito",
     "SOLD_OUT": "Agotado",
-    "OUT_OF_STOCK_MSG": "Ahora mismo no tenemos unidades de esta pieza.",
+    "OUT_OF_STOCK_MSG": "Sin unidades por ahora.",
     "ALL_IN_CART": "Ya tienes en el carrito todas las unidades disponibles."
   },
   "GIFT_CARDS": {
