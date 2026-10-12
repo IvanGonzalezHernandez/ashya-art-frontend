@@ -58,6 +58,8 @@
     }
   },
   "NAVBAR": {
+    "REMOVE_ONE": "Remove one",
+    "REMOVE_ALL": "Remove from cart",
     "HOME": "HOME",
     "WORKSHOPS_SERVICES": "WORKSHOPS & SERVICES",
     "CALENDAR": "CALENDAR",

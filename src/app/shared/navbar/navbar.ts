@@ -393,8 +393,16 @@ confirmarCompraGratis() {
   // ======== Gestión de items y gift card ========
   eliminarItem(index: number) {
     this.carritoService.eliminarItem(index);
+    this.recalcularDescuento();
+  }
 
-    // Si había descuento, re-evalúa el total con descuento
+  quitarUnidad(index: number) {
+    this.carritoService.quitarUnidad(index);
+    this.recalcularDescuento();
+  }
+
+  // Si había descuento, re-evalúa el total con descuento
+  private recalcularDescuento() {
     if (this.descuentoAplicado > 0) {
       const bruto = this.carritoService.obtenerTotal() + this.costeEnvio;
       this.totalConDescuento = Math.max(0, bruto - this.descuentoAplicado);

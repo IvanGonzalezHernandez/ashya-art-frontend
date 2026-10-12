@@ -148,10 +148,18 @@
             <img [src]="item.img" alt="{{ item.nombre }}" class="me-2 rounded" style="width: 60px; height: 60px; object-fit: cover;">
             <span>{{ item.nombre }}</span>
           </div>
-          <span>{{ item.cantidad }} x {{ item.precio }}€</span>
-          <button class="btn btn-sm btn-outline-secondary" (click)="eliminarItem(i)">
-            <i class="bi bi-trash"></i>
-          </button>
+          <div class="d-flex align-items-center gap-2">
+            <button *ngIf="item.cantidad > 1" type="button" class="btn btn-sm btn-outline-secondary"
+                    (click)="quitarUnidad(i)" [attr.aria-label]="'NAVBAR.REMOVE_ONE' | translate"
+                    [title]="'NAVBAR.REMOVE_ONE' | translate">
+              <i class="bi bi-dash"></i>
+            </button>
+            <span class="text-nowrap">{{ item.cantidad }} x {{ item.precio }}€</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="eliminarItem(i)"
+                    [attr.aria-label]="'NAVBAR.REMOVE_ALL' | translate" [title]="'NAVBAR.REMOVE_ALL' | translate">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
         </div>
       </div>
       <ng-template #vacio>

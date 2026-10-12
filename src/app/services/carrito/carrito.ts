@@ -99,6 +99,18 @@ export class CarritoService {
     this.persistir();
   }
 
+  // Quita una sola unidad de la línea; si era la última, elimina la línea
+  quitarUnidad(index: number) {
+    const item = this.items[index];
+    if (!item) return;
+    if ((Number(item.cantidad) || 0) > 1) {
+      this.items[index] = { ...item, cantidad: Number(item.cantidad) - 1 };
+      this.persistir();
+    } else {
+      this.eliminarItem(index);
+    }
+  }
+
   eliminarItem(index: number) {
     const items = [...this.items];
     items.splice(index, 1);
