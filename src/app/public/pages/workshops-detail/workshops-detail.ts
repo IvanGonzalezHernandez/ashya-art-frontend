@@ -225,6 +225,7 @@ export class WorkshopsDetail {
       nombre: `${this.cursoSeleccionado.nombre} - ${fecha.fecha}`,
       precio: this.cursoSeleccionado.precio ?? 0,
       cantidad,
+      stock: fecha.plazasDisponibles,
       img: this.cursoSeleccionado.img1Url || '',
       subtitulo: this.cursoSeleccionado.subtitulo,
       fecha: fecha.fecha,

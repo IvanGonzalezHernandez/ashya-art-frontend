@@ -96,6 +96,7 @@ export class CeramicsDetail implements OnInit {
     nombre: producto.nombre,
     precio: producto.precio ?? 0,
     cantidad: cantidad,
+    stock: producto.stock,
     img: producto.img1Url || '',
     subtitulo: producto.subtitulo,
     fecha: '',

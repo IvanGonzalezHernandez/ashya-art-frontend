@@ -91,6 +91,7 @@ export class CarritoService {
       if (idx >= 0) {
         const nueva = Number(this.items[idx].cantidad) + cantidad;
         this.items[idx].cantidad = isFinite(nueva) ? nueva : 1;
+        if (item.stock !== undefined) this.items[idx].stock = item.stock;
       } else {
         this.items.push({ ...item, cantidad });
       }
@@ -99,15 +100,15 @@ export class CarritoService {
     this.persistir();
   }
 
-  // Quita una sola unidad de la línea; si era la última, elimina la línea
-  quitarUnidad(index: number) {
+  // Fija la cantidad de una línea; 0 la elimina del carrito
+  cambiarCantidad(index: number, cantidad: number) {
     const item = this.items[index];
     if (!item) return;
-    if ((Number(item.cantidad) || 0) > 1) {
-      this.items[index] = { ...item, cantidad: Number(item.cantidad) - 1 };
-      this.persistir();
-    } else {
+    if (cantidad <= 0) {
       this.eliminarItem(index);
+    } else {
+      this.items[index] = { ...item, cantidad };
+      this.persistir();
     }
   }
 

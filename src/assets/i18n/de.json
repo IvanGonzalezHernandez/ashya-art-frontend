@@ -58,8 +58,7 @@
     }
   },
   "NAVBAR": {
-    "REMOVE_ONE": "Ein Stück entfernen",
-    "REMOVE_ALL": "Aus dem Warenkorb entfernen",
+    "REMOVE_OPTION": "0 (entfernen)",
     "HOME": "STARTSEITE",
     "WORKSHOPS_SERVICES": "WORKSHOPS & SERVICES",
     "CALENDAR": "KALENDER",

@@ -391,14 +391,16 @@ confirmarCompraGratis() {
 
 
   // ======== Gestión de items y gift card ========
-  eliminarItem(index: number) {
-    this.carritoService.eliminarItem(index);
+  cambiarCantidad(index: number, cantidad: number | string) {
+    this.carritoService.cambiarCantidad(index, Number(cantidad));
     this.recalcularDescuento();
   }
 
-  quitarUnidad(index: number) {
-    this.carritoService.quitarUnidad(index);
-    this.recalcularDescuento();
+  // Cantidades del desplegable: de 0 (quitar) hasta el stock/plazas conocidos.
+  // Las tarjetas regalo van de una en una (cada línea lleva su destinatario).
+  opcionesCantidad(item: ItemCarrito): number[] {
+    const tope = item.tipo === 'TARJETA' ? 1 : Math.max(item.stock ?? item.cantidad, item.cantidad);
+    return Array.from({ length: tope + 1 }, (_, n) => n);
   }
 
   // Si había descuento, re-evalúa el total con descuento

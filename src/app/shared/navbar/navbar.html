@@ -149,16 +149,14 @@
             <span>{{ item.nombre }}</span>
           </div>
           <div class="d-flex align-items-center gap-2">
-            <button *ngIf="item.cantidad > 1" type="button" class="btn btn-sm btn-outline-secondary"
-                    (click)="quitarUnidad(i)" [attr.aria-label]="'NAVBAR.REMOVE_ONE' | translate"
-                    [title]="'NAVBAR.REMOVE_ONE' | translate">
-              <i class="bi bi-dash"></i>
-            </button>
-            <span class="text-nowrap">{{ item.cantidad }} x {{ item.precio }}€</span>
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="eliminarItem(i)"
-                    [attr.aria-label]="'NAVBAR.REMOVE_ALL' | translate" [title]="'NAVBAR.REMOVE_ALL' | translate">
-              <i class="bi bi-trash"></i>
-            </button>
+            <select class="form-select form-select-sm w-auto" [id]="'cantidad-' + i"
+                    [ngModel]="item.cantidad" (ngModelChange)="cambiarCantidad(i, $event)"
+                    [attr.aria-label]="'COMMON.QUANTITY' | translate">
+              <option *ngFor="let n of opcionesCantidad(item)" [ngValue]="n">
+                {{ n === 0 ? ('NAVBAR.REMOVE_OPTION' | translate) : n }}
+              </option>
+            </select>
+            <span class="text-nowrap">x {{ item.precio }}€</span>
           </div>
         </div>
       </div>

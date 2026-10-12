@@ -9,4 +9,5 @@ export interface ItemCarrito {
   hora: string;
   img: string;
   destinatario?: string;
+  stock?: number; // máximo que se puede pedir (stock del producto o plazas libres del curso)
 }

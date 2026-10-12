@@ -58,8 +58,7 @@
     }
   },
   "NAVBAR": {
-    "REMOVE_ONE": "Quitar una unidad",
-    "REMOVE_ALL": "Quitar del carrito",
+    "REMOVE_OPTION": "0 (quitar)",
     "HOME": "INICIO",
     "WORKSHOPS_SERVICES": "TALLERES Y SERVICIOS",
     "CALENDAR": "CALENDARIO",

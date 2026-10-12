@@ -195,6 +195,7 @@ private openModalFechasDisponibles(): void {
         .trim(),
       precio,
       cantidad,
+      stock: fecha.plazasDisponibles,
       img: img || '',
       subtitulo: this.getSubtitulo(fecha),
       fecha: this.toDate(fecha.fecha) as any,
