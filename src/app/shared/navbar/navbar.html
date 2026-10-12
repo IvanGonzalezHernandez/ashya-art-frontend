@@ -149,13 +149,18 @@
             <span>{{ item.nombre }}</span>
           </div>
           <div class="d-flex align-items-center gap-2">
-            <select class="form-select form-select-sm w-auto" [id]="'cantidad-' + i"
-                    [ngModel]="item.cantidad" (ngModelChange)="cambiarCantidad(i, $event)"
-                    [attr.aria-label]="'COMMON.QUANTITY' | translate">
-              <option *ngFor="let n of opcionesCantidad(item)" [ngValue]="n">
-                {{ n === 0 ? ('NAVBAR.REMOVE_OPTION' | translate) : n }}
-              </option>
-            </select>
+            <button type="button" class="btn btn-sm btn-outline-secondary"
+                    (click)="cambiarCantidad(i, item.cantidad - 1)"
+                    [attr.aria-label]="'NAVBAR.REMOVE_ONE' | translate" [title]="'NAVBAR.REMOVE_ONE' | translate">
+              <i class="bi bi-dash"></i>
+            </button>
+            <span class="fw-semibold text-center" style="min-width: 1.5em;" aria-live="polite">{{ item.cantidad }}</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary"
+                    [disabled]="item.cantidad >= maxCantidad(item)"
+                    (click)="cambiarCantidad(i, item.cantidad + 1)"
+                    [attr.aria-label]="'NAVBAR.ADD_ONE' | translate" [title]="'NAVBAR.ADD_ONE' | translate">
+              <i class="bi bi-plus"></i>
+            </button>
             <span class="text-nowrap">x {{ item.precio }}€</span>
           </div>
         </div>

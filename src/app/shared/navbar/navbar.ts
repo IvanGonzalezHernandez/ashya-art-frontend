@@ -396,11 +396,10 @@ confirmarCompraGratis() {
     this.recalcularDescuento();
   }
 
-  // Cantidades del desplegable: de 0 (quitar) hasta el stock/plazas conocidos.
+  // Máximo al que deja subir el botón "+": el stock/plazas conocidos.
   // Las tarjetas regalo van de una en una (cada línea lleva su destinatario).
-  opcionesCantidad(item: ItemCarrito): number[] {
-    const tope = item.tipo === 'TARJETA' ? 1 : Math.max(item.stock ?? item.cantidad, item.cantidad);
-    return Array.from({ length: tope + 1 }, (_, n) => n);
+  maxCantidad(item: ItemCarrito): number {
+    return item.tipo === 'TARJETA' ? 1 : (item.stock ?? item.cantidad);
   }
 
   // Si había descuento, re-evalúa el total con descuento

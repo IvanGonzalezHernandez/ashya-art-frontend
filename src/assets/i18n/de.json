@@ -58,7 +58,8 @@
     }
   },
   "NAVBAR": {
-    "REMOVE_OPTION": "0 (entfernen)",
+    "REMOVE_ONE": "Ein Stück entfernen",
+    "ADD_ONE": "Ein Stück hinzufügen",
     "HOME": "STARTSEITE",
     "WORKSHOPS_SERVICES": "WORKSHOPS & SERVICES",
     "CALENDAR": "KALENDER",
